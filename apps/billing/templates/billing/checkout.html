@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block styles %}
+  <style>
+    #payment-form { max-width: 520px; margin: 2rem auto; }
+    .row { margin-bottom: 1rem; }
+    button[disabled] { opacity: .6; cursor: not-allowed; }
+  </style>
+{% endblock %}
+
+{% block head_extra %}
+  <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block content %}
+  <main id="payment-form">
+    <h1>{% trans "Paiement" %}</h1>
+    <p>{% trans "Cours" %}: <strong>{{ course.title }}</strong></p>
+    <p>{% trans "Montant" %}: <strong>{{ amount_total }} {{ currency }}</strong></p>
+
+    <div id="express"></div>
+    <form id="form">
+      <div id="payment-element" class="row"></div>
+      <button id="submit">{% trans "Payer" %}</button>
+      <div id="messages" class="row" aria-live="polite"></div>
+    </form>
+  </main>
+
+{% endblock %}
+
+{% load i18n %}
+
+{% block scripts %}
+  <script>
+    const pk = "{{ stripe_publishable_key }}";
+    const clientSecret = "{{ client_secret }}";
+    const stripe = Stripe(pk);
+
+    const options = {
+      clientSecret,
+      appearance: { theme: 'stripe' }
+    };
+
+    // Payment Element
+    const elements = stripe.elements(options);
+    const paymentElement = elements.create('payment');
+    paymentElement.mount('#payment-element');
+
+    // Express Checkout (affiche Apple/Google Pay si dispo)
+    const expressEl = elements.create('expressCheckout');
+    expressEl.mount('#express');
+
+    const form = document.getElementById('form');
+    const submit = document.getElementById('submit');
+    const messages = document.getElementById('messages');
+
+    function setLoading(v) { submit.disabled = v; submit.textContent = v ? '...' : '{% trans "Payer" %}'; }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      setLoading(true);
+      messages.textContent = '';
+      const {error} = await stripe.confirmPayment({ elements, redirect: 'if_required' });
+      if (error) {
+        messages.textContent = error.message || 'Erreur de paiement';
+        setLoading(false);
+        return;
+      }
+      // Succès immédiat (sans redirection) — l’enrôlement arrivera via le webhook
+      messages.textContent = '{% trans "Paiement en cours de finalisation..." %}';
+      setTimeout(() => { window.location.href = '/cours/{{ course.slug }}/'; }, 1000);
+    });
+  </script>
+{% endblock %}

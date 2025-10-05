@@ -1,0 +1,14 @@
+{# apps/flowforms/templates/flowforms/fragments/_cta_bar.html #}
+{% load static %}
+<div class="ff-cta-bar flex items-center gap-2 mt-4">
+  {% for cta in ctas %}
+    <button
+      type="submit"
+      name="flowforms_action"
+      value="{{ cta.action }}::{{ cta.next_step|default_if_none:'' }}"
+      class="btn {{ cta.class_name|default:'btn-primary' }}"
+      {% if cta.confirm %}onclick="return confirm('{{ cta.confirm|escapejs }}')" {% endif %}
+      aria-label="{{ cta.label }}"
+    >{{ cta.label }}</button>
+  {% endfor %}
+</div>

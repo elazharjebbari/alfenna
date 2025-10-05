@@ -1,0 +1,30 @@
+[
+  {
+    "model": "catalog.course",
+    "pk": 1,
+    "fields": {
+      "title": "Cours de Démo",
+      "slug": "demo-course",
+      "description": "Cours de démonstration pour tests UI",
+      "is_published": true,
+      "free_lectures_count": 2,
+      "plan_version": 1,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.course",
+    "pk": 2,
+    "fields": {
+      "title": "Fabrication de Bougies 101",
+      "slug": "candles-101",
+      "description": "Introduction pratique",
+      "is_published": true,
+      "free_lectures_count": 2,
+      "plan_version": 1,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  }
+]

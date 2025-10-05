@@ -1,0 +1,15 @@
+# Mapping between Lumière Learning business events and Google Ads conversion actions.
+customer_id: "1102-428-793"
+login_customer_id: "515-442-3998"
+default_currency: "EUR"
+conversion_actions:
+  lead_submit:
+    action_id: "7323462437"
+    type: "CLICK"
+  purchase:
+    action_id: "7323462437"
+    type: "CLICK"
+    value_from: "order.value"
+  purchase_adjustment:
+    action_id: "7323462437"
+    type: "ADJUSTMENT"

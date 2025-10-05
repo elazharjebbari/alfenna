@@ -1,0 +1,66 @@
+Validation du flux analytics & consentement
+===========================================
+
+Ce document résume les vérifications réalisées pour garantir que l’injection dynamique
+d’`analytics.js` respecte le consentement utilisateur et que les collectes sont bien
+expédiées.
+
+1. Vérifications automatiques
+-----------------------------
+
+- Tests Django : `DB_ENGINE=sqlite3 DJANGO_SETTINGS_MODULE=lumierelearning.settings.dev
+  python manage.py test apps.marketing.tests`
+  * confirme l’inclusion du bootstrap uniquement quand `tracking.analytics_enabled` vaut
+    `True` ;
+  * vérifie que le middleware `ConsentDebugHeadersMiddleware` n’émet des en-têtes
+    qu’avec `CONSENT_DEBUG_HEADERS=True`.
+- Tests analytics backend : la suite `apps.atelier.tests.test_analytics` valide que
+  l’endpoint `/api/analytics/collect/` refuse les collectes sans cookie et accepte les
+  événements quand le cookie marketing prend une valeur « truey » (`"yes"`, `"1"`, …).
+
+2. Vérification du chargement côté front
+----------------------------------------
+
+1. Ouvrir la page publique (ex. `https://lumiereacademy.com/`).
+2. Confirmer que `analytics_bootstrap.js` figure dans la page (`View Source` ou
+   `python manage.py runscript apps.marketing.scripts.smoke_consent_prod`).
+3. Avant consentement : aucun `<script src=".../analytics.js">` n’est injecté et le
+   cookie marketing (`cookie_consent_marketing`) existe mais reste vide (`""`).
+4. Après « Tout accepter » dans TAC :
+   * `analytics_bootstrap.js` injecte dynamiquement `analytics.js` ;
+   * `analytics.js` se réveille désormais **uniquement** sur la présence du cookie marketing (plus aucun bail sur `data-ll-analytics-enabled`) ;
+   * le cookie marketing passe à `"1"` ;
+   * `dataLayer` reçoit `ll_consent_update` avec `analytics_storage="granted"`.
+
+3. Vérification de la collecte
+------------------------------
+
+1. Dans l’onglet Réseau, filtrer `collect`.
+2. Après quelques interactions (scroll, clic) vérifier qu’une requête POST
+   `https://lumiereacademy.com/api/analytics/collect/` apparaît et contient le header
+   `Cookie: cookie_consent_marketing=1` avec une réponse `202 Accepted`.
+3. Hors navigateur :
+   ```bash
+   curl -sc cookies.txt https://lumiereacademy.com/ >/dev/null
+   # simuler l’acceptation
+   curl -b cookies.txt -X POST https://lumiereacademy.com/api/analytics/collect/ \
+     -H 'Content-Type: application/json' \
+     -d '{"events":[{"event_uuid":"debug","event_type":"view","page_id":"home"}]}'
+   ```
+   La réponse doit être `202` (si consentement), sinon `204`.
+
+La correction front force `fetch` à utiliser `credentials: 'same-origin'`, ce qui
+transmet le cookie marketing au backend (et lève le gating côté API). Auparavant,
+`credentials: 'omit'` effaçait le cookie, le middleware `SegmentResolverMiddleware`
+notait `consent='N'` et la collecte retournait `204`.
+
+4. Debug en production
+----------------------
+
+- Avec `CONSENT_DEBUG_HEADERS=True`, les réponses exposent :
+  * `X-Consent-Marketing-Name` et `X-Consent-Marketing-Value` ;
+  * `X-Analytics-Bootstrap`.
+- Vérification rapide : `curl -I https://lumiereacademy.com/ | sed -n 's/^X-Consent.*$/&/p'`
+
+Après recette, repasser `CONSENT_DEBUG_HEADERS=False` (et retirer le middleware si
+nécessaire).

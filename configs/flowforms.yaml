@@ -1,0 +1,30 @@
+flows:
+  - key: checkout_intent_flow
+    kind: checkout_intent
+    abandon_ttl_minutes: 45
+    max_reminders: 2
+    steps:
+      - key: step1
+        title: "Vos coordonnées"
+        fields:
+          - name: email
+            type: email
+            required: true
+            label: "Votre email"
+            validators: ["email"]
+          - name: phone
+            type: phone
+            required: false
+        ctas:
+          - action: next
+            label: "Continuer"
+      - key: step2
+        title: "Infos complémentaires"
+        fields:
+          - name: full_name
+            type: text
+            required: false
+            label: "Nom complet"
+        ctas:
+          - action: submit
+            label: "Valider"

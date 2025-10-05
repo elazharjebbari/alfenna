@@ -1,0 +1,38 @@
+{% extends "partials/_auth_layout.html" %}
+{% load i18n %}
+
+{% block auth_title %}{% trans "Confirme ton adresse email" %}{% endblock %}
+{% block auth_sub %}
+  {% blocktrans with email=masked_email %}Un lien a été envoyé à {{ email }}.{% endblocktrans %}
+{% endblock %}
+
+{% block auth_form %}
+  <p class="auth-muted">
+    {% trans "Clique sur le lien de vérification reçu par email pour activer ton accès." %}
+  </p>
+
+  {% if verification_just_sent %}
+    <div class="alert success" role="status">
+      {% trans "Nous venons d’envoyer un nouveau lien de vérification." %}
+    </div>
+  {% elif cooldown_remaining > 0 %}
+    <div class="alert info" role="status">
+      {% blocktrans with seconds=cooldown_remaining %}Tu pourras renvoyer un lien dans {{ seconds }} secondes.{% endblocktrans %}
+    </div>
+  {% endif %}
+
+  <form class="auth-form" method="post">
+    {% csrf_token %}
+    <button class="btn-primary w-100" type="submit" {% if not can_resend %}disabled aria-disabled="true"{% endif %}>
+      {% trans "Renvoyer le lien de vérification" %}
+    </button>
+  </form>
+
+  <div class="meta-links">
+    <a href="{% url 'accounts:profile' %}">{% trans "Retour à mon compte" %}</a>
+  </div>
+{% endblock %}
+
+{% block auth_footer %}
+  <small>{% trans "Besoin d’aide ? Contacte le support." %}</small>
+{% endblock %}

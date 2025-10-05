@@ -1,0 +1,452 @@
+pages:
+  online_home:
+    meta:
+      title: "Lumière Maroc — Ateliers de fabrication de bougies"
+      description: "Rejoignez nos ateliers d'artisanat local et apprenez à créer des bougies parfumées made in Morocco."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/struct"
+          B: "header/modes"
+        cache: false   # header dynamique => jamais cacheté
+      hero:
+        component: "hero/cover"
+        cache: true
+      learning_card:
+        component: "learning/card"
+      learning_content:
+        component: "learning/content"
+      highlights:
+        component: "learning/highlights"
+      contact_info:
+        component: "ma/contact/phone"
+      faq:
+        component: "faq/main"
+      trainer:
+        component: "trainer/profile"
+      footer:
+        component: "footer/main"
+      lead_form:
+        component: "forms/shell"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  test:
+    meta:
+      title: "(Test) Lumière Maroc — Ateliers de fabrication"
+      description: "(Test) Vérifiez les contenus localisés pour le marché marocain."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/struct"
+          B: "header/modes"
+        cache: false   # header dynamique => jamais cacheté
+      contact_info:
+        component: "core/contact/info"
+      contact_map:
+        component: "contact/map"
+        params:
+          map_embed_url: "https://maps.example.com/embed/demo"
+      course_list:
+        component: "courses/list"
+        params:
+          limit: 6
+          list_title: "Formations artisanales au Maroc"
+          list_subtitle: "Choisissez l'atelier idéal pour développer votre savoir-faire."
+          label_languages: "Langues : Arabe / Français"
+          label_lessons: "+30 ateliers locaux"
+          label_score: "Note des apprenants"
+      training_block:
+        component: "course_detail/training"
+        params:
+          hero_tag: "Artisanat marocain"
+          video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          video_label: "Lire la présentation"
+          title: "Formation complète en fabrication de bougies"
+          subtitle: "Découverte, techniques avancées et lancement d'activité."
+          enrollment_label: "+500 apprenants marocains satisfaits"
+          rating_value: 4.8
+          rating_count: 1250
+          description_title: "Description"
+          description_blocks:
+            - "Découvrez comment créer des bougies uniques pas à pas."
+            - "Approfondissez votre savoir-faire avec des modules vidéo détaillés."
+          bundle_title: "Bundle exclusif"
+          bundle_items:
+            - "Accès illimité à la bibliothèque vidéo"
+            - "Guide PDF téléchargeable (version MA)"
+            - "Support communauté WhatsApp pendant 30 jours"
+          curriculum_title: "Programme"
+          curriculum_sections:
+            - title: "Module 1 — Bases marocaines"
+              items:
+                - "Choisir les matériaux essentiels"
+                - "Préparer son atelier à la maison"
+            - title: "Module 2 — Techniques"
+              items:
+                - "Techniques de coulée"
+                - "Finitions et parfums"
+          instructors_title: "Formateurs"
+          instructors:
+            - name: "Souheila Jebbari"
+              role: "Formatrice principale"
+              bio: "Spécialiste des bougies naturelles."
+            - name: "Naila Baiga"
+              role: "Experte design"
+              bio: "Accompagne les apprenants sur les finitions décoratives."
+          reviews_title: "Avis"
+          reviews:
+            - author: "Salma"
+              location: "Artisane, Tanger"
+              content: "Une formation inspirante avec un excellent suivi."
+            - author: "Mehdi"
+              location: "Entrepreneur, Fès"
+              content: "Parcours structuré et concret pour lancer son activité."
+          reviews_cta_label: "Voir tous les avis"
+          reviews_cta_url: "https://example.com/temoignages"
+      sidebar_block:
+        component: "course_detail/sidebar"
+        params:
+          course_slug: "demo-course"
+          currency: "MAD"
+          promo_badge: "Promo spéciale"
+          info_items:
+            - icon: "icofont-man-in-glasses"
+              label: "Formatrice"
+              value: "Souheila Jebbari"
+            - icon: "icofont-clock-time"
+              label: "Durée"
+              value: "06h00"
+            - icon: "icofont-ui-video-play"
+              label: "Vidéos"
+              value: "30 modules"
+            - icon: "icofont-book-alt"
+              label: "Langues"
+              value: "Arabe / Français"
+          bundle_title: "Bonus inclus"
+          bundle_items:
+            - "Accès communauté privée"
+            - "Réductions sur les ateliers présentiels"
+          cta_guest_label: "Acheter sans inscription"
+          cta_member_label: "Se connecter pour continuer"
+          cta_note: "Achat possible en mode invité"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  contact:
+    meta:
+      title: "Contact Lumière Maroc — Ateliers"
+      description: "Retrouvez notre équipe locale et planifiez votre visite à Rabat."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/struct"
+          B: "header/modes"
+        cache: false   # header dynamique => jamais cacheté
+      contact_info:
+        component: "core/contact/info"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  courses:
+    meta:
+      title: "Catalogue des formations — Lumière Maroc"
+      description: "Explorez nos parcours artisanaux conçus pour les créateurs marocains."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/struct"
+          B: "header/modes"
+        cache: false   # header dynamique => jamais cacheté
+      course_list:
+        component: "courses/list"
+      faq:
+        component: "faq/main"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  faq:
+    meta:
+      title: "Lumière Academy — Questions fréquentes"
+      description: "Retrouvez les réponses aux questions fréquentes sur nos formations."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/struct"
+          B: "header/modes"
+        cache: false
+      faq:
+        component: "faq/main"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  register:
+    path: "/inscription/"
+    template: screens/register.html
+    meta:
+      title: "Inscription — Lumière Maroc"
+      description: "Créez votre compte et profitez des ateliers locaux."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/struct"
+          B: "header/modes"
+        cache: false
+      main:
+        component: "accounts/register/shell"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset:
+    path: "/mot-de-passe-oublie/"
+    template: screens/password_reset.html
+    meta:
+      title: "Mot de passe oublié — Lumière Maroc"
+      description: "Recevez un lien de réinitialisation sécurisé."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/struct"
+          B: "header/modes"
+        cache: false
+      main:
+        component: "accounts/password_reset/shell"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  check_email:
+    path: "/inscription/check-email/"
+    template: screens/auth_message.html
+    meta:
+      title: "Vérifie ta boîte mail — Lumière Academy"
+      description: "Confirme ton adresse pour activer ton compte."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/check_email"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  verification_success:
+    path: "/verification/succes/"
+    template: screens/auth_message.html
+    meta:
+      title: "E-mail vérifié — Lumière Academy"
+      description: "Ton adresse e-mail est confirmée."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/verify_success"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  verification_error:
+    path: "/verification/erreur/"
+    template: screens/auth_message.html
+    meta:
+      title: "Lien expiré — Lumière Academy"
+      description: "Demande un nouvel e-mail de confirmation."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/verify_error"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset_done:
+    path: "/mot-de-passe-oublie/envoye/"
+    template: screens/auth_message.html
+    meta:
+      title: "E-mail envoyé — Lumière Academy"
+      description: "Vérifie ta boîte mail pour réinitialiser ton mot de passe."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/password_reset/done"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset_confirm:
+    path: "/mot-de-passe-oublie/definir/{uidb64}/{token}/"
+    template: screens/auth_message.html
+    meta:
+      title: "Définir un nouveau mot de passe — Lumière Academy"
+      description: "Choisis un mot de passe sécurisé."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/password_reset/confirm"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset_complete:
+    path: "/mot-de-passe-oublie/termine/"
+    template: screens/auth_message.html
+    meta:
+      title: "Mot de passe mis à jour — Lumière Academy"
+      description: "Tu peux te connecter avec ton nouveau mot de passe."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/password_reset/complete"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+
+  lecture:
+    template: screens/lecture.html
+    params:
+      assets:
+        images:
+          poster: "/static/images/formateurs/cover-video-landing.jpg"
+    slots:
+      main:
+        component: core/learning/lecture
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+
+  'billing/success':
+    template: screens/ma/billing/success.html
+    meta:
+      title: "Paiement confirmé — Lumière Academy"
+      description: "Merci pour votre achat. Votre accès arrive dans quelques minutes."
+    slots:
+      vendors:
+        component: "vendors/core"
+        cache_key: "vendors|v:ma"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      message:
+        component: "checkout/thank_you_message"
+        cache_key: "billing_success_message|v:ma"
+        params:
+          title: "Paiement confirmé — merci 🙌"
+      footer:
+        component: "footer/main"
+        cache_key: "footer_main|v:ma"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  'billing/cancel':
+    template: screens/ma/billing/cancel.html
+    meta:
+      title: "Paiement annulé — Lumière Academy"
+      description: "Le paiement a été interrompu. Vous pouvez relancer le processus ou contacter notre équipe."
+    slots:
+      vendors:
+        component: "vendors/core"
+        cache_key: "vendors|v:ma"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      message:
+        component: "checkout/thank_you_message"
+        cache_key: "billing_cancel_message|v:ma"
+        params:
+          title: "Paiement interrompu"
+          paragraphs:
+            - "Votre paiement a été annulé ou n'a pas abouti."
+            - "Vous pouvez reprendre le processus quand vous le souhaitez."
+          info_box:
+            title: "Besoin d'aide ?"
+            paragraphs:
+              - "Contactez notre équipe support pour finaliser votre inscription."
+      footer:
+        component: "footer/main"
+        cache_key: "footer_main|v:ma"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false

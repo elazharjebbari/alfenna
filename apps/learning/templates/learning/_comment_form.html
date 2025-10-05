@@ -1,0 +1,9 @@
+<form method="post" action="{% url 'learning:comment' lecture.id %}" class="mt-4">
+  {% csrf_token %}
+  <label for="comment-body" class="form-label">Votre commentaire</label>
+  <textarea id="comment-body" name="body" rows="3" class="form-control" required minlength="3" maxlength="2000"
+            placeholder="Partagez une remarque utile..."></textarea>
+  <div class="mt-2 d-flex justify-content-end">
+    <button type="submit" class="btn btn-primary">Publier</button>
+  </div>
+</form>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <title>Facture {{ order.reference }}</title>
+</head>
+<body>
+<h1>Facture {{ order.reference }}</h1>
+<p>Commande #{{ order.id }} — {{ now|date:"Y-m-d" }}</p>
+<p>Client : {{ order.email }}</p>
+<table>
+    <thead>
+    <tr>
+        <th>Article</th>
+        <th>Quantité</th>
+        <th>Montant (EUR)</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td>{{ item.description|default:item.product_sku }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unit_amount|floatformat:2 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<p>Total TTC : {{ order.amount_total|floatformat:2 }} {{ order.currency }}</p>
+</body>
+</html>

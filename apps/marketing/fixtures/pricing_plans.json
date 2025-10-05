@@ -1,0 +1,96 @@
+[
+  { "model": "marketing.priceplan", "pk": 1, "fields": {
+    "slug": "starter", "title": "Starter",
+    "price_cents": 2500,
+    "currency_symbol": "€",
+    "display_order": 20,
+    "is_featured": true,
+    "is_active": true,
+    "ribbon_label": "Meilleur départ",
+    "cta_label": "Je démarre pour 25 €",
+    "cta_url": "#cta-buy-starter",
+    "cta_sublabel": "Accès immédiat — sans engagement"
+  }},
+
+  { "model": "marketing.priceplan", "pk": 2, "fields": {
+    "slug": "complet", "title": "Complet",
+    "price_cents": 32500,
+    "old_price_cents": 39900,
+    "currency_symbol": "€",
+    "display_order": 10,
+    "is_featured": false, "is_active": true,
+    "ribbon_label": "Kit + Communauté",
+    "cta_label": "Je veux le kit + communauté",
+    "cta_url": "#cta-buy-complet",
+    "cta_sublabel": "Paiement sécurisé • Accès immédiat"
+  }},
+
+  { "model": "marketing.priceplan", "pk": 3, "fields": {
+    "slug": "studio", "title": "Studio",
+    "price_cents": 175000,
+    "currency_symbol": "€",
+    "display_order": 30,
+    "is_featured": false, "is_active": true,
+    "ribbon_label": "Accompagnement 360°",
+    "cta_label": "Je lance ma marque",
+    "cta_url": "#cta-buy-studio",
+    "cta_sublabel": "Paiement sécurisé • Accès immédiat",
+    "payment_note": "Financement possible"
+  }},
+
+  { "model": "marketing.pricefeature", "pk": 100, "fields": { "plan": 1, "label": "Formation en ligne (bases essentielles)", "included": true, "sort_order": 10 }},
+  { "model": "marketing.pricefeature", "pk": 101, "fields": { "plan": 1, "label": "Guide PDF de fabrication de bougies", "included": true, "sort_order": 20 }},
+  { "model": "marketing.pricefeature", "pk": 102, "fields": { "plan": 1, "label": "Assistance 1 mois (chat / WhatsApp)", "included": true, "sort_order": 30 }},
+  { "model": "marketing.pricefeature", "pk": 103, "fields": { "plan": 1, "label": "Liste fournisseurs (FR/EU) pour le matériel", "included": true, "sort_order": 40 }},
+
+  { "model": "marketing.pricefeature", "pk": 104, "fields": { "plan": 1, "label": "Bonus #10 — Réaliser une bougie deux couleurs (moule boules)", "included": true, "sort_order": 50 }},
+  { "model": "marketing.pricefeature", "pk": 105, "fields": { "plan": 1, "label": "Bonus #11 — Obtenir l’effet “bougie crème” (texture stable)", "included": true, "sort_order": 60 }},
+  { "model": "marketing.pricefeature", "pk": 106, "fields": { "plan": 1, "label": "Bonus #12 — Fabriquer des fondants parfumés", "included": true, "sort_order": 70 }},
+  { "model": "marketing.pricefeature", "pk": 107, "fields": { "plan": 1, "label": "Bonus #13 — Diagnostiquer les défauts & appliquer les solutions", "included": true, "sort_order": 80 }},
+  { "model": "marketing.pricefeature", "pk": 108, "fields": { "plan": 1, "label": "Bonus #14 — Fabriquer le contenant de votre bougie", "included": true, "sort_order": 90 }},
+
+  { "model": "marketing.pricefeature", "pk": 200, "fields": { "plan": 2, "label": "Tout le contenu du Starter", "included": true, "sort_order": 5 }},
+  { "model": "marketing.pricefeature", "pk": 201, "fields": { "plan": 2, "label": "Accès à la communauté", "included": true, "sort_order": 10 }},
+
+  { "model": "marketing.pricefeature", "pk": 300, "fields": { "plan": 3, "label": "Tout le contenu du Complet", "included": true, "sort_order": 5 }},
+  { "model": "marketing.pricefeature", "pk": 301, "fields": { "plan": 3, "label": "Création de page Instagram", "included": true, "sort_order": 10 }},
+  { "model": "marketing.pricefeature", "pk": 302, "fields": { "plan": 3, "label": "Création de contenu & community management (1 mois)", "included": true, "sort_order": 20 }},
+  { "model": "marketing.pricefeature", "pk": 303, "fields": { "plan": 3, "label": "Traffic management (campagnes de démarrage)", "included": true, "sort_order": 30 }},
+  { "model": "marketing.pricefeature", "pk": 304, "fields": { "plan": 3, "label": "Création de boutique en ligne (Shopify/WordPress)", "included": true, "sort_order": 40 }},
+  { "model": "marketing.pricefeature", "pk": 305, "fields": { "plan": 3, "label": "Sessions 1-to-1 (2×60 min)", "included": true, "sort_order": 50 }},
+
+  { "model": "marketing.pricebonusitem", "pk": 1000, "fields": { "plan": 2, "label": "Communauté & support (12 mois)", "amount_cents": 21800, "sort_order": 10 }},
+  { "model": "marketing.pricebonusitem", "pk": 1001, "fields": { "plan": 2, "label": "Kit de formation (matériel & expédition)", "amount_cents": 14900, "sort_order": 20 }},
+
+  { "model": "marketing.pricebonusitem", "pk": 1100, "fields": { "plan": 3, "label": "Branding & set-up Instagram", "amount_cents": 12900, "sort_order": 10 }},
+  { "model": "marketing.pricebonusitem", "pk": 1101, "fields": { "plan": 3, "label": "Community management (1 mois)", "amount_cents": 14900, "sort_order": 20 }},
+  { "model": "marketing.pricebonusitem", "pk": 1102, "fields": { "plan": 3, "label": "Traffic management (lancement)", "amount_cents": 19900, "sort_order": 30 }},
+  { "model": "marketing.pricebonusitem", "pk": 1103, "fields": { "plan": 3, "label": "Création de boutique en ligne", "amount_cents": 19900, "sort_order": 40 }},
+  { "model": "marketing.pricebonusitem", "pk": 1104, "fields": { "plan": 3, "label": "Sessions 1-to-1 (2×60 min)", "amount_cents": 9900, "sort_order": 50 }},
+
+  { "model": "marketing.bonusfeature", "pk": 5000, "fields": {
+    "plan": 1,
+    "label": "Bicolore net, bord propre",
+    "icon_class": "fa-solid fa-fill-drip", "sort_order": 10, "is_active": true
+  }},
+  { "model": "marketing.bonusfeature", "pk": 5001, "fields": {
+    "plan": 1,
+    "label": "Texture crème stable",
+    "icon_class": "fa-solid fa-ice-cream", "sort_order": 20, "is_active": true
+  }},
+  { "model": "marketing.bonusfeature", "pk": 5002, "fields": {
+    "plan": 1,
+    "label": "Fondants parfumés, diffusion longue",
+    "icon_class": "fa-solid fa-bahai", "sort_order": 30, "is_active": true
+  }},
+  { "model": "marketing.bonusfeature", "pk": 5003, "fields": {
+    "plan": 1,
+    "label": "Flamme stable, surface lisse",
+    "icon_class": "fa-solid fa-screwdriver-wrench", "sort_order": 40, "is_active": true
+  }},
+  { "model": "marketing.bonusfeature", "pk": 5004, "fields": {
+    "plan": 1,
+    "label": "Fabrique ton contenant en plâtre",
+    "icon_class": "fa-solid fa-box-open", "sort_order": 50, "is_active": true
+  }}
+]

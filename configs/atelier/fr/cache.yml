@@ -1,0 +1,25 @@
+cache:
+  defaults:
+    ttl_seconds: 1800
+  slots:
+    header/struct:       { ttl_seconds: 0 }
+    hero:                { ttl_seconds: 2700 }
+    detail/formation:    { ttl_seconds: 86400 }
+    content_training:    { ttl_seconds: 86400 }
+    proofbar/videos:     { ttl_seconds: 86400 }
+    hero/cover:          { ttl_seconds: 2700 }
+    cover/highlights:    { ttl_seconds: 2700 }
+    video_presentation:  { ttl_seconds: 86400 }
+    faq/main:            { ttl_seconds: 86400 }
+    presentation/formatrice: { ttl_seconds: 86400 }
+    cta/primary:         { ttl_seconds: 1200 }
+    footer/main:         { ttl_seconds: 604800 }
+    contact/info:        { ttl_seconds: 86400 }
+    contact/phone:       { ttl_seconds: 86400 }
+    contact/map:         { ttl_seconds: 86400 }
+    courses/list:        { ttl_seconds: 900 }
+    course_detail/sidebar:  { ttl_seconds: 1800 }
+    course_detail/training: { ttl_seconds: 86400 }
+  vary_fields:
+    - Accept-Language
+    - Cookie

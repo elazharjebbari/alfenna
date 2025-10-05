@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{ flow.key }} — {{ step.title|default:step.key }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <!-- Sentinel pour tests -->
+  <div id="flowforms-sentinel" style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
+
+  <main class="container" style="max-width:720px;margin:2rem auto;padding:0 1rem;">
+    <header style="margin-bottom:1rem;">
+      <div aria-label="progress" class="ff-progress text-sm" style="opacity:.8">
+        Étape {{ progress.index }} / {{ progress.total }}
+      </div>
+      <h1 style="margin:.25rem 0 0 0;">{{ step.title|default:step.key }}</h1>
+    </header>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      {% include "flowforms/fragments/_cta_bar.html" with ctas=step.ctas %}
+    </form>
+  </main>
+</body>
+</html>

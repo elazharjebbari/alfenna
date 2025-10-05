@@ -1,0 +1,539 @@
+pages:
+  online_home:
+    meta:
+      title: "Lumière Academy — Fabrication de bougies"
+      description: "Participez à nos cours et apprenez des techniques artisanales."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      hero:
+        component: "hero/cover"
+        cache: true
+      learning_card:
+        component: "learning/card"
+      learning_content:
+        component: "learning/content"
+      highlights:
+        component: "learning/highlights"
+      faq:
+        component: "faq/main"
+      trainer:
+        component: "trainer/profile"
+      footer:
+        component: "footer/main"
+      usp_rail:
+        component: "usp/rail"
+      usp_pills:
+        component: "usp/pills"
+      usp_cards:
+        component: "usp/cards"
+      before_after_wipe:
+        component: "before-after/wipe"
+      program_roadmap:
+        component: "program/roadmap"
+      eco_proof_badges:
+        component: "eco-proofs/badges"
+      carousel_swiper:
+        component: "carousel_multi/multimedia_a"
+        with:
+          # tu peux surcharger ici personas, slides, options…
+          options:
+            autoplay_ms: 0
+            pause_on_hover: true
+            loop: true
+            items_per_view: { default: 1, md: 2, xl: 3, xxl: 3 }
+      micro_choice_pills:
+        component: "micro-choice/pills"
+      pricing_pack:
+        component: "pricing/packs"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  packs:
+    meta:
+      title: "Offres - Lumière Academy"
+      description: "Découvrez Nos Meilleurs Offres - Lumière Academy."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      faq:
+        component: "faq/main"
+      footer:
+        component: "footer/main"
+      pricing_pack:
+        component: "pricing/packs"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+
+  faq:
+    meta:
+      title: "Lumière Academy — Questions fréquentes"
+      description: "Réponses aux questions fréquentes sur les formations Lumière Academy."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      faq:
+        component: "faq/main"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+
+  test:
+    meta:
+      title: "(Test) Lumière Academy — Fabrication de bougies"
+      description: "(Test) Participez à nos cours et apprenez des techniques artisanales."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      contact_info:
+        component: "core/contact/info"
+      contact_map:
+        component: "contact/map"
+        params:
+          map_embed_url: "https://maps.example.com/embed/demo"
+      course_list:
+        component: "courses/list"
+        params:
+          limit: 6
+          list_title: "Nos formations populaires"
+          list_subtitle: "Sélectionnez un cours pour démarrer votre parcours."
+          label_languages: "Langues : 🇲🇦 / 🇫🇷"
+          label_lessons: "+30 cours"
+          label_score: "Score"
+      training_block:
+        component: "course_detail/training"
+      sidebar_block:
+        component: "course_detail/sidebar"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  contact:
+    meta:
+      title: "(Test) Lumière Academy — Fabrication de bougies"
+      description: "(Test) Participez à nos cours et apprenez des techniques artisanales."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      contact_info:
+        component: "core/contact/info"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  courses:
+    meta:
+      title: "(Test) Lumière Academy — Fabrication de bougies"
+      description: "(Test) Participez à nos cours et apprenez des techniques artisanales."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      course_list:
+        component: "courses/list"
+      faq:
+        component: "faq/main"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  lecture:
+    template: screens/lecture.html
+    params:
+      assets:
+        images:
+          poster: "/static/images/formateurs/cover-video-landing.jpg"
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+      main:
+        component: core/learning/lecture
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  demo:
+    path: "/demo/"
+    template: screens/demo.html
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+      main:
+        component: core/learning/lecture
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  course_detail:
+    template: screens/course_detail.html
+    meta:
+      title: "(Cours) Lumière Academy — Fabrication de bougies"
+      description: "(Cours) Participez à nos cours et apprenez des techniques artisanales."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      training_block:
+        component: "course_detail/training"
+      sidebar_block:
+        component: "course_detail/sidebar"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  login:
+    template: screens/login.html
+    meta:
+      title: "Login - Lumiere Academy"
+      description: "Description - Lumiere Academy."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false   # header dynamique => jamais cacheté
+      login_form:
+        component: "accounts/login/form"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  register:
+    path: "/inscription/"
+    template: screens/register.html
+    meta:
+      title: "Inscription — Lumière Academy"
+      description: "Créez votre compte pour accéder aux formations."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/register/shell"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset:
+    path: "/mot-de-passe-oublie/"
+    template: screens/password_reset.html
+    meta:
+      title: "Mot de passe oublié — Lumière Academy"
+      description: "Récupérez l'accès à votre compte."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/password_reset/shell"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  check_email:
+    path: "/inscription/check-email/"
+    template: screens/auth_message.html
+    meta:
+      title: "Vérifie ta boîte mail — Lumière Academy"
+      description: "Confirme ton adresse pour activer ton compte."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/check_email"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  verification_success:
+    path: "/verification/succes/"
+    template: screens/auth_message.html
+    meta:
+      title: "E-mail vérifié — Lumière Academy"
+      description: "Ton adresse e-mail est confirmée."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/verify_success"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  verification_error:
+    path: "/verification/erreur/"
+    template: screens/auth_message.html
+    meta:
+      title: "Lien expiré — Lumière Academy"
+      description: "Demande un nouvel e-mail de confirmation."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/verify_error"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset_done:
+    path: "/mot-de-passe-oublie/envoye/"
+    template: screens/auth_message.html
+    meta:
+      title: "E-mail envoyé — Lumière Academy"
+      description: "Vérifie ta boîte mail pour réinitialiser ton mot de passe."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/password_reset/done"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset_confirm:
+    path: "/mot-de-passe-oublie/definir/{uidb64}/{token}/"
+    template: screens/auth_message.html
+    meta:
+      title: "Définir un nouveau mot de passe — Lumière Academy"
+      description: "Choisis un mot de passe sécurisé."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/password_reset/confirm"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  password_reset_complete:
+    path: "/mot-de-passe-oublie/termine/"
+    template: screens/auth_message.html
+    meta:
+      title: "Mot de passe mis à jour — Lumière Academy"
+      description: "Tu peux te connecter avec ton nouveau mot de passe."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      main:
+        component: "accounts/password_reset/complete"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  checkout:
+    path: "/billing/checkout/plan/{plan_slug}/"
+    template: "screens/checkout.html"   # cf. NOTE plus bas si ce template n’existe pas encore
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      order_summary:
+        component: "core/checkout/order_summary"
+      payment_form:
+        component: "core/checkout/payment_form"
+      express:
+        component: "core/checkout/express"
+      legal:
+        component: "core/checkout/legal_info"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+
+  thank_you:
+    template: screens/thank_you.html
+    meta:
+      title: "Merci pour votre achat"
+      description: "Confirmation de paiement et prochaines étapes."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      thank_you_message:
+        component: "checkout/thank_you_message"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  'billing/success':
+    template: screens/core/billing/success.html
+    meta:
+      title: "Paiement confirmé — Lumière Academy"
+      description: "Merci pour votre achat. Votre accès arrive dans quelques minutes."
+    slots:
+      vendors:
+        component: "vendors/core"
+        cache_key: "vendors|v:core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      message:
+        component: "checkout/thank_you_message"
+        cache_key: "billing_success_message|v:core"
+        params:
+          title: "Paiement confirmé — merci 🙌"
+      footer:
+        component: "footer/main"
+        cache_key: "footer_main|v:core"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+  'billing/cancel':
+    template: screens/core/billing/cancel.html
+    meta:
+      title: "Paiement annulé — Lumière Academy"
+      description: "Le paiement a été interrompu. Vous pouvez relancer le processus ou contacter notre équipe."
+    slots:
+      vendors:
+        component: "vendors/core"
+        cache_key: "vendors|v:core"
+      header:
+        experiment: header_ab
+        variants:
+          A: "header/modes"
+          B: "header/struct"
+        cache: false
+      message:
+        component: "checkout/thank_you_message"
+        cache_key: "billing_cancel_message|v:core"
+        params:
+          title: "Paiement interrompu"
+          paragraphs:
+            - "Votre paiement a été annulé ou n'a pas abouti."
+            - "Vous pouvez reprendre le processus quand vous le souhaitez."
+          info_box:
+            title: "Besoin d'aide ?"
+            paragraphs:
+              - "Contactez notre équipe support pour finaliser votre inscription."
+      footer:
+        component: "footer/main"
+        cache_key: "footer_main|v:core"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false

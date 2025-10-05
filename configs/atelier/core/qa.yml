@@ -1,0 +1,2 @@
+qa:
+  preview_param_prefix: "dwft_"   # on cherchera dwft_hero_v2=1

@@ -1,0 +1,1 @@
+"""Composants (registry, contrats, assets) — package init."""

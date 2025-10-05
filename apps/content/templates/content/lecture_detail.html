@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{{ course.title }} — {% trans "Leçon" %} {{ lecture.section.order }}.{{ lecture.order }}</h1>
+
+  {% if preview %}
+    <p><em>{% trans "Prévisualisation (non indexée)" %}</em></p>
+  {% endif %}
+
+  <article>
+    <p>{{ lecture.title }}</p>
+
+    {# === Player vidéo sécurisé (stream Range 206) === #}
+    <video id="lecture-video" controls preload="metadata"
+           {% if lecture.poster %}poster="{{ lecture.poster.url }}"{% endif %}
+           style="width:100%;max-width:960px;background:#000;border-radius:12px;">
+      <source src="{{ player_src }}" type="video/mp4">
+      {% trans "Votre navigateur ne supporte pas la balise vidéo." %}
+    </video>
+
+    {# Reprise simple si une position existe #}
+    {% if user_progress and user_progress.last_position_ms %}
+      {% block scripts %}
+        {{ block.super }}
+        <script>
+          (function(){
+            var saved = {{ user_progress.last_position_ms|default:0 }};
+            var v = document.getElementById('lecture-video');
+            if (!v) return;
+            var primed = false;
+            function applyResume(){
+              if (primed) return;
+              primed = true;
+              try { v.currentTime = (saved/1000.0); } catch(e){}
+            }
+            v.addEventListener('play', applyResume, { once: true });
+          })();
+        </script>
+      {% endblock %}
+    {% endif %}
+  </article>
+
+  <section>
+    <h2>{% trans "Commentaires" %}</h2>
+    {% for c in comments %}
+      <div style="border-top:1px solid #eee;padding:.75rem 0;">
+        <div><strong>{{ c.user.username }}</strong> — <small>{{ c.created_at }}</small></div>
+        <div>{{ c.body|linebreaksbr }}</div>
+      </div>
+    {% empty %}
+      <p>{% trans "Aucun commentaire pour l’instant." %}</p>
+    {% endfor %}
+
+    {% if request.user.is_authenticated %}
+      {% include "learning/_comment_form.html" with lecture=lecture %}
+    {% else %}
+      <p>{% trans "Connectez-vous pour commenter." %}</p>
+    {% endif %}
+  </section>
+
+  {# Envoi de progression (throttle côté serveur) #}
+  {% include "learning/_progress_script.html" with lecture=lecture throttle_ms=3000 %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n cache %}
+
+{% block content %}
+  <h1>{{ object.title }}</h1>
+
+  {% if preview %}
+    <p><em>{% trans "Prévisualisation (non indexée)" %}</em></p>
+  {% endif %}
+
+  <article>
+    <p>{{ object.description }}</p>
+  </article>
+
+  <h2>{% trans "Plan du cours" %}</h2>
+  {# Cache fragment clé sur plan_version #}
+  {% cache 600 course_plan object.pk object.plan_version preview %}
+    <ol>
+      {% for s in object.prefetched_sections %}
+        <li>
+          <strong>{{ s.order }}. {{ s.title }}</strong>
+          <ol>
+            {# Grâce aux to_attr, chaque section a .prefetched_lectures quand prefetch en cascade #}
+            {% for l in s.prefetched_lectures %}
+              <li>{{ l.order }}. {{ l.title }}</li>
+            {% endfor %}
+          </ol>
+        </li>
+      {% endfor %}
+    </ol>
+  {% endcache %}
+{% endblock %}

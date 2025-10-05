@@ -1,0 +1,18 @@
+{% extends "partials/_auth_layout.html" %}
+{% load i18n %}
+
+{% block auth_title %}{% trans "Vérifie ta boîte mail" %}{% endblock %}
+{% block auth_sub %}{% trans "Nous venons d’envoyer un lien de confirmation à" %} <strong>{{ obfuscated_email }}</strong>{% endblock %}
+
+{% block auth_form %}
+  <p class="text-muted">{% trans "Clique le lien dans l’e‑mail pour activer ton compte." %}</p>
+  <form class="auth-form" method="post" action="{% url 'accounts:resend_verification' %}">
+    {% csrf_token %}
+    <div class="auth-actions">
+      <button class="btn-primary" type="submit">{% trans "Renvoyer l’e‑mail" %}</button>
+    </div>
+  </form>
+  <div class="meta-links">
+    <a href="{% url 'pages:login' %}">{% trans "Retour à la connexion" %}</a>
+  </div>
+{% endblock %}

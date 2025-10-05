@@ -1,0 +1,77 @@
+{% extends "partials/_auth_layout.html" %}
+{% load i18n %}
+
+{% block auth_title %}{% trans "Connexion" %}{% endblock %}
+{% block auth_sub %}{% trans "Accède à tes cours en toute sécurité." %}{% endblock %}
+
+{% block auth_form %}
+  {% if form.non_field_errors %}
+    <div class="alert error" role="alert">{{ form.non_field_errors|join:" " }}</div>
+  {% endif %}
+
+  <form class="auth-form" method="post" action="{% url 'pages:login' %}" novalidate>
+    {% csrf_token %}
+    {% with next_value|default:'' as next_value %}
+      {% if next_value %}<input type="hidden" name="next" value="{{ next_value }}">{% endif %}
+    {% endwith %}
+
+    <div class="field">
+      <label for="id_username">{% trans "Email ou nom d’utilisateur" %}</label>
+      {% with field_errors=form.username.errors %}
+        <input id="id_username"
+               name="username"
+               type="text"
+               autocomplete="username"
+               required
+               autofocus
+               aria-invalid="{{ field_errors|yesno:'true,false' }}"
+               {% if field_errors %}aria-describedby="err_id_username"{% endif %}
+               value="{{ form.username.value|default_if_none:'' }}">
+        {% if field_errors %}
+          <div class="alert error field-error" id="err_id_username">{{ field_errors|join:" " }}</div>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="field">
+      <label for="id_password">{% trans "Mot de passe" %}</label>
+      {% with field_errors=form.password.errors %}
+        <div class="password-field">
+          <input id="id_password"
+                 name="password"
+                 type="password"
+                 autocomplete="current-password"
+                 required
+                 aria-invalid="{{ field_errors|yesno:'true,false' }}"
+                 {% if field_errors %}aria-describedby="err_id_password"{% endif %}>
+          <button type="button"
+                  class="pw-toggle"
+                  aria-controls="id_password"
+                  aria-label="{% trans 'Afficher le mot de passe' %}"
+                  data-label-hide="{% trans 'Masquer le mot de passe' %}">👁</button>
+        </div>
+        <small class="caps-hint">{% trans "Verr Maj activée" %}</small>
+        {% if field_errors %}
+          <div class="alert error field-error" id="err_id_password">{{ field_errors|join:" " }}</div>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="field checkbox-field">
+      <label><input type="checkbox" name="remember_me" {% if form.remember_me.value %}checked{% endif %}> {% trans "Rester connecté" %}</label>
+    </div>
+
+    <div class="auth-actions">
+      <button class="btn-primary" type="submit">{% trans "Se connecter" %}</button>
+    </div>
+
+    <div class="meta-links">
+      <a href="{% url 'accounts:password_reset' %}">{% trans "Mot de passe oublié ?" %}</a>
+      <a href="{% url 'pages:register' %}">{% trans "Créer un compte" %}</a>
+    </div>
+  </form>
+{% endblock %}
+
+{% block auth_footer %}
+  <small>{% trans "Besoin d’aide ? Contacte le support." %}</small>
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "partials/_auth_layout.html" %}
+{% load i18n %}
+
+{% block auth_title %}{% trans "Créer mon compte" %}{% endblock %}
+{% block auth_sub %}{% trans "Rejoins l’académie en 1 minute." %}{% endblock %}
+
+{% block auth_form %}
+  {% if form.non_field_errors %}
+    <div class="alert error" role="alert">{{ form.non_field_errors|join:" " }}</div>
+  {% endif %}
+
+  <form class="auth-form" method="post" action="{% url 'pages:register' %}" novalidate>
+    {% csrf_token %}
+
+    <div class="field">
+      <label for="id_full_name">{% trans "Nom complet" %}</label>
+      {% with field_errors=form.full_name.errors %}
+        <input id="id_full_name"
+               name="full_name"
+               type="text"
+               autocomplete="name"
+               required
+               aria-invalid="{{ field_errors|yesno:'true,false' }}"
+               {% if field_errors %}aria-describedby="err_id_full_name"{% endif %}
+               value="{{ form.full_name.value|default_if_none:'' }}">
+        {% if field_errors %}
+          <div class="alert error field-error" id="err_id_full_name">{{ field_errors|join:" " }}</div>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="field">
+      <label for="id_email">{% trans "Adresse e‑mail" %}</label>
+      {% with field_errors=form.email.errors %}
+        <input id="id_email"
+               name="email"
+               type="email"
+               autocomplete="email"
+               required
+               aria-invalid="{{ field_errors|yesno:'true,false' }}"
+               {% if field_errors %}aria-describedby="err_id_email"{% endif %}
+               value="{{ form.email.value|default_if_none:'' }}">
+        {% if field_errors %}
+          <div class="alert error field-error" id="err_id_email">{{ field_errors|join:" " }}</div>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="field">
+      <label for="id_password1">{% trans "Mot de passe" %}</label>
+      {% with field_errors=form.password1.errors %}
+        <div class="password-field">
+          <input id="id_password1"
+                 name="password1"
+                 type="password"
+                 autocomplete="new-password"
+                 required
+                 aria-invalid="{{ field_errors|yesno:'true,false' }}"
+                 {% if field_errors %}aria-describedby="err_id_password1"{% endif %}>
+          <button type="button"
+                  class="pw-toggle"
+                  aria-controls="id_password1"
+                  aria-label="{% trans 'Afficher le mot de passe' %}"
+                  data-label-hide="{% trans 'Masquer le mot de passe' %}">👁</button>
+        </div>
+        <small class="caps-hint">{% trans "Verr Maj activée" %}</small>
+        <small class="hint">{% trans "8+ caractères. Évite les mots de passe trop communs." %}</small>
+        {% if field_errors %}
+          <div class="alert error field-error" id="err_id_password1">{{ field_errors|join:" " }}</div>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="field">
+      <label for="id_password2">{% trans "Confirmer le mot de passe" %}</label>
+      {% with field_errors=form.password2.errors %}
+        <div class="password-field">
+          <input id="id_password2"
+                 name="password2"
+                 type="password"
+                 autocomplete="new-password"
+                 required
+                 aria-invalid="{{ field_errors|yesno:'true,false' }}"
+                 {% if field_errors %}aria-describedby="err_id_password2"{% endif %}>
+          <button type="button"
+                  class="pw-toggle"
+                  aria-controls="id_password2"
+                  aria-label="{% trans 'Afficher le mot de passe' %}"
+                  data-label-hide="{% trans 'Masquer le mot de passe' %}">👁</button>
+        </div>
+        <small class="caps-hint">{% trans "Verr Maj activée" %}</small>
+        {% if field_errors %}
+          <div class="alert error field-error" id="err_id_password2">{{ field_errors|join:" " }}</div>
+        {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="field checkbox-field">
+      <label><input type="checkbox" name="marketing_opt_in" {% if form.marketing_opt_in.value %}checked{% endif %}> {% trans "Recevoir les offres et actualités" %}</label>
+    </div>
+
+    <div class="auth-actions">
+      <button class="btn-primary" type="submit">{% trans "Créer mon compte" %}</button>
+    </div>
+
+    <div class="meta-links">
+      <span>{% trans "Déjà inscrit ?" %} <a href="{% url 'pages:login' %}">{% trans "Se connecter" %}</a></span>
+    </div>
+  </form>
+{% endblock %}

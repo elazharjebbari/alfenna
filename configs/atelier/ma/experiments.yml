@@ -1,0 +1,8 @@
+experiments:
+  hero_v2:
+    rollout: 0
+    variants:
+      A: "hero/cover"
+      B: "hero/slider"
+  header_ab:
+    rollout: 0

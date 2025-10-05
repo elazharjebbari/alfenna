@@ -1,0 +1,21 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FlowForms — {{ flow.key }} — {{ step.title|default:step.key }}</title>
+</head>
+<body>
+  <!-- Sentinel pour tests (non visible) -->
+  <div id="flowforms-sentinel" style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
+
+  <main class="container" style="max-width:680px;margin:2rem auto;">
+    <h1>{{ step.title|default:step.key }}</h1>
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      {% include "flowforms/fragments/_cta_bar.html" with ctas=step.ctas %}
+    </form>
+  </main>
+</body>
+</html>
