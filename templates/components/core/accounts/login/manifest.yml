@@ -1,0 +1,13 @@
+# templates/components/core/accounts/login/manifest.yml
+alias: accounts/login/form
+template: "components/core/accounts/login/form.html"
+assets:
+  css:
+    - "/static/css/auth.css"
+  js:
+    - "/static/js/auth.js"
+hydrate:
+  module: "apps.atelier.compose.hydrators.accounts.login"
+  func: "login_form"
+render:
+  cacheable: false

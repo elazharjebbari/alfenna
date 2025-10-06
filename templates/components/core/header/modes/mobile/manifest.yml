@@ -1,0 +1,40 @@
+alias: header/modes/mobile
+template: "components/core/header/modes/mobile/mobile_menu.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+params:
+  contact:
+    phone_tel: ""
+    phone_display: ""
+    email: ""
+    address_url: ""
+    address_text: ""
+  socials: []
+  course_slug: "bougies-naturelles"
+
+contract:
+  optional:
+    contact:
+      phone_tel: "str"
+      phone_display: "str"
+      email: "str"
+      address_url: "str"
+      address_text: "str"
+    socials:
+      - icon: "str"
+        url: "str"
+        new_tab?: "bool"
+    course_slug: "str"
+    mode_override: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header_modes.hydrators"
+  func: "modes_mobile"
+
+render:
+  cacheable: false

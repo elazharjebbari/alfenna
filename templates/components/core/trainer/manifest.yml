@@ -1,0 +1,70 @@
+alias: trainer/profile
+template: "components/core/trainer/profile.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+# Defaults (servent de whitelist pour l’hydrateur)
+params:
+  section_title_html: "Votre <span>Formatrice</span>"
+  tab_label: "La formatrice"
+  tablist_id: "myTab"
+  tabcontent_id: "myTabContent"
+  tab_id: "home"
+  tab_button_id: "home-tab"
+
+  image_static_path: "images/formateurs/formatrice_souheila.png"
+  image_alt: "graphique"
+
+  intro_title_html: "Je suis votre formatrice !"
+
+  paragraph_1_html: |
+    <strong class="text-primary">Je suis Souheila</strong>, <em>Biologiste</em> et
+    passionnée par l'artisanat. Forte de mes expériences dans la création de
+    <u>parfums</u>, de <u>produits cosmétiques</u> et surtout de <strong>bougies</strong>,
+    je suis impatiente de partager avec vous mon <strong>savoir-faire</strong> et mes techniques uniques.
+
+  paragraph_2_html: |
+    Ensemble, nous explorerons l'art de créer des <strong>bougies personnalisées et distinctives</strong>,
+    qui feront la renommée de votre future entreprise. Nous aborderons également les bases du <em>e-commerce</em>
+    pour vous permettre de transformer votre passion en un projet commercial florissant.
+    <strong>Rejoignez-moi</strong> pour une aventure où votre talent artisanal deviendra le cœur de votre succès entrepreneurial.
+
+contract:
+  required:
+    image_static_path: "Chemin STATIC relatif de l'image (utilisé en data-src pour lazy)"
+  optional:
+    section_title_html: "HTML du titre de section"
+    tab_label: "Libellé de l’onglet"
+    tablist_id: "ID du <ul> des onglets"
+    tabcontent_id: "ID du conteneur de contenus d’onglets"
+    tab_id: "ID de la tab-pane (référencé par data-bs-target/aria-controls)"
+    tab_button_id: "ID du bouton d’onglet (référencé par aria-labelledby)"
+    image_alt: "Texte alternatif image"
+    intro_title_html: "Titre interne (h2)"
+    paragraph_1_html: "Paragraphe 1 (HTML autorisé)"
+    paragraph_2_html: "Paragraphe 2 (HTML autorisé)"
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.trainer.hydrators.trainer_profile"
+  module: "apps.atelier.compose.hydrators.trainer.hydrators"
+  func: "trainer_profile"
+
+  params:
+    section_title_html: ""
+    tab_label: "La formatrice"
+    tablist_id: "myTab"
+    tabcontent_id: "myTabContent"
+    tab_id: "home"
+    tab_button_id: "home-tab"
+    image_static_path: "images/formateurs/formatrice_souheila.png"
+    image_alt: "graphique"
+    intro_title_html: "Je suis votre formatrice !"
+    paragraph_1_html: ""
+    paragraph_2_html: ""
+
+render:
+  cacheable: true

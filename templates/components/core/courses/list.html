@@ -1,0 +1,53 @@
+{% load static atelier_images atelier_utils %}
+<div class="section section-padding">
+  <div class="container">
+    {% if list_title or list_subtitle %}
+    <div class="section-title text-center mb-4">
+      {% if list_title %}<h2 class="main-title">{% render_string list_title %}</h2>{% endif %}
+      {% if list_subtitle %}<p class="sub-title">{% render_string list_subtitle %}</p>{% endif %}
+    </div>
+    {% endif %}
+
+    {% if courses %}
+    <div class="row g-4">
+      {% for course in courses %}
+      <div class="col-lg-4 col-md-6">
+        <div class="single-courses h-100">
+          <div class="courses-images">
+            <a href="{{ course.url }}">
+              {% with cover=course.cover_url|default:"" %}
+                {% if cover|slice:":4" == "http" %}
+                  <img src="{{ cover }}" alt="{{ course.title }}" class="img-fluid" loading="lazy" decoding="async" />
+                {% else %}
+                  {% responsive_picture cover alt=course.title cls="img-fluid" %}
+                {% endif %}
+              {% endwith %}
+            </a>
+          </div>
+          <div class="courses-content">
+            <h4 class="title"><a href="{{ course.url }}">{{ course.title }}</a></h4>
+            <div class="courses-meta">
+              {% if label_languages %}<span><i class="icofont-world"></i> {{ label_languages }}</span>{% endif %}
+              {% if label_lessons %}<span><i class="icofont-read-book"></i> {{ label_lessons }}</span>{% endif %}
+            </div>
+            {% if label_score %}
+            <div class="courses-rating mt-2">
+              <p>{{ label_score }}</p>
+              <div class="rating-progress-bar">
+                <div class="rating-line" style="width: {{ course.progress_pct }}%;"></div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      {% if empty_state_title %}<h4 class="mb-2">{% render_string empty_state_title %}</h4>{% endif %}
+      {% if empty_state_description %}<p>{% render_string empty_state_description %}</p>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+</div>

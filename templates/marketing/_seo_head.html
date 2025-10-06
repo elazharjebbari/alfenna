@@ -1,0 +1,81 @@
+{# templates/marketing/_seo_head.html #}
+{# Rendu DRY des balises <head>, en s’appuyant sur django-meta (via View mixin) + CP marketing #}
+{% load marketing_json %}
+
+{# --- Title & description --- #}
+{% if meta.title %}
+<title>{{ meta.title }}</title>
+{% elif seo_meta.title %}
+<title>{{ seo_meta.title }}</title>
+{% else %}
+<title>{{ seo_meta.site_name }}</title>
+{% endif %}
+{% if meta.description %}
+<meta name="description" content="{{ meta.description|striptags }}">
+{% elif seo_meta.description %}
+<meta name="description" content="{{ seo_meta.description|striptags }}">
+{% endif %}
+
+{# --- Canonical & robots --- #}
+{% if seo_meta.canonical %}<link rel="canonical" href="{{ seo_meta.canonical }}">{% endif %}
+{% if seo_meta.robots %}<meta name="robots" content="{{ seo_meta.robots }}">{% endif %}
+
+{# --- Open Graph --- #}
+<meta property="og:site_name" content="{{ seo_meta.site_name }}">
+{% if meta.title %}
+<meta property="og:title" content="{{ meta.title }}">
+{% elif seo_meta.title %}
+<meta property="og:title" content="{{ seo_meta.title }}">
+{% endif %}
+{% if meta.description %}
+<meta property="og:description" content="{{ meta.description|striptags }}">
+{% elif seo_meta.description %}
+<meta property="og:description" content="{{ seo_meta.description|striptags }}">
+{% endif %}
+{% if meta.url %}
+<meta property="og:url" content="{{ meta.url }}">
+{% elif seo_meta.canonical %}
+<meta property="og:url" content="{{ seo_meta.canonical }}">
+{% endif %}
+{% if meta.image %}
+<meta property="og:image" content="{{ meta.image }}">
+{% elif seo_meta.image %}
+<meta property="og:image" content="{{ seo_meta.image }}">
+{% endif %}
+<meta property="og:type" content="{{ meta.object_type|default:seo_meta.og_type|default:'website' }}">
+
+{# --- Twitter --- #}
+{% if meta.twitter_site %}<meta name="twitter:site" content="{{ meta.twitter_site }}">{% endif %}
+{% if meta.twitter_creator %}<meta name="twitter:creator" content="{{ meta.twitter_creator }}">{% endif %}
+<meta name="twitter:card" content="{{ meta.twitter_card|default:seo_meta.twitter_card|default:'summary_large_image' }}">
+{% if meta.title %}
+<meta name="twitter:title" content="{{ meta.title }}">
+{% elif seo_meta.title %}
+<meta name="twitter:title" content="{{ seo_meta.title }}">
+{% endif %}
+{% if meta.description %}
+<meta name="twitter:description" content="{{ meta.description|striptags }}">
+{% elif seo_meta.description %}
+<meta name="twitter:description" content="{{ seo_meta.description|striptags }}">
+{% endif %}
+{% if meta.image %}
+<meta name="twitter:image" content="{{ meta.image }}">
+{% elif seo_meta.image %}
+<meta name="twitter:image" content="{{ seo_meta.image }}">
+{% endif %}
+
+{# --- hreflang alternates --- #}
+{% if seo_meta.alternates %}
+  {% for lang, url in seo_meta.alternates %}
+    <link rel="alternate" hreflang="{{ lang }}" href="{{ url }}">
+  {% endfor %}
+{% endif %}
+
+{# --- Pagination (prev/next) --- #}
+{% if seo_meta.prev_link %}<link rel="prev" href="{{ seo_meta.prev_link }}">{% endif %}
+{% if seo_meta.next_link %}<link rel="next" href="{{ seo_meta.next_link }}">{% endif %}
+
+{# --- JSON-LD : sérialisation sûre et sans test de type interdit --- #}
+{% if seo_jsonld %}
+  <script type="application/ld+json">{{ seo_jsonld|tojson|safe }}</script>
+{% endif %}

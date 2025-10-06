@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ slots_html.vendors|default_if_none:""|safe }}
+  {{ slots_html.header|default_if_none:""|safe }}
+  <div class="section-padding"></div>
+  {{ slots_html.main|default_if_none:""|safe }}
+  {{ slots_html.footer|default_if_none:""|safe }}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  {% if page_assets.js and '/static/js/learning_player.js' in page_assets.js %}
+  {% else %}
+    <script src="/static/js/learning_player.js" defer></script>
+  {% endif %}
+{% endblock %}

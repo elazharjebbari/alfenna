@@ -1,0 +1,78 @@
+alias: header/struct
+template: "components/core/header/header_struct.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+# Valeurs par défaut (documentaires)
+params:
+  topbar:
+    enabled: true
+    text_html: |
+      Étape 1 : Découvrir ✓ &nbsp;|&nbsp; Étape 2 : Choisir &nbsp;|&nbsp; Étape 3 : Rejoindre
+      &nbsp;•&nbsp; Offre lancement : <del>39,00&nbsp;€</del> <strong>25,00&nbsp;€</strong> (≈&nbsp;0,07&nbsp;€/jour)
+    deadline_ts: "2025-09-30T23:59:00Z"
+    cta:
+      label: "Je me lance"
+      url: "#packs"
+  contact:
+    phone_tel: ""
+    phone_display: ""
+    email: ""
+    address_url: ""
+    address_text: ""
+  socials: []
+
+contract:
+  required:
+    topbar:
+      enabled: "bool"
+      text_html: "str"
+      cta?:
+        label: "str"
+        url: "str"
+  optional:
+    topbar:
+      deadline_ts: "str"
+    contact:
+      phone_tel: "str"
+      phone_display: "str"
+      email: "str"
+      address_url: "str"
+      address_text: "str"
+    socials:
+      - icon: "str"
+        url: "str"
+        new_tab?: "bool"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header.hydrators"
+  func: "header_struct"
+  params:
+    topbar:
+      enabled: true
+      text_html: |
+        Étape 1 : Découvrir ✓ &nbsp;|&nbsp; Étape 2 : Choisir &nbsp;|&nbsp; Étape 3 : Rejoindre
+        &nbsp;•&nbsp; Offre lancement : <del>39,00&nbsp;€</del> <strong>25,00&nbsp;€</strong> (≈&nbsp;0,07&nbsp;€/jour)
+      deadline_ts: "2025-09-30T23:59:00Z"
+      cta:
+        label: "Je me lance"
+        url: "#packs"
+    contact:
+      phone_tel: ""
+      phone_display: ""
+      email: ""
+      address_url: ""
+      address_text: ""
+    socials: []
+
+compose:
+  children:
+    main: "header/main"
+    mobile: "header/mobile"
+
+render:
+  cacheable: false

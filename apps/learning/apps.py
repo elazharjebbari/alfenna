@@ -27,7 +27,7 @@ class LearningConfig(AppConfig):
             if Course.objects.filter(slug="bougies-naturelles").exists():
                 return
 
-            call_command("loaddata", "lumierelearning/fixtures/course_bougies.json", verbosity=0)
+            call_command("loaddata", "alfenna/fixtures/course_bougies.json", verbosity=0)
         except (OperationalError, ProgrammingError):
             # Database not ready yet
             pass

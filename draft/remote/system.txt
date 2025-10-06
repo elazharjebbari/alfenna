@@ -1,0 +1,19 @@
+[Unit]
+Description=Gunicorn daemon for lumiereacademy.com Django project
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/alfenna
+Environment="DJANGO_SETTINGS_MODULE=alfenna.settings.dev"
+ExecStart=/root/miniconda3/envs/alraha/bin/gunicorn \
+          --workers 4 \
+          --bind 127.0.0.1:8003 \
+          --access-logfile /var/www/alfenna/logs/gunicorn_access.log \
+          --error-logfile /var/www/alfenna/logs/gunicorn_error.log \
+          alfenna.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+

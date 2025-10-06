@@ -1,0 +1,239 @@
+{% load i18n static %}
+
+<style>
+  /* ===== Scope ===== */
+  .luxe-proof{ --gap:1rem; --rad:18px; margin:1.25rem auto; max-width:1100px; }
+  .luxe-proof .grid{ display:grid; gap:var(--gap); grid-template-columns:1fr; }
+  @media (min-width:992px){ .luxe-proof .grid{ grid-template-columns:repeat(12,1fr); } }
+
+  /* ===== Card ===== */
+  .luxe-proof .card{
+    background:var(--surface, #111215);
+    border:1px solid var(--bd, rgba(212,175,55,.22));
+    border-radius:var(--rad);
+    box-shadow:var(--shadow, 0 10px 30px rgba(0,0,0,.45));
+    padding:clamp(1rem,2vw,1.25rem) clamp(1rem,2vw,1.5rem);
+  }
+  .luxe-proof .card h3{
+    margin:.1rem 0 .6rem;
+    font-weight:800;
+    font-size:clamp(1.05rem,2.2vw,1.35rem);
+    background:linear-gradient(180deg, color-mix(in srgb, var(--gold,#d4af37) 92%, #fff 8%), var(--gold,#d4af37));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .luxe-proof .muted{ color:var(--muted,#b7b7bd); }
+
+  /* ===== Social proof ===== */
+  .lp-social .topline{
+    display:flex; align-items:center; justify-content:space-between; gap:.75rem; flex-wrap:wrap;
+  }
+  .lp-social .count{
+    display:inline-flex; align-items:center; gap:.35rem;
+    padding:.25rem .6rem; border-radius:999px;
+    background:rgba(212,175,55,.10); color:var(--gold,#d4af37);
+    border:1px solid var(--bd, rgba(212,175,55,.22)); font-weight:700;
+  }
+  .lp-social .reviews{ display:grid; gap:.75rem; }
+  @media (min-width:576px){ .lp-social .reviews{ grid-template-columns:1fr 1fr; } }
+
+  .review{
+    display:grid; grid-template-columns:auto 1fr; gap:.6rem .75rem; align-items:start;
+    padding:.7rem .8rem; border-radius:12px; background:var(--surface-2,#16181a);
+    border:1px solid var(--bd, rgba(212,175,55,.22));
+  }
+  .review .avatar{
+    width:44px; height:44px; border-radius:999px; overflow:hidden; border:1px solid var(--gold,#d4af37);
+  }
+  .review .meta{ display:flex; align-items:center; gap:.4rem; font-weight:700; }
+
+  /* Stars (no custom filters; pure CSS overlay) */
+  .review .stars{ position:relative; display:inline-block; line-height:1; font-size:.95rem; }
+  .review .stars .base{ color:rgba(212,175,55,.28); }
+  .review .stars .fill{
+    position:absolute; inset:0 auto auto 0; white-space:nowrap; overflow:hidden;
+    color:var(--gold,#d4af37);
+  }
+
+  .review .text{ grid-column:1/-1; color:var(--text,#f2f2f2); }
+
+  /* ===== Why it works ===== */
+  .lp-why .bullets{ display:grid; gap:.45rem; }
+  .lp-why .bullet{
+    display:flex; gap:.6rem; align-items:flex-start;
+    padding:.55rem .65rem; border-radius:12px;
+    background:rgba(212,175,55,.06); border:1px solid var(--bd, rgba(212,175,55,.22));
+  }
+  .lp-why .bullet i{ color:var(--gold,#d4af37); margin-top:.15rem; }
+  .lp-why figure{ margin:.75rem 0 0; }
+  .lp-why img{ width:100%; height:auto; display:block; border-radius:12px; border:1px solid var(--bd, rgba(212,175,55,.22)); }
+  .lp-why .foot{ margin-top:.4rem; font-size:.85rem; color:var(--muted,#b7b7bd); }
+
+  /* ===== Risk free ===== */
+  .lp-risk .pillz{ display:flex; flex-wrap:wrap; gap:.5rem .6rem; }
+  .lp-risk .pill{
+    display:inline-flex; align-items:center; gap:.45rem;
+    padding:.5rem .7rem; border-radius:999px;
+    background:rgba(212,175,55,.10); color:var(--gold,#d4af37);
+    border:1px solid var(--bd, rgba(212,175,55,.22)); font-weight:700;
+  }
+  .lp-risk .cta{
+    margin-top:.85rem; display:inline-flex; align-items:center; gap:.5rem;
+    padding:.7rem 1rem; border-radius:12px; border:1px solid var(--bd, rgba(212,175,55,.22));
+    background:var(--surface-2,#16181a); color:var(--text,#f2f2f2); font-weight:700; text-decoration:none;
+  }
+  .lp-risk .cta:hover{ filter:brightness(1.05); }
+
+  /* ===== Layout spans (desktop) ===== */
+  @media (min-width:992px){
+    .luxe-proof .card--social{ grid-column:span 4; }
+    .luxe-proof .card--why   { grid-column:span 5; }
+    .luxe-proof .card--risk  { grid-column:span 3; }
+  }
+
+  /* ===== RTL ===== */
+  {% if LANGUAGE_CODE == 'ar' %}
+  .luxe-proof{ direction:rtl; }
+  {% endif %}
+</style>
+
+<section class="luxe-proof" aria-label="{% trans 'Confiance, preuves et garanties' %}">
+  <div class="grid">
+
+    {# ========== 1) SOCIAL PROOF ========== #}
+    <article class="card card--social lp-social">
+      <div class="topline">
+        <h3>
+          {% if LANGUAGE_CODE == 'ar' %}
+            {{ social_proof.headline_ar|default:"الصلاة أصبحت أريح" }}
+          {% else %}
+            {{ social_proof.headline_fr|default:"Ils prient mieux avec Al-Raha" }}
+          {% endif %}
+        </h3>
+        <span class="count">★ {{ social_proof.count|default:"1000+" }}</span>
+      </div>
+
+      <div class="reviews" role="list">
+        {% if social_proof.reviews %}
+          {% for r in social_proof.reviews %}
+            <div class="review" role="listitem">
+              <img class="avatar" src="{{ r.avatar|default:'/static/carpet/images/avatars/placeholder.webp' }}" alt="">
+              <div>
+                <div class="meta">
+                  <span>{{ r.name }}</span>
+                  {% if r.age %}<span class="muted">· {{ r.age }}</span>{% endif %}
+                </div>
+
+                {# Stars with widthratio (r.stars of 5) #}
+                {% widthratio r.stars|default:5 5 100 as pct %}
+                <div class="stars" aria-label="{% trans 'Note' %} {{ r.stars|default:5 }}/5">
+                  <span class="base" aria-hidden="true">★★★★★</span>
+                  <span class="fill" aria-hidden="true" style="width:{{ pct }}%">★★★★★</span>
+                </div>
+              </div>
+
+              <p class="text">
+                {% if LANGUAGE_CODE == 'ar' %}
+                  {{ r.text_ar|default:"راحة حقيقية أثناء السجود" }}
+                {% else %}
+                  {{ r.text_fr|default:"Un vrai confort pendant la prière." }}
+                {% endif %}
+              </p>
+            </div>
+          {% endfor %}
+        {% else %}
+          {# Fallback 2 avis #}
+          <div class="review" role="listitem">
+            <img class="avatar" src="{% static 'carpet/images/avatars/youssef.svg' %}" alt="">
+            <div>
+              <div class="meta"><span>Youssef</span><span class="muted">· 58</span></div>
+              {% widthratio 5 5 100 as pct1 %}
+              <div class="stars" aria-label="{% trans 'Note' %} 5/5">
+                <span class="base" aria-hidden="true">★★★★★</span>
+                <span class="fill" aria-hidden="true" style="width:{{ pct1 }}%">★★★★★</span>
+              </div>
+            </div>
+            <p class="text">{% if LANGUAGE_CODE == 'ar' %}صلاتي صارت أريح بكثير{% else %}Mes sajda n’ont jamais été aussi confortables.{% endif %}</p>
+          </div>
+
+          <div class="review" role="listitem">
+            <img class="avatar" src="{% static 'carpet/images/avatars/latifa.svg' %}" alt="">
+            <div>
+              <div class="meta"><span>Latifa</span><span class="muted">· 62</span></div>
+              {% widthratio 5 5 100 as pct2 %}
+              <div class="stars" aria-label="{% trans 'Note' %} 5/5">
+                <span class="base" aria-hidden="true">★★★★★</span>
+                <span class="fill" aria-hidden="true" style="width:{{ pct2 }}%">★★★★★</span>
+              </div>
+            </div>
+            <p class="text">{% if LANGUAGE_CODE == 'ar' %}الوسادة أحدثت فرقًا كبيرًا{% else %}Le coussin change tout pour mes genoux.{% endif %}</p>
+          </div>
+        {% endif %}
+      </div>
+    </article>
+
+    {# ========== 2) WHY IT WORKS ========== #}
+    <article class="card card--why lp-why">
+      <h3>{% trans "Pourquoi ça marche" %}</h3>
+      <div class="bullets" role="list">
+        {% if LANGUAGE_CODE == 'ar' %}
+          {% for b in why_it_works.bullets_ar %}
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle" aria-hidden="true"></i><span>{{ b }}</span></div>
+          {% empty %}
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle"></i><span>رغوة ذاكرة 2سم — تخفف الضغط*</span></div>
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle"></i><span>قاعدة مانعة للانزلاق — ثبات</span></div>
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle"></i><span>مخمل ناعم — سهل التنظيف</span></div>
+          {% endfor %}
+        {% else %}
+          {% for b in why_it_works.bullets_fr %}
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle" aria-hidden="true"></i><span>{{ b }}</span></div>
+          {% empty %}
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle"></i><span>Mousse mémoire 2 cm — répartit la pression*</span></div>
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle"></i><span>Base antiglisse — stabilité pendant la prière</span></div>
+            <div class="bullet" role="listitem"><i class="flaticon-sparkle"></i><span>Velours doux — facile d’entretien</span></div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {% if why_it_works.cutaway_svg %}
+        <figure aria-label="{% trans 'Coupe technique' %}">
+          <img src="{{ why_it_works.cutaway_svg }}" alt="">
+        </figure>
+      {% endif %}
+      {% if why_it_works.footnote_fr %}
+        <div class="foot">
+          {% if LANGUAGE_CODE == 'ar' %}{% trans "Mesure interne vs tapis standard" %}{% else %}{{ why_it_works.footnote_fr }}{% endif %}
+        </div>
+      {% endif %}
+    </article>
+
+    {# ========== 3) RISK-FREE ========== #}
+    <aside class="card card--risk lp-risk">
+      <h3>{% trans "Achat sans risque" %}</h3>
+      <div class="pillz" role="list">
+        {% if LANGUAGE_CODE == 'ar' %}
+          {% for p in risk_free.pillars_ar %}
+            <span class="pill" role="listitem"><i class="flaticon-check" aria-hidden="true"></i>{{ p }}</span>
+          {% empty %}
+            <span class="pill"><i class="flaticon-check"></i>الدفع عند الاستلام</span>
+            <span class="pill"><i class="flaticon-check"></i>تجربة 30 يومًا</span>
+            <span class="pill"><i class="flaticon-check"></i>إرجاع سهل</span>
+          {% endfor %}
+        {% else %}
+          {% for p in risk_free.pillars_fr %}
+            <span class="pill" role="listitem"><i class="flaticon-check" aria-hidden="true"></i>{{ p }}</span>
+          {% empty %}
+            <span class="pill"><i class="flaticon-check"></i>Paiement à la livraison</span>
+            <span class="pill"><i class="flaticon-check"></i>Essai 30 jours</span>
+            <span class="pill"><i class="flaticon-check"></i>Retour simple</span>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <a href="#lead-form" class="cta">
+        <i class="flaticon-arrow-point-to-right" aria-hidden="true"></i>
+        {% trans "Commander en toute sérénité" %}
+      </a>
+    </aside>
+
+  </div>
+</section>

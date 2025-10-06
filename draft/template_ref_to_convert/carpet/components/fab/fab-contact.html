@@ -1,0 +1,257 @@
+{% load i18n static %}
+<style>
+
+    /* ------------------------------------------------------------------
+   Chaplin FAB  – palette déjà déclarée dans :root global
+-------------------------------------------------------------------*/
+    :root {
+        --fab-size: 64px; /* diamètre pastilles = mock-up */
+        --fab-gap: 18px; /* espacement vertical */
+        --fab-icon: 32px; /* taille icônes internes */
+        --fab-shadow: 0 6px 14px rgba(0, 0, 0, .22); /* ombre portée */
+        --fab-inner-gl: inset 0 1px 3px rgba(255, 255, 255, .62); /* glaçage */
+    --fab-color-bg: #6C4E5B;           /* prune élégant */
+    --fab-color-text: #FFF8F0;         /* crème douce */
+    --fab-color-icon: #1B1B1B;         /* noir profond */
+    --fab-color-hover: #D19559;        /* caramel pour hover */
+    --fab-color-whatsapp: #25D366;     /* vert officiel WhatsApp */
+    --fab-color-phone: #2196F3;        /* bleu pour appel vocal */
+    }
+
+    /* ---------- bouton “+ / –” -------------------------------------- */
+    .fab-btn {
+        position: fixed;
+        right: 1.25rem;
+        bottom: 1.25rem;
+        width: var(--fab-size);
+        height: var(--fab-size);
+        border-radius: 50%;
+        background: var(--fab-color-bg); /* prune */
+        color: var(--fab-color-text); /* crème */
+        font-size: var(--fab-icon);
+        z-index: 1200;
+        box-shadow: var(--fab-shadow);
+        transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .fab-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        box-sizing: border-box;
+    }
+
+    /* Bandeau toujours visible */
+    .fab-btn::before {
+        content: attr(data-label);
+        position: absolute;
+        bottom: calc(100% + 0.5rem);
+        right: 50%;
+        transform: translateX(50%) scale(1); /* scale(1) par défaut */
+        background: rgba(0, 0, 0, 0.75);
+        color: #fff;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        opacity: 1; /* visible tout le temps */
+        pointer-events: none;
+        /* plus de transition nécessaire, mais tu peux la laisser */
+        transition: opacity .2s ease, transform .2s ease;
+    }
+
+    /* Masquer le bandeau quand le menu est ouvert */
+    .fab-btn[aria-expanded="true"]::before {
+        opacity: 0;
+        transform: translateX(50%) scale(0.8);
+        transition: opacity .2s ease, transform .2s ease;
+    }
+
+    /* Facultatif : remettre l’échelle normale quand on referme */
+    .fab-btn[aria-expanded="false"]::before {
+        opacity: 1;
+        transform: translateX(50%) scale(1);
+    }
+
+
+    .fab-btn:active {
+        transform: scale(.94)
+    }
+
+    /* ---------- menu vertical --------------------------------------- */
+    .fab-menu {
+        position: fixed;
+        right: 1.25rem;
+        bottom: calc(var(--fab-size) + 1.25rem + var(--fab-gap));
+        z-index: 1100;
+    }
+
+    .fab-menu ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--fab-gap);
+    }
+
+    /* pastilles */
+    .fab-menu a {
+        width: var(--fab-size);
+        height: var(--fab-size);
+        border-radius: 50%;
+        background: var(--fab-color-text); /* crème */
+        display: grid;
+        place-items: center;
+        font-size: var(--fab-icon);
+        color: var(--fab-color-icon); /* noir/brun */
+        box-shadow: var(--fab-shadow), var(--fab-inner-gl);
+        transition: opacity .28s, transform .28s;
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    /* apparition en cascade quand aria-expanded = true */
+    .fab-btn[aria-expanded="true"] + .fab-menu a {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .fab-menu a:nth-child(1) {
+        transition-delay: .06s
+    }
+
+    .fab-menu a:nth-child(2) {
+        transition-delay: .12s
+    }
+
+    .fab-menu a:nth-child(3) {
+        transition-delay: .18s
+    }
+
+    .fab-menu a:nth-child(4) {
+        transition-delay: .24s
+    }
+
+    /* survol / focus */
+    .fab-menu a:hover,
+    .fab-menu a:focus-visible {
+        color: var(--fab-color-hover); /* caramel */
+        transform: translateY(-3px);
+        outline: none;
+    }
+
+    /* Respecte prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+        .fab-btn, .fab-menu a {
+            transition: none
+        }
+    }
+
+    /* L’icône FA ne doit pas intercepter les clics */
+    .fab-btn i {
+        pointer-events: none;
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+        text-align: center;
+        vertical-align: middle;
+        font-size: var(--fab-icon); /* déjà là */
+        box-sizing: border-box;
+    }
+
+    /* SVGs embarqués dans les pastilles (ex : TripAdvisor) */
+    .fab-menu img {
+        width: var(--fab-icon);
+        height: var(--fab-icon);
+        pointer-events: none; /* même comportement que les <i> */
+    }
+
+
+    /* 1) Assurer que l’ancre Maps puisse porter un pseudo-élément */
+    .fab-menu a[data-event="MapsClick"] {
+        position: relative;
+        overflow: visible; /* pour que la brillance dépasse sans être coupée */
+    }
+
+    /* 2) Pseudo-élément : calque tournoyant sous l’icône */
+    .fab-menu a[data-event="MapsClick"]::before {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: -4px; /* légèrement en dehors pour envelopper */
+        width: calc(100% + 8px);
+        height: calc(100% + 8px);
+        border-radius: 50%;
+        background: linear-gradient(45deg,
+        rgba(255, 0, 255, 0.5),
+        rgba(0, 255, 255, 0.5),
+        rgba(255, 255, 0, 0.5),
+        rgba(255, 0, 0, 0.5),
+        rgba(0, 255, 0, 0.5)
+        );
+        background-size: 300% 300%;
+        pointer-events: none;
+        z-index: -1;
+        animation: mapShine 8s linear infinite;
+    }
+
+    /* 3) Keyframes dédiés pour cette pastille */
+    @keyframes mapShine {
+        0% {
+            transform: rotate(0deg);
+            opacity: 0;
+        }
+        20% {
+            opacity: 1;
+        }
+        80% {
+            transform: rotate(360deg);
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+
+    /* 4) Optionnel : léger scale au hover, pour plus de punch */
+    .fab-menu a[data-event="MapsClick"]:hover {
+        transform: scale(1.1);
+        transition: transform .2s ease;
+    }
+
+</style>
+
+<!-- CONTACT FAB -->
+<button id="fab-toggle"
+        class="fab-btn"
+        aria-label="{% trans 'Ouvrir le menu contact' %}"
+        data-label="{% trans 'Contactez Nous !' %}"
+        aria-expanded="false"
+        aria-controls="fab-menu">
+    <i class="fa-solid fa-plus" aria-hidden="true"></i>
+</button>
+
+<nav id="fab-menu" class="fab-menu" hidden>
+    <ul>
+        <li>
+            <a href="https://wa.me/212537729799" target="_blank" rel="noopener"
+               data-event="WhatsappClick"
+               aria-label="{% trans 'Chat WhatsApp' %}">
+                <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li>
+            <a href="tel:+212537729799"
+               data-event="PhoneClick"
+               aria-label="{% trans 'Appeler Chaplin Crêpes' %}">
+                <i class="fa-solid fa-phone" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+

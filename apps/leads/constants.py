@@ -4,6 +4,7 @@ class FormKind(models.TextChoices):
     EMAIL_EBOOK = "email_ebook", "Email contre ebook"
     CONTACT_FULL = "contact_full", "Formulaire contact complet"
     CHECKOUT_INTENT = "checkout_intent", "Intention d'achat (Stripe)"
+    PRODUCT_LEAD = "product_lead", "Lead produit"
 
 class LeadStatus(models.TextChoices):
     PENDING = "PENDING", "Pending"

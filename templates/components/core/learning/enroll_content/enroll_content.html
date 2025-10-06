@@ -1,0 +1,113 @@
+<div class="courses-enroll-content">
+  <div class="courses-enroll-title">
+    <h2 class="title">{{ course.title }}</h2>
+    {% if enrolled_count %}
+      <p><i class="icofont-eye-alt"></i> <span>{{ enrolled_count }}</span> {{ enrollment_label }}</p>
+    {% endif %}
+  </div>
+
+  <div class="courses-enroll-tab">
+    <div class="enroll-tab-menu">
+      <ul class="nav">
+        <li>
+          <button class="active" data-bs-toggle="tab" data-bs-target="#tab-{{ overview_tab.id }}">{{ overview_tab.label }}</button>
+        </li>
+        <li>
+          <button data-bs-toggle="tab" data-bs-target="#tab-{{ certificate_tab.id }}">{{ certificate_tab.label }}</button>
+        </li>
+        <li>
+          <button data-bs-toggle="tab" data-bs-target="#tab-{{ instructor_tab.id }}">{{ instructor_tab.label }}</button>
+        </li>
+      </ul>
+    </div>
+    <div class="enroll-share">
+      {% if share_url %}
+        <a href="{{ share_url }}" id="share-button"><i class="icofont-share-alt sharethis-inline-share-buttons"></i> {{ share_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="courses-enroll-tab-content">
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="tab-{{ overview_tab.id }}">
+        <div class="overview">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="enroll-tab-title">
+                <h3 class="title">{{ overview_heading }}</h3>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="enroll-tab-content">
+                {% if overview_text %}
+                  <p>{{ overview_text }}</p>
+                {% endif %}
+                {% if total_lectures %}
+                  <table class="table mb-0">
+                    <tbody>
+                      <tr>
+                        <th>{{ lessons_label }} <span>:</span></th>
+                        <td>{{ total_lectures }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="tab-{{ certificate_tab.id }}">
+        <div class="overview">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="enroll-tab-title">
+                <h3 class="title">{{ certificate_heading }}</h3>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="enroll-tab-content">
+                {% if certificate_text %}
+                  <p>{{ certificate_text }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="tab-{{ instructor_tab.id }}">
+        <div class="overview">
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="enroll-tab-title">
+                <h3 class="title">{{ instructor_heading }}</h3>
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="enroll-tab-content">
+                <div class="single-instructor d-flex">
+                  <div class="review-author d-flex">
+                    <div class="author-thumb me-3">
+                      <img src="{{ instructor.avatar_url }}" alt="{{ instructor.name }}" width="64" height="64" class="rounded-circle">
+                    </div>
+                    <div class="author-content">
+                      <h4 class="name mb-1">{{ instructor.name }}</h4>
+                      {% if instructor.role %}
+                        <span class="designation d-block mb-2">{{ instructor.role }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% if instructor.bio %}
+                  <p class="mt-3">{{ instructor.bio }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

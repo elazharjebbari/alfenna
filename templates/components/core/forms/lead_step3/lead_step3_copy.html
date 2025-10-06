@@ -1,0 +1,90 @@
+{% load i18n %}
+{% url 'leads:collect' as leads_collect_url %}
+{% url 'leads:sign' as leads_sign_url %}
+{% with fullname_key=fields_map.fullname|default:'full_name' phone_key=fields_map.phone|default:'phone' address_key=fields_map.address|default:'address' quantity_key=fields_map.quantity|default:'quantity' offer_key=fields_map.offer|default:'offer_key' product_key=fields_map.product|default:'product' promotion_key=fields_map.promotion|default:'promotion_selected' %}
+{% with action_target=action_url|default:leads_collect_url %}
+<form class="c-lead-form c-lead-form--stepper needs-validation card border-0 shadow-sm"
+      data-form-stepper
+      data-ff-root
+      data-steps="3"
+      method="post"
+      action=""
+      data-action-url="{{ action_target }}"
+      data-require-signed="true"
+      data-sign-url="{{ leads_sign_url }}"
+      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","address":"{{ address_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}"}'
+      novalidate>
+  {% csrf_token %}
+  <div class="card-body p-4">
+    <div class="mb-4">
+      <div class="text-muted small" data-ff-progress>{% trans "Etape 1 / 3" %}</div>
+      <h3 class="h4 mb-0">{{ product.name|default:_("Votre demande") }}</h3>
+    </div>
+
+    <section data-ff-step="1" data-step="1" class="ff-step">
+      <div class="mb-3">
+        <label class="form-label" for="ff-fullname">{% trans "Nom complet" %}</label>
+        <input type="text" class="form-control" id="ff-fullname" data-ff-field="full_name" name="{{ fullname_key }}" autocomplete="name" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="ff-phone">{% trans "Numéro de téléphone" %}</label>
+        <input type="tel" class="form-control" id="ff-phone" data-ff-field="phone" name="{{ phone_key }}" inputmode="tel" autocomplete="tel" minlength="6" maxlength="20" required>
+        <div class="form-text">{% trans "WhatsApp accepte - format : +212 ou 06" %}</div>
+      </div>
+      <div class="d-flex justify-content-end gap-2">
+        <button type="button" class="btn btn-primary" data-ff-next>{% trans "Continuer" %}</button>
+      </div>
+    </section>
+
+    <section data-ff-step="2" data-step="2" class="ff-step d-none">
+      <div class="mb-3">
+        <label class="form-label" for="ff-quantity">{% trans "Quantité" %}</label>
+        <select class="form-select" id="ff-quantity" data-ff-field="quantity" name="{{ quantity_key }}">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="ff-offer">{% trans "Offre" %}</label>
+        <select class="form-select" id="ff-offer" data-ff-field="offer_key" name="{{ offer_key }}">
+          <option value="std">Standard</option>
+          <option value="pack2">Pack x2</option>
+          <option value="pack3">Pack x3</option>
+        </select>
+      </div>
+      {% if address_key %}
+        <div class="mb-3">
+          <label class="form-label" for="ff-address">{% trans "Adresse complete" %}</label>
+          <input type="text" class="form-control" id="ff-address" data-ff-field="address" name="{{ address_key }}" autocomplete="street-address" placeholder="{% trans 'Quartier, ville, code postal' %}">
+        </div>
+      {% endif %}
+
+      <input type="hidden" data-ff-field="honeypot" name="honeypot" tabindex="-1" autocomplete="off">
+      {% if product.id %}<input type="hidden" data-ff-field="{{ product_key }}" name="{{ product_key }}" value="{{ product.id }}">{% endif %}
+      {% if pricing.promo_price %}<input type="hidden" data-ff-field="{{ promotion_key }}" name="{{ promotion_key }}" value="promo">{% endif %}
+
+      <div class="d-flex justify-content-between align-items-center gap-2 mt-4">
+        <button type="button" class="btn btn-outline-secondary" data-ff-prev>{% trans "Retour" %}</button>
+        <div class="d-flex flex-column align-items-end gap-2">
+          <button type="button" class="btn btn-primary" data-ff-submit>{% trans "Valider" %}</button>
+          <div class="ff-form-msg text-danger small" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <section data-ff-step="done" data-step="3" data-thank-you class="ff-step d-none text-center" aria-live="polite">
+      <div class="py-3">
+        <p class="fw-semibold mb-1">{% trans "Merci, votre commande est enregistree." %}</p>
+        <p class="text-muted mb-0">{% trans "Vous recevrez une confirmation tres bientot." %}</p>
+      </div>
+    </section>
+  </div>
+</form>
+{% if form.flow_config_json %}
+<script type="application/json" data-ff-config>{{ form.flow_config_json|safe }}</script>
+{% else %}
+<script type="application/json" data-ff-config>{"form_kind":"product_lead","endpoint_url":"{{ action_target }}","require_idempotency":true,"require_signed_token":true,"sign_url":"{{ leads_sign_url }}","context":{}}</script>
+{% endif %}
+{% endwith %}
+{% endwith %}

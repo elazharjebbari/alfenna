@@ -1,0 +1,12 @@
+alias: contact/map
+template: "components/core/map/map.html"
+params:
+  map_embed_url: null
+contract:
+  optional:
+    map_embed_url: "url"
+hydrate:
+  module: "apps.atelier.compose.hydrators.contact.hydrators"
+  func: "contact_map"
+render:
+  cacheable: true

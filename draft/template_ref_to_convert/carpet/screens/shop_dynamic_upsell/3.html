@@ -1,0 +1,248 @@
+{% extends 'carpet/base.html' %}
+{% load i18n static %}
+{% block title %}{{ variant.headline }}{% endblock title %}
+
+{% block content %}
+
+    {#    {% include 'carpet/components/sidebar/sidebar.html' %}#}
+    {% include 'carpet/components/header/header.html' %}
+
+    {# Logo centré avec effet arrondi #}
+
+    <div class="d-flex justify-content-center my-1">
+        <img
+                src="{% static 'carpet/images/logo/al-raha_500x500.webp' %}"
+                alt="Logo Al-Raha"
+                class="img-fluid rounded"
+                style="max-width: 100px;"
+        >
+    </div>
+
+    <div class="ul-inner-page-container">
+        <div class="row ul-bs-row justify-content-center">
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="ul-blog-details">
+                    <div class="ul-blog ul-blog-big">
+                        <blockquote class="text-end">
+                            <span class="icon"><i class="flaticon-quote"></i></span>
+                            <strong class="d-block mb-1">{% trans "« La religion est facilité. »" %}</strong>
+                            <small class="d-block text-muted">
+                                {% trans "Ṣaḥīḥ al-Bukhārī, Kitāb al-Īmān (Foi)" %}
+                            </small>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Composant produit dynamique #}
+    {% include 'carpet/components/product/product_dynamic_upsell/3.html' %}
+{#    {% include 'carpet/components/faq/mini-faq.html' %}#}
+    {% include 'carpet/components/reviews/reviews.html' %}
+    {% include 'carpet/components/benefits/benefits.html' %}
+    {% include 'carpet/components/faq/faq.html' %}
+    {% include 'carpet/components/cta/sticky_cta.html' %}
+{% endblock content %}
+
+{% block js %}
+    {{ block.super }}
+    {# ton JS lead form existant (copié de shop-details.html) #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('lead-form');
+            if (!form) return;
+
+            const submitBtn = form.querySelector('[type="submit"]');
+            const url = "{% url 'create-lead-upsell' %}";
+
+            function getCSRFTOKEN() {
+                const inp = document.querySelector('[name=csrfmiddlewaretoken]');
+                return inp ? inp.value : '';
+            }
+
+            function sanitizePhone(t) {
+                return String(t || '').trim().replace(/\s+/g, '').replace(/[^\d+]/g, '').replace(/^00/, '+');
+            }
+
+            function setLoading(x) {
+                if (!submitBtn) return;
+                submitBtn.disabled = x;
+                submitBtn.innerHTML = x ? 'Envoi…' : (submitBtn.dataset._txt || 'Envoyer');
+            }
+
+            submitBtn && (submitBtn.dataset._txt = submitBtn.innerHTML);
+
+            function validate() {
+                const fullNameEl = document.getElementById('firstname');
+                const phoneEl = document.getElementById('phone-number');
+                const productEl = document.getElementById('product_id');
+                const offerKeyEl = document.getElementById('offer_key');
+                const qtyEl = document.getElementById('quantity');
+                const priceEl = document.getElementById('selected_price');
+
+                [fullNameEl, phoneEl].forEach(el => el && el.classList.remove('is-invalid'));
+
+                let ok = true, errs = [];
+                if (!fullNameEl || fullNameEl.value.trim().length < 2) {
+                    ok = false;
+                    errs.push('Veuillez saisir votre prénom.');
+                    fullNameEl && fullNameEl.classList.add('is-invalid');
+                }
+                if (!phoneEl) {
+                    ok = false;
+                    errs.push('Champ téléphone manquant.');
+                } else {
+                    phoneEl.value = sanitizePhone(phoneEl.value);
+                    if (phoneEl.value.length < 6) {
+                        ok = false;
+                        errs.push('Numéro de téléphone invalide.');
+                        phoneEl.classList.add('is-invalid');
+                    }
+                }
+                if (!productEl || !productEl.value) {
+                    ok = false;
+                    errs.push('Produit introuvable.');
+                }
+                if (!offerKeyEl || !offerKeyEl.value) {
+                    ok = false;
+                    errs.push('Offre introuvable.');
+                }
+                if (!qtyEl || !priceEl) {
+                    ok = false;
+                    errs.push('Informations offre manquantes.');
+                }
+                return {ok, errs};
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const {ok, errs} = validate();
+                if (!ok) {
+                    Swal.fire({icon: 'error', title: 'Erreur', text: errs.join('\n')});
+                    return;
+                }
+                setLoading(true);
+                fetch(url, {
+                    method: 'POST',
+                    headers: {'X-CSRFToken': getCSRFTOKEN()},
+                    body: new FormData(form)
+                })
+                    .then(async r => ({s: r.status, b: await r.json().catch(() => ({}))}))
+                    .then(({s, b}) => {
+                        if (s === 200 && b.status === 'ok' && b.redirect_url) {
+                            window.location.href = b.redirect_url;
+                        } else {
+                            const lines = [];
+                            Object.entries(b.errors || {}).forEach(([f, a]) =>
+                                (a || []).forEach(e => lines.push(`${f}: ${e.message || e}`))
+                            );
+                            Swal.fire({icon: 'error', title: 'Erreur', text: lines.join('\n') || 'Merci de corriger.'});
+                        }
+                    })
+                    .catch(() => Swal.fire({icon: 'error', title: 'Erreur réseau', text: 'Impossible de soumettre.'}))
+                    .finally(() => setLoading(false));
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const root = document.getElementById('cta-mini-faq');
+            if (!root) return;
+
+            const items = Array.from(root.querySelectorAll('.ul-single-accordion-item'));
+
+            const getBtn = (item) => item.querySelector('.ul-single-accordion-item__header');
+            const getPanel = (item) => {
+                const btn = getBtn(item);
+                const id = btn && btn.getAttribute('aria-controls');
+                return id ? document.getElementById(id) : null;
+            };
+            const setIcon = (btn, expanded) => {
+                const ic = btn.querySelector('.icon i');
+                if (!ic) return;
+                ic.classList.toggle('flaticon-plus', !expanded);
+                ic.classList.toggle('flaticon-minus', expanded);
+            };
+            const setExpanded = (item, expanded) => {
+                const btn = getBtn(item);
+                const panel = getPanel(item);
+                if (!btn || !panel) return;
+                btn.setAttribute('aria-expanded', String(expanded));
+                panel.hidden = !expanded;
+                panel.setAttribute('aria-hidden', String(!expanded));
+                item.classList.toggle('is-open', expanded);
+                setIcon(btn, expanded);
+            };
+            const collapseAll = (exceptItem) => {
+                items.forEach((it) => {
+                    if (it !== exceptItem) setExpanded(it, false);
+                });
+            };
+
+            // Initialisation — si plusieurs marqués "ouverts", on n’en garde qu’un
+            let hasOpen = false;
+            items.forEach((item) => {
+                const btn = getBtn(item), panel = getPanel(item);
+                const wantsOpen = (btn && btn.getAttribute('aria-expanded') === 'true') ||
+                    (panel && panel.hidden === false);
+                if (wantsOpen && !hasOpen) {
+                    setExpanded(item, true);
+                    hasOpen = true;
+                } else {
+                    setExpanded(item, false);
+                }
+            });
+
+            // Clic (délégation)
+            root.addEventListener('click', function (e) {
+                const btn = e.target.closest('.ul-single-accordion-item__header');
+                if (!btn || !root.contains(btn)) return;
+
+                const item = btn.closest('.ul-single-accordion-item');
+                const panel = getPanel(item);
+                if (!panel) return;
+
+                const expanded = btn.getAttribute('aria-expanded') === 'true';
+                if (expanded) {
+                    setExpanded(item, false);
+                } else {
+                    collapseAll(item);
+                    setExpanded(item, true);
+                }
+            });
+
+            // Navigation clavier (↑ ↓ Home End)
+            root.addEventListener('keydown', function (e) {
+                const btn = e.target.closest('.ul-single-accordion-item__header');
+                if (!btn) return;
+
+                const headers = items.map(getBtn).filter(Boolean);
+                const idx = headers.indexOf(btn);
+                if (idx < 0) return;
+
+                let target = null;
+                if (e.key === 'ArrowDown') {
+                    target = headers[(idx + 1) % headers.length];
+                } else if (e.key === 'ArrowUp') {
+                    target = headers[(idx - 1 + headers.length) % headers.length];
+                } else if (e.key === 'Home') {
+                    target = headers[0];
+                } else if (e.key === 'End') {
+                    target = headers[headers.length - 1];
+                }
+                if (target) {
+                    e.preventDefault();
+                    target.focus();
+                }
+            });
+        });
+    </script>
+
+
+{% endblock js %}
+
+{% block before_end_body %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock before_end_body %}

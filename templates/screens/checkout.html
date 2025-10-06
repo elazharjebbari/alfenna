@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <style>
+        .checkout-sticky {
+            position: static;
+        }
+
+        @media (min-width: 992px) {
+            .checkout-sticky {
+                position: sticky;
+                top: 24px;
+            }
+        }
+    </style>
+{% endblock extra_css %}
+
+{% block content %}
+    {{ slots_html.vendors|default:""|safe }}
+    {{ slots_html.modals_login|default:""|safe }}
+    {{ slots_html.header|default:""|safe }}
+    <div class="d-none d-md-block section-padding"></div>
+    <div class="section-padding"></div>
+
+    <div class="section section-padding mt-n10">
+        <div class="container">
+            <div class="row gx-10 align-items-start">
+                <div class="col-12 col-lg-5 order-1 order-lg-2">
+                    <div class="checkout-sticky">
+                        {{ slots_html.order_summary|default:""|safe }}
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-7 order-2 order-lg-1">
+                    {{ slots_html.express|default:""|safe }}
+                    {{ slots_html.payment_form|default:""|safe }}
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    {{ slots_html.legal|default:""|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        console.log("checkout here")
+    </script>
+{% endblock js %}

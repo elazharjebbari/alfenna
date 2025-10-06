@@ -1,0 +1,45 @@
+{% load static i18n %}
+<style>
+    .whatsapp-link {
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: white;
+        text-decoration: none;
+    }
+
+    .whatsapp-link:hover {
+        color: #25D366;
+    }
+
+</style>
+
+<!-- FOOTER SECTION START -->
+<footer class="ul-footer">
+    <div class="ul-inner-container">
+
+        <div class="ul-footer-middle">
+            <!-- Texte de contact personnalisé -->
+            <div class="ul-footer-middle-widget">
+                <h3 class="ul-footer-middle-widget-title">{% trans "Une question ? Passer une commande ? Écrivez-nous sur WhatsApp" %}</h3>
+                <div class="ul-footer-middle-widget-content">
+                    <div class="contact-nums">
+                        <a href="https://wa.me/212630035905" target="_blank" rel="noopener"
+                           class="whatsapp-link" data-event="whatsapp_checkout_click">
+                            <i class="fab fa-whatsapp" style="color:#25D366; margin-right:5px;"></i>
+                            +212 630-035905
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logo -->
+            <div class="ul-footer-middle-widget align-self-center">
+                <a href="{% url 'home-sihaty' %}">
+                    <img src="{% static 'carpet/images/logo/logo_with-text_115x17.webp' %}" alt="logo" class="logo">
+                </a>
+            </div>
+        </div>
+
+    </div>
+</footer>
+<!-- FOOTER SECTION END -->

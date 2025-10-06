@@ -1,0 +1,42 @@
+<div class="playlist-title">
+  <h3 class="title">{{ playlist_title }}</h3>
+  <span>{{ total_lectures }} {{ count_label }}</span>
+</div>
+<div class="video-playlist">
+  <div class="accordion" id="videoPlaylist">
+    {% for section in section_list %}
+      <div class="accordion-item">
+        <button type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#{{ section.collapse_id }}"
+                {% if not section.is_active and not forloop.first %}class="collapsed"{% endif %}
+                {% if section.is_active %} aria-expanded="true"{% endif %}>
+          <p>{{ section.title }}</p>
+        </button>
+        <div id="{{ section.collapse_id }}"
+             class="accordion-collapse collapse{% if section.is_active or forloop.first %} show{% endif %}"
+             data-bs-parent="#videoPlaylist">
+          <nav class="vids">
+            {% for item in section.lectures %}
+              {% if not item.is_locked %}
+                <a class="{% if item.is_active %}active{% endif %}"
+                   href="{{ item.url }}"
+                   data-src="{{ item.data_src|default:"" }}"
+                   data-lecture-id="{{ item.id }}">
+                  <p>{{ item.display_index }}. {{ item.title }}</p>
+                </a>
+              {% else %}
+                <a class="locked"
+                   href="#"
+                   data-src=""
+                   data-lecture-id="{{ item.id }}">
+                  <p>{{ item.display_index }}. {{ item.title }} <i class="fa fa-lock"></i></p>
+                </a>
+              {% endif %}
+            {% endfor %}
+          </nav>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

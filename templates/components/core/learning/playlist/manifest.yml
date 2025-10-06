@@ -1,0 +1,29 @@
+alias: learning/playlist
+template: "components/core/learning/playlist/playlist.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.learning.hydrators"
+  func: "playlist"
+
+params:
+  title: "Contenu de la formation"
+  count_label: "Leçons"
+
+contract:
+  required:
+    section_list: "list"
+    total_lectures: "int"
+  optional:
+    playlist_title: "str"
+    count_label: "str"
+    checkout_url: "str"
+    is_subscribed: "bool"
+
+render:
+  cacheable: false

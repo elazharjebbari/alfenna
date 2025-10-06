@@ -1,0 +1,20 @@
+alias: checkout/payment_form
+template: components/core/checkout/payment_form.html
+
+assets:
+  css: []
+  js:
+    - "/static/js/checkout/checkout.js"
+
+hydrate:
+  module: apps.atelier.compose.hydrators.checkout.hydrators
+  func: hydrate_payment_form
+
+params:
+  show_coupon_link: true
+  coupon_label: "Code promo"
+  coupon_placeholder: "MONCODE"
+  cta_label: "Payer et accéder maintenant"
+
+render:
+  cacheable: false

@@ -1,0 +1,30 @@
+/* Cibler le menu déroulant de l'authentification */
+.header-auth-links li .dropdown-menu {
+    display: none; /* Masquer par défaut */
+    position: absolute;
+    background-color: #fff;
+    padding: 0;
+    list-style: none;
+    z-index: 1000;
+    min-width: 150px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Afficher le menu lors du hover sur le li parent */
+.header-auth-links li:hover > .dropdown-menu {
+    display: block;
+}
+
+/* Style des liens du menu déroulant */
+.header-auth-links li .dropdown-menu li a {
+    display: block;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+}
+
+.header-auth-links li .dropdown-menu li a:hover {
+    background-color: #f8f8f8;
+}

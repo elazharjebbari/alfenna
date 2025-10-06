@@ -1,0 +1,9 @@
+Bonjour {{ user_first_name }},
+
+Merci pour ton achat. Définis ton mot de passe pour accéder à ton espace sur {{ site_name }} :
+{{ activation_url }}
+
+Ce lien sécurisé expire dans {{ activation_ttl_hours }} heures. Besoin d'aide ? Écris-nous sur {{ support_email }}.
+
+À très vite,
+L'équipe {{ site_name }}

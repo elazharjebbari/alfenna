@@ -1,0 +1,137 @@
+alias: learning/card
+template: "components/core/learning_card/learning_card.html"
+
+assets:
+  head: []
+  css:
+#    - "/static/components/core/learning/learning_card.css"
+  js: []
+  vendors: []
+
+# Valeurs de référence (servent aussi de whitelist pour l'hydrateur)
+params:
+  # Titres
+  title_html: "<span>Créez</span> et <span>Vendez</span> Vos Bougies"
+
+  # Couleurs/positions inline pour respecter le DOM d'origine
+  bg_color: "#E7F8EE"
+  banner_bg: "#EDEFF3"
+  accent: "#309255"
+  line_color: "#EDEFF3"
+  line_left: "27px"
+  line_top: "100px"
+  deco_line_enabled: true
+
+  intro_items:
+    - { text_html: "<span class='fw-bold'>Formation en Ligne &amp; Visioconférences</span> avec supports complets" }
+
+  # 1) Features avant "Formateurs"
+  features_top:
+    - { icon: "fa fa-circle", text_html: "<strong>Vidéos :</strong> <span class='text-success'>30</span> vidéos réparties en <u>4 modules</u>" }
+    - { icon: "fa fa-circle", text_html: "<strong>Public :</strong> Accessible aux <u>débutants</u> et aux professionnels en reconversion" }
+    - { icon: "fa fa-circle", text_html: "<strong>Pré-requis :</strong> <em>Aucun</em> – ouverture totale à tous" }
+    - { icon: "fa fa-circle", text_html: "<strong>Accès :</strong> Immédiat, <u>24/7</u> et sans interruption" }
+    - { icon: "fa fa-circle", text_html: "<strong>Matériel :</strong> Ressources disponibles à domicile, avec des recommandations fournisseurs" }
+    - { icon: "fa fa-circle", text_html: "<strong>Support :</strong> Accès à un groupe WhatsApp privé pour un <u>accompagnement continu</u>" }
+    - { icon: "fa fa-circle", text_html: "<strong>Horaires :</strong> Libre, avec des séances Q&amp;R en visioconférence" }
+
+  # 2) Formateurs (liste de noms)
+  trainers:
+    - { name: "Souheila Jebbari" }
+    - { name: "Naila Baiga" }
+    - { name: "Taib Jebbari" }
+
+  # 3) Évaluation (bloc unique)
+  feature_evaluation:
+    text_html: "<strong>Évaluation :</strong> QCM, exercices pratiques et <u>certification officielle</u>"
+
+  # 4) Prix
+  price: 162
+
+  # 5) Features après le prix
+  features_after:
+    - { icon: "fa fa-circle", text_html: "<strong>Communauté :</strong> Rejoignez notre <u>groupe privé WhatsApp</u> pour échanger et partager vos expériences" }
+    - { icon: "fa fa-circle", text_html: "<strong>Supports :</strong> Vidéos, PDF, fiches pratiques, et enregistrements Q&amp;R" }
+    - { icon: "fa fa-circle", text_html: "<strong>Attestation :</strong> Obtenez une attestation officielle, garantie par <u>Lumière Academy</u>" }
+
+  # 6) Bandeau bundle
+  bundle_title: "Ce que comprend votre pack :"
+  bundle_items:
+    - { icon: "fa fa-video", text_html: "<strong>30 vidéos</strong>" }
+    - { icon: "fa fa-comments", text_html: "<strong>1 mois</strong> d’accompagnement personnalisé" }
+    - { icon: "fa fa-book", text_html: "<strong>Guide complet de 100 pages</strong>" }
+    - { icon: "fa fa-list", text_html: "<strong>Liste des fournisseurs</strong>" }
+    - { icon: "fa fa-tag", text_html: "<strong>60% de réduction</strong> sur formation marketing" }
+    - { icon: "fa fa-handshake", text_html: "<strong>Ateliers à tarif réduit</strong>" }
+    - { icon: "fa fa-users", text_html: "<strong>Accès à la communauté WhatsApp</strong>" }
+
+  # Image à droite (même structure: balise <img src="{% static %}">)
+  image_static_path: "images/training/detail/pot-bougie-detail-formation.webp"
+  image_alt: "Bougie artisanale"
+  # CTA
+  cta:
+    label: "Je Participe"
+    icon: "fa fa-user-plus me-2"
+    url: null
+    url_name: null
+    url_kwargs: {}
+
+contract:
+  required:
+    image_static_path: "Chemin STATIC relatif de l'image (avec extension)"
+  optional:
+    title_html: "HTML du titre principal"
+    bg_color: "Couleur de fond"
+    banner_bg: "Couleur bandeau intro"
+    accent: "Couleur accent (icônes, bordure)"
+    line_color: "Couleur ligne verticale"
+    line_left: "Position gauche ligne"
+    line_top: "Position top ligne"
+    deco_line_enabled: "Activer la ligne décorative"
+    intro_items: "Liste {text_html}"
+    features_top: "Liste de features avant les formateurs"
+    trainers: "Liste {name}"
+    feature_evaluation: "Bloc unique {text_html}"
+    price: "Prix affiché (int)"
+    features_after: "Liste de features après le prix"
+    bundle_title: "Titre bundle"
+    bundle_items: "Liste {icon?, text_html}"
+    image_alt: "Texte alternatif image"
+    cta: "CTA {label, icon, url|url_name,url_kwargs}"
+
+hydrate:
+  # Exécution directe
+  python: "apps.atelier.compose.hydrators.learning.hydrators.learning_card"
+  # Pour les scripts d'audit/trace
+  module: "apps.atelier.compose.hydrators.learning.hydrators"
+  func: "learning_card"
+
+  # Whitelist + defaults (manifest-first robuste)
+  params:
+    title_html: "<span>Créez</span> et <span>Vendez</span> Vos Bougies"
+    bg_color: "#E7F8EE"
+    banner_bg: "#EDEFF3"
+    accent: "#309255"
+    line_color: "#EDEFF3"
+    line_left: "27px"
+    line_top: "100px"
+    deco_line_enabled: true
+    intro_items: []
+    features_top: []
+    trainers: []
+    feature_evaluation: { text_html: "" }
+    price: 0
+    features_after: []
+    bundle_title: ""
+    bundle_items: []
+    image_static_path: "images/training/detail/pot-bougie-detail-formation.webp"
+    image_alt: "Bougie artisanale"
+    cta:
+      label: "Je Participe"
+      icon: "fa fa-user-plus me-2"
+      url: null
+      url_name: null
+      url_kwargs: {}
+
+render:
+  cacheable: true

@@ -1,0 +1,27 @@
+alias: courses/list
+template: "components/core/courses/list.html"
+assets: {}
+params:
+  limit: 12
+  list_title: "Nos formations populaires"
+  list_subtitle: "Sélectionnez un cours pour démarrer votre parcours."
+  label_languages: "Langues : 🇲🇦 / 🇫🇷"
+  label_lessons: "+29 cours"
+  label_score: "Score"
+  empty_state_title: "Aucun cours disponible pour le moment"
+  empty_state_description: "Revenez bientôt, de nouvelles formations arrivent."
+contract:
+  optional:
+    limit: "int"
+    list_title: "str"
+    list_subtitle: "str"
+    label_languages: "str"
+    label_lessons: "str"
+    label_score: "str"
+    empty_state_title: "str"
+    empty_state_description: "str"
+hydrate:
+  module: "apps.atelier.compose.hydrators.courses.hydrators"
+  func: "course_list"
+render:
+  cacheable: false

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ slots_html.vendors|default_if_none:""|safe }}
+    {{ slots_html.header|default_if_none:""|safe }}
+    <div class="section-padding"></div>
+    {{ slots_html.contact_info|default_if_none:""|safe }}
+
+{% endblock %}

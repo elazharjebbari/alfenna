@@ -1,0 +1,91 @@
+{% load i18n %}
+
+<div class="modal fade"
+     id="{{ dom_id }}"
+     tabindex="-1"
+     aria-labelledby="{{ dom_id }}_label"
+     aria-hidden="true"
+     {% if autoshow %}data-autoshow="1"{% endif %}>
+  <div class="{{ dialog_class }}">
+    <form method="{{ method }}" action="{{ action_url }}" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next_url }}">
+      {% if hidden_fields %}
+        {% for name, val in hidden_fields.items %}
+          <input type="hidden" name="{{ name }}" value="{{ val }}">
+        {% endfor %}
+      {% endif %}
+
+      <div class="modal-content {{ content_class }}">
+        <div class="modal-header {{ header_class }}">
+          <h5 class="modal-title" id="{{ dom_id }}_label">
+            {{ title }}
+          </h5>
+          <button type="button" class="btn-close {{ close_btn_class }}"
+                  data-bs-dismiss="modal" aria-label="{% trans 'Fermer' %}"></button>
+        </div>
+
+        <div class="modal-body {{ body_class }}">
+          {% if description %}
+            <p class="{{ description_class }}">{{ description|safe }}</p>
+          {% endif %}
+
+          <div class="mb-3">
+            <label for="{{ dom_id }}_username" class="form-label">
+              {{ username_label }}
+            </label>
+            <input type="text"
+                   class="form-control {{ username_input_class }}"
+                   id="{{ dom_id }}_username"
+                   name="username"
+                   required
+                   autocomplete="username"
+                   placeholder="{{ username_placeholder }}">
+          </div>
+
+          <div class="mb-3">
+            <label for="{{ dom_id }}_password" class="form-label">
+              {{ password_label }}
+            </label>
+            <input type="password"
+                   class="form-control {{ password_input_class }}"
+                   id="{{ dom_id }}_password"
+                   name="password"
+                   required
+                   autocomplete="current-password"
+                   placeholder="{{ password_placeholder }}">
+          </div>
+
+          {% if show_remember %}
+          <div class="form-check">
+            <input class="form-check-input {{ remember_input_class }}"
+                   type="checkbox" value="on"
+                   id="{{ dom_id }}_remember" name="remember_me">
+            <label class="form-check-label" for="{{ dom_id }}_remember">
+              {{ remember_label }}
+            </label>
+          </div>
+          {% endif %}
+
+          {% if show_forgot and forgot_url %}
+            <div class="mt-2">
+              <a class="{{ forgot_link_class }}" href="{{ forgot_url }}">{{ forgot_label }}</a>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="modal-footer {{ footer_class }}">
+          <button type="submit" class="{{ submit_btn_class }}">
+            {{ submit_label }}
+          </button>
+
+          {% if show_register and register_url %}
+            <a class="{{ register_btn_class }}" href="{{ register_url }}">
+              {{ register_label }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+alias: checkout/legal_info
+template: components/core/checkout/legal_info.html
+
+assets:
+  css: []
+  js: []
+
+# facultatif : seulement si tu as un hydrateur pour remplir security_badges / legal_links
+hydrate:
+  module: apps.atelier.compose.hydrators.checkout.hydrators
+  func: hydrate_legal_info
+
+params:
+  compact: true
+  faq_heading: "Questions fréquentes sur votre commande"
+  faq_items:
+    - question: "Et si je n’ai pas de matériel ?"
+      answer: "Nous listons le nécessaire et ses alternatives dès le module 1 — vous pouvez démarrer avec ce que vous avez."
+      href: "#programme"
+    - question: "Combien de temps ça prend ?"
+      answer: "Comptez 2 h pour votre première création puis 7 jours pour maîtriser toute la méthode à votre rythme."
+      href: "#planning"
+    - question: "Et si je change d’avis ?"
+      answer: "Vous pouvez annuler en 2 clics : remboursement intégral sous 14 jours, sans conditions."
+      href: "/cgv/"
+  compact_points:
+    - icon: "lock"
+      text: "Paiement 100% sécurisé via Stripe"
+    - icon: "rotate-left"
+      text: "Garantie satisfaite ou remboursée 14 jours"
+    - icon: "bolt"
+      text: "Accès immédiat à l’espace d’apprentissage"
+  price_notice: "Montant TTC, devise EUR — TVA et frais inclus"
+
+render:
+  cacheable: true

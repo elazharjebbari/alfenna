@@ -1,0 +1,22 @@
+{% load static i18n %}
+<div class="ul-sidebar">
+  <div class="ul-sidebar-header">
+    <div class="ul-sidebar-header-logo">
+      <a href="/">
+        <img src="{% static 'carpet/images/logo/logo_with-text_115x17.webp' %}" alt="Logo" class="logo">
+      </a>
+    </div>
+    <button class="ul-sidebar-closer" type="button" aria-label="{% trans 'Fermer le menu' %}"><i class="flaticon-close"></i></button>
+  </div>
+
+  <div class="ul-sidebar-header-nav-wrapper"></div>
+
+  <div class="ul-sidebar-footer">
+    <span class="ul-sidebar-footer-title">{% trans 'Suivez-nous' %}</span>
+    <div class="ul-sidebar-footer-social">
+      <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><i class="flaticon-facebook-app-symbol"></i></a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><i class="flaticon-instagram"></i></a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="YouTube"><i class="flaticon-youtube"></i></a>
+    </div>
+  </div>
+</div>

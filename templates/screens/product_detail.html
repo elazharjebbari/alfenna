@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+{{ slots_html.vendors|default_if_none:""|safe }}
+{{ slots_html.header|default_if_none:""|safe }}
+<div class="section-padding"></div>
+<div class="section-padding"></div>
+{{ slots_html.product_hero|default_if_none:""|safe }}
+{{ slots_html.faq|default_if_none:""|safe }}
+{{ slots_html.footer|default_if_none:""|safe }}
+{{ slots_html.chatbot|default_if_none:""|safe }}
+{% endblock %}

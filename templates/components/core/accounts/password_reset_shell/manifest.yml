@@ -1,0 +1,8 @@
+alias: accounts/password_reset/shell
+template: "components/core/accounts/password_reset_shell/component.html"
+compose:
+  children:
+    form:
+      alias: "accounts/password_reset/form"
+render:
+  cacheable: false

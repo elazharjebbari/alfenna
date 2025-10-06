@@ -1,0 +1,70 @@
+{% load i18n static %}
+
+<section class="quote-luxe" aria-label="{% trans 'Citation inspirante' %}">
+  <div class="ul-inner-page-container">
+    <figure class="quote-card position-relative p-4 p-lg-5 my-3 my-lg-4">
+
+      <!-- guillemet décoratif -->
+      <div class="quote-mark" aria-hidden="true">“</div>
+
+      <blockquote class="m-0">
+        <p class="quote-text">
+          {% trans "La religion est facilité." %}
+        </p>
+        <figcaption class="quote-meta">
+          <span class="source">{% trans "Ṣaḥīḥ al-Bukhārī — Livre de la Foi" %}</span>
+          <span class="sep" aria-hidden="true"></span>
+          <span class="arabic">{% trans "الدين يُسر" %}</span>
+        </figcaption>
+      </blockquote>
+
+      <!-- sceau centré (optionnel) -->
+      <span class="quote-seal" aria-hidden="true">
+        <img src="{% static 'carpet/images/logo/al-raha_500x500.webp' %}" alt="" />
+      </span>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .quote-luxe{ padding: 8px 0 0; }
+  .quote-card{
+    background: linear-gradient(180deg, rgba(212,175,55,.06), rgba(212,175,55,.02));
+  }
+  .quote-mark{
+    position:absolute; top:-8px; inset-inline-start:22px;
+    font-size: clamp(38px, 5vw, 64px); line-height: 1; color: var(--gold);
+    opacity:.9;
+  }
+  .quote-text{
+    font-family: "EB Garamond","Cormorant Garamond",Georgia,serif;
+    font-weight: 600; letter-spacing:.2px;
+    color: var(--gold);
+    font-size: clamp(22px, 4.2vw, 42px);
+    line-height: 1.25;
+    text-align: center;
+    margin: 0 0 .6rem 0;
+  }
+  .quote-meta{
+    display: flex; align-items: center; gap: .75rem;
+    color: var(--muted); font-size: .95rem; justify-content: center;
+  }
+  .quote-meta .sep{ flex: 0 1 120px; height:1px; background: var(--bd); }
+  .quote-meta .arabic{
+    font-family: "Amiri","Scheherazade New",serif; color: var(--gold);
+    font-size: 1.05rem;
+  }
+  .quote-seal{
+    position: absolute; inset-inline: 0; bottom:-16px; width:42px; height:42px;
+    display:grid; place-items:center; border-radius: 999px;
+    background: var(--surface); border:1px solid var(--bd);
+  }
+  .quote-seal img{ width:28px; height:28px; border-radius:6px; }
+
+  /* RTL */
+  {% get_current_language as LANGUAGE_CODE %}
+  {% if LANGUAGE_CODE == 'ar' %}
+    .quote-meta{ direction: rtl; }
+    .quote-mark{ inset-inline-start:auto; inset-inline-end:22px; }
+  {% endif %}
+</style>

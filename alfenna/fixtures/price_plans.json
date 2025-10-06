@@ -1,0 +1,55 @@
+[
+  {
+    "model": "marketing.priceplan",
+    "pk": 1,
+    "fields": {
+      "slug": "starter",
+      "title": "Starter",
+      "currency": "€",
+      "currency_symbol": "€",
+      "price_cents": 2900,
+      "old_price_cents": null,
+      "ribbon_label": "",
+      "is_featured": false,
+      "is_active": true,
+      "display_order": 10,
+      "priority": 10,
+      "features": [
+        "Les bases pour se lancer",
+        "Templates essentiels",
+        "Acces a vie a la plateforme",
+        "Support email 30 jours"
+      ],
+      "value_breakdown": [],
+      "payment_note": ""
+    }
+  },
+  {
+    "model": "marketing.priceplan",
+    "pk": 2,
+    "fields": {
+      "slug": "createur",
+      "title": "Createur",
+      "currency": "€",
+      "currency_symbol": "€",
+      "price_cents": 27900,
+      "old_price_cents": 33900,
+      "ribbon_label": "Le plus choisi",
+      "is_featured": true,
+      "is_active": true,
+      "display_order": 20,
+      "priority": 20,
+      "features": [
+        "Programme complet",
+        "Coaching de groupe",
+        "Acces a vie et mises a jour",
+        "Support prioritaire"
+      ],
+      "value_breakdown": [
+        {"label": "Templates et outils", "amount_cents": 9400},
+        {"label": "Communautes et support", "amount_cents": 21800}
+      ],
+      "payment_note": "Paiement securise"
+    }
+  }
+]

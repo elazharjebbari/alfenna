@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ slots_html.vendors|default_if_none:""|safe }}
+    {{ slots_html.header|default_if_none:""|safe }}
+        <div class="section-padding"></div>
+  {{ slots_html.course_list|default_if_none:""|safe }}
+  {{ slots_html.faq|default_if_none:""|safe }}
+
+{#      <div class="section section-padding mt-n10">#}
+{#        <div class="container">#}
+{#          <div class="row gx-10">#}
+{#            <div class="col-lg-8">#}
+{#              {{ slots_html.training_block|default_if_none:""|safe }}#}
+{#            </div>#}
+{#            <div class="col-lg-4">#}
+{#              {{ slots_html.sidebar_block|default_if_none:""|safe }}#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </div>#}
+{% endblock %}

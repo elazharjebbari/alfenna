@@ -1,0 +1,94 @@
+{% load static atelier_images atelier_utils %}
+
+<div class="section">
+  <section class="ba-section"
+           aria-labelledby="{{ id }}-title"
+           style="--ba-bg: {{ style.bg_color|default:'#e7f8ee' }}; --ba-radius: {{ style.radius|default:20 }}px; --ba-handle: {{ style.handle_color|default:'#309255' }};">
+
+    <div class="container">
+      {% if title %}<h3 id="{{ id }}-title" class="ba-title sr-only">{{ title }}</h3>{% endif %}
+      {% if subtitle %}<p class="ba-subtitle sr-only">{{ subtitle }}</p>{% endif %}
+
+      <div class="ba-wipe"
+           id="{{ id }}"
+           role="region"
+           aria-label="Comparer l'avant et l'après"
+           data-snap="{% if options.snap_points %}{{ options.snap_points|join:',' }}{% else %}0,50,100{% endif %}"
+           data-ev-view="{{ events.view|default:'ba_view' }}"
+           data-ev-drag="{{ events.drag|default:'ba_drag' }}"
+           data-ev-drag-end="{{ events.drag_end|default:'ba_drag_end' }}"
+           data-ev-snap-after="{{ events.snap_after|default:'ba_snap_after' }}">
+
+        <!-- AVANT -->
+        <div class="ba-layer ba-before" aria-hidden="true">
+          {% responsive_picture before.image alt=before.alt cls="ba-img" %}
+          {% if before.pills %}
+          <ul class="ba-pills left">
+            {% for p in before.pills %}
+              <li><span class="ba-pill"><i class="{{ p.icon }}"></i>{{ p.text }}</span></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <span class="ba-corner label-left">{{ before.label|default:"Avant" }}</span>
+        </div>
+
+        <!-- APRÈS -->
+        <div class="ba-layer ba-after" style="--wipe: {{ options.default_value|default:'50' }}%;">
+          {% responsive_picture after.image alt=after.alt cls="ba-img" %}
+          {% if after.pills %}
+          <ul class="ba-pills right">
+            {% for p in after.pills %}
+              <li><button class="ba-pill" data-ev="ba_kpi_click"><i class="{{ p.icon }}"></i>{{ p.text }}</button></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <span class="ba-corner label-right">{{ after.label|default:"Après" }}</span>
+        </div>
+
+        <!-- rail + range -->
+        <div class="ba-rail">
+          <input type="range" class="ba-range"
+                 min="0" max="100" step="1"
+                 value="{{ options.default_value|default:'50' }}"
+                 aria-label="Révéler l’après"
+                 aria-valuemin="0" aria-valuemax="100"
+                 aria-valuenow="{{ options.default_value|default:'50' }}">
+          <div class="ba-handle" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- tags lisibles mobile -->
+      {% if before.pills or after.pills %}
+      <div class="ba-mobile-tags">
+        {% if before.pills %}
+        <div class="ba-chip-row">
+          <span class="ba-chip-title"><i class="fa fa-exclamation-circle"></i> Avant</span>
+          <div class="ba-chip-scroll">{% for p in before.pills %}<span class="ba-chip">{{ p.text }}</span>{% endfor %}</div>
+        </div>
+        {% endif %}
+        {% if after.pills %}
+        <div class="ba-chip-row">
+          <span class="ba-chip-title"><i class="fa fa-leaf"></i> Après</span>
+          <div class="ba-chip-scroll">{% for p in after.pills %}<span class="ba-chip">{{ p.text }}</span>{% endfor %}</div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <!-- actions -->
+      <div class="ba-actions">
+        <div class="ba-snaps">
+          <button class="ba-snap" data-snap-to="0">Avant</button>
+          <button class="ba-snap" data-snap-to="50">50%</button>
+          <button class="ba-snap" data-snap-to="100">Après</button>
+        </div>
+        {% if cta %}
+        <a href="{{ cta.url|default:'#' }}" class="btn btn-primary btn-hover-dark ba-cta"
+           data-ev="{{ events.cta_click|default:'ba_cta_near' }}">
+          <i class="fa fa-play-circle me-1"></i>{{ cta.label|default:"Je me lance" }}
+        </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,165 @@
+<!doctype html>
+{% load i18n static compress %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+
+<head>
+    {% block tags_header %}
+        {% if IS_PRODUCTION %}
+            {% include 'analytics/zonex-site/google_analytics/head.html' %}
+            {% include 'analytics/zonex-site/google_tag_manager/gestion-stock_site/gtm_header.html' %}
+            {% include 'analytics/zonex-site/hotjar/head.html' %}
+        {% endif %}
+    {% endblock tags_header %}
+
+    {% block meta_header %}
+        <title>{% block title %}{% trans "Tapis de prière confortable | Maroc" %}{% endblock title %}</title>
+        <meta charset="utf-8">
+        <meta name="csrf-token" content="{{ csrf_token }}">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="robots" content="index, follow"/>
+        <meta name="description" content="Sajadat Al-Raha : tapis de prière ergonomique en mousse mémoire, soulage les genoux, design élégant. Offre -30 %, livraison rapide au Maroc.">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% endblock meta_header %}
+
+  {% compress css %}
+  <!-- Librairies tierces -->
+  <link rel="stylesheet" href="{% static 'carpet/vendor/bootstrap/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/splide/splide.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/swiper/swiper-bundle.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/slim-select/slimselect.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/animate-wow/animate.min.css' %}">
+  <link rel="stylesheet" href="{% static 'alfenna_hair/assets/css/fontawesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/icon/flaticon_glamer.css' %}">
+  <!-- Vos styles spécifiques -->
+  {% endcompress %}
+
+    {% block extra_head %}
+
+    {% endblock extra_head %}
+
+
+    {% block extra_css %}
+
+    {% endblock extra_css %}
+
+    <!-- Styles spécifiques pour la langue arabe -->
+    {% if request.LANGUAGE_CODE == 'ar' %}
+        <style>
+            body {
+                text-align: right;
+            }
+
+            p, h1, h2, h3, h4, h5, h6, span, li, a, label, blockquote {
+                direction: rtl;
+                text-align: right; /* Alignement à droite pour les textes */
+            }
+
+            .btn {
+                margin-left: 0;
+                margin-right: 10px;
+            }
+
+            .mainmenu-area {
+                text-align: right;
+            }
+        </style>
+    {% endif %}
+</head>
+
+<body>
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+<!--============================================-->
+{% block tags_body %}
+    {% if IS_PRODUCTION %}
+        {% include 'analytics/zonex-site/google_analytics/body.html' %}
+        {% include 'analytics/zonex-site/google_tag_manager/gestion-stock_site/gtm_body.html' %}
+    {% endif %}
+{% endblock tags_body %}
+
+
+<main>
+
+    {% block content %}
+
+    {% endblock content %}
+    {% include 'carpet/components/footer/footer.html' %}
+
+</main>
+
+
+  {% compress js %}
+  <!-- Bundle des librairies tierces -->
+  <script src="{% static 'carpet/vendor/bootstrap/bootstrap.bundle.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/splide/splide.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/splide/splide-extension-auto-scroll.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/swiper/swiper-bundle.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/slim-select/slimselect.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/animate-wow/wow.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/splittype/index.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/mixitup/mixitup.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/fslightbox/fslightbox.js' %}" defer></script>
+  {% endcompress %}
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: 'page_view',
+            page_title: document.title,
+            page_path: window.location.pathname,
+            page_language: '{{ LANGUAGE_CODE }}',
+            user_logged_in: {{ request.user.is_authenticated|yesno:"true,false" }},
+            timestamp: new Date().toISOString()
+        });
+
+        window.dataLayer = window.dataLayer || [];
+
+        // Event listener pour tous les liens dotés de data-event
+        document.querySelectorAll('a[data-event]').forEach(link => {
+            link.addEventListener('click', function () {
+                const evtName = this.getAttribute('data-event');
+                dataLayer.push({
+                    event: evtName,
+                    label: this.getAttribute('href'),   // facultatif : pour récupérer l’URL Maps ou le tel
+                });
+            });
+        });
+
+     // --- Nouvelle partie : détection du début de saisie dans le formulaire ---
+      (function() {
+        const form = document.getElementById('lead-form');
+        if (!form) return;
+
+        let started = false;
+
+        // Fonction qui push l'événement une seule fois
+        function pushStart() {
+          if (started) return;
+          started = true;
+          dataLayer.push({ event: 'LeadFormStarted' });
+          // si vous voulez ajouter un label, par exemple le timestamp :
+          // dataLayer.push({ event: 'LeadFormStarted', timestamp: Date.now() });
+        }
+
+        // On écoute le premier 'focusin' (classique) ou 'input' sur n'importe quel champ
+        form.addEventListener('focusin', pushStart, { once: true });
+        form.addEventListener('input', pushStart, { once: true });
+      })();
+
+    });
+</script>
+
+{% block js %}
+{% endblock js %}
+
+{% block before_end_body %}
+{% endblock before_end_body %}
+
+</body>
+
+</html>

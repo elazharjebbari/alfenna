@@ -1,0 +1,219 @@
+{% load static %}
+<div class="section" id="packs">
+  <section class="pricing-packs" id="packs-offres">
+    <div class="container">
+      <h2 class="pricing-title text-center">{{ heading_html|default:"" }}</h2>
+
+      {% if badges.limited_offer.enabled and badges.limited_offer.text %}
+        <div class="pricing-limited text-center"
+             {% if badges.limited_offer.deadline_ts %}data-deadline="{{ badges.limited_offer.deadline_ts }}"{% endif %}>
+          {{ badges.limited_offer.text }}
+        </div>
+      {% endif %}
+
+      <div class="row gx-4 gy-4 align-items-stretch pricing-grid">
+        {% for plan in plans %}
+          <div class="col-12 col-lg-4">
+            <article class="pack-card {% if plan.is_featured %}pack-card--featured{% endif %} {% if plan.mobile_align_left %}mobile-align-left{% endif %}"
+                     itemscope itemtype="https://schema.org/Offer" data-plan-slug="{{ plan.slug }}">
+
+              {% if plan.ribbon_label %}
+                <div class="pack-ribbon">{{ plan.ribbon_label }}</div>
+              {% elif plan.is_featured and badges.featured_label %}
+                <div class="pack-ribbon">{{ badges.featured_label }}</div>
+              {% endif %}
+
+              <header class="pack-head">
+                <h3 class="pack-title" itemprop="name">{{ plan.title|default:"—" }}</h3>
+
+                <div class="pack-price-wrap">
+                  {% if plan.small_word %}
+                    <div class="price-small-word">{{ plan.small_word }}</div>
+                  {% endif %}
+
+                  <div class="pack-price" itemprop="price" content="{{ plan.price_amount_raw|default:0 }}">
+                    <span class="price-int">{{ plan.price_parts.int }}</span>
+                    {% if plan.price_parts.sep and plan.price_parts.cents %}
+                      <span class="price-sep">{{ plan.price_parts.sep }}</span>
+                      <span class="price-cents">{{ plan.price_parts.cents }}</span>
+                    {% endif %}
+                    {% if plan.price_parts.curr %}
+                      <span class="price-curr">{{ plan.price_parts.curr }}</span>
+                    {% endif %}
+                  </div>
+
+                  {% if show_old_price and plan.old_price_amount %}
+                    <div class="pack-old-price">
+                      <del>{{ plan.old_price_amount }}{{ plan.currency }}</del>
+                    </div>
+                  {% endif %}
+
+                  {% if plan.amount_saved_text %}
+                    <div class="amount-saved">{{ plan.amount_saved_text }}</div>
+                  {% endif %}
+
+                  {% if plan.daily_approx %}
+                    <div class="pack-daily">{{ plan.daily_prefix }} {{ plan.daily_approx }}{{ plan.currency_nbsp }}{{ plan.daily_suffix }}</div>
+                  {% endif %}
+
+                  {% if plan.installments and plan.installments.text %}
+                    <div class="installments-note">ou {{ plan.installments.text }}</div>
+                  {% endif %}
+
+                  <meta itemprop="priceCurrency" content="{{ plan.currency|default:'EUR' }}" />
+                  <link itemprop="availability" href="https://schema.org/InStock" />
+                </div>
+              </header>
+
+              {# Value‑stack (Complet) #}
+              {% if value_stack.enabled and plan.value_breakdown %}
+                {% if value_stack.show_for == "all" or value_stack.show_for == "highlight_only" and plan.is_highlighted %}
+                  {% include "components/core/pricing/_value_stack.html" %}
+                {% endif %}
+              {% endif %}
+
+              {# --- BONUS Spotlight (Starter) — rendu serveur + icônes --- #}
+              {% if bonus_icons.enabled and plan.slug == bonus_icons.plan_slug and plan.bonus_icons and plan.bonus_icons.items %}
+                <section class="pack-bonus-spotlight" data-spotlight="bonus" data-source="server" aria-label="{{ bonus_icons.title|default:'Bonus inclus' }}">
+                  <header class="bonus-head">
+                    <span class="bonus-badge" aria-hidden="true">BONUS</span>
+                    <h4 class="bonus-title">{{ bonus_icons.title|default:"Bonus inclus" }}
+                      {% if bonus_icons.subtitle %}<small class="d-block opacity-75">{{ bonus_icons.subtitle }}</small>{% endif %}
+                    </h4>
+                  </header>
+
+                  <ul class="bonus-pills">
+                    {% for it in plan.bonus_icons.items_visible %}
+                        <li class="bonus-pill" title="{{ it.label }}">
+                          <i class="{{ it.icon_class|default:'fa-solid fa-gift' }}" aria-hidden="true"></i>
+                          <span>{{ it.label }}</span>
+                        </li>
+                    {% endfor %}
+                  </ul>
+
+                  {% if plan.bonus_icons.has_more %}
+                    <div class="bonus-more collapse" id="bonus-{{ plan.slug }}-more" hidden>
+                      <ul class="bonus-list">
+                        {% for it in plan.bonus_icons.items_hidden %}
+                            <li class="bonus-item" title="{{ it.label }}">
+                              <i class="{{ it.icon_class|default:'fa-solid fa-gift' }}" aria-hidden="true"></i>
+                              <span>{{ it.label }}</span>
+                            </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <button class="bonus-toggle" type="button" data-target="#bonus-{{ plan.slug }}-more" aria-expanded="false">
+                      Voir +{{ plan.bonus_icons.items_hidden|length }} bonus
+                    </button>
+                  {% endif %}
+                </section>
+              {% endif %}
+
+              {# Liste des features — on masque les lignes "Bonus #..." pour STARTER (éviter double affichage) #}
+              {% if plan.features %}
+                <ul class="pack-features list-unstyled">
+                  {% for f in plan.features %}
+                    {% if bonus_icons.enabled and plan.slug == bonus_icons.plan_slug and "Bonus" in f %}
+                      {# skip duplicate bonus lines when spotlight active #}
+                    {% else %}
+                      <li class="pack-feature">
+                        <i class="fas fa-check-circle me-2" aria-hidden="true"></i>
+                        <span>{{ f }}</span>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+
+              <div class="pack-cta">
+                <a class="btn btn-primary w-100"
+                   href="{{ plan.cta.url|default:cta_default.url }}"
+                   aria-label="{{ plan.cta.aria|default:cta_default.aria }}"
+                   data-plan="{{ plan.slug }}">
+                  <strong>{{ plan.cta.label|default:cta_default.label }}</strong>
+                  {% if plan.cta.sublabel|default:cta_default.sublabel %}
+                    <small class="d-block opacity-75 single-line-desktop">
+                      {{ plan.cta.sublabel|default:cta_default.sublabel }}</small>
+                  {% endif %}
+                </a>
+              </div>
+
+              {% if plan.payment_note %}
+                <p class="pack-payment-note">{{ plan.payment_note }}</p>
+              {% endif %}
+
+              {% if plan.second_cta %}
+                <div class="pack-cta pack-cta--secondary">
+                  <a class="btn btn-secondary w-100"
+                     href="{{ plan.second_cta.url }}"
+                     aria-label="{{ plan.second_cta.aria|default:plan.second_cta.label }}"
+                     data-plan="{{ plan.slug }}">
+                    <strong>{{ plan.second_cta.label }}</strong>
+                  </a>
+                </div>
+              {% endif %}
+            </article>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="row gx-4 gy-4 mt-3 align-items-center">
+        <div class="col-12 col-lg-4 d-none d-lg-block">
+          {% if proof.left_usps %}
+            <ul class="proof-usps list-unstyled m-0">
+              {% for usp in proof.left_usps %}
+                <li><i class="fas fa-shield-alt me-2"></i>{{ usp }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+        <div class="col-12 col-lg-4"></div>
+        <div class="col-12 col-lg-4 d-none d-lg-block">
+          {% if proof.right_ratings.enabled %}
+            <div class="proof-ratings text-lg-end">
+              <span class="stars" aria-hidden="true">★★★★★</span>
+              <span class="rating-text">{{ proof.right_ratings.avg|default:"4.8" }}/5 • {{ proof.right_ratings.count_text|default:"50+ avis" }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  // Util : bascule harmonisée Bootstrap (.show) + attribut "hidden"
+  function toggleCollapse(btn){
+    const sel = btn.getAttribute('data-target'); if(!sel) return;
+    const el  = document.querySelector(sel);     if(!el)  return;
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!expanded));
+    if (expanded){
+      el.classList.remove('show');
+      el.setAttribute('hidden', '');
+    } else {
+      el.classList.add('show');
+      el.removeAttribute('hidden');
+    }
+  }
+
+  // Accordéon Value‑Stack
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.vs-toggle');
+    if (btn){ toggleCollapse(btn); }
+  });
+
+  // Bonus toggle
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('.bonus-toggle');
+    if (!btn) return;
+    toggleCollapse(btn);
+    // Texte du bouton
+    if (btn.getAttribute('aria-expanded') === 'true'){
+      btn.dataset.moreLabel = btn.dataset.moreLabel || btn.textContent;
+      btn.textContent = 'Réduire';
+    } else {
+      btn.textContent = btn.dataset.moreLabel || btn.textContent.replace('Réduire','Voir +… bonus');
+    }
+  });
+</script>

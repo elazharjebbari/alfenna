@@ -10,6 +10,6 @@
 - Documenté les préfixes privés additionnels dans les réglages (`lumierelearning/settings/base.py:372`) pour expliciter la protection de `/admin/` et `/staging/`.
 
 ## Bonnes pratiques SEO futures
-- Vérifier avant chaque mise en production que `SEO_ENV` est bien défini à `"prod"` et exécuter le smoke test `python manage.py runscript apps.pages.scripts.smoke_seo_headers --settings=lumierelearning.settings.test_cli`.
+- Vérifier avant chaque mise en production que `SEO_ENV` est bien défini à `"prod"` et exécuter le smoke test `python manage.py runscript apps.pages.scripts.smoke_seo_headers --settings=alfenna.settings.test_cli`.
 - Intégrer dans la CI le test `apps/pages/tests/test_robots_headers.py` afin de détecter toute régression future sur l'en-tête `X-Robots-Tag`.
 - Limiter l'usage de `noindex` aux routes explicitement privées et surveiller les nouveaux middlewares ou templates qui pourraient réintroduire des directives bloquantes.

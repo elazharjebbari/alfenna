@@ -1,0 +1,12 @@
+alias: accounts/password_reset/confirm
+template: "components/core/accounts/password_reset_confirm/component.html"
+assets:
+  css:
+    - "/static/css/auth.css"
+  js:
+    - "/static/js/auth.js"
+hydrate:
+  module: "apps.atelier.compose.hydrators.accounts.password_reset_confirm"
+  func: "password_reset_confirm_form"
+render:
+  cacheable: false

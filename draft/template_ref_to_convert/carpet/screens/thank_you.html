@@ -1,0 +1,56 @@
+{% extends 'carpet/base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Merci !" %}{% endblock %}
+
+{% block content %}
+<section class="thank-you" style="padding:3rem 1rem; text-align:center;">
+  <h1 style="font-size:2rem; margin-bottom:1rem;">{% trans "Merci pour votre commande !" %}</h1>
+  <p style="font-size:1.1rem; color:#555;">
+    {% trans "Nous avons bien reçu votre demande et reviendrons vers vous sous 24 h." %}
+  </p>
+  <a href="{% url 'home-carpet' %}"
+     class="btn-cta"
+     style="margin-top:2rem; padding:0.75rem 1.5rem;
+            background:#ff4757; color:#fff; font-size:1rem;
+            border:none; border-radius:4px; display:inline-block;">
+    {% trans "Retour à la boutique" %}
+  </a>
+</section>
+
+{# --- 1) Payload serveur (prioritaire) --- #}
+{% if conversion %}
+  {{ conversion|json_script:"conversion-json" }}
+  <script>
+    (function(){
+      window.dataLayer = window.dataLayer || [];
+      try {
+        var el = document.getElementById('conversion-json');
+        if (!el) return;
+        var conv = JSON.parse(el.textContent);
+        if (conv && typeof conv === 'object') {
+          dataLayer.push(Object.assign({event: 'purchase'}, conv));
+        }
+      } catch(e){}
+    })();
+  </script>
+{% endif %}
+
+{# --- 2) Fallback client (si session manquante) --- #}
+<script>
+(function(){
+  // Si conversion serveur présente, on ne fait rien.
+  {% if conversion %} return; {% endif %}
+  window.dataLayer = window.dataLayer || [];
+  try {
+    var raw = sessionStorage.getItem('purchase_payload');
+    if (!raw) return;
+    var conv = JSON.parse(raw);
+    if (conv && typeof conv === 'object') {
+      dataLayer.push(Object.assign({event: 'purchase'}, conv));
+    }
+  } catch(e) {}
+  try { sessionStorage.removeItem('purchase_payload'); } catch(e){}
+})();
+</script>
+{% endblock %}

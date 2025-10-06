@@ -1,0 +1,127 @@
+alias: learning/content
+template: "components/core/learning_content/learning_content.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+# Valeurs par défaut (servent aussi de whitelist)
+params:
+  bg_color: "#ffffff"
+  image_static_path: "images/training/detail/candle-learning.webp"
+  image_alt: "Bougie artisanale"
+
+  bubble_color: "#4CAF50"
+  timeline_line_bg: "#E7F8EE"
+
+  timeline_md_left: "40px"
+  timeline_md_top: "100px"
+  timeline_sm_left: "33px"
+  timeline_sm_top: "150px"
+  title_html: "<span>Tout Savoir</span> sur les Bougies Artisanales"
+
+  # CTA
+  cta:
+    label: "Décrouvrir la formation"
+    icon: "fa fa-search me-2"
+    url: null
+    url_name: null
+    url_kwargs: {}
+
+  chapters:
+    # Introduction (bordure 0, classes mt-4 mt-md-0)
+    - intro: true
+      border_px: 0
+      icon: "fa fa-info-circle"
+      desc_html: "<strong>Introduction :</strong> <em>Présentation générale</em><br><small>La formation vise à enseigner la création de bougies artisanales en utilisant des techniques simples et efficaces.</small>"
+      subitems: []
+
+    # 1. Types de bougies + sous-parties
+    - mt4: false
+      border_px: 2
+      icon: "fa fa-fire"
+      desc_html: "<strong>Types de bougies :</strong><br><small>Explication des types de bougies : parfumées, décoratives et fondantes.</small>"
+      subitems:
+        - { text_html: "<u>Bougies parfumées :</u> Diffusent des parfums d'ambiance pour la relaxation et la décoration." }
+        - { text_html: "<u>Bougies décoratives :</u> Conçues pour embellir des espaces sans être brûlées." }
+        - { text_html: "<u>Bougies fondantes :</u> Se consument rapidement pour libérer des parfums." }
+
+    # 2. Matériel + sous-partie mèches
+    - mt4: true
+      border_px: 2
+      icon: "fa fa-tools"
+      desc_html: "<strong>Matériel :</strong><br><small>Liste des outils nécessaires : moules, mèches, cires, huiles parfumées.</small>"
+      subitems:
+        - { text_html: "<u>Types de mèches :</u> Leur rôle dans la combustion et l'efficacité des bougies." }
+
+    # 3. Types de cires + sous-parties
+    - mt4: true
+      border_px: 2
+      icon: "fa fa-leaf"
+      desc_html: "<strong>Types de cires :</strong><br><small>Cire d'abeille, cire de soja, paraffine, avec leurs avantages et inconvénients.</small>"
+      subitems:
+        - { text_html: "<u>Cire d'abeille :</u> Naturelle et respectueuse de l'environnement." }
+        - { text_html: "<u>Cire de soja :</u> Alternative écologique aux cires traditionnelles." }
+
+    # 4. Recettes
+    - mt4: true
+      border_px: 2
+      icon: "fa fa-flask"
+      desc_html: "<strong>Recettes de bougies :</strong><br><small>Formulations selon les types de cires et d'additifs choisis.</small>"
+      subitems: []
+
+    # 5. Problèmes + sous-parties suivantes
+    - mt4: true
+      border_px: 2
+      icon: "fa fa-exclamation-circle"
+      desc_html: "<strong>Problèmes courants :</strong><br><small>Résolution des problèmes de fabrication : bulles d'air, surface irrégulière.</small>"
+      subitems:
+        - { text_html: "<u>Colorants et parfums :</u> Techniques pour ajouter des colorants et parfums de manière uniforme." }
+        - { text_html: "<u>Moules :</u> Utilisation de moules en silicone, acrylique, et métal." }
+
+contract:
+  required:
+    image_static_path: "Chemin STATIC relatif de l'image (avec extension)"
+    chapters: "Liste ordonnée des chapitres {intro?, mt4?, border_px, icon, desc_html, subitems[]}"
+  optional:
+    title_html: "HTML du titre principal"
+    bg_color: "Couleur de fond"
+    image_alt: "Texte alternatif image"
+    bubble_color: "Couleur des icônes et bordures"
+    timeline_line_bg: "Couleur de la ligne verticale"
+    timeline_md_left: "Décalage left (>=768px)"
+    timeline_md_top: "Décalage top (>=768px)"
+    timeline_sm_left: "Décalage left (<768px)"
+    timeline_sm_top: "Décalage top (<768px)"
+    cta: "CTA {label, icon, url|url_name,url_kwargs}"
+
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.learning.hydrators.learning_content"
+  module: "apps.atelier.compose.hydrators.learning.hydrators"
+  func: "learning_content"
+
+  params:
+    title_html: "<span>Tout Savoir</span> sur les Bougies Artisanales"
+    bg_color: "#ffffff"
+    image_static_path: "images/training/detail/candle-learning.webp"
+    image_alt: "Bougie artisanale"
+    bubble_color: "#4CAF50"
+    timeline_line_bg: "#E7F8EE"
+    timeline_md_left: "40px"
+    timeline_md_top: "100px"
+    timeline_sm_left: "33px"
+    timeline_sm_top: "150px"
+    chapters: []
+    # CTA
+    cta:
+      label: "Décrouvrir la formation"
+      icon: "fa fa-search me-2"
+      url: null
+      url_name: null
+      url_kwargs: {}
+
+render:
+  cacheable: true

@@ -1,0 +1,1 @@
+{{ campaign_name }} – Offre spéciale pour toi

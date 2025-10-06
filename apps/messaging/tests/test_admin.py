@@ -11,7 +11,7 @@ from apps.messaging.template_loader import FileSystemTemplateLoader
 UserModel = get_user_model()
 
 
-@override_settings(ROOT_URLCONF="lumierelearning.urls")
+@override_settings(ROOT_URLCONF="alfenna.urls")
 class MessagingAdminTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()

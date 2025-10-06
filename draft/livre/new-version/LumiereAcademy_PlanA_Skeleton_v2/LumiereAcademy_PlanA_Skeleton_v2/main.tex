@@ -1,0 +1,33 @@
+% ===============================================================
+% Journal de l’atelier — Plan A (Squelette de projet LaTeX)
+% ===============================================================
+\documentclass[11pt,oneside]{book}
+
+\input{tex/_shared/packages.tex}
+\input{tex/_shared/config.tex}
+\input{tex/_shared/styles.tex}
+
+\begin{document}
+
+\frontmatter
+\subfile{tex/00_frontmatter/titlepage}
+\subfile{tex/00_frontmatter/copyright}
+\subfile{tex/00_frontmatter/toc}
+
+\mainmatter
+\part{Journal de l’atelier}
+
+\subfile{tex/10_acte1_declic_securite/acte1}
+\subfile{tex/20_acte2_premieres_lueurs/acte2}
+\subfile{tex/30_acte3_domestiquer_matiere/acte3}
+\subfile{tex/40_acte4_formes_maitrise/acte4}
+\subfile{tex/50_acte5_pret_a_vendre/acte5}
+
+\appendix
+\part*{Annexes}
+\subfile{tex/90_annexes/annexes}
+
+\backmatter
+\printbibliography
+
+\end{document}

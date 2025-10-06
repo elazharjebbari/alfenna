@@ -183,6 +183,27 @@ class FaqView(SeoViewMixin, TemplateView):
         return response.render_base(page_ctx, fragments, assets, request)
 
 
+class ProductDetailView(SeoViewMixin, TemplateView):
+    """Fiche produit orchestrée par Atelier."""
+
+    template_name = "screens/product-detail.html"
+
+    def get(self, request, *args, **kwargs):
+        page_id = "product_detail"
+        request._product_slug = kwargs.get("product_slug")
+
+        page_ctx = pipeline.build_page_spec(page_id, request)
+
+        fragments = {}
+        for slot_id, slot_ctx in (page_ctx.get("slots") or {}).items():
+            rendered = pipeline.render_slot_fragment(page_ctx, slot_ctx, request)
+            fragments[slot_id] = rendered.get("html", "")
+
+        assets = pipeline.collect_page_assets(page_ctx)
+
+        return response.render_base(page_ctx, fragments, assets, request)
+
+
 class DemoView(SeoViewMixin, TemplateView):
     template_name = "screens/demo.html"
     slug_url_kwarg = "course_slug"

@@ -1,0 +1,56 @@
+.box-wrapper p {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Animation de secousse */
+@keyframes ring {
+    0% {
+        transform: rotate(0);
+    }
+    10% {
+        transform: rotate(2deg);
+    }
+    20% {
+        transform: rotate(-2deg);
+    }
+    30% {
+        transform: rotate(2deg);
+    }
+    40% {
+        transform: rotate(-2deg);
+    }
+    50% {
+        transform: rotate(1deg);
+    }
+    60% {
+        transform: rotate(-1deg);
+    }
+    70% {
+        transform: rotate(1deg);
+    }
+    80% {
+        transform: rotate(-1deg);
+    }
+    90% {
+        transform: rotate(0.5deg);
+    }
+    100% {
+        transform: rotate(0);
+    }
+}
+
+/* Style de vibration appliqué à la box-content */
+.ring-box-content {
+    animation: ring 0.5s ease-in-out 1;
+    animation-delay: 3s;
+    animation-iteration-count: infinite; /* Boucle avec pauses */
+}

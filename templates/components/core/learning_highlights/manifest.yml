@@ -1,0 +1,60 @@
+alias: learning/highlights
+template: "components/core/learning_highlights/learning_highlights.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+# Defaults documentaires (servent de whitelist pour l’hydrateur)
+params:
+  bg_color: "#EEFBF3"
+
+  title_html: "Transformez Votre Passion en <span>Compétences Artisanales</span>"
+  subtitle_html: "Profitez d'Opportunités Artisanales Inédites"
+
+  # Style inline des bulles/icônes (on garde EXACTEMENT la structure/classe)
+  icon_color: "#309255"
+  circle_border_color: "#d3d3d3"
+  circle_bg: "#ffffff"
+  circle_padding: "20px"
+
+  # Cartes (icon = classe FA, title = texte en gras avant :, text = suite)
+  items:
+    - { icon: "fas fa-hands",          title: "Compétences Artisanales Concrètes :", text: "Maîtrisez des compétences artisanales." }
+    - { icon: "fas fa-clock",          title: "Flexibilité Totale :",                text: "Apprenez quand et où vous voulez à votre rythme." }
+    - { icon: "fas fa-user-graduate",  title: "Pour Débutants et Experts :",         text: "Modules adaptés à tous niveaux." }
+    - { icon: "fas fa-tools",          title: "Pratique et Interactive :",           text: "70% de pratique, apprentissage immersif." }
+    - { icon: "fas fa-users",          title: "Communauté Engagée :",                text: "Rejoignez plus de 500 artisans passionnés." }
+    - { icon: "fas fa-briefcase",      title: "Devenez Patron :",                    text: "Créez et développez votre business avec notre soutien." }
+
+contract:
+  required:
+    items: "Liste de cartes {icon, title, text}"
+  optional:
+    bg_color: "Couleur de fond de la section"
+    title_html: "HTML du titre principal"
+    subtitle_html: "HTML du sous-titre"
+    icon_color: "Couleur des icônes"
+    circle_border_color: "Couleur de la bordure circulaire"
+    circle_bg: "Fond du cercle"
+    circle_padding: "Padding interne du cercle"
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.learning.hydrators.learning_highlights"
+  module: "apps.atelier.compose.hydrators.learning.hydrators"
+  func: "learning_highlights"
+
+  params:
+    bg_color: "#EEFBF3"
+    title_html: ""
+    subtitle_html: ""
+    icon_color: "#309255"
+    circle_border_color: "#d3d3d3"
+    circle_bg: "#ffffff"
+    circle_padding: "20px"
+    items: []
+
+render:
+  cacheable: true

@@ -1,0 +1,9 @@
+<div class="section section-padding-02">
+  <div class="container">
+    <div class="contact-map-wrapper">
+      {% if map_embed_url %}
+      <iframe id="gmap_canvas" src="{{ map_embed_url }}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+      {% endif %}
+    </div>
+  </div>
+</div>

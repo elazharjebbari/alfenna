@@ -1,0 +1,110 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<style>
+/* ===== Deal Timer — Flex & Logical + "Économie (duo compact)" ===== */
+:root{
+  --timer-accent : var(--ul-primary, #EF2853);   /* accent (montant + durée) */
+  --promotion-color : #FFA31A;   /* accent (montant + durée) */
+  --timer-urgent : var(--ul-secondary, #FFA31A); /* < 1h */
+  --timer-muted  : rgba(0,0,0,.68);
+  --timer-soft   : rgba(239,40,83,.08);          /* léger halo desktop */
+}
+
+/* Ligne principale */
+.deal-timer{
+  display:flex; align-items:baseline; gap:.5rem 1rem; flex-wrap:wrap;
+  padding:.375rem 0; min-height:40px;
+  color:var(--black,#000); background:transparent; border:0;
+  text-align:initial;
+}
+
+/* Bloc gauche = info éco + icône */
+.deal-timer__left{
+  display:flex; align-items:center; gap:.5rem; min-width:0;
+}
+.deal-timer__icon{
+  color:var(--timer-accent); width:18px; height:18px;
+  display:grid; place-items:center; flex:0 0 18px;
+}
+@media (max-width:360px){ .deal-timer__icon{ display:none; } }
+
+/* ---- Économie : "83 MAD économisés (−23%)" */
+.deal-save{ display:inline-flex; align-items:baseline; gap:.35rem; flex-wrap:wrap; }
+.deal-save__amount{
+  color:var(--promotion-color);
+  font-weight:800; font-variant-numeric:tabular-nums; letter-spacing:.2px;
+}
+.deal-save__text{ font-weight:600; }
+.deal-save__percent{
+  color:var(--timer-muted);
+  font-size:.92em; unicode-bidi:isolate;   /* stabilité en RTL */
+}
+
+/* Bloc droit = libellé + durée */
+.deal-timer__right{
+  margin-inline-start:auto;                           /* pousse vers le bord */
+  display:flex; align-items:baseline; gap:.5rem;
+  white-space:nowrap; text-align:right;
+}
+.deal-timer__hint{ color:var(--timer-muted); font-weight:500; }
+.deal-timer__value{
+  color:var(--timer-accent); font-weight:800; letter-spacing:.2px; line-height:1;
+  font-variant-numeric:tabular-nums; unicode-bidi:isolate;
+  padding:.125rem .375rem; border-radius:.5rem;
+}
+@media (min-width:576px){ .deal-timer__value{ background:var(--timer-soft); } }
+
+/* États posés par le JS */
+.deal-timer--warn .deal-timer__value{ color:var(--timer-urgent); background:rgba(255,163,26,.12); }
+.deal-timer--expired{ opacity:.7; }
+
+/* RTL : miroir propre (compteur côté gauche + alignements) */
+html[lang="ar"] .deal-timer{ direction:rtl; }
+html[lang="ar"] .deal-timer__right{ text-align:left; }
+</style>
+
+<div id="{{ id|default:'deal-timer' }}"
+     class="deal-timer"
+     data-mode="{{ mode|default:'rolling' }}"
+     data-deadline-iso="{{ deadline_iso|default_if_none:'' }}"
+     data-rolling-hours="{{ rolling_hours|default:'24' }}"
+     data-locale="{{ LANGUAGE_CODE }}"
+     data-lp="{{ lp.slug|default:'' }}"
+     data-variant="{{ variant.key|default:'' }}"
+     data-trim="hm"
+     role="status" aria-live="polite">
+
+  <!-- Économie (mise en avant) -->
+  <div class="deal-timer__left">
+    <span class="deal-timer__icon" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M12 9v5l3 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </span>
+
+    {% if LANGUAGE_CODE == 'ar' %}
+      <span class="deal-save">
+        <span class="deal-save__amount">{{ price_ui.savings_text }}</span>
+        <span class="deal-save__text">{% trans 'موفَّرة' %}</span>
+        <span class="deal-save__percent">(-{{ price_ui.percent_text }})</span>
+      </span>
+    {% else %}
+      <span class="deal-save">
+        <span class="deal-save__amount">{{ price_ui.savings_text }}</span>
+        <span class="deal-save__text">{% trans 'économisés' %}</span>
+        <span class="deal-save__percent">({{ price_ui.percent_text }})</span>
+      </span>
+    {% endif %}
+  </div>
+
+  <!-- Compteur -->
+  <div class="deal-timer__right">
+    <span class="deal-timer__hint">
+      {% if LANGUAGE_CODE == 'ar' %}{% trans 'ينتهي خلال' %}{% else %}{% trans 'Reste' %}{% endif %}
+    </span>
+    <span class="deal-timer__value" data-role="value">--:--</span>
+    <time class="d-none" data-role="deadline"></time>
+  </div>
+</div>

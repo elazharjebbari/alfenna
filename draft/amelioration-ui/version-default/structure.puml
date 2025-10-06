@@ -1,0 +1,216 @@
+@startuml
+title Landing DIY Bougies Naturelles — Parcours Conversion (BPMN style)
+
+skinparam dpi 160
+skinparam activity {
+  BackgroundColor White
+  BorderColor #0D5C4F
+  FontName Arial
+}
+skinparam note {
+  BackgroundColor #F2FFF7
+  BorderColor #0D5C4F
+}
+skinparam ArrowColor #0D5C4F
+
+start
+
+partition "HEADER (Sticky minimal)" {
+  :Top bar "Étape 1: Découvrir ✓  |  Étape 2: Choisir  |  Étape 3: Rejoindre";
+  :Menu (<=4 liens): Accueil | Formation | Avis | FAQ;
+  :Sticky CTA (mobile/desktop): "Je me lance";
+  note right
+  Objectif: NAV + Confiance
+  Composants:
+  - Logo + note 4.8/5
+  - Mini-icônes: Paiement sécurisé, Accès immédiat
+  Règles:
+  - Menu court
+  - Sticky CTA discret (80% viewport width mobile)
+  KPIs: clic_header, clic_sticky
+  end note
+}
+
+partition "HERO — Above the fold" {
+  :H1 "Fabrique des bougies naturelles,\nqualitatives et éco-responsables";
+  :Sous-promesse "De débutante à créatrice autonome en 7 jours";
+  :Preuve sociale "500+ apprenantes | Note 4.8/5";
+  :Ancre Prix  ~~199 €~~ **149,95 €**  ≈ **0,50 €/jour**  ("Seulement");
+  :CTA primaire "Je me lance";
+  :CTA secondaire "Voir le programme";
+  :Micro-progress "Tu es ici ✓  → Choisir l'accès → Rejoindre";
+  :Timer (J-x, dates exactes);
+  note right
+  Objectif: CI + NF
+  Composants:
+  - Photo formatrice (regard orienté bouton)
+  - Badge "100% végétal | zéro paraffine"
+  - Micro-garantie "Accès immédiat – Paiement sécurisé"
+  A/B clés:
+  - "Seulement" vs neutre
+  - Prix barré + % vs prix seul
+  - 149,95 vs 149,00
+  - Coût/jour visible vs caché
+  KPIs: ctr_hero_cta, scroll25, time_to_first_click
+  end note
+}
+
+if ("INTENTION ?\nCartes: Apprendre | Vendre | Offrir") then (Apprendre)
+  :Tag persona=APPR;
+elseif (Vendre)
+  :Tag persona=VENDRE;
+else (Offrir)
+  :Tag persona=OFFRIR;
+endif
+
+partition "USP — Valeurs & Bénéfices clefs" {
+  :Bande 4 USP (max): Qualité | Naturel | Créativité | Autonomie;
+  :Bande 2 USP contextuelles selon persona;
+  note right
+  Messages:
+  - APPR: "Crée ta 1ère bougie en 2h, sans matériel coûteux"
+  - VENDRE: "Monte une micro-activité rentable et durable"
+  - OFFRIR: "Des cadeaux zéro déchet qui ont du sens"
+  Composants:
+  - Icônes pleines, titres 3-4 mots, micro-texte 1 ligne
+  KPIs: hover_usp, scroll50
+  end note
+}
+
+partition "AVANT / APRÈS — Stop-scroll" {
+  :Split N&B (erreurs fréquentes)\n→ Couleur (bougies réussies);
+  note right
+  Objectif: Contraste émotionnel
+  Contenu:
+  - Avant: cire fissurée, suie, parfum trop fort
+  - Après: rendu lisse, mèche coton, parfum sans phtalates
+  Étiquettes chiffrées:
+  - "0% paraffine", "x3 tenue du parfum", "2h pour 1ère bougie"
+  KPIs: vues_section, ctr_voisin
+  end note
+}
+
+partition "PROGRAMME — Aperçu" {
+  :Timeline 5 étapes (courtes): Bases → Matières → Recettes → Parfums → Mise en vente (optional);
+  :Accordéon modules (7) avec bullets concrets;
+  :Lien "Voir 1 leçon gratuite";
+  note right
+  Objectif: Réassurance + projection
+  Règles:
+  - Titres très courts
+  - 1 CTA par vue
+  KPIs: accord_open, cta_lecon_free
+  end note
+}
+
+partition "ÉCO-PROOFS — Crédibilité écologique" {
+  :Badges: cire de soja/colza | mèches coton | parfums IFRA | Recyclage pots;
+  :Mini-texte "Pourquoi naturel = qualité + sécurité";
+  note right
+  Objectif: NF (écologie) + différenciation
+  Composants:
+  - Pictos labels
+  - Photo packshot isolé (bougie + ingrédients)
+  KPIs: dwell_eco, ctr_cta_proche
+  end note
+}
+
+partition "SOCIAL PROOF — Témoignages" {
+  :Carousel 3-4 avis (texte court) + 1 vidéo (<30s);
+  :Métrique: "4.8/5 • 527 avis";
+  note right
+  Objectif: Confiance + émotion
+  Variantes:
+  - APPR: plaisir créatif & déco maison
+  - VENDRE: premières ventes / marchés
+  - OFFRIR: réactions aux cadeaux
+  KPIs: swipe_carousel, ctr_cta_proche
+  end note
+}
+
+partition "MICRO-CHOIX — Personnalisation douce" {
+  :3 Cartes "Je veux": Apprendre | Vendre | Offrir (ancrent la page);
+  note right
+  Objectif: activer mindset "lequel ?"
+  Règles:
+  - Toujours 3 (jamais >4)
+  - Ancre vers blocs personnalisés (titres/arguments)
+  KPIs: click_choice_card, path_depth
+  end note
+}
+
+partition "PACK & OFFRES — Valeur" {
+  :Carte Offre Unique "Accès à vie" + Bonus (templates, checklists, communauté);
+  :Garantie "Satisfaite ou remboursée 14 jours";
+  :Ancre Prix répliquée "Et tout ça pour seulement ...";
+  :CTA "Je me lance";
+  note right
+  Objectif: Décision
+  Composants:
+  - Tableau valeur: Modules, Bonus, Accès, Support
+  - Badge promo limité: dates réelles (J-x)
+  A/B clés:
+  - Prix avant vs après bénéfices
+  - % badge vs texte
+  - Empilement bonus vs simple liste
+  KPIs: click_pack_cta, add_to_cart, conv_rate
+  end note
+}
+
+partition "FAQ — Objections" {
+  :FAQ 6 Q (matériel, niveau, temps, parfums, éco, remboursement);
+  :Micro-CTA dans chaque réponse ("Je me lance");
+  note right
+  Objectif: lever doutes sans diluer l’action
+  KPIs: faq_open, faq_cta_click
+  end note
+}
+
+partition "RÉCUP HÉSITATION — Lead ou Retour tunnel" {
+  :Bloc "Tu hésites ?": Leçon gratuite OU Quiz parfum;
+  :Modal sortie (exit-intent) non intrusif;
+  note right
+  Objectif: sauver la session / capter lead
+  Règles:
+  - 1 seule alternative
+  - Renvoi vers achat après visionnage
+  KPIs: lead_cr, return_to_checkout
+  end note
+}
+
+partition "CTA FINAL + Sticky" {
+  :Grand CTA "Je me lance" + micro-garantie;
+  :Rappel preuves: 4.8/5 | 500+ | naturel/éco;
+}
+
+if ("CTA cliqué ?") then (Oui)
+  :Checkout (1 page);
+  :Order bump (kit matériel recommandé);
+  stop
+else (Non)
+  :Footer confiance (coordonnées, légales, paiement);
+  end
+endif
+
+''======================
+'' INSTRUMENTATION & TESTS (Notes globales)
+''======================
+'note bottom
+'Instrumentation GA4:
+'- cta_click_primary / cta_click_sticky
+'- choice_card_click
+'- accordion_open
+'- price_view / pack_cta_click
+'- faq_open / faq_cta_click
+'- lead_submit / exit_modal_view
+'Segmentation:
+'- device, source, persona (APPR/VENDRE/OFFRIR)
+'A/B tests prioritaires:
+'- "Seulement" + prix barré + coût/jour
+'- .95 vs .00
+'- Micro-choix présent vs absent
+'- Avant/Après présent vs absent
+'- Timer réel vs aucun
+'end note
+
+@enduml

@@ -1,0 +1,27 @@
+{% load i18n %}
+{% with fullname_key=fields_map.fullname|default:'full_name' phone_key=fields_map.phone|default:'phone' address_key=fields_map.address|default:'' product_key=fields_map.product|default:'' promotion_key=fields_map.promotion|default:'' %}
+<form class="needs-validation" data-product-lead action="{{ action_url }}" method="post" novalidate>
+  {% csrf_token %}
+  <div class="mb-3">
+    <label class="form-label" for="id-{{ fullname_key }}">{% trans "Nom complet" %}</label>
+    <input type="text" class="form-control" id="id-{{ fullname_key }}" name="{{ fullname_key }}" autocomplete="name" required placeholder="{% trans 'Ex: Amine Benali' %}">
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="id-{{ phone_key }}">{% trans "Numero de telephone" %}</label>
+    <input type="tel" class="form-control" id="id-{{ phone_key }}" name="{{ phone_key }}" inputmode="tel" autocomplete="tel" minlength="6" maxlength="20" required placeholder="{% trans 'Ex: 06 12 34 56 78' %}">
+    <div class="form-text">{% trans "WhatsApp accepte - Format : 06 12 34 56 78 ou +212" %}</div>
+  </div>
+  {% if address_key %}
+    <div class="mb-3">
+      <label class="form-label" for="id-{{ address_key }}">{% trans "Adresse complete" %}</label>
+      <input type="text" class="form-control" id="id-{{ address_key }}" name="{{ address_key }}" autocomplete="street-address" placeholder="{% trans 'Quartier, ville, code postal' %}">
+    </div>
+  {% endif %}
+  {% if product_key %}<input type="hidden" name="{{ product_key }}" value="{{ product.id }}">{% endif %}
+  {% if promotion_key %}<input type="hidden" name="{{ promotion_key }}" value="{{ pricing.promo_price|default:pricing.price }}">{% endif %}
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary" data-product-submit>{% trans "Commander maintenant" %}</button>
+    <div class="text-muted small">{% trans "Donnees protegees, aucune revente." %}</div>
+  </div>
+</form>
+{% endwith %}

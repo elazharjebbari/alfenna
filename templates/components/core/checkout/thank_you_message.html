@@ -1,0 +1,50 @@
+{% load i18n %}
+<section class="section">
+  <div class="container" style="max-width: 860px; margin: 0 auto;">
+    <div class="content mt-4" style="padding: 20px 0; font-size: 16px; color: #555; line-height: 1.7; text-align: center;">
+
+      <!-- Titre -->
+      <h2 style="font-weight: 700; color: #2f855a; margin-bottom: 12px;">
+        <i class="icofont-check-circled" aria-hidden="true"></i>
+        {{ title|safe }}
+      </h2>
+
+      <!-- Paragraphes principaux -->
+      {% for p in paragraphs %}
+        <p>{{ p|safe }}</p>
+      {% endfor %}
+
+      <!-- Info box -->
+      <div class="info-box"
+           style="background-color: #f7fafc; padding: 16px; border-left: 5px solid #2f855a; margin: 22px auto; font-size: 15px; border-radius: 6px; text-align: left; max-width: 720px;">
+        <p class="info-title" style="font-size: 18px; font-weight: bold; color: #2f855a; margin-bottom: 8px;">
+          <i class="icofont-info-circle" aria-hidden="true"></i>
+          {{ info_box.title|default:"Informations"|safe }}
+        </p>
+        {% for p in info_box.paragraphs %}
+          <p style="margin: 0 0 6px 0;">{{ p|safe }}</p>
+        {% endfor %}
+      </div>
+
+      {% if show_go_to_course and course_url %}
+        <p style="margin-top: 16px;">
+          <a class="btn btn-success" href="{{ course_url }}">
+            <i class="icofont-graduate" aria-hidden="true"></i>
+            {% trans "Accéder au cours" %}
+          </a>
+        </p>
+      {% endif %}
+
+      <!-- Contact -->
+      {% if contact_email %}
+        <p class="note"
+           style="text-align: center; font-size: 14px; color: #d9534f; margin-top: 20px; font-weight: bold;">
+          <i class="icofont-email" aria-hidden="true"></i>
+          {% trans "Une question ?" %} {% trans "Contactez-nous à" %}
+          <a href="mailto:{{ contact_email }}"
+             style="color: #d9534f; text-decoration: none; font-weight: bold;">{{ contact_email }}</a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>

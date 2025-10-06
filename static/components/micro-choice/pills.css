@@ -1,0 +1,28 @@
+/* Micro-choice (pills) — léger et réutilisable */
+.ll-choice--pills { padding: .5rem 0 0 }
+.ll-choice--pills .ll-choice-head { margin: 0 0 .5rem 2px }
+.ll-choice--pills .ll-choice-head .ll-sub { margin: .25rem 0 0; opacity: .75 }
+
+.ll-pills{
+  display:flex; flex-wrap:wrap; gap:var(--ll-gap);
+}
+
+.ll-pill{
+  appearance:none; border:1px solid var(--ll-pill-border);
+  background:var(--ll-pill-bg); color:var(--ll-accent);
+  padding:.55rem .9rem; border-radius:var(--ll-radius);
+  font-weight:700; line-height:1.1; cursor:pointer;
+  display:inline-flex; align-items:center; gap:.5rem;
+  box-shadow:0 2px 10px rgba(0,0,0,.03);
+  transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease, border-color .12s ease;
+}
+.ll-pill .ll-pill-sub{ display:block; font-weight:600; opacity:.7; font-size:.82em }
+
+.ll-pill:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.06) }
+.ll-pill[aria-pressed="true"]{
+  background:var(--ll-pill-selected); border-color:transparent;
+}
+
+@media (max-width: 480px){
+  .ll-pill{ padding:.5rem .75rem }
+}

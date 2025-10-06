@@ -14,7 +14,7 @@ from apps.common.runscript_harness import binary_harness
 def _find_manifest():
     candidates = [
         settings.BASE_DIR / "templates" / "components" / "forms" / "manifest",
-        settings.BASE_DIR / "lumierelearning" / "templates" / "components" / "forms" / "manifest",
+        settings.BASE_DIR / "alfenna" / "templates" / "components" / "forms" / "manifest",
         settings.BASE_DIR / "apps" / "atelier" / "templates" / "components" / "forms" / "manifest",
     ]
     for p in candidates:

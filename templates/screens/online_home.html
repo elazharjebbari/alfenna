@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <!-- Swiper CSS (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+{% endblock extra_css %}
+
+{% block content %}
+    {{ slots_html.vendors|default_if_none:""|safe }}
+    {{ slots_html.modals_login|default_if_none:""|safe }}
+    {{ slots_html.header|default_if_none:""|safe }}
+    {{ slots_html.chatbot|default_if_none:""|safe }}
+    {{ slots_html.hero|default_if_none:""|safe }}
+    {{ slots_html.usp_pills|default_if_none:""|safe }}
+    {{ slots_html.form_step|default_if_none:""|safe }}
+    {{ slots_html.before_after_wipe|default_if_none:""|safe }}
+    {{ slots_html.program_roadmap|default_if_none:""|safe }}
+    {{ slots_html.eco_proof_badges|default_if_none:""|safe }}
+    {{ slots_html.carousel_swiper|default_if_none:""|safe }}
+    {{ slots_html.contact_info|default_if_none:""|safe }}
+    {{ slots_html.micro_choice_pills|default_if_none:""|safe }}
+    {{ slots_html.pricing_pack|default_if_none:""|safe }}
+    {{ slots_html.faq|default_if_none:""|safe }}
+
+
+
+
+    {#    <div class="container">#}
+    {#        <div class="section">#}
+    {#            <blockquote class="blockquote section-padding section-title shape-02">#}
+    {#                <span class="quote">“</span>#}
+    {#                <h2 class="main-title">L'artisanat, c'est la <span>poursuite de l'excellence</span> à travers des gestes#}
+    {#                    simples et répétés</h2>#}
+    {#            </blockquote>#}
+    {#        </div>#}
+    {#    </div>#}
+    {##}
+    {#    {{ slots_html.learning_card|default_if_none:""|safe }}#}
+    {#    {{ slots_html.learning_content|default_if_none:""|safe }}#}
+    {#    {{ slots_html.highlights|default_if_none:""|safe }}#}
+    {#  {{ slots_html.cover|default_if_none:""|safe }}#}
+    {#    {{ slots_html.teacher|default_if_none:""|safe }}#}
+    {#    {{ slots_html.faq|default_if_none:""|safe }}#}
+    {#    {{ slots_html.trainer|default_if_none:""|safe }}#}
+    {#  {{ slots_html.footer|default_if_none:""|safe }}#}
+{% endblock %}
+
+
+
+
+

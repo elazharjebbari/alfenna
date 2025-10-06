@@ -1,0 +1,28 @@
+alias: "header/main"
+template: "components/header/main/header_main.html"
+assets:
+  css: []
+  js: []
+  head: []
+hydrate:
+  python: "apps.atelier.compose.hydrators.header_main"
+  defaults:
+    logo_src: "images/logo.webp"
+    logo_alt: "Lumière Academy"
+    show_auth_links: true
+    menu:
+      - { label: "Accueil", url_name: "pages:home" }
+      - label: "Nos Formations"
+        children:
+          - { label: "Formation en ligne", url: "/courses/" }
+      - { label: "Nos Cours", url_name: "catalog:list" }
+      - { label: "Q&A", url: "#" }
+      - { label: "Contact", url: "#" }
+contract:
+  optional:
+    logo_src: str
+    logo_alt: str
+    menu: list
+    show_auth_links: bool
+render:
+  cacheable: true

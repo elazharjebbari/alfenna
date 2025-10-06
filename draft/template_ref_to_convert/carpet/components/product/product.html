@@ -1,0 +1,245 @@
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% if LANGUAGE_CODE == 'ar' %}
+    <style>
+        /* Aligner les étoiles à droite */
+        .ul-product-details-rating {
+            text-align: right;
+            direction: rtl;
+        }
+
+        /* RTL pour les options de produit */
+        .ul-product-details-options.rtl {
+            direction: rtl;
+        }
+
+        /* Aligner les titres à droite */
+        .ul-product-details-options.rtl .title {
+            text-align: right;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Formulaires en RTL (ordre inverse) */
+        .ul-product-details-options.rtl .variants {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 0.5rem;
+            justify-content: flex-start;
+        }
+
+        /* Badge (taille) en RTL */
+        .ul-product-details-options.rtl .badge {
+            font-size: 1rem;
+            direction: rtl;
+            display: inline-block;
+        }
+
+        /* forcer la direction RTL sur tout le formulaire */
+        form[dir="rtl"] {
+            direction: rtl !important;
+        }
+
+        /* aligner tout champ texte à droite */
+        form[dir="rtl"] .form-control,
+        form[dir="rtl"] input,
+        form[dir="rtl"] textarea {
+            text-align: right !important;
+        }
+
+        /* si tu as des groupes d’icône + champ */
+        form[dir="rtl"] .input-group {
+            flex-direction: row-reverse !important;
+        }
+
+        form[dir="rtl"] .input-group .input-group-text {
+            text-align: right !important;
+        }
+    </style>
+
+
+{% endif %}
+
+<style>
+    .variants .black {
+        background-color: black !important;
+    }
+
+    .variants .grey {
+        background-color: grey !important;
+    }
+
+    .variants .brown {
+        background-color: saddlebrown !important;
+    }
+</style>
+
+<!-- Variante optimisée pour Sajadat Al-Raha -->
+<div class="ul-inner-page-container">
+    <div class="ul-product-details">
+        <div class="ul-product-details-top">
+            <div class="row ul-bs-row row-cols-lg-2 row-cols-1 align-items-center">
+                <!-- img -->
+                <div class="col">
+                    <div class="ul-product-details-img">
+                        <div class="ul-product-details-img-slider swiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide">
+                                    <img src="{% static 'carpet/images/cover/cadre-domestique.webp' %}"
+                                         alt="Tapis Sajadat Al-Raha">
+                                </div>
+                                <div class="swiper-slide">
+                                    {% if LANGUAGE_CODE == 'ar' %}
+                                        <img src="{% static 'carpet/images/cover/mouse-memoire-airgel-ar.webp' %}"
+                                             alt="{% trans 'Tapis Sajadat Al-Raha - vue angle 2' %}">
+                                    {% elif LANGUAGE_CODE == 'fr' %}
+                                        <img src="{% static 'carpet/images/cover/mouse-memoire-airgel.webp' %}"
+                                             alt="{% trans 'Tapis Sajadat Al-Raha - vue angle 2' %}">
+                                    {% else %}
+                                        <img src="{% static 'carpet/images/cover/mouse-memoire-airgel.webp' %}"
+                                             alt="{% trans 'Tapis Sajadat Al-Raha - vue angle 2' %}">
+                                    {% endif %}
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="{% static 'carpet/images/cover/genous-coussin-2.webp' %}"
+                                         alt="Tapis Sajadat Al-Raha angle 2">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="{% static 'carpet/images/cover/genous-coussin.webp' %}"
+                                         alt="Tapis Sajadat Al-Raha angle 2">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="{% static 'carpet/images/cover/image-priere.webp' %}"
+                                         alt="Tapis Sajadat Al-Raha angle 2">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="{% static 'carpet/images/cover/image-profil.webp' %}"
+                                         alt="Tapis Sajadat Al-Raha angle 2">
+                                </div>
+
+                                <div class="swiper-slide">
+                                    <img src="{% static 'carpet/images/cover/toucher.webp' %}"
+                                         alt="Tapis Sajadat Al-Raha angle 2">
+                                </div>
+                            </div>
+                            <div class="ul-product-details-img-slider-nav" id="ul-product-details-img-slider-nav">
+                                <button class="prev"><i class="flaticon-left-arrow"></i></button>
+                                <button class="next"><i class="flaticon-arrow-point-to-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- txt -->
+                <div class="col">
+                    <div class="ul-product-details-txt">
+                        <!-- product rating -->
+                        <div class="ul-product-details-rating">
+                            <span class="rating">
+                                <i class="flaticon-star"></i>
+                                <i class="flaticon-star"></i>
+                                <i class="flaticon-star"></i>
+                                <i class="flaticon-star"></i>
+                                <i class="flaticon-star"></i>
+                            </span>
+                            <span class="review-number"></span>
+                        </div>
+
+                        <!-- price -->
+                        <!-- price -->
+                        <span class="ul-product-details-price d-inline-flex align-items-baseline gap-2">
+                            <span class="fw-bold text-danger fs-4">
+                            {{ product.promotion_price|floatformat:0 }} {% trans 'MAD' %}
+                            </span>
+                            {% if product.price and product.price > product.promotion_price %}
+                                <span class="text-muted text-decoration-line-through fs-6">
+                                  {{ product.price|floatformat:0 }} {% trans 'MAD' %}
+                                </span>
+                            {% endif %}
+                        </span>
+                        <small class="d-block text-success opacity-75 ul-product-details-price"
+                           style="font-size:.78rem; margin-top:-0.7rem;">
+                          {% trans "Livraison gratuite partout au Maroc" %}
+                        </small>
+
+                        <!-- product title -->
+                        <h3 class="ul-product-details-title">{% trans "Sajadat Al-Raha – Tapis de prière confortable et élégant" %}</h3>
+
+                        <!-- product description -->
+                        <p class="ul-product-details-descr">
+                            {% trans "Conçu pour allier confort et spiritualité, ce tapis de prière ergonomique soulage vos genoux et apporte une sérénité nouvelle à vos moments de recueillement. Idéal pour les adultes, seniors, ou personnes souffrant de douleurs articulaires." %}
+                        </p>
+
+                        <!-- product options -->
+                        <div class="ul-product-details-options {% if LANGUAGE_CODE == 'ar' %}rtl{% endif %}">
+                            <!-- Taille -->
+                            <div class="ul-product-details-option ul-product-details-sizes">
+                                <span class="title">{% trans "Taille" %}</span>
+                                <form action="#" class="variants" {% if LANGUAGE_CODE == 'ar' %} dir="rtl" {% endif %}>
+                                    <label for="size-unique" class="d-inline-block">
+                                        <input type="radio" name="product-size" id="size-unique" checked hidden>
+                                        <span class="badge bg-primary">
+                                        {% trans "120 cm x 72 cm" %}
+                                    </span>
+                                    </label>
+                                </form>
+                            </div>
+
+                            <!-- Couleur -->
+{#                            <div class="ul-product-details-option ul-product-details-colors">#}
+{#                                <span class="title" id="couleur-tapis">{% trans "Couleur" %}</span>#}
+{#                                <form action="#" class="variants">#}
+{#                                    <!-- 1. Neutres -->#}
+{#                                    <label for="color-black">#}
+{#                                        <input type="radio" name="product-color" id="color-black" value="black" checked#}
+{#                                               hidden>#}
+{#                                        <span class="color-btn black"></span>#}
+{#                                    </label>#}
+{#                                    <label for="color-grey">#}
+{#                                        <input type="radio" name="product-color" id="color-grey" value="grey" hidden>#}
+{#                                        <span class="color-btn grey"></span>#}
+{#                                    </label>#}
+{#                                    <label for="color-brown">#}
+{#                                        <input type="radio" name="product-color" id="color-brown" value="brown" hidden>#}
+{#                                        <span class="color-btn brown"></span>#}
+{#                                    </label>#}
+{##}
+{#                                    <!-- 2. Froids / Calmes -->#}
+{#                                    <label for="color-green">#}
+{#                                        <input type="radio" name="product-color" id="color-green" value="green" hidden>#}
+{#                                        <span class="color-btn green"></span>#}
+{#                                    </label>#}
+{#                                    <label for="color-blue">#}
+{#                                        <input type="radio" name="product-color" id="color-blue" value="blue" hidden>#}
+{#                                        <span class="color-btn blue"></span>#}
+{#                                    </label>#}
+{##}
+{#                                    <!-- 3. Chauds / Dynamiques -->#}
+{#                                    <label for="color-orange">#}
+{#                                        <input type="radio" name="product-color" id="color-orange" value="orange"#}
+{#                                               hidden>#}
+{#                                        <span class="color-btn orange"></span>#}
+{#                                    </label>#}
+{#                                    <label for="color-red">#}
+{#                                        <input type="radio" name="product-color" id="color-red" value="red" hidden>#}
+{#                                        <span class="color-btn red"></span>#}
+{#                                    </label>#}
+{#                                </form>#}
+{##}
+{##}
+{#                            </div>#}
+
+                        </div>
+
+
+                        {% include 'carpet/components/forms/form-lead.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</div>

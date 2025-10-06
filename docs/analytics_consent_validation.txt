@@ -8,7 +8,7 @@ expédiées.
 1. Vérifications automatiques
 -----------------------------
 
-- Tests Django : `DB_ENGINE=sqlite3 DJANGO_SETTINGS_MODULE=lumierelearning.settings.dev
+- Tests Django : `DB_ENGINE=sqlite3 DJANGO_SETTINGS_MODULE=alfenna.settings.dev
   python manage.py test apps.marketing.tests`
   * confirme l’inclusion du bootstrap uniquement quand `tracking.analytics_enabled` vaut
     `True` ;

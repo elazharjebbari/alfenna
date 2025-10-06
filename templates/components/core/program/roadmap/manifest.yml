@@ -1,0 +1,71 @@
+alias: program/roadmap
+template: "components/core/program/roadmap/roadmap.html"
+
+assets:
+  head: []                               # ⇠ supprimé: driver.min.css
+  css:
+    - "/static/components/program/roadmap.css"
+  js:
+    - "/static/components/program/roadmap.js"
+  vendors: []                            # ⇠ supprimé: driver.min.js
+
+params:
+  title: "Ce que tu vas apprendre"
+  subtitle: "5 étapes simples — bases → recettes → parfums → mise en vente"
+  style:
+    bg_color: "#e7f8ee"
+    line_color: "#98c9aa"
+    bullet_color: "#309255"
+    radius: 20
+  cta:
+    label: "Voir 1 leçon gratuite"
+    url: "https://lumiereacademy.com/demo/bougies-naturelles/"
+  steps:
+    - icon: "fa fa-info-circle"
+      title: "Introduction — fondations"
+      summary_html: "La méthode et les outils. <em>Tu pars sur de bons rails.</em>"
+      bullets:
+        - "Matériel minimal & sécurité"
+        - "Pourquoi végétal = qualité"
+    - icon: "fa fa-flask"
+      title: "Bases des cires"
+      summary_html: "Soja, colza, abeille — avantages, températures, dosage."
+      bullets:
+        - "Point de fusion & additifs"
+        - "Ratés fréquents et corrections"
+    - icon: "fa fa-leaf"
+      title: "Recettes guidées"
+      summary_html: "3 recettes testées, pas-à-pas + fiche PDF."
+      bullets:
+        - "Jar 180g | petite mèche coton"
+        - "Melt & pour | colorants"
+    - icon: "fa fa-wind"
+      title: "Parfums & diffusion"
+      summary_html: "Choisir, doser, IFRA, tenue x3."
+      bullets:
+        - "Dosage % et compatibilités"
+        - "Tests froid/chaud"
+    - icon: "fa fa-store"
+      title: "Premières ventes"
+      summary_html: "Packaging, prix psychologique, micro-canal."
+      bullets:
+        - "Fixer un prix (.95) & offre"
+        - "Marchés, Etsy : checklist"
+
+contract:
+  required:
+    steps: "Liste ordonnée d’étapes {icon, title, summary_html, bullets[]}"
+  optional:
+    title: "str"
+    subtitle: "str"
+    cta: "{label, url}"
+    style: "{bg_color?, line_color?, bullet_color?, radius?}"
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.program.hydrators.roadmap"
+  module: "apps.atelier.compose.hydrators.program.hydrators"
+  func: "roadmap"
+  params: {}
+
+render:
+  cacheable: false

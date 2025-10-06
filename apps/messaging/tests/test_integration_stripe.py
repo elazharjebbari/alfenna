@@ -12,7 +12,7 @@ from apps.messaging.template_loader import FileSystemTemplateLoader
 UserModel = get_user_model()
 
 
-@override_settings(ROOT_URLCONF="lumierelearning.urls")
+@override_settings(ROOT_URLCONF="alfenna.urls")
 class StripeMessagingIntegrationTests(TestCase):
     def setUp(self) -> None:
         self.user = UserModel.objects.create_user(

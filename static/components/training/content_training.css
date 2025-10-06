@@ -1,0 +1,9 @@
+.ct-section { padding: 3rem 0; background:#fff; }
+.ct-image { height:100%; width:100%; object-fit:cover; }
+.ct-details { position:relative; z-index:2; margin-left:1rem; display:flex; flex-direction:column; }
+.ct-timeline-line { position:absolute; bottom:0; width:3px; background:#E7F8EE; z-index:1; left:40px; top:100px; }
+@media (max-width: 767.98px){ .ct-timeline-line { left:33px; top:150px; } }
+.ct-item { display:flex; align-items:flex-start; margin-bottom:.75rem; }
+.ct-bubble { border:2px solid #4CAF50; border-radius:50%; width:40px; height:40px; display:flex; justify-content:center; align-items:center; margin-right:15px; background:#fff; z-index:3; }
+.ct-bubble-plain { border:0; }
+.ct-bubble i { color:#4CAF50; }

@@ -1,0 +1,8 @@
+Bonjour {{ customer_name|default:"" }},
+
+Votre facture (référence {{ order_reference }}) pour {{ site_name }} est disponible.
+Montant TTC : {{ amount_total_display }}
+Lien sécurisé (valable {{ invoice_ttl_hours }} heures) :
+{{ invoice_url }}
+
+Merci pour votre confiance.

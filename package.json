@@ -1,0 +1,27 @@
+{
+  "name": "alfenna",
+  "version": "1.0.0",
+  "description": "",
+  "main": "playwright.config.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elazharjebbari/alfenna.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elazharjebbari/alfenna/issues"
+  },
+  "homepage": "https://github.com/elazharjebbari/alfenna#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1"
+  }
+}

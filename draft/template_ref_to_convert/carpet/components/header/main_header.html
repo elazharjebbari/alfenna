@@ -1,0 +1,63 @@
+{% load static i18n %}
+<header class="ul-header">
+  {% if request.path != '/' %}
+    <div class="ul-header-top">
+      <div class="ul-header-top-slider splide" data-splide='{"type":"loop","arrows":false,"pagination":false,"autoplay":true,"interval":6000}'>
+        <div class="splide__track">
+          <ul class="splide__list">
+            <li class="splide__slide">
+              <p class="ul-header-top-slider-item"><i class="flaticon-sparkle"></i> {% trans "Livraison offerte dès 499 MAD" %}</p>
+            </li>
+            <li class="splide__slide">
+              <p class="ul-header-top-slider-item"><i class="flaticon-sparkle"></i> {% trans "Paiement à la livraison" %}</p>
+            </li>
+            <li class="splide__slide">
+              <p class="ul-header-top-slider-item"><i class="flaticon-sparkle"></i> {% trans "Service client 7j/7" %}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="ul-header-bottom">
+    <div class="ul-container">
+      <div class="ul-header-bottom-wrapper">
+        <div class="header-bottom-left">
+          <div class="logo-container">
+            <a href="/" class="d-inline-block" aria-label="{% trans 'Aller à l\'accueil' %}">
+              <img src="{% static 'carpet/images/logo/logo_with-text_115x17.webp' %}" alt="Logo" class="logo">
+            </a>
+          </div>
+
+          <div class="ul-header-search-form-wrapper flex-grow-1 flex-shrink-0 d-none d-xl-flex">
+            <form action="/blog/" method="get" class="ul-header-search-form" role="search">
+              <div class="ul-header-search-form-right">
+                <input type="search" name="q" id="ul-header-search" placeholder="{% trans 'Rechercher un article…' %}" value="{{ request.GET.q|default:'' }}">
+                <button type="submit"><span class="icon"><i class="flaticon-search-interface-symbol"></i></span></button>
+              </div>
+            </form>
+            <button class="ul-header-mobile-search-closer d-xxl-none" type="button"><i class="flaticon-close"></i></button>
+          </div>
+        </div>
+
+        <div class="ul-header-nav-wrapper">
+          <div class="to-go-to-sidebar-in-mobile">
+            <nav class="ul-header-nav">
+              <a href="/" class="{% if request.path == '/' %}active{% endif %}">{% trans 'Accueil' %}</a>
+              <a href="/blog/" class="{% if request.path|slice:':5' == '/blog' %}active{% endif %}">{% trans 'Blog' %}</a>
+            </nav>
+          </div>
+        </div>
+
+        <div class="ul-header-actions">
+          <button class="ul-header-mobile-search-opener d-xxl-none" type="button" aria-label="{% trans 'Rechercher' %}"><i class="flaticon-search-interface-symbol"></i></button>
+        </div>
+
+        <div class="d-inline-flex">
+          <button class="ul-header-sidebar-opener" type="button" aria-label="{% trans 'Ouvrir le menu' %}"><i class="flaticon-hamburger"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

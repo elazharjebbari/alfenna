@@ -1,0 +1,368 @@
+{
+  "user": {
+    "exists": true,
+    "id": 1,
+    "email": "buyer_access@example.com",
+    "entitlement_count": 1,
+    "entitlements": [
+      {
+        "id": 1,
+        "granted_at": "2025-09-30 08:55:06.313319+00:00"
+      }
+    ]
+  },
+  "course": {
+    "id": 601,
+    "title": "Bougies naturelles",
+    "lecture_count": 18
+  },
+  "lectures": [
+    {
+      "id": 60023,
+      "section": 1,
+      "order": 1,
+      "title": "Introduction et pr\u00e9sentation du mat\u00e9riel",
+      "is_free": true,
+      "is_demo": true,
+      "video_path": "videos/stream/fr_france/1 - Introduction et pr\u00e9sentation du mat\u00e9riel.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60024,
+      "section": 1,
+      "order": 2,
+      "title": "Introduction et pr\u00e9sentation du mat\u00e9riel",
+      "is_free": true,
+      "is_demo": true,
+      "video_path": "videos/stream/fr_france/1-1 - Introduction et pr\u00e9sentation du mat\u00e9riel.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60025,
+      "section": 1,
+      "order": 3,
+      "title": "Pr\u00e9sentation des cires",
+      "is_free": true,
+      "is_demo": true,
+      "video_path": "videos/stream/fr_france/2 - Pr\u00e9sentation des cires.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60026,
+      "section": 1,
+      "order": 4,
+      "title": "Pr\u00e9sentation des cires",
+      "is_free": true,
+      "is_demo": true,
+      "video_path": "videos/stream/fr_france/2-1 - Pr\u00e9sentation des cires.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60027,
+      "section": 1,
+      "order": 5,
+      "title": "Pr\u00e9sentation des moules de bougies",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/3 - Pr\u00e9sentation des moules de bougies.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60028,
+      "section": 1,
+      "order": 6,
+      "title": "Pr\u00e9sentation des moules de bougies",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/3-1 - Pr\u00e9sentation des moules de bougies.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60029,
+      "section": 1,
+      "order": 7,
+      "title": "Pr\u00e9sentation des m\u00e8ches",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/4 - Pr\u00e9sentation des m\u00e8ches.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60030,
+      "section": 1,
+      "order": 8,
+      "title": "Pr\u00e9sentation des m\u00e8ches",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/4-1 - Pr\u00e9sentation des m\u00e8ches.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60031,
+      "section": 1,
+      "order": 9,
+      "title": "Pr\u00e9sentation des parfums et colorants",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/5 - Pr\u00e9sentation des parfums et colorants.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60032,
+      "section": 1,
+      "order": 10,
+      "title": "Pr\u00e9sentation des parfums et colorants",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/5-1 Pr\u00e9sentation des parfums et colorants.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60033,
+      "section": 2,
+      "order": 1,
+      "title": "Formules de fabrication des bougies",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/6 - Formules de fabrication des bougies.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60034,
+      "section": 2,
+      "order": 2,
+      "title": "Formules de fabrication des bougies",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/6-1 Formules de fabrication des bougies.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60035,
+      "section": 3,
+      "order": 1,
+      "title": "Pratique Bougie florale",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/7 - Pratique  Bougie florale.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60036,
+      "section": 3,
+      "order": 2,
+      "title": "Pratique Bougie florale",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/7-1 - Pratique  Bougie florale.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60037,
+      "section": 3,
+      "order": 3,
+      "title": "D\u00e9fauts et r\u00e9solutions",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/ar_maroc/8 - D\u00e9fauts et r\u00e9solutions.mp4",
+      "variant_langs": [
+        "ar_MA"
+      ],
+      "default_lang": null,
+      "variant_count": 1
+    },
+    {
+      "id": 60038,
+      "section": 3,
+      "order": 4,
+      "title": "Utilisation des colorants",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/8-1 - Utilisation des colorants.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60039,
+      "section": 3,
+      "order": 5,
+      "title": "M\u00e8che en Bois",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/9 - M\u00e8che en Bois.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    },
+    {
+      "id": 60040,
+      "section": 3,
+      "order": 6,
+      "title": "M\u00e8che en Bois",
+      "is_free": false,
+      "is_demo": false,
+      "video_path": "videos/stream/fr_france/9-1 M\u00e8che en Bois.mp4",
+      "variant_langs": [
+        "ar_MA",
+        "fr_FR"
+      ],
+      "default_lang": "fr_FR",
+      "variant_count": 2
+    }
+  ],
+  "stream_checks": [
+    {
+      "lecture_id": 60023,
+      "title": "Introduction et pr\u00e9sentation du mat\u00e9riel",
+      "fr_FR_status": 206,
+      "fr_FR_content_language": "fr-FR",
+      "fr_FR_content_range": "bytes 0-1023/2047347",
+      "ar_MA_status": 206,
+      "ar_MA_content_language": "ar-MA",
+      "ar_MA_content_range": "bytes 0-1023/22163967"
+    },
+    {
+      "lecture_id": 60024,
+      "title": "Introduction et pr\u00e9sentation du mat\u00e9riel",
+      "fr_FR_status": 206,
+      "fr_FR_content_language": "fr-FR",
+      "fr_FR_content_range": "bytes 0-1023/452725577",
+      "ar_MA_status": 206,
+      "ar_MA_content_language": "ar-MA",
+      "ar_MA_content_range": "bytes 0-1023/458275602"
+    },
+    {
+      "lecture_id": 60025,
+      "title": "Pr\u00e9sentation des cires",
+      "fr_FR_status": 206,
+      "fr_FR_content_language": "fr-FR",
+      "fr_FR_content_range": "bytes 0-1023/55847868",
+      "ar_MA_status": 206,
+      "ar_MA_content_language": "ar-MA",
+      "ar_MA_content_range": "bytes 0-1023/56557134"
+    },
+    {
+      "lecture_id": 60026,
+      "title": "Pr\u00e9sentation des cires",
+      "fr_FR_status": 206,
+      "fr_FR_content_language": "fr-FR",
+      "fr_FR_content_range": "bytes 0-1023/375896237",
+      "ar_MA_status": 206,
+      "ar_MA_content_language": "ar-MA",
+      "ar_MA_content_range": "bytes 0-1023/380473344"
+    },
+    {
+      "lecture_id": 60027,
+      "title": "Pr\u00e9sentation des moules de bougies",
+      "fr_FR_status": 206,
+      "fr_FR_content_language": "fr-FR",
+      "fr_FR_content_range": "bytes 0-1023/8202001",
+      "ar_MA_status": 206,
+      "ar_MA_content_language": "ar-MA",
+      "ar_MA_content_range": "bytes 0-1023/90454142"
+    },
+    {
+      "lecture_id": 60028,
+      "title": "Pr\u00e9sentation des moules de bougies",
+      "fr_FR_status": 206,
+      "fr_FR_content_language": "fr-FR",
+      "fr_FR_content_range": "bytes 0-1023/526687475",
+      "ar_MA_status": 206,
+      "ar_MA_content_language": "ar-MA",
+      "ar_MA_content_range": "bytes 0-1023/533119536"
+    }
+  ],
+  "html_snippet": {
+    "primary_source": "<source data-src=\"/learning/stream/60023/?lang=fr_FR\" type=\"video/mp4\">",
+    "playlist_sources": [
+      "data-src=\"/media/videos/stream/fr_france/1%20-%20Introduction%20et%20pr%C3%A9sentation%20du%20mat%C3%A9riel.mp4\"",
+      "data-src=\"/media/videos/stream/fr_france/1-1%20-%20Introduction%20et%20pr%C3%A9sentation%20du%20mat%C3%A9riel.mp4\"",
+      "data-src=\"/media/videos/stream/fr_france/2%20-%20Pr%C3%A9sentation%20des%20cires.mp4\"",
+      "data-src=\"/media/videos/stream/fr_france/2-1%20-%20Pr%C3%A9sentation%20des%20cires.mp4\"",
+      "data-src=\"/media/videos/stream/fr_france/3%20-%20Pr%C3%A9sentation%20des%20moules%20de%20bougies.mp4\""
+    ]
+  },
+  "tests": {
+    "apps.learning.tests.test_stream_multilang": "passed",
+    "apps.atelier.tests.test_learning_video_player": "passed",
+    "apps.learning.scripts.suite.tests_scripts.test_stream_range_lang_smoke": "passed",
+    "apps.atelier.scripts.suite.tests_scripts.test_learn_multilang_smoke": "passed"
+  }
+}

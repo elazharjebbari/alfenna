@@ -1,0 +1,43 @@
+{% load i18n static atelier_images %}
+{% with images=media.images %}
+<div class="position-relative" data-product-media data-lightbox="{{ media.lightbox|yesno:'true,false' }}">
+  <div class="ratio ratio-4x3 bg-light rounded shadow-sm overflow-hidden">
+    <div class="swiper h-100" data-product-swiper>
+      <div class="swiper-wrapper h-100">
+        {% for image in images %}
+          <div class="swiper-slide d-flex align-items-center justify-content-center h-100">
+            {% if media.lightbox %}
+              <a href="{{ image.src }}" data-fslightbox="product-{{ product.id|default:'product' }}" class="d-block w-100 h-100">
+                {% responsive_picture src=image.src alt=image.alt|default:product.name width=960 height=720 formats="webp,jpg" placeholder="auto" cls="img-fluid w-100 h-100 object-fit-cover" %}
+              </a>
+            {% else %}
+              {% responsive_picture src=image.src alt=image.alt|default:product.name width=960 height=720 formats="webp,jpg" placeholder="auto" cls="img-fluid w-100 h-100 object-fit-cover" %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="position-absolute top-50 start-0 translate-middle-y ms-2" aria-hidden="true">
+      <button type="button" class="btn btn-light btn-sm rounded-circle shadow" data-product-nav="prev" aria-label="{% trans 'Image precedente' %}">&lsaquo;</button>
+    </div>
+    <div class="position-absolute top-50 end-0 translate-middle-y me-2" aria-hidden="true">
+      <button type="button" class="btn btn-light btn-sm rounded-circle shadow" data-product-nav="next" aria-label="{% trans 'Image suivante' %}">&rsaquo;</button>
+    </div>
+  </div>
+  {% if images|length > 1 %}
+    <div class="d-flex flex-wrap gap-2 mt-3" role="tablist" aria-label="{% trans 'Galerie produit' %}" data-product-thumbs>
+      {% for image in images %}
+        <button type="button"
+                class="btn btn-outline-secondary border-0 p-0 rounded overflow-hidden{% if forloop.first %} active shadow-sm{% endif %}"
+                role="tab"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                data-index="{{ forloop.counter0 }}"
+                data-full-src="{{ image.src }}"
+                data-alt="{{ image.alt|default:product.name }}">
+          {% responsive_picture src=image.thumb|default:image.src alt=image.alt|default:"" width=176 height=132 formats="webp,jpg" placeholder="auto" cls="img-fluid rounded" %}
+        </button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+{% endwith %}

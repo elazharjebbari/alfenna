@@ -1,0 +1,87 @@
+{% load static i18n %}
+<!-- tarteaucitron.io -->
+<link rel="preload"
+      href="{% static 'cookies/tarteaucitron.js-1.25.0/tarteaucitron.min.js' %}"
+      as="script" crossorigin="anonymous">
+
+<link rel="stylesheet" href="{% static 'cookies/tarteaucitron.js-1.25.0/css/tarteaucitron.min.css' %}">
+<script src="{% static 'cookies/tarteaucitron.js-1.25.0/tarteaucitron.min.js' %}"></script>
+
+<script>
+(function boot(){
+  if (!window.tarteaucitron) return setTimeout(boot,10);
+
+  window.dataLayer = window.dataLayer || [];
+  function dlPush(o){ try{ dataLayer.push(o);}catch(e){} }
+
+  // Langue forcée
+  (function(){ var l="{{ LANGUAGE_CODE|default:'fr' }}".toLowerCase();
+    window.tarteaucitronForceLanguage = (l.indexOf('ar')===0)?'ar':'fr';
+  })();
+
+  tarteaucitron.init({
+    privacyUrl: "/politique-de-confidentialite/",
+    bodyPosition: "top",
+    cookieName: "ll_tac",
+    orientation: "bottom",
+    groupServices: true,          // si tu préfères ligne par ligne => false
+    showDetailsOnClick: true,
+    serviceDefaultState: "wait",
+    showAlertSmall: false,
+    closePopup: true,
+    showIcon: true,
+    iconPosition: "BottomRight",
+    DenyAllCta: true,
+    AcceptAllCta: true,
+    highPrivacy: true,
+    mandatory: true,
+    googleConsentMode: false,     // GCM piloté par GTM, pas par TAC
+    bingConsentMode: false,
+    dataLayer: false,
+    partnersList: true
+  });
+
+  // 4 services alignés sur les catégories TAC
+  tarteaucitron.services.analytics = {
+    key:"analytics", type:"analytic",
+    name:"Mesure (analytics_storage)", needConsent:true, cookies:[],
+    js:function(){}, fallback:function(){}
+  };
+  tarteaucitron.services.ad_storage = {
+    key:"ad_storage", type:"ads",
+    name:"Stockage publicitaire (ad_storage)", needConsent:true, cookies:[],
+    js:function(){}, fallback:function(){}
+  };
+  tarteaucitron.services.ad_user_data = {
+    key:"ad_user_data", type:"ads",              // <-- était "google" => "ads"
+    name:"Données publicitaires (ad_user_data)", needConsent:true, cookies:[],
+    js:function(){}, fallback:function(){}
+  };
+  tarteaucitron.services.ad_personalization = {
+    key:"ad_personalization", type:"ads",        // <-- était "google" => "ads"
+    name:"Personnalisation pub (ad_personalization)", needConsent:true, cookies:[],
+    js:function(){}, fallback:function(){}
+  };
+
+  (tarteaucitron.job = tarteaucitron.job || []).push(
+    'analytics','ad_storage','ad_user_data','ad_personalization'
+  );
+
+  function gcm(k){ return (tarteaucitron.state && tarteaucitron.state[k]===true) ? 'granted' : 'denied'; }
+  let last="";
+  function pushUpdate(reason){
+    var payload = {
+      event:'ll_consent_update', _src:'tac', _reason:reason||'auto',
+      analytics_storage:   gcm('analytics'),
+      ad_storage:          gcm('ad_storage'),
+      ad_user_data:        gcm('ad_user_data'),
+      ad_personalization:  gcm('ad_personalization')
+    };
+    var key = JSON.stringify(payload);
+    if (key!==last){ last=key; dlPush(payload); }
+  }
+
+  window.addEventListener('tac.root_available', function(){ setTimeout(function(){ pushUpdate('root_available'); },0); });
+  document.addEventListener('tac.consent_updated', function(){ pushUpdate('updated'); });
+})();
+</script>

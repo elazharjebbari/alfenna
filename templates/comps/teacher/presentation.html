@@ -1,0 +1,32 @@
+{% load static atelier_images %}
+<div class="container">
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active text-dark" data-bs-toggle="tab" data-bs-target="#teacher-tab" type="button">
+        La formatrice
+      </button>
+    </li>
+  </ul>
+  <div class="tab-content" id="teacher-tab-content">
+    <div class="tab-pane fade show active" id="teacher-tab">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-12 col-md-6 d-flex justify-content-center mb-3">
+            {% if photo_url %}
+              {% responsive_picture photo_url alt=photo_alt|default:"Formatrice" cls="img-fluid img-thumbnail max-height-img" %}
+            {% endif %}
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="text-dark">
+              <div class="section-title mb-4">
+                <h2 class="custom-h1 fw-bolder text-center">Je suis votre formatrice !</h2>
+              </div>
+              <p class="custom-h3">{{ intro_html|safe }}</p>
+              <p class="fw-medium">{{ body_html|safe }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,333 @@
+
+\documentclass[../../main.tex]{subfiles}
+\begin{document}
+
+% ===============================================================
+% (1) MARGE "CAHIER À CARREAUX" — activation pour tout l'acte 2
+% ===============================================================
+% Même gabarit que l’Acte 1 (continuité visuelle)
+\newcommand{\ActeNotesGridAII}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \def\gridwidth{4.6cm}
+    \def\cell{0.55cm}
+    \def\gridcolor{black!18}
+    \def\gridopacity{0.28}
+    \begin{scope}[shift={(0,0)}, opacity=\gridopacity]
+      \draw[\gridcolor, step=\cell]
+        ([xshift=-\gridwidth]current page.north east) grid
+        (current page.south east);
+    \end{scope}
+  \end{tikzpicture}%
+}
+\AddToShipoutPictureBG{\ActeNotesGridAII}
+
+% ===============================================================
+% TITRE CHAPITRE
+% ===============================================================
+\chapter{Acte 2 — Premières lueurs : recette contenant certifiée}
+
+% ===============================================================
+% HOOK — accroche brève (même ton que l’Acte 1)
+% ===============================================================
+\begin{Hook}
+  \HookItem{Pain}{Tu veux une bougie en contenant qui \textit{brûle bien} dès la première série — pas de tunneling, pas de suie, pas d’impro.}
+  \HookItem{Promesse}{En 6~pages, tu obtiens \textbf{une recette stable}, \textbf{une mèche validée} par \textit{burn‑test}, et \textbf{des étiquettes sécurité} prêtes.}
+  \HookItem{Preuve}{On calcule, on coule, on teste 2--3~h, on décide \textit{wick‑up / ok / down}. Tu notes dans le journal.}
+  \HookItem{Prochain geste}{Prépare 4~bocaux propres, une balance au gramme, deux tailles voisines de mèches. On lance la première série.}
+\end{Hook}
+
+% ===============================================================
+% SCÈNE D’OUVERTURE — narration + visuel placeholder
+% ===============================================================
+\section*{Scène d’ouverture}
+
+La table est claire. Quatre bocaux attendent, tièdes, alignés comme des verres à eau. La cire se calme à la surface du pichet, lisse, nacrée. Le thermomètre redescend doucement vers la \textit{fenêtre d’ajout}. Une main verse, lentement, sans éclabousser. Les mèches, bien au centre, restent droites sous le centreur. L’odeur est franche, pas cuite. On laisse prendre, sans déplacer. Demain, \textit{première flamme}. Ce soir, tout est noté.
+
+\begin{figure}[!h]
+  \centering
+  % Placeholder : photo "versement propre en contenant"
+  \fbox{\rule{0pt}{0.36\textheight}\rule{0.9\textwidth}{0pt}}
+  \caption{Première coulée : bec verseur propre, mèche centrée, headspace régulier (10--15\,mm).}
+\end{figure}
+
+% ===============================================================
+% CADRE — objectifs & critères de sortie
+% ===============================================================
+\section{Cadre de l'acte}
+
+L’objectif est simple : \textit{sortir une bougie en contenant qui passe le premier burn‑test}. Tu produis 4~échantillons, tu mesures 2--3\,h, puis tu \textbf{décides de la mèche} sur faits et non sur intuition.
+
+\begin{BlocObjectif}
+\textbf{Résultat visé} : recette contenant validée (cire, \% parfum, fenêtres T°, \& mèche). \\
+\textbf{Livrables} : (1) fiche recette A4 ; (2) 4 échantillons «\,échelle de mèches\,» (N--1 / N / N / N+1) ; (3) fiche \textit{burn‑test} cycle~1 ; (4) étiquette sécurité (pictos + 5 consignes) ; (5) journal de lot complété. \\
+\textbf{Gate de sortie} : FMP\footnote{Full Melt Pool = surface totalement fondue} \(\leq\) 2--3\,h ; flamme 10--25\,mm ; suie quasi nulle ; paroi \(<\) 60\,\si{\celsius} (alerte \(\geq\) 70\,\si{\celsius}). \\
+\textbf{Ton} : concret, calme, mesuré ; chaque geste prépare la décision.
+\end{BlocObjectif}
+
+% ===============================================================
+% PRÉPARER — matériel & aménagement
+% ===============================================================
+\section{Préparer sans s’encombrer}
+
+Avant la procédure, pose le terrain : de l’ordre, des outils fiables, et des fenêtres de température claires. Les contenants sont dégraissés (alcool iso), les mèches sont centrées et collées, le thermomètre reste \textit{visible}.
+
+\begin{BlocMateriel}
+\textbf{BOM essentiel} : cire pour contenant (soja ou paraffine cont.), parfum dédié bougies, 2 tailles voisines de mèches (coton tressé / TCR ; bois possible pour diam.\(\geq\)80\,mm), pastilles adhésives, centreur, pichet métal, thermomètre (0--110\,\si{\celsius}), balance au gramme, spatule, tapis silicone, alcool iso. \\
+\textbf{Additifs (option paraffine)} : stéarine 10--15\,\% (durcit, opacifie) ; Vybar \(\approx\)1\,\% (rétention parfum, surface lisse). \\
+\textbf{Poste} : zone froide (bocaux tièdes, propres), zone chaude (bain‑marie), SOP affichée, couvercle \textit{à portée}. \\
+\textit{Ne pas} : micro‑ondes (chauffe inégale, poches surchauffées).
+\end{BlocMateriel}
+
+\begin{figure}[!h]
+  \centering
+  % Placeholder : mini "ladder test" schéma
+  \begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
+    \draw[rounded corners=3pt] (0,0) rectangle (12,3.4);
+    \node at (0.5,3.2) {Plan «\,échelle de mèches\,»};
+    \foreach \x/\lab in {1.5/A (N--1),4.5/B (N),7.5/C (N),10.5/D (N+1)}{
+      \draw[fill=white,rounded corners=2pt] (\x-1,0.6) rectangle (\x+1,2.8);
+      \draw (\x-0.6,2.1) -- (\x-0.6,2.8);
+      \fill (\x-0.6,2.8) circle (0.05);
+      \node at (\x,0.3) {\lab};
+    }
+  \end{tikzpicture}
+  \caption{Plan d’essai : quatre contenants \(\rightarrow\) N--1, N, N, N+1. On ne teste jamais une seule mèche.}
+\end{figure}
+
+% ===============================================================
+% CALCULER — zéro pifomètre
+% ===============================================================
+\section{Calculer la fournée (clair et reproductible)}
+
+Un calcul court évite des litres perdus. On part du volume réel du bocal et on ajoute le parfum en \% du poids de cire.
+
+\paragraph{Formules utiles.}
+\[
+P_{\text{cire}} = V_{\text{bocal}}\times \rho_{\text{cire}}
+\quad\text{avec}\quad
+\rho_{\text{cire}} \approx 0{,}80\,\si{g/ml}.
+\qquad
+P_{\text{parfum}} = P_{\text{cire}}\times \%\_{\text{parfum}} \;(6\text{ à }10\,\%).
+\]
+
+\begin{table}[!h]
+  \centering
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabularx}{\linewidth}{c c c c X}
+    \toprule
+    \rowcolor{lightgray!35}
+    \textbf{Bocal (ml)} & \textbf{Cire (g)} & \textbf{Parfum 6\,\% (g)} & \textbf{Parfum 8\,\% (g)} & \textbf{Notes} \\
+    \midrule
+    120 & 96 & 5{,}8 & 7{,}7 & Headspace 10–12\,mm \\
+    160 & 128 & 7{,}7 & 10{,}2 & Mélange 2\,min à T° d’ajout \\
+    200 & 160 & 9{,}6 & 12{,}8 & Bon format pour premier test \\
+    250 & 200 & 12{,}0 & 16{,}0 & Jar plus large \(\Rightarrow\) mèche plus forte \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Repères de départ (densité moyenne de cire 0{,}80\,g/ml). Ajuster à tes contenants.}
+\end{table}
+
+\begin{remark}
+Les huiles essentielles pures demandent prudence (compatibilité, stabilité olfactive) et restent souvent \(\leq\)3--5\,\%. Privilégie des \textit{huiles parfumées formulées pour bougies}.
+\end{remark}
+
+% ===============================================================
+% FAIRE — recette en 8 étapes (mêmes fenêtres que l’Acte 1)
+% ===============================================================
+\section{Recette contenant : huit gestes qui décident bien}
+
+Avant le bloc, un rappel : la cire n’a pas besoin de vitesse, elle a besoin d’attention. Les fenêtres ci‑dessous sont \textit{prudentes} et servent de base à personnaliser.
+
+\begin{BlocEtapes}
+\textbf{Procédure — Contenant (8 étapes)}
+\begin{enumerate}[leftmargin=1.2em]
+  \item \textbf{Dégraisser \& centrer} : alcool iso, pastille, centreur. Verre \textit{légèrement tiédi}.
+  \item \textbf{Fondre au bain‑marie} : soja \(\SIrange{65}{75}{\celsius}\) ; paraffine cont. \(\SIrange{60}{70}{\celsius}\).
+  \item \textbf{Couper la chauffe} et laisser descendre vers la \textit{fenêtre d’ajout}.
+  \item \textbf{Ajouter le parfum} : soja \(\SIrange{60}{70}{\celsius}\) ; paraffine \(\SIrange{60}{70}{\celsius}\). \textit{Mélange calme 2\,min}.
+  \item \textbf{Couler} : soja \(\SIrange{55}{60}{\celsius}\) ; paraffine \(\SIrange{60}{65}{\celsius}\). Viser 10--15\,mm de headspace.
+  \item \textbf{Stabiliser} : ne pas déplacer ; corriger centrage à chaud si besoin.
+  \item \textbf{Cure} : 24--48\,h (soja souvent meilleur à 48\,h).
+  \item \textbf{Couper la mèche} \(\rightarrow\) \(\SIrange{3}{6}{\milli\meter}\) juste avant l’allumage.
+\end{enumerate}
+\end{BlocEtapes}
+
+\begin{remark}
+Éco‑geste : \textit{zéro cire à l’évier}. Essuyage \textit{à chaud} des pichets avec chiffon dédié, puis bac déchets solide.
+\end{remark}
+
+% ===============================================================
+% CONTRÔLES — la coulée "OK" à l'œil + fenêtres prudentes
+% ===============================================================
+\section{Contrôler la coulée sans s’alourdir}
+
+L’œil voit beaucoup : surface, adhérence, centrage, coupe. On ne corrige ni à froid ni à coups de miracles — juste un souffle d’air chaud si un \textit{sink‑hole} s’invite.
+
+\begin{BlocControles}
+\textbf{Ce qui est “OK”} : surface homogène ; adhérence globalement bonne (wet‑spots légers tolérés) ; mèche centrée ; coupe \(\SIrange{3}{6}{\milli\meter}\). \\
+\textbf{Fenêtres rappel} (contenant, par défaut prudentes) : \\
+\(\triangleright\) Soja : \textit{ajout} \(\SIrange{60}{70}{\celsius}\) ; \textit{coulée} \(\SIrange{55}{60}{\celsius}\). \\
+\(\triangleright\) Paraffine cont. : \textit{ajout} \(\SIrange{60}{70}{\celsius}\) ; \textit{coulée} \(\SIrange{60}{65}{\celsius}\). \\
+\textbf{Avant test} : cure respectée ; mèche coupée ; environnement calme (sans courant d’air).
+\end{BlocControles}
+
+% ===============================================================
+% TESTER — burn‑test cycle 1 (2–3 h) + décision mèche
+% ===============================================================
+\section{Premier burn‑test (cycle 1)}
+
+\paragraph{Protocole simple.}
+Une bougie à la fois. Timer en vue. Mesures à 1\,h, 2\,h, 3\,h : \textit{flamme} (hauteur), \textit{FMP} (bain fondu total ?), \textit{T° paroi}, \textit{suie}, \textit{odeur}. Extinction douce (pas de souffle violent), note immédiate.
+
+\begin{table}[!h]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4.5pt}
+  \renewcommand{\arraystretch}{1.22}
+  \begin{tabularx}{\textwidth}{c c c c c c c X}
+    \toprule
+    \rowcolor{lightgray!35}
+    \textbf{ID} & \textbf{Mèche} & \textbf{FMP 2h} & \textbf{Flamme} & \textbf{Suie} & \textbf{Paroi} & \textbf{Décision} & \textbf{Notes} \\
+    & (réf.) & (oui/non) & (mm) & (0/+\,+) & (\si{\celsius}) & (\(\uparrow\) / OK / \(\downarrow\)) & \\
+    \midrule
+    A & N--1 &  &  &  &  &  &  \\
+    B & N    &  &  &  &  &  &  \\
+    C & N    &  &  &  &  &  &  \\
+    D & N+1  &  &  &  &  &  &  \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Fiche \textit{burn‑test} cycle 1 — relever au minimum FMP\,(2--3\,h), flamme, suie, T° paroi, décision mèche.}
+\end{table}
+
+\begin{figure}[!h]
+  \centering
+  % Petit arbre décision wick up/down
+  \begin{tikzpicture}[node distance=1.4cm, every node/.style={font=\small}, >=stealth]
+    \tikzstyle{b}=[rounded corners=2pt, draw, align=center, inner sep=4pt]
+    \node[b] (start) {Allumage \\ mèche 3--6\,mm};
+    \node[b, below=of start] (q1) {FMP \(\leq\) 2--3\,h ?};
+    \node[b, below left=of q1, xshift=-0.4cm] (up) {\(\Rightarrow\) \textbf{wick‑up}\\(tunnel, manque de bain)};
+    \node[b, below right=of q1, xshift=0.4cm] (q2) {Paroi \(<\)60\,\si{\celsius} \& \\ flamme 10--25\,mm \& suie~\(\approx\)~0 ?};
+    \node[b, below left=of q2, xshift=-0.4cm] (down) {\(\Rightarrow\) \textbf{wick‑down}\\(suie, flamme forte, paroi chaude)};
+    \node[b, below right=of q2, xshift=0.4cm] (ok) {\textbf{OK} \\ mèche retenue};
+    \draw[->] (start)--(q1);
+    \draw[->] (q1.west) -- (up.north);
+    \draw[->] (q1.east) -- (q2.north);
+    \draw[->] (q2.west) -- (down.north);
+    \draw[->] (q2.east) -- (ok.north);
+  \end{tikzpicture}
+  \caption{Arbre court de décision mèche : \(\uparrow\) si tunnel, \(\downarrow\) si suie / chaleur, \textit{OK} sinon.}
+\end{figure}
+
+\begin{remark}
+Durée de combustion (estimation) : peser la bougie avant/après 3--4\,h. Taux \(g/h = \Delta P/\Delta t\). Durée totale \(\approx P_{\text{total}} / (g/h)\). Cohérent avec le chapitre ``Durée de combustion''.
+\end{remark}
+
+% ===============================================================
+% DÉPANNAGE — si… alors…
+% ===============================================================
+\section{Dépanner sans s’éparpiller}
+
+\begin{BlocDepannage}
+\textbf{Si… alors… (raccourci utile)} \\
+Tunneling \(\Rightarrow\) mèche +1 ; vérifier coulage (T° trop basse) ; prolonger session test. \\
+Suie / flamme \(\!>\) 25\,mm \(\Rightarrow\) mèche --1 ; recouper mèche ; vérifier courants d’air. \\
+Mushrooming fort \(\Rightarrow\) mèche trop grande \textit{ou} parfum lourd ; mèche --1 \& retest. \\
+Huile en surface \(\Rightarrow\) réduire \% parfum ; allonger cure ; mélange 2\,min à T° d’ajout. \\
+Frosting (soja) \(\Rightarrow\) esthétique ; atténuer par verre tiédi \& coulage un peu plus chaud. \\
+Paroi \(\geq\) 70\,\si{\celsius} \(\Rightarrow\) mèche --1 \textit{ou} bocal plus épais.
+\end{BlocDepannage}
+
+% ===============================================================
+% CAPITALISER — coûts, étiquettes, micro-lot vendable
+% ===============================================================
+\section{Capitaliser : du test à la micro‑série vendable}
+
+Tu ne changes qu’une chose à la fois. Quand la mèche est décidée, tu l’écris en grand sur la fiche recette, et tu sors une micro‑série propre (8~unités).
+
+\begin{BlocCouts}
+\textbf{Coût unitaire} : \(C = C_{\text{cire}} + C_{\text{parfum}} + C_{\text{mèche}} + C_{\text{bocal}} + C_{\text{étiquette}} + C_{\text{énergie}}\). \\
+\textbf{Prix conseillé} : \(\approx 3\times C\) (à adapter au positionnement). \\
+\textbf{Étiquette sécurité (5 règles)} : mèche \(\SIrange{3}{6}{\milli\meter}\) ; session \(\leq\)4\,h ; surface résistante à la chaleur ; éloigner enfants/animaux ; ne jamais laisser sans surveillance. Pictos standard visibles.
+\end{BlocCouts}
+
+\spacer
+
+\begin{BlocAVendre}
+\textbf{À vendre maintenant} : 1 fiche recette (A4) \(\cdot\) 1 fiche burn‑test archivée \(\cdot\) 4 échantillons documentés \(\cdot\) 8 bougies micro‑lot (mèche retenue) \(\cdot\) étiquettes prêtes.
+\end{BlocAVendre}
+
+% ===============================================================
+% ASTUCES & CHECKLIST — gate de sortie
+% ===============================================================
+\section*{Astuces \& Checklist (fin d’acte)}
+
+\begin{BlocAstuce}
+\textbf{Astuces rapides} : préchauffer légèrement le verre ; mélanger 2\,min à T° d’ajout ; marquer les repères (ajout/coulée/test) sur la tige du thermomètre ; photographier chaque jar à 2\,h (mémoire \& com).
+\end{BlocAstuce}
+
+\spacer
+
+\begin{BlocChecklist}
+\ChecklistItem{Bocaux dégraissés, mèches centrées, headspace 10--15\,mm}
+\ChecklistItem{Fenêtres T° connues (ajout/coulée) et respectées}
+\ChecklistItem{Parfum pesé au g : 6--10\,\% (HE prudentes)}
+\ChecklistItem{Coulée lente, centrage maintenu à chaud}
+\ChecklistItem{Cure 24--48\,h respectée}
+\ChecklistItem{Mèche coupée \(\SIrange{3}{6}{\milli\meter}\) avant allumage}
+\ChecklistItem{Burn‑test 2--3\,h réalisé (FMP, flamme, suie, T° paroi)}
+\ChecklistItem{Paroi \(<\)60\,\si{\celsius}, flamme 10--25\,mm, suie \(\approx\)0}
+\ChecklistItem{Décision mèche (\(\uparrow\) / OK / \(\downarrow\)) consignée}
+\ChecklistItem{Journal de lot rempli \& étiquette sécurité prête}
+\end{BlocChecklist}
+
+% ===============================================================
+% ANNEXES DE L’ACTE — imprimables (modèles)
+% ===============================================================
+\section*{Annexes Acte 2 — modèles imprimables}
+
+\paragraph{Fiche recette — contenant (A4).}
+\begin{table}[H]
+  \centering
+  \small
+  \setlength{\tabcolsep}{6pt}
+  \renewcommand{\arraystretch}{1.22}
+  \begin{tabularx}{\textwidth}{>{\bfseries}p{3.5cm} X >{\bfseries}p{3.2cm} p{2.8cm}}
+    \toprule
+    Cire & \multicolumn{1}{l}{\phantom{XX}} & Bocal (ml) & Poids cire (g) \\
+    Parfum (\%) & \multicolumn{1}{l}{\phantom{XX}} & Fenêtre ajout & Fenêtre coulée \\
+    Mèche retenue & \multicolumn{1}{l}{\phantom{XX}} & Cure (h) & Notes \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Recette contenant — à compléter, puis plastifier et afficher près de la SOP.}
+\end{table}
+
+\paragraph{Fiche burn‑test — cycle 1 (détail 1--3\,h).}
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \setlength{\tabcolsep}{3.8pt}
+  \renewcommand{\arraystretch}{1.16}
+  \begin{tabularx}{\textwidth}{c c c c c c c c X}
+    \toprule
+    \rowcolor{lightgray!35}
+    \textbf{ID} & \textbf{Mèche} & \textbf{1h FMP} & \textbf{2h FMP} & \textbf{3h FMP} & \textbf{Flamme} & \textbf{Suie} & \textbf{Paroi} & \textbf{Décision} \\
+     &  & (O/N) & (O/N) & (O/N) & (mm) & (0/+\,+) & (\si{\celsius}) & \(\uparrow\)/OK/\(\downarrow\) \\
+    \midrule
+    A &  &  &  &  &  &  &  &  \\
+    B &  &  &  &  &  &  &  &  \\
+    C &  &  &  &  &  &  &  &  \\
+    D &  &  &  &  &  &  &  &  \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Feuille de relevés \textit{burn‑test} — consigner aussi l’ambiance (T° pièce, courant d’air).}
+\end{table}
+
+% ===============================================================
+% (2) DÉSACTIVER LA GRILLE pour les actes suivants
+% ===============================================================
+\ClearShipoutPictureBG
+
+\end{document}

@@ -1,0 +1,26 @@
+alias: contact/info
+template: "components/core/contact/info.html"
+params:
+  phone_tel: "0615330941"
+  phone_display: "contact/info"
+  phone_title: "Phone title"
+  email: "email@email.com"
+  email_title: "titre email"
+  address_url: "https://addresse-url.com"
+  address_text: "addrese texte"
+  address_title: "addresse tittre"
+contract:
+  optional:
+    phone_tel: "str"
+    phone_display: "str"
+    phone_title: "str"
+    email: "str"
+    email_title: "str"
+    address_url: "url"
+    address_text: "str"
+    address_title: "str"
+hydrate:
+  module: "apps.atelier.compose.hydrators.contact.hydrators"
+  func: "contact_info"
+render:
+  cacheable: false

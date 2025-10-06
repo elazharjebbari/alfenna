@@ -1,0 +1,78 @@
+@startuml 02_dependances_apps
+title Dépendances inter‑apps (imports agrégés)
+
+skinparam shadowing false
+skinparam componentStyle rectangle
+skinparam ArrowColor #888
+
+package "Apps" {
+  [accounts]
+  [atelier]
+  [billing]
+  [catalog]
+  [content]
+  [core]
+  [flowforms]
+  [leads]
+  [learning]
+  [marketing]
+  [pages]
+  [common]
+}
+
+' Import graph (X → Y = X importe Y)
+accounts --> common
+
+atelier --> accounts
+atelier --> billing
+atelier --> catalog
+atelier --> common
+atelier --> content
+atelier --> flowforms
+atelier --> leads
+atelier --> pages
+
+billing --> atelier
+billing --> catalog
+billing --> common
+billing --> marketing
+
+catalog --> common
+catalog --> content
+catalog --> marketing
+
+content --> billing
+content --> catalog
+content --> common
+content --> learning
+content --> marketing
+
+core --> catalog
+core --> marketing
+
+flowforms --> common
+flowforms --> leads
+
+leads --> billing
+leads --> catalog
+leads --> common
+leads --> flowforms
+
+learning --> billing
+learning --> catalog
+learning --> common
+learning --> content
+
+marketing --> billing
+marketing --> catalog
+marketing --> common
+marketing --> content
+
+pages --> accounts
+pages --> atelier
+pages --> billing
+pages --> catalog
+pages --> common
+pages --> content
+pages --> marketing
+@enduml

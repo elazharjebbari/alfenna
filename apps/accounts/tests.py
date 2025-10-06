@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from urllib.parse import parse_qs, urlparse
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lumierelearning.settings.test_cli")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alfenna.settings.test_cli")
 
 import django
 
@@ -259,7 +259,7 @@ class EmailVerificationFlowTests(TestCase):
         session = self.client.session
         self.assertTrue(session.get("accounts:verification_just_sent", False))
 
-@override_settings(ROOT_URLCONF="lumierelearning.urls")
+@override_settings(ROOT_URLCONF="alfenna.urls")
 class PasswordResetAliasTests(TestCase):
     def test_root_alias_redirects_to_namespaced_done(self) -> None:
         response = self.client.get("/password-reset/done/")

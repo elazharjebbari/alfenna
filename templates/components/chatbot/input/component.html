@@ -1,0 +1,25 @@
+{# components/chatbot/input/component.html #}
+<form class="chatbot-input" data-chatbot-input novalidate>
+  <div class="chatbot-input__field">
+    <textarea
+      name="message"
+      data-chatbot-textarea
+      rows="3"
+      placeholder="{{ placeholder }}"
+      aria-label="{{ placeholder }}"
+      {% if disabled %}disabled{% endif %}
+    ></textarea>
+  </div>
+  <div class="chatbot-input__actions">
+    {% if actions %}
+      <ul class="chatbot-input__suggestions">
+        {% for action in actions %}
+          <li>
+            <button type="button" data-chatbot-suggestion value="{{ action.value }}">{{ action.label }}</button>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <button type="submit" class="chatbot-input__submit" data-chatbot-submit{% if disabled %} disabled{% endif %}>{{ submit_label }}</button>
+  </div>
+</form>

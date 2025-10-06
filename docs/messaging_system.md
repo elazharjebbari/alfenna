@@ -43,7 +43,7 @@
 ## Operational Commands
 
 ```bash
-export DJANGO_SETTINGS_MODULE=lumierelearning.settings.test_cli
+export DJANGO_SETTINGS_MODULE=alfenna.settings.test_cli
 python manage.py migrate                        # ensures new models are applied
 python manage.py test apps.messaging             # run messaging suite
 python manage.py runscript apps.messaging.scripts.suite.run_all

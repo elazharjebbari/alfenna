@@ -1,0 +1,45 @@
+{% load i18n static %}
+<style>
+    .flag-icon {
+        width: 24px; /* Largeur ajustée pour une intégration harmonieuse */
+        height: 24px; /* Hauteur ajustée pour correspondre à la largeur */
+    }
+</style>
+<!-- HEADER SECTION START -->
+<header class="ul-header">
+    <!-- header top -->
+    <div class="ul-header-top">
+        <div class="ul-header-top-slider splide">
+            <div class="splide__track">
+
+                <ul class="splide__list">
+
+                    <li class="splide__slide">
+                        <p class="ul-header-top-slider-item"><i
+                                class="fas fa-truck px-2"></i> {% trans "Livraison 24h au Maroc" %}
+                            <span><img src="{% static 'alfenna_hair/assets/img/hair/icon/morocco.svg' %}" alt="Drapeau du Maroc" class="flag-icon"></span>
+                        </p>
+                    </li>
+
+                    <li class="splide__slide">
+                        <p class="ul-header-top-slider-item"> {% trans "Paiement à la livraison" %}</p>
+                    </li>
+
+                    <li class="splide__slide">
+                        <p class="ul-header-top-slider-item"><i
+                                class="flaticon-sparkle"></i> {% trans "Vérifiez avant de payer" %}
+                        </p>
+                    </li>
+
+                    <li class="splide__slide">
+                        <p class="ul-header-top-slider-item"><i
+                                class="flaticon-sparkle"></i> {% trans "-30% aujourd’hui" %}</p>
+                    </li>
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</header>
+<!-- HEADER SECTION END -->

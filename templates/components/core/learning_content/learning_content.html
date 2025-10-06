@@ -1,0 +1,63 @@
+{% load static atelier_utils %}
+
+<style>
+  @media (min-width: 768px) {
+    .timeline-line { left: {{ timeline_md_left|default:'40px' }}; top: {{ timeline_md_top|default:'100px' }}; }
+  }
+  @media (max-width: 767px) {
+    .timeline-line { left: {{ timeline_sm_left|default:'33px' }}; top: {{ timeline_sm_top|default:'150px' }}; }
+  }
+</style>
+
+<div class="container">
+  <div class="section">
+
+    {% if title_html %}
+    <div class="section-title shape-03 section-padding mb-3">
+      <h2 class="main-title">{% render_string title_html %}</h2>
+    </div>
+    {% endif %}
+
+    <section id="learning-card" class="py-5" style="background-color: {{ bg_color|default:'#ffffff' }};">
+      <div class="container">
+        <div class="row g-0" style="display: flex;">
+          <!-- Image du côté gauche -->
+          <div class="col-md-6 order-1 order-md-1">
+            <img src="{% static image_static_path %}" style="height: 100%; width: 100%; object-fit: cover;" alt="{{ image_alt|default:'Bougie artisanale' }}" class="img-fluid">
+          </div>
+
+          <!-- Bloc de droite avec la ligne verte -->
+          <div class="col-md-6 order-2 order-md-2 position-relative ms-0">
+            <div class="timeline-line" style="position: absolute; bottom: 0; width: 3px; background-color: {{ timeline_line_bg|default:'#E7F8EE' }}; z-index: 1;"></div>
+
+            <div class="details ms-4 d-flex flex-column" style="position: relative; z-index: 2;">
+              {% for ch in chapters %}
+              <div class="d-flex align-items-start mb-3 {% if ch.intro %}mt-4 mt-md-0{% elif ch.mt4 %}mt-4{% endif %}">
+                <div class="timeline-bubble" style="border: {{ ch.border_px|default:2 }}px solid {{ bubble_color|default:'#4CAF50' }}; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin-right: 15px; background-color: #FFFFFF; z-index: 3;">
+                  <i class="{{ ch.icon|default:'fa fa-circle' }}" style="color: {{ bubble_color|default:'#4CAF50' }};"></i>
+                </div>
+                <div>{% if ch.desc_html %}{% render_string ch.desc_html %}{% endif %}</div>
+              </div>
+
+              {% if ch.subitems %}
+              <div class="ps-5">
+                {% for si in ch.subitems %}<div>{% render_string si.text_html %}</div>{% endfor %}
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% if cta %}
+    <p class="lead mb-0 text-center my-4">
+      <a href="{{ cta.url|default:'#' }}" class="btn btn-md fw-bold text-uppercase bg-success text-white btn-inscription btn-hover-secondary rounded-3">
+        <i class="{{ cta.icon|default:'fa fa-search me-2' }}"></i>{{ cta.label|default:'Décrouvrir la formation' }}
+      </a>
+    </p>
+    {% endif %}
+
+  </div>
+</div>

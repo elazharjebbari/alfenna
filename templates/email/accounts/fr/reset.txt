@@ -1,0 +1,9 @@
+Bonjour {{ user_first_name }},
+
+Tu as demandé la réinitialisation de ton mot de passe.
+Utilise ce lien (valide {{ reset_ttl_minutes }} minutes) :
+{{ reset_url }}
+
+Si tu n'es pas à l'origine de cette demande, ignore ce message.
+
+Assistance : {{ support_email }}

@@ -1,0 +1,38 @@
+alias: header/modes
+template: "components/core/header/modes/header_modes.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+# Valeurs documentaires (surchargées si besoin par pages.yml)
+params:
+  topbar:
+    enabled: true
+    text_html: "Étape 1 : Découvrir ✓ &nbsp;|&nbsp; Étape 2 : Choisir &nbsp;|&nbsp; Étape 3 : Rejoindre"
+    deadline_ts: ""
+    cta: { label: "Je me lance", url: "#packs" }
+
+contract:
+  optional:
+    topbar:
+      enabled: "bool"
+      text_html: "str"
+      deadline_ts: "str"
+      cta?:
+        label: "str"
+        url: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header_modes.hydrators"
+  func: "modes_struct"
+
+compose:
+  children:
+    main: "header/modes/main"
+    mobile: "header/modes/mobile"
+
+render:
+  cacheable: false

@@ -1,0 +1,41 @@
+@startsalt
+' Al Fenna — Step 1/3 (Contact)
+' Style: appliquer Raleway sur la UI, Great Vibes sur le H1 via CSS côté app.
+
+{+
+{T
+=  [*  Al Fenna — الروتين الكامل للأظافر الصحية *]      ' H1 (visuel: Great Vibes)
+    [Routine complète pour ongles sains]
+}
+
+{S
+  "✓ Élimine fongus & odeurs   •   ✓ Protège & répare   •   ✓ Hydrate en profondeur"
+  "✓ يقضي على الفطريات والروائح   •   ✓ حماية وإصلاح   •   ✓ ترطيب عميق"
+}
+
+{^
+  "Prix: " | "<s>399 MAD</s>" | "  " | "*349 MAD*" | "   " | "Vous économisez 50 MAD"
+}
+
+{S
+  "[ 100% naturel ]   [ Carte officielle incluse ]   [ Livraison 24–48 h ]"
+}
+
+--
+{#
+  "Prénom" | [__________________________]
+  "Téléphone / WhatsApp" | [__________________________]
+  "Ville / Quartier" | [__________________________]
+}
+{S
+  "[ ] Me contacter sur WhatsApp"
+}
+--
+{+
+  ( Commander — Paiement à la livraison )     ' CTA principal (brand green)
+}
+{S
+  "En cliquant, vous acceptez la prise de contact pour finaliser la commande."
+}
+}
+@endsalt

@@ -4,6 +4,8 @@ import logging
 import os
 from pathlib import PurePosixPath
 from typing import Dict, Iterable, List, Optional, Tuple, Set
+import base64
+from html import escape
 
 from django import template
 from django.conf import settings
@@ -180,14 +182,27 @@ def _choose_fallback(
     for ext in ("png", "jpg", "jpeg", "webp", "avif"):
         rel = variants.get(ext)
         if rel:
-            return _url_for(rel, force_hashed=ext in hashed_formats)
+            try:
+                return _url_for(rel, force_hashed=ext in hashed_formats)
+            except Exception:
+                continue
 
     if original_rel:
         normalized = original_rel.lstrip("/")
         if _exists(normalized):
-            return _url_for(normalized)
+            try:
+                return _url_for(normalized)
+            except Exception:
+                return "#"
 
     return "#"
+
+
+def _safe_source(rel: str, ext: str, hashed_formats: Set[str]) -> Optional[str]:
+    try:
+        return _url_for(rel, force_hashed=ext in hashed_formats)
+    except Exception:
+        return None
 
 
 def _normalize_attrs(alt: str, cls: str, width, height, loading, decoding, fetchpriority, sizes, **kwargs) -> Dict[str, str]:
@@ -218,6 +233,34 @@ def _normalize_attrs(alt: str, cls: str, width, height, loading, decoding, fetch
     return attrs
 
 
+def _auto_placeholder(width: Optional[int], height: Optional[int], text: str) -> str:
+    w = width or 48
+    h = height or 36
+    label = escape((text or "").strip() or "Img")
+    svg = (
+        f"<svg xmlns='http://www.w3.org/2000/svg' width='{w}' height='{h}' viewBox='0 0 {w} {h}'>"
+        f"<rect width='100%' height='100%' fill='#f1f5f9'/>"
+        f"<text x='50%' y='50%' fill='#94a3b8' font-family='sans-serif' font-size='{max(12, min(w, h)//4)}'"
+        f" text-anchor='middle' dominant-baseline='central'>{label}</text>"
+        "</svg>"
+    )
+    return "data:image/svg+xml;base64," + base64.b64encode(svg.encode("utf-8")).decode("ascii")
+
+
+def _render_picture(source_rows, img_src: str, attrs: Dict[str, str]):
+    sources_html = format_html_join(
+        "",
+        '<source type="{}" srcset="{}" />',
+        ((mime, url) for mime, url in source_rows),
+    )
+    return format_html(
+        "<picture>{sources}<img src=\"{img_src}\"{img_attrs} /></picture>",
+        sources=sources_html,
+        img_src=img_src,
+        img_attrs=flatatt(attrs),
+    )
+
+
 @register.simple_tag
 def responsive_picture(
     src: str,
@@ -230,6 +273,7 @@ def responsive_picture(
     decoding: str = "async",
     fetchpriority: Optional[str] = None,  # 'high'|'low'
     sizes: Optional[str] = None,
+    placeholder: Optional[str] = None,
     **kwargs,
 ):
     """
@@ -238,6 +282,23 @@ def responsive_picture(
         {% responsive_picture 'images/logo' alt='logo' cls='img-fluid' %}
         {% responsive_picture 'images/logo.webp' alt='logo' cls='img-fluid' %}
     """
+    placeholder_data: Optional[str] = None
+    if placeholder == "auto":
+        placeholder_data = _auto_placeholder(width, height, alt)
+        if placeholder_data:
+            kwargs.setdefault("data_placeholder", placeholder_data)
+
+    is_remote = src.startswith(("http://", "https://", "data:"))
+    if is_remote:
+        if placeholder_data and src.startswith("https://placehold.co/"):
+            kwargs.setdefault("data_src", src)
+            img_src_remote = placeholder_data
+        else:
+            img_src_remote = src
+
+        attrs = _normalize_attrs(alt, cls, width, height, loading, decoding, fetchpriority, sizes, **kwargs)
+        return _render_picture([], img_src_remote, attrs)
+
     parent, stem, original_rel = _split_base(src)
     variants_raw, manifest_formats = _build_variants(parent, stem, original_rel)
     variants = _filter_existing(variants_raw)
@@ -250,25 +311,31 @@ def responsive_picture(
     img_src = _choose_fallback(variants, manifest_formats, original_rel)
 
     if img_src == "#" and original_rel:
-        img_src = _url_for(original_rel)
+        normalized = original_rel.lstrip("/")
+        if _exists(normalized):
+            try:
+                img_src = _url_for(original_rel)
+            except Exception:
+                img_src = "#"
 
-    # Si aucune variante disponible, rend un <img> simple
-    if not variants:
-        attrs = _normalize_attrs(alt, cls, width, height, loading, decoding, fetchpriority, sizes, **kwargs)
-        return format_html('<img src="{}"{} />', img_src, flatatt(attrs))
+    if img_src == "#" and not placeholder_data:
+        placeholder_data = _auto_placeholder(width, height, alt)
+        if placeholder_data:
+            kwargs.setdefault("data_placeholder", placeholder_data)
 
-    # Prépare les <source> dans l'ordre AVIF → WEBP (PNG n’est pas un <source>, il sert de fallback)
+    if placeholder_data and img_src == "#":
+        img_src = placeholder_data
+
     source_rows = []
     if "avif" in variants:
-        source_rows.append(("image/avif", _url_for(variants["avif"], force_hashed="avif" in manifest_formats)))
+        src_avif = _safe_source(variants["avif"], "avif", manifest_formats)
+        if src_avif:
+            source_rows.append(("image/avif", src_avif))
     if "webp" in variants:
-        source_rows.append(("image/webp", _url_for(variants["webp"], force_hashed="webp" in manifest_formats)))
+        src_webp = _safe_source(variants["webp"], "webp", manifest_formats)
+        if src_webp:
+            source_rows.append(("image/webp", src_webp))
 
     attrs = _normalize_attrs(alt, cls, width, height, loading, decoding, fetchpriority, sizes, **kwargs)
 
-    return format_html(
-        "<picture>{sources}<img src=\"{img_src}\"{img_attrs} /></picture>",
-        sources=format_html_join("", '<source type="{}" srcset="{}" />', ((t, u) for t, u in source_rows)),
-        img_src=img_src,
-        img_attrs=flatatt(attrs),
-    )
+    return _render_picture(source_rows, img_src, attrs)

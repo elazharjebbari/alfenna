@@ -1,0 +1,74 @@
+alias: core/modals/login
+template: "components/core/modals/login/login.html"
+
+assets:
+  head: []
+  css: []
+  js:
+    - "/static/js/login_modal.js"
+  vendors: []
+
+params:
+  dom_id: "loginModal"
+  title: "Connectez-vous"
+  description: "<em>Accès à vos cours et progression.</em>"
+  dialog_class: "modal-dialog modal-dialog-centered"
+  submit_btn_class: "btn btn-primary w-100"
+  show_register: true
+  register_label: "Créer un compte"
+  autoshow: false
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.modals.hydrators"
+  func: "login_modal"
+
+contract:
+  optional:
+    # Identification / ciblage
+    dom_id: "str"
+
+    # Routage backend
+    action_url: "str"
+    method: "str"
+    next_url: "str"
+
+    # Textes
+    title: "str"
+    description: "str"
+    username_label: "str"
+    password_label: "str"
+    remember_label: "str"
+    submit_label: "str"
+    register_label: "str"
+    forgot_label: "str"
+
+    # Placeholders
+    username_placeholder: "str"
+    password_placeholder: "str"
+
+    # Liens annexes
+    show_register: "bool"
+    register_url: "str|null"
+    show_forgot: "bool"
+    forgot_url: "str|null"
+
+    # Apparence
+    dialog_class: "str"
+    content_class: "str"
+    header_class: "str"
+    body_class: "str"
+    footer_class: "str"
+    close_btn_class: "str"
+    submit_btn_class: "str"
+    register_btn_class: "str"
+    forgot_link_class: "str"
+    username_input_class: "str"
+    password_input_class: "str"
+    remember_input_class: "str"
+
+    # Divers
+    hidden_fields: "dict"
+    autoshow: "bool"
+
+render:
+  cacheable: false

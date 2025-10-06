@@ -1,0 +1,139 @@
+{% load static atelier_utils %}
+
+<div class="container">
+  <div class="section" id="faq">
+
+    <div class="section-title shape-01 section-padding-02 mb-4">
+      <h2 class="main-title">{% render_string title_html %}</h2>
+    </div>
+
+    <!-- FAQ Lumière Academy Start -->
+    <div class="section section-padding" style="padding-top: {{ padding_top|default:'60px' }}; padding-bottom: {{ padding_bottom|default:'60px' }};">
+      <div class="container">
+
+        <!-- FAQ Tab Menu Start -->
+        <div class="faq-tab-menu" style="margin-bottom: 40px;">
+          <ul class="nav nav-justified">
+            {% for t in tabs %}
+            <li class="nav-item">
+              <button type="button"
+                      class="nav-link {% if forloop.first %}active{% endif %}"
+                      data-bs-toggle="tab"
+                      data-bs-target="#{{ t.id }}">
+                <i class="{{ t.icon }}" style="margin-right: 5px;"></i>
+                {{ t.label }}
+              </button>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <!-- FAQ Tab Menu End -->
+
+        <!-- FAQ Tab Content -->
+        <div class="tab-content">
+          {% for t in tabs %}
+          <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ t.id }}">
+            {% if t.type == 'faqs' %}
+            <div class="faq-wrapper">
+              {% for q in t.faqs %}
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>{% render_string q.question_html %}</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">{% render_string q.answer_html %}</p>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% elif t.type == 'contenu' %}
+            <!-- Contenu de la formation Tab -->
+            <section id="learning-card" class="py-5" style="background-color: #ffffff;">
+              <div class="container">
+                <div class="row g-0" style="display: flex;">
+                  <!-- Image du côté gauche -->
+                  <div class="col-md-6 order-1 order-md-1">
+                    <img src="{% static t.image_static_path %}" style="height: 100%; width: 100%; object-fit: cover;" alt="{{ t.image_alt|default:'Bougie artisanale' }}" class="img-fluid">
+                  </div>
+                  <!-- Bloc de droite avec la ligne verte et le contenu -->
+                  <div class="col-md-6 order-2 order-md-2 position-relative ms-0">
+                    <div class="timeline-line" style="position: absolute; bottom: 0; width: 3px; background-color: {{ t.timeline_line_bg|default:'#E7F8EE' }}; z-index: 1;"></div>
+                    <div class="details ms-4 d-flex flex-column" style="position: relative; z-index: 2;">
+                      {% for ch in t.chapters %}
+                      <div class="d-flex align-items-start mb-3 {% if ch.intro %}mt-4 mt-md-0{% elif ch.mt4 %}mt-4{% endif %}">
+                        <div class="timeline-bubble" style="border: {{ ch.border_px|default:2 }}px solid {{ t.bubble_color|default:'#4CAF50' }}; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; margin-right: 15px; background-color: #FFFFFF; z-index: 3;">
+                          <i class="{{ ch.icon|default:'fa fa-circle' }}" style="color: {{ t.bubble_color|default:'#4CAF50' }};"></i>
+                        </div>
+                        <div>{% if ch.desc_html %}{% render_string ch.desc_html %}{% endif %}</div>
+                      </div>
+                      {% if ch.subitems %}
+                      <div class="ps-5">
+                        {% for si in ch.subitems %}
+                        <div>{% render_string si.text_html %}</div>
+                        {% endfor %}
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {% elif t.type == 'modalites' %}
+            <!-- Modalités Tab -->
+            <section id="learning-modalities" class="py-5" style="background-color: #E7F8EE;">
+              <div class="container">
+                <div class="row g-0" style="display: flex;">
+                  <!-- Bloc de gauche avec la ligne verticale -->
+                  <div class="col-md-6 order-2 order-md-1 position-relative ms-0">
+                    <div style="position: absolute; left: {{ t.line_left|default:'27px' }}; top: {{ t.line_top|default:'100px' }}; bottom: 0; width: 3px; background-color: {{ t.line_color|default:'#EDEFF3' }}; z-index: 1;"></div>
+                    <!-- Bloc date -->
+                    <div class="date-section mb-4" style="background-color: #EDEFF3; color: #000;">
+                      <ul class="list-unstyled ms-4 p-3">
+                        {% for ds in t.date_section_items %}
+                        <li>
+                          <span class="black me-2"> &gt; </span>
+                          {% render_string ds.text_html %}
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                    <!-- Détails Modalités -->
+                    <div class="row">
+                      <div class="col">
+                        <div class="details ms-4 d-flex flex-column" style="position: relative; z-index: 2;">
+                          {% for d in t.details_items %}
+                          <div class="d-flex align-items-start mb-3">
+                            <div><i class="fa fa-circle" style="color: {{ t.accent|default:'#309255' }}; margin-right: 10px;"></i></div>
+                            <div>
+                              {% if d.kind == 'price' %}
+                                <strong>Prix :</strong> {{ t.price }} DHS pour accès à vie.
+                              {% else %}
+                                {% render_string d.text_html %}
+                              {% endif %}
+                            </div>
+                          </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Image du côté droit -->
+                  <div class="col-md-6 order-1 order-md-2">
+                    <img src="{% static t.right_image_static_path %}" style="height: 100%; width: 100%; object-fit: cover;" alt="{{ t.right_image_alt|default:'Bougie artisanale' }}" class="img-fluid">
+                  </div>
+                </div>
+              </div>
+            </section>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+    </div>
+    <!-- FAQ Lumière Academy End -->
+
+  </div>
+</div>

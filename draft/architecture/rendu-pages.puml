@@ -1,0 +1,53 @@
+@startuml 03_sequence_rendu_page
+title Séquence : GET /maroc/ (rendu via Atelier + cache)
+
+skinparam ArrowColor #666
+skinparam sequenceArrowThickness 1
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+autonumber
+
+actor U as "Utilisateur"
+participant S as "Django (server)"
+participant MW as "PathPrefixSiteVersionMiddleware"
+participant P as "pages.views"
+participant PIPE as "atelier.compose.pipeline"
+participant REG as "components.registry\n(namespace=ma→fallback core)"
+participant F as "FragmentCache (L1 + Redis)"
+database DB as "DB"
+participant T as "Templates/WhiteNoise"
+
+U -> S : GET /maroc/
+activate S
+S -> MW : process_request()
+MW --> S : site_version="ma", path_info="/"
+
+S -> P : dispatch(home)
+activate P
+P -> PIPE : build_page_spec(\"online_home\", site_version=ma)
+activate PIPE
+PIPE -> F : get(cache_key = route|slot|variant|lang|device|consent|source|campaign|content_rev|v:ma[|qa])
+alt cache HIT
+  F --> PIPE : HTML fragment(s)
+else cache MISS
+  PIPE -> REG : get(alias, ns=\"ma\", fallback=core)
+  REG --> PIPE : meta (template, hydrate, assets, params)
+  PIPE -> DB : queries (ex. Catalog.Course.published())
+  DB --> PIPE : rows
+  PIPE -> T : render templates + merge assets
+  T --> PIPE : HTML
+  PIPE -> F : set(cache_key, HTML, ttl)
+end
+PIPE --> P : page_ctx + HTML
+deactivate PIPE
+
+P --> S : HttpResponse(HTML)
+deactivate P
+S --> U : 200 OK + assets (WhiteNoise)
+deactivate S
+
+note over F
+  Clé cache canonique :
+  route|slot|variant|lang|device|consent|source|campaign|content_rev|v:<slug>[|qa]
+end note
+@enduml

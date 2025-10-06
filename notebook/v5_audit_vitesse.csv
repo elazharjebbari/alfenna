@@ -1,0 +1,3 @@
+﻿segment_id,duration_sec,target_words,new_length,rate_wpm,target_wpm,rate_deviation_pct,rate_status
+7c780d11-dd7e-4cfb-ac1e-759ad448edd8,18.331,45,45,147.3,147.0,0.2,OK
+236692a2-13e7-4687-ae14-3ca8540357f2,3.321,8,8,144.5,147.0,-1.7,OK

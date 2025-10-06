@@ -1,0 +1,148 @@
+{% load i18n static widget_tweaks %}
+
+<style>
+/* Base (idem) */
+.lp-form{--pill-bg:#fff7f8;--pill-bd:#ffd2d7;--pill-bd-focus:#ff4757;--pill-txt:#111;--pill-ph:#8a8a8a}
+.lp-form .form-header h4{font-size:1.1rem;margin:0}.lp-form .badge-sale{background:#ff4757;color:#fff;padding:.2em .6em;font-size:.75rem;border-radius:6px;margin-inline-start:.5em}
+.lp-form .grid{display:grid;gap:.65rem}
+@media(min-width:992px){.lp-form .grid{grid-template-columns:1fr 1fr}.lp-form .grid .span-2{grid-column:1/-1}}
+.lp-form .field{display:flex;flex-direction:column;gap:.35rem}
+.lp-form .field label{font-size:.85rem;font-weight:600;color:#222}
+.lp-form .pill{position:relative;display:flex;align-items:center;background:var(--pill-bg);border:1px solid var(--pill-bd);border-radius:12px;min-height:56px;padding:.75rem 1rem .75rem 2.6rem;transition:border-color .15s ease,box-shadow .15s ease}
+.lp-form .pill:focus-within{border-color:var(--pill-bd-focus);box-shadow:0 0 0 .2rem rgba(255,71,87,.15)}
+.lp-form .pill input{width:100%;border:0;background:transparent;color:var(--pill-txt);font-size:1rem}
+.lp-form .pill input::placeholder{color:var(--pill-ph)}
+.lp-form .icon{position:absolute;inset-inline-start:.9rem;top:50%;transform:translateY(-50%);font-size:1.05rem;opacity:.9;pointer-events:none}
+.lp-form .help{font-size:.75rem;color:#666;margin:.25rem 0 0}
+.lp-form .btn-cta{width:100%;margin-top:.35rem;padding:.9rem 1rem;border:0;border-radius:10px;background:#ff4757;color:#fff;font-weight:700;font-size:1rem}
+.lp-form .pill,.lp-form .btn-cta{min-height:56px}
+
+/* Réassurance */
+.reassure-line{display:flex;flex-wrap:wrap;gap:.5rem .75rem;align-items:center;justify-content:flex-start}
+.reassure-item{display:inline-flex;align-items:center;gap:.375rem;padding:.35rem .6rem;border-radius:999px;background:rgba(13,110,253,.08);color:#0d6efd;font-weight:500;font-size:.88rem}
+
+/* === Toggle offres === */
+.toggle-wrap{margin:.4rem 0 .6rem}
+.offer-title{font-weight:800;font-size:1.05rem;margin:0 0 .5rem}
+.toggle{
+  display:grid;grid-template-columns:1fr 1fr;border:2px solid #e7e8ea;border-radius:12px;overflow:hidden;background:#fff
+}
+.toggle button{
+  appearance:none;background:#fff;border:0;padding:.65rem .6rem;font-weight:700;cursor:pointer
+}
+.toggle button.active{background:#0d6efd;color:#fff}
+.toggle button:focus-visible{outline:2px solid #0d6efd;outline-offset:-2px}
+.offer-panel{border:2px solid #e7e8ea;border-radius:12px;padding:.8rem;background:#fff}
+.offer-panel .line1{font-weight:800}
+.offer-panel .price{font-weight:900}
+.offer-panel .strike{color:#9a9a9a;text-decoration:line-through}
+.offer-panel .save{color:#0d6efd;font-weight:800}
+.badge-pop{display:inline-block;margin-inline-start:.5rem;background:#0d6efd;color:#fff;border-radius:8px;padding:.15rem .45rem;font-size:.75rem;font-weight:700}
+.offer-note{font-size:.8rem;color:#555;margin:.35rem 0 0}
+</style>
+
+<form id="lead-form" method="post" class="lp-form" novalidate {% if LANGUAGE_CODE == 'ar' %}dir="rtl"{% endif %}>
+  {% csrf_token %}
+  {{ form.product }}{{ form.promotion_selected }}
+
+  <div class="form-header mt-4" style="text-align:center;margin-bottom:.75rem">
+    <h4 id="promo-form" style="display:flex;gap:.5rem;align-items:center;justify-content:center;flex-wrap:wrap">
+      {% if price_ui.show %}
+        <span class="badge-sale">{{ price_ui.percent_text }}</span>
+        <span style="font-weight:700">{% trans "Vous économisez" %} {{ price_ui.savings_text }}</span>
+      {% else %}<span>{% trans "Prix spécial aujourd’hui" %}</span>{% endif %}
+    </h4>
+  </div>
+
+  <!-- Toggle avec pack pré-sélectionné -->
+  <div class="toggle-wrap" role="group" aria-labelledby="offer-title">
+    <p id="offer-title" class="offer-title">{% trans "Combien de tapis souhaitez-vous acheter ?" %}</p>
+    <div class="toggle" role="tablist" aria-label="{% trans 'Options de pack' %}">
+      <button type="button" class="tab" data-offer="solo" role="tab" aria-selected="false">{% trans "1 tapis" %}</button>
+      <button type="button" class="tab active" data-offer="duo" role="tab" aria-selected="true">
+        {% trans "2 tapis" %}<span class="badge-pop">{% trans "Meilleur choix" %}</span>
+      </button>
+    </div>
+
+    <div class="offer-panel" id="panel">
+      <!-- contenu injecté par JS (duo par défaut) -->
+    </div>
+
+    <p class="offer-note">{% trans "Astuce : le Pack Duo est parfait pour offrir et vous fait économiser 47 DHS." %}</p>
+
+    <input type="hidden" name="quantity" id="quantity" value="2">
+    <input type="hidden" name="selected_price" id="selected_price" value="499">
+  </div>
+
+  <!-- Champs -->
+  <div class="grid" role="group" aria-labelledby="promo-form">
+    {% trans "Ex : Amine" as ph_name %}
+    {% trans "Ex : 06 12 34 56 78 ou +212 6 12 34 56 78 (WhatsApp)" as ph_phone %}
+    {% trans "Ex : 10 rue Anfa, Résidence Atlas, 3e étage, Casablanca" as ph_addr %}
+
+    <div class="field">
+      <label for="firstname">{% trans "Votre prénom pour la remise" %}</label>
+      <div class="pill"><span class="icon"><i class="flaticon-user"></i></span>
+        {% render_field form.full_name id="firstname" placeholder=ph_name autocomplete="name" class+="form-control" %}</div>
+    </div>
+
+    <div class="field">
+      <label for="phone-number">{% trans "Téléphone ou WhatsApp" %}</label>
+      <div class="pill"><span class="icon"><i class="fas fa-phone"></i></span>
+        {% render_field form.phone_number id="phone-number" placeholder=ph_phone autocomplete="tel" inputmode="tel" dir="ltr" pattern="^[0-9+()\-\\s]{6,}$" class+="form-control" %}</div>
+      <p class="help">{% trans "Nous utilisons ce numéro uniquement pour confirmer la livraison." %}</p>
+    </div>
+
+    <div class="field span-2">
+      <label for="address">{% trans "Votre adresse de livraison" %}</label>
+      <div class="pill"><span class="icon"><i class="flaticon-location-1"></i></span>
+        <input type="text" name="address" id="address" class="form-control"
+               placeholder="{{ ph_addr }}" autocomplete="street-address" required></div>
+      <p class="help" id="rgpd-note">{% trans "Données protégées (RGPD)" %}</p>
+    </div>
+
+    <input type="hidden" name="product_id" id="product_id" value="{{ product.pk }}">
+    <input type="hidden" name="promotion_selected" id="promotion_selected" value="{{ product.promotion_price|default:'499' }}">
+  </div>
+
+  <button type="submit" class="btn-cta">{% trans "J'achète mon tapis" %}</button>
+
+  <div class="reassure-line mt-2">
+    <div class="reassure-item"><i class="fas fa-truck"></i><span>{% trans "Livraison gratuite" %}</span></div>
+    <div class="reassure-item"><i class="fas fa-shield-alt"></i><span>{% trans "Paiement à la livraison" %}</span></div>
+    <div class="reassure-item"><i class="fas fa-undo-alt"></i><span>{% trans "Retour 7 jours" %}</span></div>
+    <a class="reassure-item" href="https://wa.me/212625113848" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i><span>{% trans "Support WhatsApp" %}</span></a>
+  </div>
+
+  <p class="help" style="text-align:center;margin-top:.5rem">{% trans "+1000 clients satisfaits" %}</p>
+</form>
+
+<script>
+(function(){
+  const tabs=document.querySelectorAll('.toggle .tab');
+  const panel=document.getElementById('panel');
+  const qty=document.getElementById('quantity');
+  const sel=document.getElementById('selected_price');
+  const promo=document.getElementById('promotion_selected');
+
+  function render(offer){
+    if(offer==='duo'){
+      panel.innerHTML=`<div class="line1">{% trans "2 tapis (Pack Duo)" %}</div>
+        <div class="price"><span class="price">499 DHS</span> · <span class="strike">546 DHS</span> · <span class="save">{% trans "Économisez 47 DHS" %}</span></div>`;
+      qty.value='2'; sel.value='499'; promo.value='499';
+    }else{
+      panel.innerHTML=`<div class="line1">{% trans "1 tapis" %}</div>
+        <div class="price"><span class="price">273 DHS</span></div>`;
+      qty.value='1'; sel.value='273'; promo.value='273';
+    }
+  }
+  function activate(btn){
+    tabs.forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false')});
+    btn.classList.add('active');btn.setAttribute('aria-selected','true');
+    render(btn.dataset.offer);
+  }
+  // default: duo
+  render('duo');
+  tabs.forEach(btn=>btn.addEventListener('click',()=>activate(btn)));
+})();
+</script>

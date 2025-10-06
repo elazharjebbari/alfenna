@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import json
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lumierelearning.settings.test_cli")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alfenna.settings.test_cli")
 
 import django
 
@@ -28,7 +28,7 @@ from apps.messaging.tokens import TokenService
 UserModel = get_user_model()
 
 
-@override_settings(ROOT_URLCONF="lumierelearning.urls")
+@override_settings(ROOT_URLCONF="alfenna.urls")
 class MessagingEndpointsTests(TestCase):
     def setUp(self) -> None:
         self.client = Client()

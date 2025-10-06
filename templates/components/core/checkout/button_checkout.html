@@ -1,0 +1,28 @@
+{% load i18n %}
+<div class="checkout-submit mt-3">
+  <button
+      id="payment-button"
+      type="button"
+      class="btn btn-primary w-100 checkout-submit-button"
+      aria-live="polite"
+      data-plan-slug="{{ plan_slug }}"
+      data-plan-title="{{ plan_title }}"
+      data-amount="{{ amount_total }}"
+      data-amount-cents="{{ amount_cents|default:0 }}"
+      data-currency="{{ currency|upper }}"
+      data-loading-label="{% trans 'Paiement en cours…' %}"
+  >
+    <span class="checkout-submit-label">
+      {% if cta_label %}
+        {{ cta_label }}
+      {% else %}
+        {% trans "Payer et accéder maintenant" %}
+      {% endif %}
+    </span>
+    {% if amount_total_display %}
+      <span class="checkout-submit-amount">{{ amount_total_display }}</span>
+    {% endif %}
+    <span class="checkout-submit-spinner spinner-border spinner-border-sm" role="status" aria-hidden="true" hidden></span>
+  </button>
+  <div id="payment-feedback" class="mt-2 small text-muted" aria-live="polite"></div>
+</div>

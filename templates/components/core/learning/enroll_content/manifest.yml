@@ -1,0 +1,30 @@
+alias: learning/enroll_content
+template: "components/core/learning/enroll_content/enroll_content.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.learning.hydrators"
+  func: "enroll_content"
+
+contract:
+  required:
+    course: "Course"
+    lecture: "Lecture"
+  optional:
+    enrolled_count: "int|null"
+    overview_tab: "dict"
+    certificate_tab: "dict"
+    instructor_tab: "dict"
+    overview_text: "str"
+    certificate_text: "str"
+    instructor: "dict"
+    share_url: "str"
+    total_lectures: "int"
+
+render:
+  cacheable: false

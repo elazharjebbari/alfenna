@@ -1,0 +1,70 @@
+{% load static atelier_images atelier_utils %}
+
+<div class="container">
+  <div class="section">
+    <div class="section-title shape-03 section-padding mb-3">
+      <h2 class="main-title">
+        <span>{{ title|default:"Tout Savoir" }}</span> {{ title_suffix|default:"sur les Bougies Artisanales" }}
+      </h2>
+      {% if subtitle %}<p class="lead text-muted">{{ subtitle }}</p>{% endif %}
+    </div>
+
+    <section id="learning-card" class="py-5" style="background-color:#E7F8EE;">
+      <div class="container">
+        <div class="row g-0">
+          <div class="col-md-6 order-2 order-md-1 position-relative">
+
+            <div style="position:absolute; left:27px; top:100px; bottom:0; width:3px; background-color:#EDEFF3; z-index:1;"></div>
+
+            {% if intro_banner.enabled %}
+            <div class="mb-4 p-3" style="background-color:#EDEFF3; border-left:5px solid #309255;">
+              <ul class="list-unstyled ms-3 mb-0">
+                <li>
+                  <span style="font-weight:bold; color:#000;">&gt;</span>
+                  <span class="fw-bold">{% render_string intro_banner.text_html %}</span>
+                </li>
+              </ul>
+            </div>
+            {% endif %}
+
+            <div class="ms-3" style="position:relative; z-index:2;">
+              {% for item in bullets %}
+                <div class="mb-3 d-flex align-items-start">
+                  <i class="{{ item.icon|default:'fa fa-circle' }}" style="color:#309255; margin-right:10px;"></i>
+                  <div>{% render_string item.html %}</div>
+                </div>
+              {% empty %}
+                <div class="alert alert-info">Le programme détaillé sera bientôt disponible.</div>
+              {% endfor %}
+
+              {% if bundle_items %}
+              <div class="mt-4" style="padding-left:30px">
+                <h3 class="fw-bold" style="text-decoration:underline;">{{ bundle_title|default:"Ce que comprend votre pack :" }}</h3>
+                <ul class="list-unstyled ms-4">
+                  {% for html in bundle_items %}
+                    <li class="mb-2">{% render_string html %}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-md-6 order-1 order-md-2">
+            {% if image_src %}
+              {% responsive_picture image_src alt=image_alt|default:"Bougie artisanale" cls="img-fluid" %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% if cta and cta.url and cta.label %}
+      <p class="lead mb-0 text-center my-4">
+        <a href="{{ cta.url }}" class="btn btn-md fw-bold text-uppercase bg-success text-white btn-inscription btn-hover-secondary rounded-3">
+          <i class="fa fa-search me-2"></i>{{ cta.label }}
+        </a>
+      </p>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,43 @@
+{% load i18n %}
+<div class="d-flex flex-column gap-3">
+  {% if product.name %}
+    <h2 class="h4 mb-0">{{ product.name }}</h2>
+  {% endif %}
+
+  <div>
+    {% if pricing.has_promo %}
+      <div class="d-flex align-items-baseline gap-2">
+        <span class="fs-3 fw-bold text-danger">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency }}</span>
+        <span class="text-muted text-decoration-line-through">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</span>
+      </div>
+    {% elif pricing.price %}
+      <div class="fs-3 fw-bold">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</div>
+    {% endif %}
+    {% if pricing.savings %}
+      <small class="text-success">{% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency %}Vous economisez {{ amount }} {{ currency }}{% endblocktrans %}</small>
+    {% endif %}
+  </div>
+
+  {% if product.description %}
+    <p class="mb-0 text-muted">{{ product.description }}</p>
+  {% endif %}
+
+  {% if product.highlights %}
+    <ul class="list-unstyled mb-0">
+      {% for item in product.highlights %}
+        <li class="d-flex align-items-start gap-2">
+          <span class="text-success">&#10003;</span>
+          <span>{{ item }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if product.badges %}
+    <div class="d-flex flex-wrap gap-2">
+      {% for badge in product.badges %}
+        <span class="badge bg-light text-primary border">{% if badge.icon %}<i class="{{ badge.icon }} me-1"></i>{% endif %}{{ badge.text }}</span>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

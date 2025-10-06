@@ -1,0 +1,40 @@
+component: product
+version: 1
+params:
+  product:
+    id: "demo-product"
+    name: "Produit demonstration"
+    price: 499
+    promo_price: 349
+    currency: "MAD"
+    badges:
+      - { icon: "fas fa-truck", text: "Livraison 24h/48h" }
+      - { icon: "fas fa-shield-alt", text: "Paiement securise" }
+  media:
+    lightbox: false
+    images:
+      - { src: "/static/images/demo/product-hero.webp", alt: "Vue principale" }
+      - { src: "/static/images/demo/product-hero-2.webp", alt: "Vue angle" }
+  options:
+    color:
+      enabled: true
+      items:
+        - { key: "sable", label: "Sable", color: "#d7c59a" }
+        - { key: "bleu", label: "Bleu nuit", color: "#1f3a5f" }
+  form:
+    alias: "core/forms/lead_step3"
+    action_url: "leads:collect"
+    fields_map:
+      fullname: "full_name"
+      phone: "phone_number"
+      address: "address"
+      product: "product"
+      promotion: "promotion_selected"
+      quantity: "quantity"
+      offer: "offer_key"
+  tracking:
+    enabled: true
+    events:
+      view: "lp_variant_view"
+      media_switch: "product_media_switch"
+  rtl: auto

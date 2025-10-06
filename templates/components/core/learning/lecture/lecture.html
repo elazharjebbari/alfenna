@@ -1,0 +1,13 @@
+<div class="section section-padding">
+  <div class="courses-enroll-wrapper"
+       data-locked="{{ is_locked|yesno:'1,0' }}"
+       data-checkout-url="{{ checkout_url }}">
+    <div class="courses-video-player">
+      {{ children.video|default_if_none:""|safe }}
+      {{ children.enroll|default_if_none:""|safe }}
+    </div>
+    <div class="courses-video-playlist">
+      {{ children.playlist|default_if_none:""|safe }}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+alias: chatbot/consent_gate
+template: "components/chatbot/consent_gate/component.html"
+
+params:
+  title: "Activer l'assistant"
+  body: "Nous respectons votre consentement. Autorisez les cookies fonctionnels pour discuter avec nous."
+  cta_label: "J'accepte"
+  privacy_url: "/mentions-legales"
+
+contract:
+  optional:
+    title: "str"
+    body: "str"
+    cta_label: "str"
+    privacy_url: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.chatbot.hydrators"
+  func: "chatbot_consent_gate"
+
+render:
+  cacheable: false

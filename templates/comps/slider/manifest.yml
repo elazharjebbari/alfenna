@@ -1,0 +1,47 @@
+alias: hero/cover
+template: components/slider/slider.html
+assets:
+  css:
+    - /static/components/slider/slider.css
+contract:
+  required: {}
+  optional:
+    badge_html: str
+    title_sub: str
+    title_main: str
+    description: str
+    price: int
+    promotion_pct: int
+    cta: dict
+    slider_image: str
+    video_url: str
+    rating: dict
+    style: dict
+hydrate:
+  python: apps.atelier.compose.hydrators.hero_cover
+  params:
+    badge_html: str
+    title_sub: str
+    title_main: str
+    description: str
+    price: int
+    promotion_pct: int
+    cta: dict
+    slider_image: str
+    video_url: str
+    rating: dict
+    style: dict
+  defaults:
+    badge_html: ""
+    title_sub: "Transformez votre passion en savoir-faire"
+    title_main: "Maîtrisez la fabrication de bougies."
+    description: "Apprenez à créer des bougies uniques avec nos cours, et développez des compétences artisanales qui vous démarquent."
+    price: 169
+    promotion_pct: 30
+    cta: { label: "Apprenez maintenant", url: "#" }
+    slider_image: "images/slider/slider-1"
+    video_url: "https://www.youtube.com/watch?v=Aj75R0ojBa0"
+    rating: { value: 4.8, count: 86000 }
+    style: { price_box_bg: "#FF4500" }
+render:
+  cacheable: true

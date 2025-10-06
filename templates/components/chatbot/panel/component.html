@@ -1,0 +1,40 @@
+{# components/chatbot/panel/component.html #}
+<section
+  class="chatbot-panel"
+  data-chatbot-surface
+  data-session-id="{{ session_id }}"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="chatbot-panel-title"
+>
+  <header class="chatbot-panel__header">
+    <h2 class="chatbot-panel__title" id="chatbot-panel-title">{{ title }}</h2>
+    {% if subtitle %}<p class="chatbot-panel__subtitle">{{ subtitle }}</p>{% endif %}
+    <button type="button" class="chatbot-panel__close" data-chatbot-close aria-label="Fermer l'assistant">&times;</button>
+  </header>
+  <div class="chatbot-panel__messages">
+    {% if children and children.messages %}
+      {{ children.messages|safe }}
+    {% endif %}
+    <div class="chatbot-panel__typing" data-chatbot-typing aria-live="polite" hidden>
+      <span aria-hidden="true">&bull;&bull;&bull;</span>
+      <span class="sr-only">L'assistant est en train d'écrire...</span>
+    </div>
+  </div>
+  <div class="chatbot-panel__input">
+    {% if children and children.input %}
+      {{ children.input|safe }}
+    {% endif %}
+  </div>
+  {% if footer_links %}
+    <footer class="chatbot-panel__footer">
+      <ul class="chatbot-panel__links">
+        {% for link in footer_links %}
+          <li class="chatbot-panel__link">
+            <a href="{{ link.href }}"{% if link.new_tab %} target="_blank" rel="noopener"{% endif %}>{{ link.label }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </footer>
+  {% endif %}
+</section>

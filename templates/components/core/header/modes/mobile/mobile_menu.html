@@ -1,0 +1,70 @@
+{% load i18n %}
+<div class="mobile-menu d-lg-none" id="mobileMenu">
+  <a class="menu-close" href="javascript:void(0)" id="mobileMenuClose"><i class="icofont-close-line"></i></a>
+
+  <!-- Coordonnées (optionnel) -->
+  <div class="mobile-top d-flex flex-column align-items-start p-3">
+    {% if contact.phone_tel and contact.phone_display %}
+      <div class="d-flex align-items-center mb-2">
+        <i class="fas fa-phone-alt text-success me-2" style="font-size: 18px;"></i>
+        <a href="tel:{{ contact.phone_tel }}" class="text-dark fw-semibold">{{ contact.phone_display }}</a>
+      </div>
+    {% endif %}
+    {% if contact.email %}
+      <div class="d-flex align-items-center mb-2">
+        <i class="fas fa-envelope text-success me-2" style="font-size: 18px;"></i>
+        <a href="mailto:{{ contact.email }}" class="text-dark fw-semibold small">{{ contact.email }}</a>
+      </div>
+    {% endif %}
+    {% if contact.address_url and contact.address_text %}
+      <div class="d-flex align-items-center">
+        <i class="fas fa-map-marker-alt text-success me-2" style="font-size: 18px;"></i>
+        <a href="{{ contact.address_url }}" class="text-dark fw-semibold" rel="noopener" target="_blank">
+          {{ contact.address_text }}
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Auth -->
+  <div class="mobile-sign-in-up px-3">
+    {% if mode == "member" %}
+      <form method="post" action="{{ logout_url }}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger w-100 mb-3">
+          <i class="fas fa-sign-out-alt me-1"></i> {% trans "Se déconnecter" %}
+        </button>
+      </form>
+    {% else %}
+      <a class="btn btn-outline-secondary w-100 mb-3" href="{{ login_url }}">
+        <i class="fas fa-user me-1"></i> {% trans "Se connecter" %}
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Menu -->
+  <div class="mobile-menu-items px-3">
+    <ul class="nav-menu list-unstyled">
+      {% for item in menu %}
+        <li class="mb-2"><a href="{{ item.url }}">{{ item.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Réseaux (optionnel) -->
+  {% if socials %}
+  <div class="mobile-social px-3 pb-3">
+    <ul class="social list-inline m-0">
+      {% for s in socials %}
+        <li class="list-inline-item">
+          <a href="{{ s.url }}" rel="noopener" {% if s.new_tab %}target="_blank"{% endif %}>
+            <i class="{{ s.icon }}"></i>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+
+<div class="mobile-menu-overlay d-lg-none" id="mobileMenuOverlay"></div>

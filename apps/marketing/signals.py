@@ -42,7 +42,7 @@ def ensure_price_plans(sender, **kwargs):
 
     missing = sorted(expected_slugs - existing)
     try:
-        call_command("loaddata", "lumierelearning/fixtures/price_plans.json", verbosity=0)
+        call_command("loaddata", "alfenna/fixtures/price_plans.json", verbosity=0)
         logger.info("Loaded pricing fixtures for: %s", ", ".join(missing) if missing else "starter, createur")
     except Exception as exc:
         logger.warning("Failed to load pricing fixtures: %s", exc)

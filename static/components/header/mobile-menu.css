@@ -1,0 +1,11 @@
+/* Style pour le sous-menu mobile */
+.mobile-menu .nav-menu .sub-menu {
+    background-color: #309255; /* Couleur de fond différente pour distinguer le sous-menu */
+    color: white; /* Couleur de fond différente pour distinguer le sous-menu */
+}
+
+.mobile-menu .nav-menu .sub-menu li a {
+    color: #333;
+    padding: 10px 0;
+    display: block;
+}

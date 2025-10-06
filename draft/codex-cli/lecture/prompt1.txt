@@ -1,0 +1,99 @@
+TITRE — Backend streaming démo (Phases 0→3) + seeds + harness
+
+Contexte & objectifs
+- Objectif final (côté backend) : disposer d’un cours démo “stream-demo” (2 sections × 2 vidéos), servi en streaming HTTP (Range 206) avec la même politique d’accès que les vues HTML, et des tests harness qui valident le tout.
+- Le frontend “joli” sera branché plus tard : ici on vise seed + endpoint de stream robuste + intégration minimale côté pages existantes (LectureDetailView utilise déjà player_src=learning:stream).
+
+Contraintes & frontières
+- ✅ Autorisé : apps/content/**, apps/learning/** (pour la vue de stream), apps/pages/scripts/** (uniquement tests), templates/content/**, alfenna/fixtures/**.
+- ❌ Interdit : alfenna/OnlineLearning (excluded)/** (lecture seule).
+- Aucune valeur métier en dur dans les templates ; pas de secrets en YAML ; tests idempotents.
+- Toujours sous env de test CLI :
+  export DJANGO_SETTINGS_MODULE=alfenna.settings.test_cli
+
+Design attendu (haut niveau)
+- Seed d’un cours slug=stream-demo, is_published=True, free_lectures_count=2.
+- 2 sections (order=1..2) × 2 leçons vidéo par section (order=1..2), is_published=True.
+- Chaque leçon “free” = dans le quota (L1, L2) ; L3+ = premium.
+- Vue de stream (learning:stream, param pk=lecture.id) : HEAD/GET Range 206, headers corrects, gating via AccessPolicy (même logique que les vues HTML).
+- LectureDetailView conserve player_src=reverse("learning:stream", [lecture.id]) → pas de changement côté template.
+
+Plan d’implémentation (steps atomiques)
+0) Vérifier l’état de départ (content gating)
+   - Commande : python manage.py runscript apps.content.scripts.gating.run_all
+   - Si rouge, corriger avant d’avancer (access policy, mixins, redirections).
+
+1) Seed de données “stream-demo”
+   1.1 Créer un runscript idempotent : apps/content/scripts/seed_stream_demo.py
+       - Crée/Met à jour Course(slug="stream-demo", title="Streaming Demo", is_published=True, free_lectures_count=2, price=169, difficulty=”beginner” si champ dispo).
+       - Crée Section(order=1..2) publiées.
+       - Crée 4 Lecture(type="video", is_published=True, is_free=True pour L1,L2; False pour L3,L4).
+       - Renseigner video_file OU video_path en pointant vers MEDIA_ROOT/videos/courses/<fichiers>.mp4.
+         (si video_file indispo en fixture, utiliser video_path et s’assurer que les fichiers existent dans media/videos/courses).
+   1.2 Ajouter un harness : apps/content/scripts/gating/tests_scripts/test_seed_stream_demo.py
+       - Vérifie existence du cours, sections, 4 leçons ; free_lectures_count=2 ; chemins vidéo non vides ; idempotence (lancer 2× ne duplique pas).
+   1.3 Exécution manuelle :
+       - python manage.py runscript apps.content.scripts.seed_stream_demo
+       - python manage.py runscript apps.content.scripts.gating.run_all (doit rester vert)
+
+2) Streaming serveur (HEAD/GET Range 206) + gating
+   2.1 Vue de stream (apps/learning/urls.py + views.py) :
+       - Créer/compléter une vue learning:stream(pk) qui :
+         a) Résout lecture = Lecture(pk) + lecture.section.course
+         b) Applique la même policy d’accès (utiliser LectureAccessRequiredMixin OU AccessPolicy directement)
+         c) Supporte HEAD (retourne uniquement headers) et GET partiel :
+            - Lit l’entête Range "bytes=start-end" ; calcule Content-Range, Content-Length ; status=206.
+            - S’il n’y a pas de Range, servir 200 ou 206 “bytes=0-” (préférer 206 pour les players).
+            - Headers requis : Accept-Ranges: bytes ; Content-Type: video/mp4 ; Content-Length ; Content-Range (pour 206).
+         d) Source du fichier : lecture.video_file.path si présent, sinon lecture.video_path (absolu) ; 404 si absent.
+   2.2 Harness de validation : apps/content/scripts/gating/tests_scripts/test_stream_range.py
+       - Cas free (L1) anonyme : HEAD → 206 + headers ; GET bytes=0- → 206 avec Content-Range.
+       - Cas premium (L3) anonyme : 302/403 (conforme à la policy), jamais de payload vidéo.
+       - Authentifié avec entitlement (ou staff preview=1) : accès OK sur premium.
+   2.3 Perf guard (réutiliser existant) : apps/content/scripts/gating/tests_scripts/test_gating_perf_guard.py doit rester vert.
+
+3) E2E backend (page → lecture → stream) + progression (smoke)
+   3.1 Vérifier que LectureDetailView continue de fournir player_src=learning:stream(lecture.id).
+       - Rien à changer si déjà en place.
+   3.2 Harness E2E : apps/content/scripts/gating/tests_scripts/test_e2e_course_to_stream.py
+       - GET /<course_slug>/s1/l1/ (lecture free) → 200 et présence d’une URL “learning:stream”.
+       - HEAD sur l’URL stream référencée → 206 + headers attendus.
+       - GET lecture premium anonyme → 302/403 ; en mode staff ?preview=1 → 200.
+   3.3 Progression (smoke) : réutiliser suite learning existante si présente (apps/learning/scripts/suite/*).
+       - Au minimum, lancer : python manage.py runscript apps.learning.scripts.suite.run_all
+       - Sinon, ajouter un mini smoke (facultatif à ce stade) qui vérifie : endpoint de progression renvoie 401 anonyme / 200 authentifié (sans exposer données sensibles).
+
+Conventions YAML & templates
+- Aucun ajout YAML requis pour ces phases.
+- Templates : ne rien hardcoder ; LectureDetail (templates/content/lecture_detail.html) garde le placeholder poster et le player_src fourni par la vue.
+
+Tests à livrer (nouveaux)
+- apps/content/scripts/seed_stream_demo.py (script d’initialisation).
+- apps/content/scripts/gating/tests_scripts/test_seed_stream_demo.py
+  • Compte, liens (FK), flags publication, L1/L2 free, L3/L4 premium, chemins vidéo renseignés, idempotence.
+- apps/content/scripts/gating/tests_scripts/test_stream_range.py
+  • HEAD/GET 206 sur free, lock premium, headers corrects.
+- apps/content/scripts/gating/tests_scripts/test_e2e_course_to_stream.py
+  • Page → lecture → stream, + staff preview sur premium.
+- (Réutiliser) apps/content/scripts/gating/run_all.py pour agréger ; ajouter l’import des 3 tests si nécessaire.
+
+Critères d’acceptation (par phase)
+- Phase 0 : python manage.py runscript apps.content.scripts.gating.run_all → 100% OK (policy, perf, no leak).
+- Phase 1 : le seed crée/maintiendra stream-demo (2×2 leçons), idempotent, harness seed vert.
+- Phase 2 : Range 206 fonctionnel (HEAD/GET), headers standards, verrou premium respecté, perf guard vert.
+- Phase 3 : E2E backend opérationnel (lecture free joue via learning:stream, premium verrou), suite learning (si existante) ne casse pas.
+
+Rollback & maintenance
+- Pour retirer la démo : supprimer le cours “stream-demo” (script inverse) ; la vue de stream reste générique.
+- Journaliser côté stream (logger “stream”) : user, lecture, bytes range, décision d’accès → utile en diag.
+- Les scripts harness sont safe à rejouer ; n’altèrent pas d’autres données que la démo.
+
+Commandes utiles (récap)
+- export DJANGO_SETTINGS_MODULE=alfenna.settings.test_cli
+- python manage.py migrate
+- python manage.py runscript apps.content.scripts.seed_stream_demo
+- python manage.py runscript apps.content.scripts.gating.run_all
+- (optionnel) python manage.py runscript apps.learning.scripts.suite.run_all
+
+
+

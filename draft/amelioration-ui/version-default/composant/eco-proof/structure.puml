@@ -1,0 +1,44 @@
+@startuml
+title ECO-PROOFS — Crédibilité écologique (UX & Events)
+
+skinparam dpi 160
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam ArrowColor #0D5C4F
+skinparam rectangle {
+  BackgroundColor #F2FFF7
+  BorderColor #0D5C4F
+}
+
+actor "Visiteuse" as U
+
+rectangle "Section ECO-PROOFS" as ECO {
+  component "Image\nPackshot ingrédients" as IMG
+  component "Badges (4)\n• Cires végétales\n• Mèches coton\n• IFRA / 0% phtalates\n• Réemploi" as BADGES
+  component "Détails courts\n(popover/accordéon ≤3 bullets)" as DETAILS
+  component "CTA léger\n« Voir nos engagements »" as CTA
+}
+
+U --> ECO : scroll
+ECO -> IMG : inview ≥60% -> event eco_view
+U -[#green]-> BADGES : hover/click badge
+BADGES -> DETAILS : open ≤ 120 chars
+DETAILS -> BADGES : close
+U -[#green]-> CTA : click
+CTA -> "Section PACKS" : smooth scroll
+
+rectangle "Instrumentation" as GA {
+  note right
+  Events:
+  - eco_view {ratio}
+  - eco_badge_open {name}
+  - eco_details_close {name}
+  - eco_cta_click {loc:'eco'}
+  AB flags:
+  - eco_image_on (A) vs off (B)
+  - eco_chiffres_on (A) vs descriptif (B)
+  end note
+}
+
+ECO --> GA
+@enduml

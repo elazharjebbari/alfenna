@@ -1,0 +1,6 @@
+Salut {{ user_first_name }},
+
+Confirme ton adresse e-mail pour sécuriser ton compte :
+{{ verification_url }}
+
+Le lien reste actif {{ verification_ttl_hours }} heures. Besoin d'aide ? {{ support_email }}

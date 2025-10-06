@@ -1,0 +1,1118 @@
+{% load i18n static widget_tweaks pricing humanize l10n %}
+
+<style>
+    :root {
+        --black: #000;
+        --white: #fff;
+        --ul-primary: #EF2853;
+        --ul-secondary: #FFA31A;
+        --ul-gradient: linear-gradient(90deg, var(--ul-primary) 0%, var(--ul-secondary) 100%);
+        --font-primary: "Jost", sans-serif;
+        /* Motion tokens */
+        --dur-in: 220ms; /* entrées */
+        --dur-out: 140ms; /* sorties */
+        --dur-flip: 260ms; /* carte -> récap */
+        --ease-out: cubic-bezier(.16, 1, .3, 1); /* douce à l’arrivée */
+        --ease-in: cubic-bezier(.3, 0, .7, .1); /* rapide en sortie */
+        --stagger: 40ms; /* décalage champs */
+    }
+
+    .lp-form {
+        font-family: var(--font-primary);
+        --brand: var(--ul-primary);
+        --brand-weak: rgba(239, 40, 83, .08);
+        --accent-grad: var(--ul-gradient);
+        --accent-solid: var(--ul-primary);
+        --info: #1677ff;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --text: #0f172a;
+        --muted: #64748b;
+        --surface: #fff;
+        --line: #e7e7ea;
+        --shadow: 0 8px 20px rgba(2, 6, 23, .08);
+        --radius: 16px;
+    }
+
+    /* Stepper (inchangé) */
+    .stepper {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        justify-content: center;
+        margin: .25rem 0 .5rem
+    }
+
+    .stepper .dot {
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        font-weight: 800;
+        color: #64748b
+    }
+
+    .stepper .dot .num {
+        inline-size: 26px;
+        block-size: 26px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #cbd5e1;
+        background: #fff
+    }
+
+    .stepper .dot.is-active {
+        color: #0f172a
+    }
+
+    .stepper .dot.is-active .num {
+        border-color: var(--brand);
+        background: rgba(239, 40, 83, .06)
+    }
+
+    .stepper .sep {
+        inline-size: 36px;
+        height: 2px;
+        background: linear-gradient(90deg, #e7e7ea 0%, #f2f2f4 100%);
+        border-radius: 3px
+    }
+
+    /* CTA */
+    .lp-form .btn-cta {
+        width: 100%;
+        padding: .95rem 1rem;
+        border: 0;
+        border-radius: 12px;
+        background: var(--accent-grad);
+        color: #fff;
+        font-weight: 800;
+        font-size: 1rem;
+        line-height: 1.1;
+        box-shadow: 0 6px 14px rgba(239, 40, 83, .18);
+        transition: transform 80ms ease
+    }
+
+    .lp-form .btn-cta:active {
+        transform: scale(.98)
+    }
+
+    .lp-form .btn-cta:focus-visible {
+        outline: 3px solid rgba(22, 119, 255, .35);
+        outline-offset: 2px
+    }
+
+    .btn-cta.is-loading {
+        pointer-events: none;
+        opacity: .9
+    }
+
+    .btn-cta.is-loading::after {
+        content: "";
+        display: inline-block;
+        margin-inline-start: .5rem;
+        inline-size: 1em;
+        block-size: 1em;
+        border: 2px solid rgba(255, 255, 255, .7);
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin .8s linear infinite
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg)
+        }
+    }
+
+    /* Steps */
+    .step {
+        display: none
+    }
+
+    .step.is-active {
+        display: block
+    }
+
+    /* Alert indispo (inchangé) */
+    .unavailable {
+        display: flex;
+        gap: .8rem;
+        align-items: center;
+        line-height: 1.35;
+        background: linear-gradient(180deg, #fff6f6 0%, #ffe9e9 100%);
+        border: 1px solid #ffd3d3;
+        border-radius: 12px;
+        padding: .8rem 1rem;
+        color: #b80606;
+        font-weight: 700
+    }
+
+    /* Offres (inchangé visuel) */
+    .step1-title {
+        font-weight: 900;
+        font-size: 1.15rem;
+        margin: .2rem 0 .2rem;
+        text-align: center
+    }
+
+    .offers {
+        display: grid;
+        gap: .8rem
+    }
+
+    .offer {
+        display: block
+    }
+
+    .offer input[type=radio] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none
+    }
+
+    .offer-card {
+        position: relative;
+        display: grid;
+        grid-template-columns:auto 1fr;
+        gap: .85rem;
+        padding: 1rem .95rem;
+        border: 2px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        transition: border-color .15s, box-shadow .15s, background-color .15s
+    }
+
+    .offer-card.is-pack {
+        border-color: rgba(239, 40, 83, .16)
+    }
+
+    .offer-ic {
+        inline-size: 40px;
+        block-size: 40px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: rgba(22, 119, 255, .08);
+        color: var(--info);
+        font-size: 1.1rem;
+        align-self: flex-start
+    }
+
+    .offer-txt {
+        display: grid;
+        gap: .25rem;
+        align-content: start
+    }
+
+    .offer-title {
+        font-weight: 800;
+        font-size: .98rem;
+        color: var(--text)
+    }
+
+    .offer-price {
+        display: flex;
+        gap: .5rem;
+        align-items: baseline
+    }
+
+    .offer-price .now {
+        font-weight: 900;
+        font-size: 1.05rem;
+        color: #111
+    }
+
+    .offer-price .was {
+        color: #9aa1a8;
+        text-decoration: line-through;
+        font-size: .92rem
+    }
+
+    .offer-save {
+        font-size: .85rem;
+        font-weight: 800;
+        color: var(--success);
+        display: flex;
+        gap: .35rem;
+        align-items: center
+    }
+
+    .offer-unit {
+        font-size: .8rem;
+        color: var(--muted)
+    }
+
+    .offer-card:hover {
+        border-color: #ffc9d4;
+        background: linear-gradient(180deg, #fff 0%, #fff8f6 100%)
+    }
+
+    .offer input.offer-radio:focus-visible + .offer-card {
+        box-shadow: 0 0 0 .2rem rgba(22, 119, 255, .18)
+    }
+
+    .offer-check {
+        position: absolute;
+        inset-inline-end: .65rem;
+        top: .65rem;
+        inline-size: 26px;
+        block-size: 26px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        border: 2px solid #cbd5e1;
+        background: #fff;
+        transition: all .15s
+    }
+
+    .offer-check svg {
+        inline-size: 16px;
+        block-size: 16px;
+        display: none
+    }
+
+    .offer input.offer-radio:checked + .offer-card {
+        border-color: var(--brand);
+        background: linear-gradient(180deg, #fff 0%, rgba(239, 40, 83, .04) 100%);
+        box-shadow: var(--shadow), 0 0 0 .18rem rgba(239, 40, 83, .12)
+    }
+
+    .offer input.offer-radio:checked + .offer-card .offer-check {
+        background: var(--brand);
+        border-color: var(--brand)
+    }
+
+    .offer input.offer-radio:checked + .offer-card .offer-check svg {
+        display: block;
+        color: #fff;
+        fill: #fff
+    }
+
+    .offer input.offer-radio:checked + .offer-card::before {
+        content: "";
+        position: absolute;
+        inset-inline-start: -2px;
+        top: -2px;
+        bottom: -2px;
+        width: 4px;
+        border-start-start-radius: calc(var(--radius) - 2px);
+        border-end-start-radius: calc(var(--radius) - 2px);
+        background: var(--ul-gradient)
+    }
+
+    .offer-badge {
+        position: absolute;
+        inset-inline-end: .65rem;
+        bottom: .2rem;
+        padding: .2rem .4rem;
+        border-radius: 10px;
+        background: var(--accent-solid);
+        color: #fff;
+        font-size: .7rem;
+        font-weight: 800;
+        display: flex;
+        gap: .35rem;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(239, 40, 83, .2);
+        pointer-events: none
+    }
+
+    /* Grille infos (inchangé) */
+    .lp-form .grid {
+        display: grid;
+        gap: .65rem
+    }
+
+    @media (min-width: 992px) {
+        .lp-form .grid {
+            grid-template-columns:1fr 1fr
+        }
+
+        .lp-form .grid .span-2 {
+            grid-column: 1/-1
+        }
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: .35rem
+    }
+
+    .field label {
+        font-size: .92rem;
+        font-weight: 800;
+        color: #0f172a
+    }
+
+    .pill {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        min-height: 56px;
+        padding: .75rem 1rem .75rem 2.6rem;
+        transition: border-color .15s, box-shadow .15s
+    }
+
+    .pill:focus-within {
+        border-color: var(--info);
+        box-shadow: 0 0 0 .2rem rgba(22, 119, 255, .15)
+    }
+
+    .pill.is-invalid {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 .2rem rgba(239, 68, 68, .12)
+    }
+
+    .pill.is-valid {
+        border-color: rgba(16, 185, 129, .6);
+        box-shadow: 0 0 0 .18rem rgba(16, 185, 129, .15)
+    }
+
+    .pill input {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #111;
+        font-size: 1rem
+    }
+
+    .pill .icon {
+        position: absolute;
+        inset-inline-start: .9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.1rem;
+        color: var(--info)
+    }
+
+    /* Récap sticky */
+    .recap {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid var(--line);
+        color: #0f172a;
+        font-weight: 800;
+        padding: .65rem .8rem;
+        margin: .4rem 0;
+        position: sticky;
+        top: .5rem;
+        z-index: 5
+    }
+
+    .recap:before {
+        content: "";
+        display: block;
+        inline-size: 4px;
+        block-size: 100%;
+        border-radius: 8px 0 0 8px;
+        margin-inline-end: .6rem;
+        background: var(--ul-gradient)
+    }
+
+    .recap .ic {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: rgba(22, 119, 255, .12);
+        color: var(--info);
+        display: grid;
+        place-items: center
+    }
+
+    .recap .link-back {
+        margin-inline-start: auto;
+        color: var(--info);
+        font-weight: 700;
+        text-decoration: underline dotted
+    }
+
+    .recap .link-back:hover {
+        text-decoration: underline
+    }
+
+    .help {
+        color: #64748b;
+        font-size: .88rem;
+        margin: .25rem 0 0
+    }
+
+    .reassure-line {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem .75rem;
+        align-items: center;
+        justify-content: flex-start
+    }
+
+    .reassure-item {
+        display: inline-flex;
+        align-items: center;
+        gap: .375rem;
+        padding: .38rem .65rem;
+        border-radius: 999px;
+        background: rgba(16, 185, 129, .12);
+        color: var(--success);
+        font-weight: 700;
+        font-size: .9rem
+    }
+
+    .lp-form .nudge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .4rem;
+        color: #0b8a6a;
+        font-weight: 800;
+        font-size: .92rem;
+        margin: .2rem 0 .8rem
+    }
+
+    .visually-title {
+        margin: .2rem 0 .6rem;
+        font-weight: 900;
+        font-size: 1.05rem;
+        color: var(--text);
+        text-align: left
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0
+    }
+
+    /* ====== Motion states (classe-based) ====== */
+    /* 1) Sortie de Step 1 : toutes les cartes non sélectionnées s’évanouissent vers le haut */
+    .step-1.leaving .offer-card:not(.is-selected) {
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity var(--dur-out) var(--ease-in), transform var(--dur-out) var(--ease-in);
+        pointer-events: none;
+    }
+
+    /* 2) Entrée de Step 2 : champs et CTA apparaissent en cascade */
+    .step-2.entering [data-anim] {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    .step-2.entering .animate-in {
+        opacity: 1;
+        transform: translateY(0);
+        transition: transform var(--dur-in) var(--ease-out), opacity var(--dur-in) var(--ease-out);
+    }
+
+    /* 3) Fallback crossfade (si reduced motion / pas WAAPI) */
+    .xfade-out {
+        opacity: 0;
+        transition: opacity var(--dur-out) var(--ease-in)
+    }
+
+    .xfade-in {
+        opacity: 1;
+        transition: opacity var(--dur-in) var(--ease-out)
+    }
+
+    /* RTL : barre de sélection à droite */
+    html[lang="ar"] .offer input.offer-radio:checked + .offer-card::before {
+        inset-inline-start: auto;
+        inset-inline-end: -2px;
+    }
+
+    /* Clone FLIP (au-dessus de tout) */
+    .offer-clone {
+        position: fixed;
+        margin: 0;
+        z-index: 9999;
+        pointer-events: none;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow), 0 0 0 .18rem rgba(239, 40, 83, .12);
+    }
+
+    /* Respect des préférences d’accessibilité */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0ms !important
+        }
+
+        .step-1.leaving .offer-card:not(.is-selected) {
+            transform: none
+        }
+
+        .step-2.entering [data-anim] {
+            transform: none
+        }
+    }
+
+  .stepper{align-items:center}
+  .stepper-lang{display:flex;gap:.25rem;align-items:center}
+  .chip{font-weight:800;font-size:.78rem;border:1px solid #e7e7ea;border-radius:999px;padding:.28rem .5rem;text-decoration:none;color:#0f172a;background:#fff}
+  .chip.is-active{background:rgba(22,119,255,.08);border-color:#cbd5e1}
+  .chip:is(:hover,:focus){background:rgba(22,119,255,.12)}
+
+  .btn-wa{
+    width:100%; margin-top:.6rem; padding:.9rem 1rem;
+    border:2px solid rgba(16,185,129,.5); border-radius:12px;
+    background:#fff; color:#0b8a6a; font-weight:800;
+    display:flex; align-items:center; justify-content:center; gap:.5rem;
+    box-shadow:0 0 0 0 rgba(0,0,0,0);
+    transition:border-color .15s, background .15s, box-shadow .15s;
+  }
+  .btn-wa:hover{ background:rgba(16,185,129,.06); border-color:#10b981 }
+  .btn-wa:focus-visible{ outline:3px solid rgba(16,185,129,.35); outline-offset:2px }
+  .btn-wa .wa-ic{ font-size:1.15rem; line-height:1 }
+  .wa-note{ text-align:center; margin-top:.35rem; color:#64748b; font-size:.88rem }
+</style>
+
+<form id="lead-form" method="post" class="lp-form"
+      novalidate {% if LANGUAGE_CODE == 'ar' %}dir="rtl"{% endif %}
+      data-has-offers="{% if offers %}1{% else %}0{% endif %}">
+    {% csrf_token %}
+    {{ form.product }}{{ form.promotion_selected }}
+
+    {% if not product or not offers %}
+        <!-- Indispo -->
+        <div class="unavailable" role="alert" aria-live="polite">
+            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+            <span>{% trans "Produit indisponible pour le moment. Revenez plus tard." %}</span>
+        </div>
+        <button type="button" class="btn-cta mt-2" disabled aria-disabled="true">
+            <i class="fas fa-ban" aria-hidden="true"></i> {% trans "Indisponible" %}
+        </button>
+        <input type="hidden" id="offer_key" name="offer_key" value="">
+        <input type="hidden" id="quantity" name="quantity" value="">
+        <input type="hidden" id="selected_price" name="selected_price" value="">
+        <input type="hidden" id="product_name" value="{{ product.name|default:_('Sajadat Al-Raha – Tapis de prière') }}">
+    {% else %}
+
+        <!-- Stepper global -->
+        {# dans le form : bloc stepper #}
+        <div class="stepper" aria-hidden="true">
+            <div class="dot is-active"><span class="num">1</span> {% trans "Offre" %}</div>
+            <div class="sep"></div>
+            <div class="dot"><span class="num">2</span> {% trans "Livraison" %}</div>
+
+            <div class="stepper-lang ms-auto" role="group" aria-label="{% trans 'Langue' %}">
+                {% if cur_lang|slice:":2" == "ar" %}
+                    <span class="chip is-active" lang="ar" dir="rtl">AR</span>
+                    <a class="chip" href="{{ alt_url }}" lang="fr" dir="ltr"
+                       data-event="LangToggle_Click" data-origin="stepper" data-from="ar" data-to="fr">FR</a>
+                {% else %}
+                    <span class="chip is-active" lang="fr" dir="ltr">FR</span>
+                    <a class="chip" href="{{ alt_url }}" lang="ar" dir="rtl"
+                       data-event="LangToggle_Click" data-origin="stepper" data-from="fr" data-to="ar">AR</a>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <!-- ÉTAPE 1 -->
+        <div class="step step-1 is-active" aria-labelledby="step1-title">
+            <p id="step1-title" class="step1-title">{% trans "Choisissez votre offre" %}</p>
+
+            <div class="nudge"><i class="fas fa-users"></i> {% trans "+1000 clients ont choisi l’offre Duo" %}</div>
+
+            <div class="offers" role="radiogroup" aria-label="{% trans 'Options' %}">
+                {% for offer in offers %}
+                    <label class="offer">
+                        <input class="offer-radio" type="radio" name="offer_choice"
+                               value="{{ offer.key }}"
+                               {% if offer.is_default %}checked{% elif not default_offer and forloop.first %}checked{% endif %}
+                               data-label="{{ offer.get_label }}"
+                               data-qty="{{ offer.quantity }}"
+                               data-price="{{ offer.price|unlocalize }}"
+                               data-compare="{{ offer.compare_at_price|default:''|unlocalize }}">
+                        <div class="offer-card {% if offer.quantity > 1 %}is-pack{% endif %}">
+              <span class="offer-ic" aria-hidden="true">
+                {% if offer.quantity == 1 %}<i class="fas fa-user"></i>
+                {% elif offer.quantity == 2 %}<i class="fas fa-layer-group"></i>
+                {% else %}<i class="fas fa-boxes"></i>{% endif %}
+              </span>
+                            <div class="offer-txt">
+                                <div class="offer-title">{{ offer.get_label }}</div>
+                                <div class="offer-price">
+                                    <span class="now">{{ offer.price|floatformat:0|intcomma }} {% trans "Dhs" %}</span>
+                                    {% if offer.compare_at_price and offer.compare_at_price > offer.price %}
+                                        <span class="was">{{ offer.compare_at_price|floatformat:0|intcomma }} {% trans "Dhs" %}</span>
+                                    {% endif %}
+                                </div>
+                                {% if offer.compare_at_price and offer.compare_at_price > offer.price %}
+                                    {% with saved=offer.compare_at_price|save_amount:offer.price pct=offer.compare_at_price|discount_pct:offer.price %}
+                                        {% if saved %}
+                                            <div class="offer-save">
+                                                <i class="fas fa-tags" aria-hidden="true"></i>
+                                                <span>{% trans "Économisez" %} {{ saved|intcomma }} {% trans "Dhs" %} <span
+                                                        class="pct">(-{{ pct }}%)</span></span>
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endif %}
+                                {% if offer.quantity > 1 %}
+                                    <div class="offer-unit js-unit"
+                                         data-price="{{ offer.price|unlocalize }}"
+                                         data-qty="{{ offer.quantity }}"></div>
+                                {% endif %}
+                            </div>
+                            <span class="offer-check" aria-hidden="true">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                  <path d="M20.285 6.709a1 1 0 0 1 0 1.414l-9.192 9.192a1 1 0 0 1-1.414 0L3.715 11.55a1 1 0 1 1 1.414-1.415l5.05 5.05 8.485-8.485a1 1 0 0 1 1.621.009z"></path>
+                </svg>
+              </span>
+                            {% if offer.is_default %}
+                                <span class="offer-badge"><i class="fas fa-star"
+                                                             aria-hidden="true"></i> {% trans "Meilleur choix" %}</span>
+                            {% endif %}
+                        </div>
+                    </label>
+                {% endfor %}
+            </div>
+
+            <!-- Champs techniques -->
+            <input type="hidden" name="offer_key" id="offer_key" value="">
+            <input type="hidden" name="quantity" id="quantity" value="">
+            <input type="hidden" name="selected_price" id="selected_price" value="">
+
+            <p class="help" id="tip-step1" style="text-align:center;margin:.6rem 0 0">
+                <i class="fas fa-lightbulb" style="color:var(--warning)" aria-hidden="true"></i>
+                {% trans "Astuce : parfait pour offrir à un proche tout en économisant." %}
+            </p>
+
+            <div style="display:flex;gap:.6rem;margin-top:.9rem">
+                <button type="button" class="btn-cta" id="btn-continue" aria-describedby="tip-step1">
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    <span id="cta-continue-text">{% trans "Continuer" %}</span>
+                </button>
+            </div>
+
+            <div class="reassure-line mt-2" role="list" aria-label="{% trans 'Garanties & assistance' %}">
+                <div class="reassure-item" role="listitem"><i class="fas fa-truck"
+                                                              aria-hidden="true"></i><span>{% trans "Livraison gratuite" %}</span>
+                </div>
+                <div class="reassure-item" role="listitem"><i class="fas fa-shield-alt"
+                                                              aria-hidden="true"></i><span>{% trans "Paiement à la livraison" %}</span>
+                </div>
+                <div class="reassure-item" role="listitem"><i class="fas fa-undo-alt"
+                                                              aria-hidden="true"></i><span>{% trans "Retour 7 jours" %}</span>
+                </div>
+                <a class="reassure-item" role="listitem" href="https://wa.me/212630035905" target="_blank"
+                   rel="noopener" data-event="whatsapp_checkout_click">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i><span>{% trans "Support WhatsApp" %}</span>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- ÉTAPE 2 (optimisée) -->
+        <div class="step step-2" aria-labelledby="step2-title" aria-live="polite">
+            <!-- pas de stepper ici (on garde le global) -->
+
+            <div class="recap" role="region" aria-label="{% trans 'Récapitulatif de votre offre' %}">
+                <span class="ic"><i class="fas fa-receipt" aria-hidden="true"></i></span>
+                <div id="recap-text">{% trans "Veuillez choisir une offre" %}</div>
+                <button type="button" class="link-back" id="link-back" aria-describedby="hint-back">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i> {% trans "Modifier l’offre" %}
+                </button>
+            </div>
+            <p class="sr-only" id="hint-back">{% trans "Retour à l’étape 1 sans perdre vos informations." %}</p>
+
+            <h2 id="step2-title" class="visually-title">{% trans "Vos informations de livraison" %}</h2>
+
+            <div class="grid">
+                {% trans "Amine" as ph_name %}
+                {% trans "06 12 34 56 78 ou +212 6 12 34 56 78 (WhatsApp)" as ph_phone %}
+                {% trans "10 rue Anfa, Résidence Atlas, 3e étage, Casablanca" as ph_addr %}
+
+                <!-- data-anim permet la cascade -->
+                <div class="field" data-anim>
+                    <label for="firstname">{% trans "Votre prénom pour la remise" %}</label>
+                    <div class="pill" id="pill-firstname">
+                        <span class="icon"><i class="fas fa-user" aria-hidden="true"></i></span>
+                        {% render_field form.full_name id="firstname" placeholder=ph_name autocomplete="name" required="required" class+="form-control" aria-describedby="name-help" %}
+                    </div>
+                </div>
+
+                <div class="field" data-anim>
+                    <label for="phone-number">{% trans "Téléphone ou WhatsApp" %}</label>
+                    <div class="pill" id="pill-phone">
+                        <span class="icon"><i class="fas fa-phone" aria-hidden="true"></i></span>
+                        {% render_field form.phone_number id="phone-number" placeholder=ph_phone autocomplete="tel" inputmode="tel" dir="ltr" maxlength="20" pattern="^[0-9٠-٩+()\-\\s]{6,}$" required="required" class+="form-control" aria-describedby="tel-help tel-hint" %}
+                    </div>
+                    <p class="help" id="tel-help">{% trans "Numéro utilisé pour confirmer la livraison." %}</p>
+                </div>
+
+                <div class="field span-2" data-anim>
+                    <label for="address">{% trans "Votre adresse de livraison" %}</label>
+                    <div class="pill" id="pill-address">
+                        <span class="icon"><i class="fas fa-location-dot" aria-hidden="true"></i></span>
+                        <input type="text" name="address" id="address" class="form-control" placeholder="{{ ph_addr }}"
+                               autocomplete="street-address" required aria-describedby="addr-help">
+                    </div>
+                    <p class="help" id="addr-help">{% trans "Données protégées (RGPD)." %}</p>
+                </div>
+
+                <input type="hidden" name="product_id" id="product_id" value="{{ product.pk }}">
+                <input type="hidden" name="promotion_selected" id="promotion_selected"
+                       value="{{ product.promotion_price|default_if_none:'' }}">
+            </div>
+
+            <button type="submit" class="btn-cta" id="submit-order" aria-describedby="post-submit-note"
+                    data-loading-text="{% trans 'Envoi…' %}">
+                <i class="fas fa-bag-shopping" aria-hidden="true"></i> {% trans "Confirmer — Paiement à la livraison" %}
+            </button>
+
+{#            <a id="btn-wa-buy" class="btn-wa" href="#" target="_blank" rel="noopener"#}
+{#               aria-label="{% trans 'Acheter sur WhatsApp' %}">#}
+{#              <span class="wa-ic"><i class="fab fa-whatsapp" aria-hidden="true"></i></span>#}
+{#              {% trans "Acheter sur WhatsApp" %}#}
+{#            </a>#}
+            <p class="wa-note">{% trans "Réponse en 5–15 min • Paiement à la livraison" %}</p>
+
+            <div class="reassure-line mt-2" role="list" aria-label="{% trans 'Garanties & assistance' %}">
+                <div class="reassure-item" role="listitem"><i class="fas fa-truck"
+                                                              aria-hidden="true"></i><span>{% trans "Livraison gratuite" %}</span>
+                </div>
+                <div class="reassure-item" role="listitem"><i class="fas fa-shield-alt"
+                                                              aria-hidden="true"></i><span>{% trans "Paiement à la livraison" %}</span>
+                </div>
+                <div class="reassure-item" role="listitem"><i class="fas fa-undo-alt"
+                                                              aria-hidden="true"></i><span>{% trans "Retour 7 jours" %}</span>
+                </div>
+                <a class="reassure-item" role="listitem" href="https://wa.me/212625113848" target="_blank"
+                   rel="noopener">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i><span>{% trans "Support WhatsApp" %}</span>
+                </a>
+            </div>
+
+            <p class="help" style="text-align:center;margin-top:.5rem">⭐ 4.7/5
+                — {% trans "+1000 clients satisfaits" %}</p>
+        </div>
+    {% endif %}
+</form>
+
+<script>
+    (function () {
+        const form = document.getElementById('lead-form');
+        if (!form) return;
+        const hasOffers = form.getAttribute('data-has-offers') === '1';
+        if (!hasOffers) return;
+
+        // Elements
+        const step1 = form.querySelector('.step-1');
+        const step2 = form.querySelector('.step-2');
+        const stepperDots = Array.from(form.querySelectorAll('.stepper .dot'));
+        const radios = Array.from(form.querySelectorAll('.offer-radio'));
+        const offersCards = Array.from(form.querySelectorAll('.offer-card'));
+        const recap = document.getElementById('recap-text');
+        const btnContinue = document.getElementById('btn-continue');
+        const ctaText = document.getElementById('cta-continue-text');
+        const backLink = document.getElementById('link-back');
+
+        const inpKey = document.getElementById('offer_key');
+        const inpQty = document.getElementById('quantity');
+        const inpPrice = document.getElementById('selected_price');
+
+        const firstname = document.getElementById('firstname');
+        const phone = document.getElementById('phone-number');
+        const submitBtn = document.getElementById('submit-order');
+
+        // Arab digits → occidental
+        const AR_DIGITS = {
+            '٠': '0',
+            '١': '1',
+            '٢': '2',
+            '٣': '3',
+            '٤': '4',
+            '٥': '5',
+            '٦': '6',
+            '٧': '7',
+            '٨': '8',
+            '٩': '9'
+        };
+        const normalizeDigits = s => String(s || '').replace(/[٠-٩]/g, d => AR_DIGITS[d] ?? d);
+
+        const toNum = (v) => {
+            if (v == null) return 0;
+            const s = normalizeDigits(String(v)).replace(/\u00A0/g, '').replace(/\s/g, '').replace(',', '.').replace(/[^\d.-]/g, '');
+            const n = Number(s);
+            return Number.isFinite(n) ? n : 0;
+        };
+
+        const fmt = (n) => {
+            try {
+                return new Intl.NumberFormat('{{ LANGUAGE_CODE|default:"fr" }}', {maximumFractionDigits: 0}).format(Number(n));
+            } catch (e) {
+                return String(Math.round(Number(n) || 0));
+            }
+        };
+
+        // Unitaire pour packs
+        form.querySelectorAll('.js-unit').forEach(el => {
+            const p = toNum(el.dataset.price || 0), q = toNum(el.dataset.qty || 1);
+            if (q > 1 && p > 0) {
+                const unit = Math.round((p / q) * 2) / 2;
+                el.textContent = `≈ ${fmt(unit)} Dhs / {% trans "tapis" %}`;
+            }
+        });
+
+        const current = () => radios.find(r => r.checked);
+
+        function updateStepper(activeIndex) {
+            stepperDots.forEach((d, i) => d.classList.toggle('is-active', i === activeIndex));
+        }
+
+        function markSelectedCard() {
+            // pour les effets de sortie ciblés
+            offersCards.forEach(c => c.classList.remove('is-selected'));
+            const r = current();
+            if (!r) return null;
+            const card = r.nextElementSibling;
+            if (card) card.classList.add('is-selected');
+            return card || null;
+        }
+
+        function applySelection(r) {
+            if (!r) return;
+            const key = r.value;
+            const qty = r.dataset.qty || '';
+            const price = toNum(r.dataset.price);
+            const label = r.dataset.label || '';
+
+            inpKey.value = key;
+            inpQty.value = qty;
+            inpPrice.value = price;
+
+            if (recap) {
+                recap.textContent = `{% trans "Vous avez choisi :" %} ${qty} {% trans "tapis —" %} ${fmt(price)} Dhs`;
+            }
+            if (ctaText) {
+                const short = label.replace(/\s*\(.*?\)\s*/, '');
+                ctaText.textContent = `{% trans "Continuer avec l’offre" %} ${short}`;
+            }
+
+            markSelectedCard();
+        }
+
+        // Validation live simple
+        function validateLive() {
+            const nameOk = !!(firstname && firstname.value.trim().length >= 2);
+            if (phone) {
+                phone.value = normalizeDigits(phone.value);
+            }
+            const tel = phone ? phone.value.replace(/\s+/g, '').replace(/^00/, '+') : '';
+            const telOk = (/[0-9+()\-]{6,}/.test(tel));
+            if (submitBtn) submitBtn.disabled = !(nameOk && telOk);
+            // feedback visuel
+            if (firstname) {
+                firstname.closest('.pill')?.classList.toggle('is-valid', nameOk);
+            }
+            if (phone) {
+                phone.closest('.pill')?.classList.toggle('is-valid', telOk);
+            }
+        }
+
+        // ====== FLIP: carte sélectionnée -> récap (WAAPI) ======
+        const canWAAPI = !!(Element.prototype.animate);
+        const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function flipCardToRecap(selectedCard) {
+            if (!canWAAPI || prefersReduced) return Promise.resolve(false); // on ne fait rien, fallback CSS
+            if (!selectedCard) return Promise.resolve(false);
+
+            // 1) Mesure source
+            const srcRect = selectedCard.getBoundingClientRect();
+
+            // 2) Préparer Step 2 hors écran pour mesurer la cible
+            const prevDisplay = step2.style.display;
+            const prevVis = step2.style.visibility;
+            const prevPos = step2.style.position;
+            const prevLeft = step2.style.left;
+
+            step2.style.display = 'block';
+            step2.style.visibility = 'hidden';
+            step2.style.position = 'fixed';
+            step2.style.left = '-10000px';
+
+            const recapEl = step2.querySelector('.recap');
+            const tgtRect = recapEl ? recapEl.getBoundingClientRect() : null;
+
+            // revert styles
+            step2.style.display = prevDisplay || '';
+            step2.style.visibility = prevVis || '';
+            step2.style.position = prevPos || '';
+            step2.style.left = prevLeft || '';
+
+            if (!tgtRect) return Promise.resolve(false);
+
+            // 3) Créer le clone
+            const clone = selectedCard.cloneNode(true);
+            clone.classList.add('offer-clone');
+            clone.style.left = srcRect.left + 'px';
+            clone.style.top = srcRect.top + 'px';
+            clone.style.width = srcRect.width + 'px';
+            clone.style.height = srcRect.height + 'px';
+            document.body.appendChild(clone);
+
+            // 4) Calcul delta
+            const dx = (tgtRect.left - srcRect.left);
+            const dy = (tgtRect.top - srcRect.top);
+            const sx = (tgtRect.width / srcRect.width);
+            const sy = (tgtRect.height / srcRect.height);
+
+            // 5) Cache visuellement la carte source pendant l’anim
+            selectedCard.style.visibility = 'hidden';
+
+            // 6) Animation
+            const anim = clone.animate([
+                {transform: 'translate(0px,0px) scale(1,1)', opacity: 1},
+                {transform: `translate(${dx}px,${dy}px) scale(${sx},${sy})`, opacity: 1}
+            ], {duration: 260, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards'});
+
+            return new Promise(resolve => {
+                anim.addEventListener('finish', () => {
+                    clone.remove();
+                    selectedCard.style.visibility = '';
+                    resolve(true);
+                }, {once: true});
+                anim.addEventListener('cancel', () => {
+                    clone.remove();
+                    selectedCard.style.visibility = '';
+                    resolve(false);
+                }, {once: true});
+            });
+        }
+
+        // ====== Orchestration Step1 -> Step2 ======
+        function transitionToStep2() {
+            // garde-fous
+            if (!inpKey.value || !inpQty.value || !inpPrice.value) {
+                try {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '{% trans "Choix requis" %}',
+                        text: '{% trans "Veuillez sélectionner une offre pour continuer." %}'
+                    });
+                } catch (e) {
+                    alert('{% trans "Veuillez sélectionner une offre pour continuer." %}');
+                }
+                return;
+            }
+
+            // 1) micro-état bouton pour prévenir le double-clic
+            btnContinue.classList.add('is-loading');
+            setTimeout(() => btnContinue.classList.remove('is-loading'), 320);
+
+            // 2) Marque les non-sélectionnées pour la sortie CSS
+            step1.classList.add('leaving');
+
+            const selectedCard = markSelectedCard();
+
+            // 3) Lancer FLIP → puis activer Step 2 + cascade
+            flipCardToRecap(selectedCard).finally(() => {
+                // Activer Step 2
+                step1.classList.remove('is-active', 'leaving');
+                step2.classList.add('is-active', 'entering');
+
+                // Stepper
+                updateStepper(1);
+
+                // Cascade : appliquer .animate-in avec des délais progressifs
+                const items = Array.from(step2.querySelectorAll('[data-anim]'));
+                items.forEach((el, i) => {
+                    // positionne au prochain frame pour laisser le temps à .entering d’être posé
+                    requestAnimationFrame(() => {
+                        el.classList.add('animate-in');
+                        el.style.transitionDelay = (i * (parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stagger')) || 40)) + 'ms';
+                    });
+                });
+
+                // Focus
+                firstname && firstname.focus();
+
+                // Nettoyage des délais après l’anim
+                setTimeout(() => {
+                    items.forEach(el => el.style.transitionDelay = '');
+                    step2.classList.remove('entering');
+                }, 600);
+            });
+        }
+
+        // ====== Retour Step2 -> Step1 (simple crossfade) ======
+        function transitionToStep1() {
+            // Crossfade propre (compatible reduced-motion)
+            step2.classList.add('xfade-out');
+            setTimeout(() => {
+                step2.classList.remove('xfade-out', 'is-active');
+                step1.classList.add('is-active');
+                // petit fade-in step1
+                step1.classList.add('xfade-in');
+                requestAnimationFrame(() => step1.classList.remove('xfade-in'));
+                updateStepper(0);
+            }, 120);
+        }
+
+        // Init sélection + validations
+        applySelection(current());
+        validateLive();
+
+        radios.forEach(r => {
+            r.addEventListener('change', () => applySelection(r));
+            r.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    applySelection(r);
+                }
+            });
+        });
+
+        // Navigation
+        if (btnContinue) {
+            btnContinue.addEventListener('click', transitionToStep2);
+        }
+        if (backLink) {
+            backLink.addEventListener('click', transitionToStep1);
+        }
+
+        // Live checks
+        firstname && firstname.addEventListener('input', validateLive);
+        phone && phone.addEventListener('input', validateLive);
+
+        // Soumission sécurisée
+        form.addEventListener('submit', function (e) {
+            if (!inpKey.value || !inpQty.value || !inpPrice.value) {
+                e.preventDefault();
+                try {
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{% trans "Offre manquante" %}',
+                        text: '{% trans "Merci de sélectionner une offre avant de confirmer." %}'
+                    });
+                } catch (err) {
+                    alert('{% trans "Merci de sélectionner une offre avant de confirmer." %}');
+                }
+                return;
+            }
+            // anti double-clic + micro loader
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('is-loading');
+            }
+        });
+
+    })();
+</script>

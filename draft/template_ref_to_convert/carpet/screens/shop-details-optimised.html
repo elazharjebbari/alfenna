@@ -1,0 +1,253 @@
+{% extends 'carpet/base.html' %}
+{% load i18n static %}
+{% block title %}Tapis de Prière - Maroc{% endblock title %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block extra_head %}
+
+
+{% endblock extra_head %}
+
+
+{% block content %}
+    {#    {% include 'carpet/components/sidebar/sidebar.html' %}#}
+    {% include 'carpet/components/header/header.html' %}
+
+    {# Logo centré avec effet arrondi #}
+
+    <div class="d-flex justify-content-center my-1">
+        <img
+                src="{% static 'carpet/images/logo/al-raha_500x500.webp' %}"
+                alt="Logo Al-Raha"
+                class="img-fluid rounded"
+                style="max-width: 100px;"
+        >
+    </div>
+
+    <div class="ul-inner-page-container">
+        <div class="row ul-bs-row justify-content-center">
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="ul-blog-details">
+                    <div class="ul-blog ul-blog-big">
+                        <blockquote class="text-end">
+                            <span class="icon"><i class="flaticon-quote"></i></span>
+                            <strong class="d-block mb-1">{% trans "« La religion est facilité. »" %}</strong>
+                            <small class="d-block text-muted">
+                                {% trans "Ṣaḥīḥ al-Bukhārī, Kitāb al-Īmān (Foi)" %}
+                            </small>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    {#    {% include 'carpet/components/fab/fab-contact.html' %}#}
+    {#    {% include 'carpet/components/breacrumbs/breadcrumbs.html' %}#}
+    {#    {% include 'carpet/components/product/product-optimized.html' %}#}
+    {% include 'carpet/components/reviews/reviews.html' %}
+    {% include 'carpet/components/benefits/benefits.html' %}
+    {% include 'carpet/components/faq/faq.html' %}
+
+
+
+{% endblock content %}
+
+{% block before_end_body %}
+
+
+{% endblock before_end_body %}
+
+{% block js %}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('lead-form');
+            if (!form) return;
+
+            const submitBtn = form.querySelector('[type="submit"]');
+            const url = "{% url 'create-lead' %}";
+
+            function getCSRFTOKEN() {
+                const inp = document.querySelector('[name=csrfmiddlewaretoken]');
+                return inp ? inp.value : '';
+            }
+
+            function sanitizePhone(t) {
+                return String(t || '').trim().replace(/\s+/g, '').replace(/[^\d+]/g, '').replace(/^00/, '+');
+            }
+
+            function setLoading(x) {
+                if (!submitBtn) return;
+                submitBtn.disabled = x;
+                submitBtn.innerHTML = x ? 'Envoi…' : (submitBtn.dataset._txt || 'Envoyer');
+            }
+
+            submitBtn && (submitBtn.dataset._txt = submitBtn.innerHTML);
+
+            function validate() {
+                const fullNameEl = document.getElementById('firstname');
+                const phoneEl = document.getElementById('phone-number');
+
+                // Accepte product_id OU id_product (champ du ModelForm)
+                const productEl = document.getElementById('product_id') || document.getElementById('id_product');
+                const promoEl = document.getElementById('promotion_selected') || document.getElementById('id_promotion_selected');
+
+                [fullNameEl, phoneEl].forEach(el => el && el.classList.remove('is-invalid'));
+
+                let ok = true, errs = [];
+
+                if (!fullNameEl || fullNameEl.value.trim().length < 2) {
+                    ok = false;
+                    errs.push('Veuillez saisir votre prénom.');
+                    fullNameEl && fullNameEl.classList.add('is-invalid');
+                }
+                if (!phoneEl) {
+                    ok = false;
+                    errs.push('Champ téléphone manquant.');
+                } else {
+                    phoneEl.value = sanitizePhone(phoneEl.value);
+                    if (phoneEl.value.length < 6) {
+                        ok = false;
+                        errs.push('Numéro de téléphone invalide.');
+                        phoneEl.classList.add('is-invalid');
+                    }
+                }
+                if (!productEl || !productEl.value) {
+                    ok = false;
+                    errs.push('Produit introuvable (champ "product" manquant).');
+                }
+                if (!promoEl) {
+                    ok = false;
+                    errs.push('promotion_selected manquant.');
+                }
+
+                return {ok, errs};
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const {ok, errs} = validate();
+                if (!ok) {
+                    Swal.fire({icon: 'error', title: 'Erreur', text: errs.join('\n')});
+                    return;
+                }
+
+                setLoading(true);
+                const csrftoken = getCSRFTOKEN();
+                const formData = new FormData(form);
+
+                fetch(url, {method: 'POST', headers: {'X-CSRFToken': csrftoken}, body: formData})
+                    .then(async resp => ({status: resp.status, body: await resp.json().catch(() => ({}))}))
+                    .then(({status, body}) => {
+                        if (status === 200 && body.status === 'ok' && body.redirect_url) {
+                            window.location.href = body.redirect_url;
+                        } else {
+                            const lines = [];
+                            Object.entries(body.errors || {}).forEach(([f, arr]) => (arr || []).forEach(e => lines.push(`${f}: ${e.message || e}`)));
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: lines.join('\n') || 'Merci de corriger le formulaire.'
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur réseau',
+                            text: 'Impossible de soumettre votre demande.'
+                        });
+                    })
+                    .finally(() => setLoading(false));
+            });
+
+            var heroImg = document.getElementById('hero-img');
+            var heroLink = document.getElementById('hero-link');
+            var srcWebp = document.getElementById('hero-src-webp');
+            var thumbsBox = document.querySelector('#product-hero .thumbs');
+            var btnPrev = document.querySelector('#product-hero .btn-prev');
+            var btnNext = document.querySelector('#product-hero .btn-next');
+            if (!heroImg || !thumbsBox) return;
+
+            var thumbs = Array.prototype.slice.call(thumbsBox.querySelectorAll('.thumb'));
+
+            function selectThumb(btn) {
+                var full = btn.getAttribute('data-full');
+                var alt = btn.getAttribute('data-alt') || heroImg.alt;
+
+                if (srcWebp) srcWebp.srcset = full;   // fallback WebP
+                heroImg.src = full;
+                heroImg.alt = alt;
+                heroLink.href = full;
+
+                thumbs.forEach(function (t) {
+                    t.classList.remove('thumb--selected');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                btn.classList.add('thumb--selected');
+                btn.setAttribute('aria-selected', 'true');
+
+                // garde la vignette visible
+                try {
+                    btn.scrollIntoView({block: 'nearest', inline: 'center', behavior: 'smooth'});
+                } catch (e) {
+                }
+
+                // analytics optionnel
+                try {
+                    (window.dataLayer = window.dataLayer || []).push({event: 'product_media_switch', src: full});
+                } catch (e) {
+                }
+            }
+
+            function currentIndex() {
+                var cur = thumbsBox.querySelector('.thumb.thumb--selected');
+                return cur ? parseInt(cur.getAttribute('data-index') || thumbs.indexOf(cur), 10) : 0;
+            }
+
+            function selectByIndex(i) {
+                var idx = (i + thumbs.length) % thumbs.length;
+                selectThumb(thumbs[idx]);
+            }
+
+            // clic sur vignettes
+            thumbsBox.addEventListener('click', function (e) {
+                var b = e.target.closest('.thumb');
+                if (b) selectThumb(b);
+            });
+
+            // clavier (gauche/droite)
+            thumbsBox.addEventListener('keydown', function (e) {
+                var i = currentIndex();
+                if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    selectByIndex(i + 1);
+                }
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    selectByIndex(i - 1);
+                }
+            });
+
+            // flèches overlay
+            if (btnPrev) btnPrev.addEventListener('click', function () {
+                selectByIndex(currentIndex() - 1);
+            });
+            if (btnNext) btnNext.addEventListener('click', function () {
+                selectByIndex(currentIndex() + 1);
+            });
+
+
+        });
+    </script>
+
+
+{% endblock js %}
+

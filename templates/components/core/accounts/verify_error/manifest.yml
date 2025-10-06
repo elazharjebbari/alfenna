@@ -1,0 +1,12 @@
+alias: accounts/verify_error
+template: "components/core/accounts/auth_message/component.html"
+assets:
+  css:
+    - "/static/css/auth.css"
+  js:
+    - "/static/js/auth.js"
+hydrate:
+  module: "apps.atelier.compose.hydrators.accounts.verify_error"
+  func: "verify_error"
+render:
+  cacheable: false

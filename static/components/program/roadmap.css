@@ -1,0 +1,55 @@
+/* Wrapper */
+.roadmap-section { background: var(--rm-bg, #e7f8ee); padding: 28px 0; border-radius: var(--rm-radius,20px); }
+.roadmap .section-title { margin-bottom: .25rem; }
+
+/* Grid responsif : timeline à gauche, accordéon à droite (stack en mobile) */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+}
+@media (max-width: 991.98px) {
+  .roadmap-grid { grid-template-columns: 1fr; }
+}
+
+/* Timeline */
+.rm-timeline { position: relative; padding-left: 22px; }
+.rm-timeline::before {
+  content:""; position: absolute; left: 8px; top: 2px; bottom: 2px;
+  width: 4px; background: var(--rm-line,#98c9aa); border-radius: 999px;
+  opacity: .6;
+}
+.rm-node { position: relative; margin-bottom: 18px; padding-left: 8px; }
+.rm-node:last-child { margin-bottom: 0; }
+.rm-node .rm-dot {
+  position: absolute; left: -2px; top: 2px; width: 20px; height: 20px;
+  border-radius: 50%; background: #fff; border: 3px solid var(--rm-line,#98c9aa);
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.rm-dot-inner {
+  display:block; width: 10px; height: 10px; border-radius: 50%;
+  margin: 1px; background: var(--rm-bullet,#309255); transform: scale(0);
+  transition: transform .2s ease;
+}
+.rm-node.is-active .rm-dot { border-color: var(--rm-bullet,#309255); }
+.rm-node.is-active .rm-dot-inner { transform: scale(1); }
+.rm-node-label { margin-left: 26px; font-weight: 700; color:#113a2c; }
+
+/* Accordéon – on s’appuie sur Bootstrap existant ; on affine juste le skin */
+.rm-accordion .accordion-item {
+  border: 1px solid rgba(17,58,44,.08); border-radius: 12px; overflow: hidden;
+  background: #fff; box-shadow: 0 10px 24px rgba(0,0,0,.04);
+  margin-bottom: 10px;
+}
+.rm-accordion .accordion-button { font-weight: 800; color:#113a2c; }
+.rm-accordion .accordion-button:not(.collapsed) {
+  background: rgba(48,146,85,.08); color:#113a2c;
+}
+.rm-bullets { margin: 0; padding-left: 1.1rem; }
+.rm-bullets li { margin:.25rem 0; }
+
+/* Sécurité : le grid n'entraîne jamais un dépassement horizontal */
+.roadmap-section,
+.roadmap-grid {
+  overflow-x: clip; /* moderne, mieux que hidden pour le layout */
+}

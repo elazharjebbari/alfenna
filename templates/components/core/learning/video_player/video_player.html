@@ -1,0 +1,17 @@
+<div class="vidcontainer" data-component="video-player">
+  <video id="{{ video_dom_id }}"
+         class="w-100"
+         controls
+         preload="none"
+         poster="{{ poster_url }}"
+         data-locked="{{ is_locked|yesno:'1,0' }}"
+         data-checkout-url="{{ checkout_url }}">
+    <source data-src="{{ stream_url|default:"" }}" type="{{ source_mime }}">
+    Your browser does not support the video tag.
+  </video>
+  <div class="loading" id="{{ loading_dom_id }}" style="display: none;">
+    <div class="spinner-border spinner" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+</div>

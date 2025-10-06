@@ -1,0 +1,67 @@
+alias: eco-proofs/badges
+template: "components/core/eco_proofs/eco_proofs.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/eco-proofs/eco-proofs.css"
+  js:
+    - "/static/components/eco-proofs/eco-proofs.js"
+  vendors: []   # Driver.js est déjà global chez toi ; sinon on laisse vide
+
+params:
+  title: "Pourquoi naturel = qualité + sécurité"
+  subtitle: "Des ingrédients choisis & des méthodes propres"
+  image: "images/components/eco/ecoproof.png"
+  image_alt: "Bougie + ingrédients naturels"
+
+  items:
+    - { icon: "fa fa-seedling", label: "Cires végétales (soja/colza)", desc: "Sans paraffine ni OGM, traçabilité européenne." }
+    - { icon: "fa fa-feather",  label: "Mèches 100% coton",           desc: "Sans plomb, combustion plus propre." }
+    - { icon: "fa fa-vial",     label: "Parfums conformes IFRA",      desc: "Normes européennes, sans phtalates." }
+    - { icon: "fa fa-recycle",  label: "Pots réutilisables",          desc: "Verre recyclable, zéro déchet." }
+
+  cta: { label: "Je me lance", url: "#packs" }
+
+  style:
+    bg_color: "#e7f8ee"
+    accent: "#309255"
+    radius: 20
+    shadow: true
+
+  options:
+    start_open: 1        # ouvre l’item 1 au viewport
+    tour_hint: true      # micro-hint Driver (1 seul step)
+    tour_text: "Touchez un badge pour découvrir nos choix écologiques."
+
+contract:
+  optional:
+    title: "str"
+    subtitle: "str"
+    image: "str"
+    image_alt: "str"
+    items:
+      - icon?: "str"
+        label?: "str"
+        desc?: "str"
+    cta?:
+      label: "str"
+      url: "str"
+    style?:
+      bg_color?: "str"
+      accent?: "str"
+      radius?: "int"
+      shadow?: "bool"
+    options?:
+      start_open?: "int"
+      tour_hint?: "bool"
+      tour_text?: "str"
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.eco.hydrators.eco_proofs"
+  module: "apps.atelier.compose.hydrators.eco.hydrators"
+  func: "eco_proofs"
+  params: {}  # valeurs par défaut ci-dessus
+
+render:
+  cacheable: true

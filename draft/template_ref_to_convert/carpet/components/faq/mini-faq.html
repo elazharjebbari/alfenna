@@ -1,0 +1,115 @@
+{% load i18n %}
+
+{# ===== MINI-FAQ sous CTA (scopé) ===== #}
+<style>
+    /* Scope strict au conteneur pour ne pas impacter l’autre FAQ */
+    #cta-mini-faq.ul-accordion--compact .ul-single-accordion-item + .ul-single-accordion-item {
+        margin-top: .4rem;
+    }
+
+    #cta-mini-faq.ul-accordion--compact .ul-single-accordion-item__title {
+        font-size: .95rem;
+        margin: 0;
+    }
+
+    #cta-mini-faq.ul-accordion--compact .ul-single-accordion-item__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        text-align: start;
+        padding: .55rem .75rem;
+        border-radius: .75rem;
+        background: #fff;
+        border: 1px solid #eee;
+        cursor: pointer;
+    }
+
+    #cta-mini-faq.ul-accordion--compact .ul-single-accordion-item__header:focus-visible {
+        outline: 3px solid rgba(13, 110, 253, .35);
+        outline-offset: 2px;
+    }
+
+    #cta-mini-faq.ul-accordion--compact .ul-single-accordion-item__body {
+        padding: .5rem .85rem .75rem;
+    }
+
+    #cta-mini-faq.ul-accordion--compact .icon i {
+        font-size: .9rem;
+        line-height: 1;
+    }
+
+    /* Neutraliser l’aspect bouton par défaut sans casser l’accessibilité */
+    #cta-mini-faq button.ul-single-accordion-item__header {
+        background: inherit;
+        border: 0;
+        margin: 0;
+    }
+
+    /* RTL : conserve l’ordre visuel et la flèche à droite */
+    {% if LANGUAGE_CODE == 'ar' %}
+        #cta-mini-faq.ul-accordion--compact .ul-single-accordion-item__header {
+            direction: rtl;
+        }
+    {% endif %}
+</style>
+
+<!-- FAQ SECTION START -->
+<section class="ul-faq" id="faq">
+    <div class="ul-inner-page-container">
+
+        <div class="lp-mini-faq mt-2">
+            <h2 class="visually-hidden">{% trans "Questions clés avant d’acheter" %}</h2>
+
+            <div class="ul-accordion ul-accordion--compact" id="cta-mini-faq" aria-label="{% trans 'Questions clés' %}">
+                <!-- Q1 -->
+                <div class="ul-single-accordion-item">
+                    <button type="button" class="ul-single-accordion-item__header" aria-expanded="false"
+                            aria-controls="cta-faq-1">
+                        <div class="left">
+                            <h3 class="ul-single-accordion-item__title">{% trans "J’ai mal aux genoux : ça aide vraiment ?" %}</h3>
+                        </div>
+                        <span class="icon" aria-hidden="true"><i class="flaticon-plus"></i></span>
+                    </button>
+                    <div class="ul-single-accordion-item__body" id="cta-faq-1" hidden>
+                        <p class="mb-0">
+                            {% trans "Oui. Le coussin à mémoire de forme placé au centre réduit la pression sur la rotule et soulage pendant et après la prière." %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="ul-single-accordion-item">
+                    <button type="button" class="ul-single-accordion-item__header" aria-expanded="false"
+                            aria-controls="cta-faq-2">
+                        <div class="left">
+                            <h3 class="ul-single-accordion-item__title">{% trans "Quelle est l’épaisseur du coussin ?" %}</h3>
+                        </div>
+                        <span class="icon" aria-hidden="true"><i class="flaticon-plus"></i></span>
+                    </button>
+                    <div class="ul-single-accordion-item__body" id="cta-faq-2" hidden>
+                        <p class="mb-0">
+                            {% trans "Environ 2 cm de mousse mémoire, confort ferme mais accueillant, qui reprend sa forme après chaque usage." %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="ul-single-accordion-item">
+                    <button type="button" class="ul-single-accordion-item__header" aria-expanded="false"
+                            aria-controls="cta-faq-3">
+                        <div class="left">
+                            <h3 class="ul-single-accordion-item__title">{% trans "Comment l’entretenir ?" %}</h3>
+                        </div>
+                        <span class="icon" aria-hidden="true"><i class="flaticon-plus"></i></span>
+                    </button>
+                    <div class="ul-single-accordion-item__body" id="cta-faq-3" hidden>
+                        <p class="mb-0">
+                            {% trans "Aspiration douce. Taches : chiffon humide + savon neutre. Pas de javel ni sèche-linge. Séchage à l’air." %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

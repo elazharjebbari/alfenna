@@ -1,0 +1,37 @@
+alias: "forms/wizard_generic"
+template: "components/core/forms/wizard.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+params:
+  flow_key: null
+  backend_config: {}
+  ui_texts: {}
+  schema: {}
+
+contract:
+  required:
+    flow_key: "str"
+  optional:
+    backend_config:
+      endpoint_url?: "str"
+      require_idempotency?: "bool"
+      require_signed_token?: "bool"
+      sign_url?: "str"
+      client_ts_skew_s?: "int"
+    ui_texts: "dict"
+    schema: "dict"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.forms.hydrators"
+  func: "wizard_generic"
+
+render:
+  cacheable: true
+  vary_on:
+    - "flow_key"
+    - "config_sha1"

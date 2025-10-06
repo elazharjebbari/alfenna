@@ -1,0 +1,210 @@
+<!doctype html>
+{% load i18n static compress chat_widget  %}
+{% get_current_language as LANGUAGE_CODE %}
+{% chat_widget lang="auto" theme="auto" position="br" method="post" %}
+<html lang="{{ LANGUAGE_CODE }}">
+
+<head>
+{% block tags_header %}
+    {% if NAME_SERVER == "ZONEX" %}
+        {% include 'analytics/zonex-site/google_analytics/head.html' %}
+        {% include 'analytics/zonex-site/google_tag_manager/gestion-stock_site/gtm_header.html' %}
+        {% include 'analytics/zonex-site/hotjar/head.html' %}
+    {% elif NAME_SERVER == "ALRAHA" %}
+        {% include 'analytics/alraha-store/google_analytics/head.html' %}
+        {% include 'analytics/alraha-store/google_tag_manager/head.html' %}
+        {% include 'analytics/alraha-store/hotjar/head.html' %}
+    {% else %}
+        {# En DEV on n’inclut rien #}
+    {% endif %}
+{% endblock tags_header %}
+
+
+    {% block meta_header %}
+        <link rel="shortcut icon" href="{% static 'carpet/favicon.ico' %}" type="image/x-icon">
+        <title>{% block title %}{% trans "Tapis de prière confortable | Maroc" %}{% endblock title %}</title>
+        <meta charset="utf-8">
+        <meta name="csrf-token" content="{{ csrf_token }}">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="robots" content="index, follow"/>
+        <meta name="description" content="Sajadat Al-Raha : tapis de prière ergonomique en mousse mémoire, soulage les genoux, design élégant. Offre -30 %, livraison rapide au Maroc.">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="icon" href="{% static 'carpet/favicon.ico' %}" type="image/x-icon">
+        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'carpet/images/favicons/apple-icon-57x57.webp' %}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'carpet/images/favicons/apple-icon-72x72.webp' %}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'carpet/images/favicons/apple-icon-114x114.webp' %}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'carpet/images/favicons/apple-icon-120x120.webp' %}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'carpet/images/favicons/apple-icon-144x144.webp' %}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{% static 'carpet/images/favicons/apple-icon-152x152.webp' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'carpet/images/favicons/apple-icon-180x180.webp' %}">
+
+        <link rel="icon" type="image/webp" sizes="16x16" href="{% static 'carpet/images/favicons/favicon-16x16.webp' %}">
+        <link rel="icon" type="image/webp" sizes="32x32" href="{% static 'carpet/images/favicons/favicon-32x32.webp' %}">
+        <link rel="icon" type="image/webp" sizes="48x48" href="{% static 'carpet/images/favicons/favicon-48x48.webp' %}">
+        <link rel="icon" type="image/webp" sizes="96x96" href="{% static 'carpet/images/favicons/favicon-96x96.webp' %}">
+        <link rel="icon" type="image/webp" sizes="256x256" href="{% static 'carpet/images/favicons/favicon-256x256.webp' %}">
+        <link rel="icon" type="image/webp" sizes="192x192" href="{% static 'carpet/images/favicons/android-icon-192x192.webp' %}">
+        <link rel="icon" type="image/webp" sizes="384x384" href="{% static 'carpet/images/favicons/android-icon-384x384.webp' %}">
+        <link rel="icon" type="image/webp" sizes="512x512" href="{% static 'carpet/images/favicons/android-icon-512x512.webp' %}">
+    {% endblock meta_header %}
+
+  {% compress css %}
+  <!-- Librairies tierces -->
+  <link rel="stylesheet" href="{% static 'carpet/vendor/bootstrap/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/splide/splide.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/swiper/swiper-bundle.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/slim-select/slimselect.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/vendor/animate-wow/animate.min.css' %}">
+  <link rel="stylesheet" href="{% static 'alfenna_hair/assets/css/fontawesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'carpet/icon/flaticon_glamer.css' %}">
+  <!-- Vos styles spécifiques -->
+  <link rel="stylesheet" href="{% static 'carpet/css/style.css' %}">
+
+  {% endcompress %}
+
+    {% block extra_head %}
+
+    {% endblock extra_head %}
+
+
+    {% block extra_css %}
+
+    {% endblock extra_css %}
+
+    <!-- Styles spécifiques pour la langue arabe -->
+    {% if request.LANGUAGE_CODE == 'ar' %}
+        <style>
+            body {
+                text-align: right;
+            }
+
+            p, h1, h2, h3, h4, h5, h6, span, li, a, label, blockquote {
+                direction: rtl;
+                text-align: right; /* Alignement à droite pour les textes */
+            }
+
+            .btn {
+                margin-left: 0;
+                margin-right: 10px;
+            }
+
+            .mainmenu-area {
+                text-align: right;
+            }
+        </style>
+    {% endif %}
+</head>
+
+<body>
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+<!--============================================-->
+{% block tags_body %}
+    {% if NAME_SERVER == "ZONEX" %}
+        {% include 'analytics/zonex-site/google_analytics/body.html' %}
+        {% include 'analytics/zonex-site/google_tag_manager/gestion-stock_site/gtm_body.html' %}
+    {% elif NAME_SERVER == "ALRAHA" %}
+        {% include 'analytics/alraha-store/google_analytics/body.html' %}
+        {% include 'analytics/alraha-store/google_tag_manager/body.html' %}
+    {% else %}
+        {# En DEV → pas de scripts injectés #}
+    {% endif %}
+{% endblock tags_body %}
+
+
+{% include 'carpet/components/header/sidebar.html' %}
+{% include 'carpet/components/header/main_header.html' %}
+
+<main>
+
+    {% block content %}
+
+    {% endblock content %}
+
+
+
+    {% include 'chat_core/widget.html' %}
+    {% include 'carpet/components/footer/footer.html' %}
+
+</main>
+
+
+  {% compress js %}
+  <!-- Bundle des librairies tierces -->
+  <script src="{% static 'carpet/vendor/bootstrap/bootstrap.bundle.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/splide/splide.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/splide/splide-extension-auto-scroll.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/swiper/swiper-bundle.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/slim-select/slimselect.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/animate-wow/wow.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/splittype/index.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/mixitup/mixitup.min.js' %}" defer></script>
+  <script src="{% static 'carpet/vendor/fslightbox/fslightbox.js' %}" defer></script>
+  <!-- Votre code d’initialisation perso -->
+  <script src="{% static 'carpet/js/main.js' %}"></script>
+  <script src="{% static 'carpet/js/accordion.js' %}"></script>
+    <script src="{% static 'chat_core/js/widget.js' %}"></script>
+  {% endcompress %}
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: 'page_view',
+            page_title: document.title,
+            page_path: window.location.pathname,
+            page_language: '{{ LANGUAGE_CODE }}',
+            user_logged_in: {{ request.user.is_authenticated|yesno:"true,false" }},
+            timestamp: new Date().toISOString()
+        });
+
+        window.dataLayer = window.dataLayer || [];
+
+        // Event listener pour tous les liens dotés de data-event
+        document.querySelectorAll('a[data-event]').forEach(link => {
+            link.addEventListener('click', function () {
+                const evtName = this.getAttribute('data-event');
+                dataLayer.push({
+                    event: evtName,
+                    label: this.getAttribute('href'),   // facultatif : pour récupérer l’URL Maps ou le tel
+                });
+            });
+        });
+
+     // --- Nouvelle partie : détection du début de saisie dans le formulaire ---
+      (function() {
+        const form = document.getElementById('lead-form');
+        if (!form) return;
+
+        let started = false;
+
+        // Fonction qui push l'événement une seule fois
+        function pushStart() {
+          if (started) return;
+          started = true;
+          dataLayer.push({ event: 'LeadFormStarted' });
+          // si vous voulez ajouter un label, par exemple le timestamp :
+          // dataLayer.push({ event: 'LeadFormStarted', timestamp: Date.now() });
+        }
+
+        // On écoute le premier 'focusin' (classique) ou 'input' sur n'importe quel champ
+        form.addEventListener('focusin', pushStart, { once: true });
+        form.addEventListener('input', pushStart, { once: true });
+      })();
+
+    });
+</script>
+
+{% block js %}
+{% endblock js %}
+
+{% block before_end_body %}
+{% endblock before_end_body %}
+
+</body>
+
+</html>

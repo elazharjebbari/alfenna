@@ -1,0 +1,26 @@
+<!-- Grille desktop -->
+<div class="d-none d-md-block" id="uspGridDesktop">
+  <div class="row row-cols-2 row-cols-lg-4 g-3">
+    {% for it in pillars %}
+      <div class="col">
+        <div class="usp-card h-100" data-ev="usp_hover" data-kind="pillar">
+          <div class="usp-ico"><i class="{{ it.icon|default:'fas fa-star' }}"></i></div>
+          <p class="usp-title">{{ it.title }}</p>
+          {% if it.text %}<p class="usp-text">{{ it.text }}</p>{% endif %}
+        </div>
+      </div>
+    {% endfor %}
+
+    {% for code, arr in context_by_persona.items %}
+      {% for it in arr %}
+        <div class="col usp-context" data-persona="{{ code }}" {% if code != persona_default %}style="display:none"{% endif %}>
+          <div class="usp-card h-100" data-ev="usp_hover" data-kind="context" data-persona="{{ code }}">
+            <div class="usp-ico"><i class="{{ it.icon|default:'fas fa-check' }}"></i></div>
+            <p class="usp-title">{{ it.title }}</p>
+            {% if it.text %}<p class="usp-text">{{ it.text }}</p>{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,432 @@
+{% load i18n static widget_tweaks %}
+
+<style>
+    /* ===== Pills + labels au-dessus (scopé) ===== */
+    .lp-form {
+        --pill-bg: #fff7f8;
+        --pill-bd: #ffd2d7;
+        --pill-bd-focus: #ff4757;
+        --pill-txt: #111;
+        --pill-ph: #8a8a8a;
+    }
+
+    .lp-form .form-header h4 {
+        font-size: 1.1rem;
+        margin: 0
+    }
+
+    .lp-form .badge-sale {
+        background: #FFA31A;
+        color: #fff;
+        padding: .2em .6em;
+        font-size: .75rem;
+        border-radius: 6px;
+        margin-inline-start: .5em
+    }
+
+    .lp-form .grid {
+        display: grid;
+        gap: .65rem
+    }
+
+    @media (min-width: 992px) {
+        .lp-form .grid {
+            grid-template-columns:1fr 1fr
+        }
+
+        .lp-form .grid .span-2 {
+            grid-column: 1/-1
+        }
+    }
+
+    .lp-form .field {
+        display: flex;
+        flex-direction: column;
+        gap: .35rem
+    }
+
+    .lp-form .field label {
+        font-size: .85rem;
+        font-weight: 600;
+        color: #222
+    }
+
+    .lp-form .pill {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: var(--pill-bg);
+        border: 1px solid var(--pill-bd);
+        border-radius: 12px;
+        min-height: 56px;
+        padding: .75rem 1rem .75rem 2.6rem;
+        transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    .lp-form .pill:focus-within {
+        border-color: var(--pill-bd-focus);
+        box-shadow: 0 0 0 .2rem rgba(255, 71, 87, .15);
+    }
+
+    .lp-form .pill input {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: var(--pill-txt);
+        font-size: 1rem;
+        outline: none;
+    }
+
+    .lp-form .pill input::placeholder {
+        color: var(--pill-ph)
+    }
+
+    .lp-form .icon {
+        position: absolute;
+        inset-inline-start: .9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.05rem;
+        opacity: .9;
+        pointer-events: none;
+    }
+
+    .lp-form .help {
+        font-size: .75rem;
+        color: #666;
+        margin: .25rem 0 0
+    }
+
+    .lp-form .error {
+        font-size: .8rem;
+        color: #b00020;
+        margin: .25rem 0 0
+    }
+
+    .lp-form .is-invalid {
+        border-color: #b00020 !important;
+        box-shadow: none
+    }
+
+    /* CTA */
+    .lp-form .btn-cta {
+        width: 100%;
+        margin-top: .35rem;
+        padding: .9rem 1rem;
+        border: 0;
+        border-radius: 10px;
+        background: #ff4757;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .lp-form .btn-cta:focus-visible {
+        outline: 3px solid rgba(255, 71, 87, .35);
+        outline-offset: 2px
+    }
+
+    /* Tape-targets ≤ iOS guideline */
+    .lp-form .pill, .lp-form .btn-cta {
+        min-height: 56px
+    }
+
+    /* ---- Réassurance sous CTA ---- */
+    .reassure-line {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem .75rem;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    {% if LANGUAGE_CODE == 'ar' %}.reassure-line {
+        flex-direction: row-reverse;
+    }
+
+    {% endif %}
+    .reassure-item {
+        display: inline-flex;
+        align-items: center;
+        gap: .375rem;
+        padding: .35rem .6rem;
+        border-radius: 999px;
+        background: rgba(13, 110, 253, .08);
+        color: #0d6efd;
+        font-weight: 500;
+        line-height: 1;
+        font-size: .88rem;
+    }
+
+    .reassure-item i {
+        font-size: .95rem;
+        line-height: 1;
+    }
+
+    /* ---- Sticky CTA mobile ---- */
+    .lp-sticky-cta {
+        position: fixed;
+        inset-inline: 0;
+        bottom: 0;
+        z-index: 1050;
+        padding: max(.35rem, env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, .92);
+        backdrop-filter: saturate(1.2) blur(6px);
+        box-shadow: 0 -8px 20px rgba(0, 0, 0, .15);
+    }
+
+    .lp-sticky-inner {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        justify-content: space-between;
+        max-width: 640px;
+        margin: 0 auto;
+    }
+
+    .lp-sticky-cta .price {
+        font-weight: 800;
+        font-size: 1rem;
+        color: #111;
+    }
+
+    .lp-sticky-cta .btn-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .65rem 1rem;
+        border: 0;
+        border-radius: .6rem;
+        background: #ff4757;
+        color: #fff;
+        font-weight: 700;
+        font-size: .95rem;
+    }
+
+    .lp-sticky-cta .btn-cta:focus-visible {
+        outline: 3px solid #0d6efd;
+        outline-offset: 2px;
+    }
+
+</style>
+
+
+<style>
+  /* ---- Réassurance sous CTA (scopée au formulaire) ---- */
+  .lp-form .reassure-line{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.5rem .75rem;
+    align-items:center;
+    justify-content:flex-start; /* défaut LTR */
+  }
+  .lp-form .reassure-item{
+    display:inline-flex; align-items:center; gap:.375rem;
+    padding:.38rem .65rem; border-radius:999px;
+    background:rgba(13,110,253,.08); color:#0d6efd;
+    font-weight:600; line-height:1; font-size:.88rem;
+    text-decoration:none;
+  }
+  .lp-form .reassure-item i{ font-size:.95rem; line-height:1; }
+
+  /* RTL : aligner à droite sans inverser l’ordre des items */
+  {% if LANGUAGE_CODE == 'ar' %}
+  .lp-form[dir="rtl"] .reassure-line{
+    direction: rtl;
+    justify-content:flex-end;
+  }
+  /* Icône et espacement en logique RTL */
+  .lp-form[dir="rtl"] .reassure-item{
+    gap:.375rem; /* conserve l’ordre texte/icone, juste l’écriture RTL */
+  }
+  {% endif %}
+
+/* Bouton principal du formulaire */
+.lp-form .btn-cta{
+  display:flex;                  /* centre horizontal + vertical */
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+
+  width:100%;
+  min-height:56px;
+  padding:.95rem 1.1rem;
+  border:0; border-radius:12px;
+
+  font-weight:800;
+  font-size:clamp(1rem, .96rem + .2vw, 1.12rem);
+  line-height:1;
+  letter-spacing:.2px;
+}
+
+/* Typo adaptée à l’arabe (évite le letter-spacing) */
+.lp-form .btn-cta:lang(ar){ letter-spacing:0; }
+
+/* =========================
+   CTA Trust Green (override)
+   ========================= */
+
+/* Form CTA */
+.lp-form .btn-cta{
+  /* centrage déjà en place chez toi ; on garde */
+  background:#0E7D36;          /* vert confiance */
+  color:#fff;
+  box-shadow:0 6px 14px rgba(14,125,54,.22);
+  transition:background .15s ease, transform .12s ease, box-shadow .2s ease;
+}
+.lp-form .btn-cta:hover{  background:#0C6F30; }
+.lp-form .btn-cta:active{ background:#0B612A; }
+.lp-form .btn-cta:focus-visible{
+  outline:3px solid #CFECD9;   /* halo doux, rassurant */
+  outline-offset:2px;
+}
+.lp-form .btn-cta:disabled{ opacity:.55; cursor:not-allowed; }
+
+/* Micro-lift subtil (respecte reduced-motion) */
+@media (prefers-reduced-motion: no-preference){
+  .lp-form .btn-cta:hover{  transform:translateY(-1px); }
+  .lp-form .btn-cta:active{ transform:translateY(0); }
+}
+
+/* Typo AR : pas d’espacement forcé */
+.lp-form .btn-cta:lang(ar){ letter-spacing:0; }
+
+/* --- Option : Sticky CTA en Trust Green aussi --- */
+.lp-sticky-cta .btn-cta{
+  background:#0E7D36;
+  color:#fff;
+  box-shadow:0 6px 14px rgba(14,125,54,.22);
+  transition:background .15s ease, transform .12s ease, box-shadow .2s ease;
+}
+.lp-sticky-cta .btn-cta:hover{  background:#0C6F30; }
+.lp-sticky-cta .btn-cta:active{ background:#0B612A; }
+.lp-sticky-cta .btn-cta:focus-visible{
+  outline:3px solid #CFECD9;
+  outline-offset:2px;
+}
+
+</style>
+
+
+<form id="lead-form" method="post" class="lp-form" novalidate {% if LANGUAGE_CODE == 'ar' %}dir="rtl"{% endif %}>
+    {% csrf_token %}
+
+    {# on conserve aussi les champs cachés du ModelForm si tu en as besoin #}
+    {{ form.product }} {# hidden dans ta form Django #}
+    {{ form.promotion_selected }}{# hidden dans ta form Django #}
+
+
+  {# === Header promo : Variante B (badge % + “Vous économisez …”) avec fallback propre === #}
+{# Header promo simplifié (pas de blocktrans) #}
+<div class="form-header mt-4" style="text-align:center;margin-bottom:.75rem">
+  <h4 id="promo-form"
+      style="display:flex;gap:.5rem;align-items:center;justify-content:center;flex-wrap:wrap">
+    {% if price_ui.show %}
+      <span class="badge-sale">{{ price_ui.percent_text }}</span>
+      <span style="font-weight:700">
+        {% trans "Vous économisez" %} {{ price_ui.savings_text }}
+      </span>
+    {% else %}
+      <span>{% trans "Prix spécial aujourd’hui" %}</span>
+    {% endif %}
+  </h4>
+</div>
+
+
+
+    <div class="grid" role="group" aria-labelledby="promo-form">
+
+
+        {% trans "Ex : Amine" as ph_name %}
+        {% trans "Ex : +212 6X XX XX XX (WhatsApp)" as ph_phone %}
+        {% trans "Ex : 10 rue Anfa, Résidence Atlas, 3e étage" as ph_addr %}
+
+
+{# ========= Prénom ========= #}
+<div class="field">
+  <label for="firstname">{% trans "Votre prénom pour la remise" %}</label>
+  <div class="pill">
+    <span class="icon"><i class="flaticon-user"></i></span>
+    {% render_field form.full_name id="firstname" placeholder=ph_name autocomplete="name" class+="form-control" %}
+  </div>
+  {% if form.full_name.errors %}<div class="error">{{ form.full_name.errors|join:", " }}</div>{% endif %}
+</div>
+
+{# ========= Téléphone ========= #}
+<div class="field">
+  <label for="phone-number">{% trans "Téléphone ou WhatsApp" %}</label>
+  <div class="pill">
+    <span class="icon"><i class="fas fa-phone"></i></span>
+    {% render_field form.phone_number id="phone-number" placeholder=ph_phone autocomplete="tel" inputmode="tel" dir="ltr" pattern="^[0-9+()\-\\s]{6,}$" class+="form-control" %}
+  </div>
+  <p class="help" id="phone-help">{% trans "WhatsApp accepté. Format : 06 12 34 56 78 ou +212…" %}</p>
+  {% if form.phone_number.errors %}<div class="error">{{ form.phone_number.errors|join:", " }}</div>{% endif %}
+</div>
+
+{# ========= Adresse ========= #}
+<div class="field span-2">
+  <label for="address">{% trans "Votre adresse de livraison" %}</label>
+  <div class="pill">
+    <span class="icon"><i class="flaticon-location-1"></i></span>
+    <input
+      type="text"
+      name="address"
+      id="address"
+      class="form-control"
+      placeholder="{{ ph_addr }}"
+      autocomplete="street-address"
+      required>
+  </div>
+  <p class="help" id="rgpd-note">{% trans "Données protégées (RGPD)" %}</p>
+</div>
+
+        {# ========= Hidden requis par l’endpoint AJAX (on les garde !) ========= #}
+        <input type="hidden" name="product_id" id="product_id" value="{{ product.pk }}">
+        <input type="hidden" name="promotion_selected" id="promotion_selected"
+               value="{{ product.promotion_price|default:'' }}">
+    </div>
+
+    <button type="submit" class="btn-cta">
+        {% trans "J'achète mon tapis" %}
+    </button>
+
+  {# === Variante C : rappel du gain juste sous le CTA (pill bleue), seulement si vrai discount === #}
+{# Rappel sous le CTA (pill bleue) — sans blocktrans #}
+{#{% if price_ui.show %}#}
+{#  <div class="reassure-line" style="margin-top:.5rem">#}
+{#    <span class="reassure-item">#}
+{#      <i class="fas fa-tag" aria-hidden="true"></i>#}
+{#      {% trans "Vous gagnez" %} {{ price_ui.savings_text }} ({{ price_ui.percent_text }})#}
+{#    </span>#}
+{#  </div>#}
+{#{% endif %}#}
+
+
+
+{# --- RÉASSURANCE (sous le CTA) --- #}
+<div class="reassure-line mt-2" role="list" aria-label="{% trans 'Garanties & assistance' %}">
+  <div class="reassure-item" role="listitem">
+    <i class="fas fa-truck" aria-hidden="true"></i>
+    <span>{% trans "Livraison gratuite" %}</span>
+  </div>
+  <div class="reassure-item" role="listitem">
+    <i class="fas fa-shield-alt" aria-hidden="true"></i>
+    <span>{% trans "Paiement à la livraison" %}</span>
+  </div>
+  <div class="reassure-item" role="listitem">
+    <i class="fas fa-undo-alt" aria-hidden="true"></i>
+    <span>{% trans "Retour 7 jours" %}</span>
+  </div>
+  <a class="reassure-item" role="listitem"
+     href="https://wa.me/212719646705" target="_blank" rel="noopener"
+     aria-label="{% trans 'Support WhatsApp' %}">
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+    <span>{% trans "Support WhatsApp" %}</span>
+  </a>
+</div>
+
+
+    <p class="help" style="text-align:center;margin-top:.5rem">
+        {% trans "+1000 clients satisfaits" %}
+    </p>
+</form>

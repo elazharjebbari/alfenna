@@ -1,0 +1,156 @@
+{# templates/base.html — SOCLE UNIQUE (compose fallback) #}
+{% load i18n static compress assets %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE|default:'fr' }}" dir="ltr">
+  <head>
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" href="{% static 'favicon.ico' %}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'icons/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'icons/apple-touch-icon.png' %}">
+    {# -------- META/SEO -------- #}
+    {% block meta_header %}
+      <meta charset="utf-8">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      {# Option: si tu utilises django-meta/SEO centralisé #}
+      {% include "marketing/_seo_head.html" %}
+    {% endblock meta_header %}
+
+
+    {# ------------------------------------------------------------------------------------------------------------  #}
+    {#                                      Cookie Manager (tarteaucitron)                                                                      #}
+    {# ------------------------------------------------------------------------------------------------------------  #}
+
+    {% include 'analytics/cookies/tarteaucitron.html' %}
+
+    {# ------------------------------------------------------------------------------------------------------------  #}
+    {#                                      Tags                                                                       #}
+    {# ------------------------------------------------------------------------------------------------------------  #}
+
+    {% block gtags_manager_head %}
+      {% include "marketing/_tracking_head.html" %}
+    {% endblock gtags_manager_head %}
+    {% block ganalytics_head %}
+{#        {% include 'analytics/google_analytics/head.html' %}#}
+    {% endblock ganalytics_head %}
+  {# ------------------------------------------------------------------------------------------------------------  #}
+  {# ------------------------------------------------------------------------------------------------------------  #}
+
+    {# -------- Vendors/head supplémentaires déclarés par les composants -------- #}
+    {% if page_assets.head %}
+      {% for markup in page_assets.head %}
+        {{ markup|safe }}
+      {% endfor %}
+    {% endif %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    {% compress css file 'vendors-css' %}
+      {% include 'assets/css_vendors.html' %}
+    {% endcompress %}
+
+    {% compress css file 'app-css' %}
+      {% include 'assets/css_app.html' %}
+    {% endcompress %}
+
+    {# -------- STYLES (assets collectés) -------- #}
+    {% if page_assets.css %}
+      {% for href in page_assets.css|exclude_known_vendors %}
+        <link rel="stylesheet" href="{{ href }}">
+      {% endfor %}
+    {% endif %}
+
+    {% block styles %}{% endblock styles %}
+    {% block extra_css %}{% endblock extra_css %}
+    {% block extra_head %}{% endblock extra_head %}
+  </head>
+
+  <body data-ll-consent-cookie="{{ marketing_config.consent_cookie_name|default:'cookie_consent_marketing' }}" data-ll-analytics-enabled="{{ tracking.analytics_enabled|yesno:'1,0' }}">
+
+      {# Hooks optionnels projet #}
+
+    {% block gtags_manager_body %}
+      {% include "marketing/_tracking_body.html" %}
+    {% endblock gtags_manager_body %}
+
+  {# -------- Modales globales / tags body -------- #}
+    {% include 'components/core/modals/modal_connect.html' %}
+    {% include 'components/core/modals/modal_subscribe.html' %}
+    {% block tags_body %}{% endblock tags_body %}
+
+    {# -------- Vendors slot (facultatif) -------- #}
+    {% if slots_html.vendors %}{{ slots_html.vendors|safe }}{% endif %}
+
+    {# -------- HEADER -------- #}
+    {% block header %}
+      {% if slots_html.header %}{{ slots_html.header|safe }}
+      {% elif slots_html.header_struct %}{{ slots_html.header_struct|safe }}
+      {% else %}
+        <header role="banner" aria-label="{% trans 'En-tête du site' %}"></header>
+      {% endif %}
+    {% endblock header %}
+
+    {# -------- MESSAGES -------- #}
+    {% block messages %}
+      {% if messages %}
+        <div role="status" aria-live="polite">
+          {% for message in messages %}
+            <p class="msg msg-{{ message.tags }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endblock messages %}
+
+    {# -------- CONTENU PRINCIPAL -------- #}
+    <main id="content" role="main">
+      {# Si un screen dédié existe il remplace ce template; sinon on affiche les slots connus. #}
+      {% block content %}
+      {% endblock content %}
+    </main>
+
+    {# -------- SIDEBAR (optionnel) -------- #}
+    {% block sidebar %}{% endblock sidebar %}
+
+    {# -------- FOOTER -------- #}
+    {% block footer %}
+      {% if slots_html.footer %}{{ slots_html.footer|safe }}
+      {% elif slots_html.footer_main %}{{ slots_html.footer_main|safe }}
+      {% else %}
+        <footer role="contentinfo" aria-label="{% trans 'Pied de page' %}"></footer>
+      {% endif %}
+    {% endblock footer %}
+
+    {# -------- SCRIPTS DU PROJET (hooks) -------- #}
+    {% block scripts %}{% endblock scripts %}
+    {% block js %}{% endblock js %}
+
+    {% compress js file 'vendors-js' %}
+      {% include 'assets/js_vendors.html' %}
+    {% endcompress %}
+
+    {% compress js file 'app-js' %}
+      {% include 'assets/js_app.html' %}
+    {% endcompress %}
+
+    {# -------- JS des composants (assets collectés) — DEFER obligatoire -------- #}
+    {% if page_assets.js %}
+      {% for src in page_assets.js|exclude_known_vendors %}
+        <script src="{{ src }}" defer></script>
+      {% endfor %}
+    {% endif %}
+
+    {% if tracking.analytics_enabled %}
+      <script src="{% static 'site/analytics_bootstrap.js' %}" defer></script>
+    {% endif %}
+
+    {# -------- AVANT </BODY> -------- #}
+    {% block before_end_body %}{% endblock before_end_body %}
+  </body>
+</html>

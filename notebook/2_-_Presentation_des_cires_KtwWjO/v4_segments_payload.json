@@ -1,0 +1,92 @@
+[
+  {
+    "id": "8d7a71c7-84e7-4be4-addf-8d69c3d7c0b3",
+    "dst": {
+      "text": "Les cires déterminent la combustion, l'aspect et la diffusion des parfums essentiels. La balance, fondoir et la cuillère en bois influent sur les colorants.",
+      "lang": "fr-fr"
+    },
+    "start": "00:00:00,738",
+    "end": "00:00:10,418"
+  },
+  {
+    "id": "fc98262d-4ef3-429a-9d85-3057c5d999c9",
+    "dst": {
+      "text": "Le choix de la cire naturelle influence la qualité.",
+      "lang": "fr-fr"
+    },
+    "start": "00:00:10,418",
+    "end": "00:00:13,913"
+  },
+  {
+    "id": "aa4deb66-623c-4c45-9ba3-d99bbe9418bd",
+    "dst": {
+      "text": "La cire d'abeille est une cire naturelle offrant une combustion propre, durable et une belle lueur pour les bougies artisanales. Elle provient des abeilles, contient des traces naturelles utiles pour les parfums et respecte souvent la santé publique.",
+      "lang": "fr-fr"
+    },
+    "start": "00:00:14,354",
+    "end": "00:00:30,025"
+  },
+  {
+    "id": "342b2806-3672-4035-8971-548b78a169f0",
+    "dst": {
+      "text": "Considérée comme cire naturelle à 100%, elle est généralement sans danger.",
+      "lang": "fr-fr"
+    },
+    "start": "00:00:30,823",
+    "end": "00:00:35,186"
+  },
+  {
+    "id": "f1bdfd4a-7283-49b6-95ba-b7de7bf4b49c",
+    "dst": {
+      "text": "La cire de soja, cire naturelle issue de ressources renouvelables, brûle lentement et produit peu de fumée bénéfique pour l'atmosphère intérieure domestique et conviviale. Cette caractéristique prolonge la durée de vie des bougies et séduit par son rendu homogène dans les moules et favorise une diffusion régulière.",
+      "lang": "fr-fr"
+    },
+    "start": "00:00:35,645",
+    "end": "00:00:54,694"
+  },
+  {
+    "id": "40fe5576-2765-4e75-b2d4-e9e779ec338d",
+    "dst": {
+      "text": "La cire de paraffine, issue de la pétrochimie, reste populaire pour sa facilité de manipulation et son coût abordable en production industrielle massive. Cependant sa combustion peut libérer des substances préoccupantes pour la santé et l'environnement, ce qui pousse certains à préférer des alternatives durables.",
+      "lang": "fr-fr"
+    },
+    "start": "00:00:55,526",
+    "end": "00:01:13,981"
+  },
+  {
+    "id": "2caf09cf-05c5-44a8-87d7-c53cbc52abff",
+    "dst": {
+      "text": "La paraffine, très répandue, offre une mise en forme facile et un résultat souvent lisse et brillant esthétiquement. Sa disponibilité et son faible coût expliquent son usage généralisé dans l'industrie et chez certains artisans de production. Cependant la combustion produit parfois des résidus et des composés susceptibles d'alerter sur la qualité de l'air intérieure. La durée de combustion se révèle souvent moindre que celle des cires végétales ou animales plus denses durables. Ces aspects incitent de nombreux consommateurs et créateurs à privilégier des cires naturelles et des formulations plus respectueuses pour l'environnement. Par conséquent l'attention se porte aussi sur le choix des mèches, des colorants, des parfums et des supports de mèche.",
+      "lang": "fr-fr"
+    },
+    "start": "00:01:15,560",
+    "end": "00:02:01,074"
+  },
+  {
+    "id": "5063a8c7-38bf-488b-b18f-eb94001b248c",
+    "dst": {
+      "text": "L'acide stéarique améliore la texture, l'opacité et la tenue des bougies artisanales. Il apporte durabilité et facilite le démoulage dans les moules sans défaut.",
+      "lang": "fr-fr"
+    },
+    "start": "00:02:01,400",
+    "end": "00:02:11,290"
+  },
+  {
+    "id": "54091848-748e-4a99-aea0-1e2eb40988d3",
+    "dst": {
+      "text": "L'acide stéarique agit aussi comme agent blanchissant et affine la blancheur visuelle. Le rendu améliore l'aspect des bougies, séduisant pour la présentation commerciale soignée.",
+      "lang": "fr-fr"
+    },
+    "start": "00:02:11,290",
+    "end": "00:02:21,110"
+  },
+  {
+    "id": "adf33389-a2c8-417b-860d-760bb039ff30",
+    "dst": {
+      "text": "Son intérêt dépasse l'esthétique car il renforce la structure et améliore nettement la texture des bougies artisanales.",
+      "lang": "fr-fr"
+    },
+    "start": "00:02:21,689",
+    "end": "00:02:28,724"
+  }
+]

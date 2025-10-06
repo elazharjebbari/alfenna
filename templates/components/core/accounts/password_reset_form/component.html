@@ -1,0 +1,50 @@
+{# templates/components/core/accounts/password_reset/form.html #}
+{% load i18n %}
+<section class="auth-wrap auth-slot" data-auth-screen>
+  <header class="auth-header">
+    <h1 class="auth-title">{{ title|default:_("Mot de passe oublié") }}</h1>
+    {% if subtitle %}<p class="auth-sub">{{ subtitle }}</p>{% endif %}
+  </header>
+
+  {% if messages %}
+    <div class="auth-alerts" role="status" aria-live="polite">
+      {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="auth-card">
+    {% if non_field_errors %}
+      <div class="alert error" role="alert">{{ non_field_errors_text }}</div>
+    {% endif %}
+
+    <form class="auth-form" method="post" action="{{ action_url }}" novalidate>
+      {% csrf_token %}
+      <div class="field">
+        <label for="reset_id_email">{% trans "Adresse e‑mail" %}</label>
+        {% with error=field_errors_text.email %}
+          <input id="reset_id_email"
+                 name="email"
+                 type="email"
+                 autocomplete="email"
+                 required
+                 aria-invalid="{{ error|yesno:'true,false' }}"
+                 {% if error %}aria-describedby="reset_err_email"{% endif %}
+                 value="{{ values.email|default_if_none:'' }}">
+          {% if error %}
+            <div class="alert error field-error" id="reset_err_email">{{ error }}</div>
+          {% endif %}
+        {% endwith %}
+      </div>
+
+      <div class="auth-actions">
+        <button class="btn-primary" type="submit">{% trans "Envoyer le lien" %}</button>
+      </div>
+
+      <div class="meta-links">
+        <a href="{{ links.login }}">{% trans "Retour" %}</a>
+      </div>
+    </form>
+  </div>
+</section>

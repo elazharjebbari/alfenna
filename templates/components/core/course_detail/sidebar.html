@@ -1,0 +1,45 @@
+{% load atelier_utils %}
+<div class="sidebar">
+  <div class="sidebar-widget widget-information">
+    <div class="info-price text-center">
+      {% if price %}<span class="old-price">{{ price }} {{ currency }}</span>{% endif %}
+      {% if promo_badge %}<span class="badge-offer">{{ promo_badge }}</span>{% endif %}
+      {% if promotion %}<div class="promotion-price">{{ promotion }} {{ currency }}</div>{% endif %}
+    </div>
+
+    {% if info_items %}
+    <div class="info-list">
+      <ul>
+        {% for item in info_items %}
+        <li>
+          {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+          {% if item.label %}<strong>{% render_string item.label %}</strong>{% endif %}
+          {% if item.value %}<span>{% render_string item.value %}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if bundle_items %}
+    <div class="tab-bundle">
+      {% if bundle_title %}<h3 class="tab-title">{% render_string bundle_title %}</h3>{% endif %}
+      <ul>
+        {% for item in bundle_items %}
+        <li>{% render_string item %}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div class="info-btn">
+      {% if cta_guest_url and cta_guest_label %}
+      <a href="{{ cta_guest_url }}" class="btn btn-guest">{{ cta_guest_label }}</a>
+      {% endif %}
+      {% if cta_member_url and cta_member_label %}
+      <a href="{{ cta_member_url }}" class="btn btn-login">{{ cta_member_label }}</a>
+      {% endif %}
+      {% if cta_note %}<p class="info-note">{% render_string cta_note %}</p>{% endif %}
+    </div>
+  </div>
+</div>

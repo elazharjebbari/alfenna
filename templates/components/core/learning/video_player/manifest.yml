@@ -1,0 +1,27 @@
+alias: learning/video_player
+template: "components/core/learning/video_player/video_player.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.learning.hydrators"
+  func: "video_player"
+
+contract:
+  required:
+    lecture: "Lecture"
+    poster_url: "str"
+    is_locked: "bool"
+  optional:
+    stream_url: "str|null"
+    video_dom_id: "str"
+    loading_dom_id: "str"
+    source_mime: "str"
+    checkout_url: "str"
+
+render:
+  cacheable: false

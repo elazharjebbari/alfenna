@@ -12,7 +12,7 @@ from apps.learning.models import LectureComment, Progress
 class Command(BaseCommand):
     help = "Reset learning data (course, sections, lectures, progress, comments) for CLI test runs."
 
-    target_settings_module = "lumierelearning.settings.test_cli"
+    target_settings_module = "alfenna.settings.test_cli"
 
     def add_arguments(self, parser):
         parser.add_argument(

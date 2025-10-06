@@ -1,0 +1,135 @@
+alias: hero/cover
+template: "components/core/slider/slider.html"
+
+assets:
+  head: []
+  css:
+#    - "/static/components/core/slider/slider.css"
+  js: []
+  vendors: []
+
+# Valeurs de référence (documentaires)
+params:
+  badge_html: "<span class='badge' style='background:#e7f8ee;color:#309255;border-radius:999px;padding:.35rem .6rem;font-weight:700;'>100% végétal • Zéro paraffine</span>"
+  title_sub: "De débutante à créatrice autonome en 7 jours"
+  title_main: "Fabrique des bougies naturelles, qualitatives et éco-responsables"
+  description: "Crée tes premières bougies dès aujourd’hui, avec des recettes simples, des équipements accessibles et un accompagnement pas-à-pas."
+  proof_text: "500+ apprenantes"
+  currency: "€"
+  price_current: 25.95
+  price_before: 119.00
+  # Si tu veux un coût/jour exact, fixe la valeur ci-dessous ; sinon il sera calculé sur 365 jours.
+  cost_per_day: 0.50
+  cost_period_days: 365
+  price_label_only: "Seulement"
+
+  cta: { label: "Je me lance", url: "#packs" }
+  cta_secondary: { label: "Voir le programme", url: "#program" }
+
+  safety_note: "Paiement sécurisé • Accès immédiat"
+  micro_progress_html: "Tu es ici ✓ → Choisir l’accès → Rejoindre"
+  timer_deadline_ts: "2025-09-30T23:59:00Z"
+
+  slider_image: "images/slider/slider-default.png"
+  video_url: "https://www.youtube.com/watch?v=Aj75R0ojBa0"
+
+  rating: { value: 4.8, count: 86000 }
+
+  style:
+    price_box_bg: "#309255"
+    layout: "circle"                  # "circle" | "ribbon"
+    mobile_price_mode: "strip"        # "strip" | "circle"
+    show_rating_bubble_desktop: true
+    show_shapes_desktop: true
+    show_shapes_mobile: false
+
+  trust_badges:
+    - { icon: "fas fa-shield-alt", text: "Paiement 100% sécurisé" }
+    - { icon: "fas fa-undo",       text: "Satisfait ou remboursé 7 jours" }
+    - { icon: "fas fa-infinity",    text: "Accès à vie" }
+
+  ab_variant: ""
+
+contract:
+  required: {}
+  optional:
+    badge_html: "str"
+    title_sub: "str"
+    title_main: "str"
+    description: "str"
+    proof_text: "str"
+    currency: "str"
+    price_current: "float"
+    price_before: "float"
+    cost_per_day: "float"
+    cost_period_days: "int"
+    price_label_only: "str"
+    cta:
+      label: "str"
+      url: "str"
+    cta_secondary?:
+      label: "str"
+      url: "str"
+    safety_note: "str"
+    micro_progress_html: "str"
+    timer_deadline_ts: "str"
+    slider_image: "str"
+    video_url: "str"
+    rating:
+      value: "float"
+      count: "int"
+    style:
+      price_box_bg?: "str"
+      layout?: "str"
+      mobile_price_mode?: "str"
+      show_rating_bubble_desktop?: "bool"
+      show_shapes_desktop?: "bool"
+      show_shapes_mobile?: "bool"
+    trust_badges?:
+      - icon?: "str"
+        text?: "str"
+    ab_variant: "str"
+
+hydrate:
+  # Exécution
+  python: "apps.atelier.compose.hydrators.slider.hydrators.hero_cover"
+  # Audit
+  module: "apps.atelier.compose.hydrators.slider.hydrators"
+  func: "hero_cover"
+
+  # Whitelist + defaults passés à l’hydrateur
+  params:
+    badge_html: "<span class='badge' style='background:#e7f8ee;color:#309255;border-radius:999px;padding:.35rem .6rem;font-weight:700;'>100% végétal • Zéro paraffine</span>"
+    title_sub: "De débutante à créatrice autonome en 7 jours"
+    title_main: "Fabrique des bougies naturelles, qualitatives et éco-responsables"
+    description: "Crée tes premières bougies dès aujourd’hui, avec des recettes simples, des équipements accessibles et un accompagnement pas-à-pas."
+    proof_text: "500+ apprenantes"
+    currency: "€"
+    price_current: 149.95
+    price_before: 199.00
+    cost_per_day: 0.50
+    cost_period_days: 365
+    price_label_only: "Seulement"
+    cta: { label: "Je me lance", url: "#cta-buy" }
+    cta_secondary: { label: "Voir le programme", url: "#program" }
+    safety_note: "Paiement sécurisé • Accès immédiat"
+    micro_progress_html: "Tu es ici ✓ → Choisir l’accès → Rejoindre"
+    timer_deadline_ts: "2025-09-30T23:59:00Z"
+    slider_image: "images/slider/slider-default.png"
+    video_url: "https://www.youtube.com/watch?v=Aj75R0ojBa0"
+    rating: { value: 4.8, count: 86000 }
+    style:
+      price_box_bg: "#309255"
+      layout: "circle"
+      mobile_price_mode: "strip"
+      show_rating_bubble_desktop: true
+      show_shapes_desktop: true
+      show_shapes_mobile: false
+    trust_badges:
+      - { icon: "fas fa-shield-alt", text: "Paiement 100% sécurisé" }
+      - { icon: "fas fa-undo",       text: "Satisfait ou remboursé 7 jours" }
+      - { icon: "fas fa-infinity",    text: "Accès à vie" }
+    ab_variant: ""
+
+render:
+  cacheable: true

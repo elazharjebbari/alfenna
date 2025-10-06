@@ -6,7 +6,7 @@ from django.test.utils import override_settings
 
 def run():
     client = Client()
-    with override_settings(ROOT_URLCONF="lumierelearning.urls"):
+    with override_settings(ROOT_URLCONF="alfenna.urls"):
         response = client.get("/email/health/")
     ok = response.status_code == 200 and response.json().get("status") == "ok"
     return {

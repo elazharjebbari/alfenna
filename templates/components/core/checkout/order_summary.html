@@ -1,0 +1,101 @@
+{% load i18n %}
+
+<section class="checkout-summary card border-0 shadow-sm">
+  <div class="card-body">
+    <p class="text-uppercase text-muted small mb-1">{{ heading }}</p>
+    <div class="d-flex flex-column gap-2">
+      <div class="d-flex justify-content-between align-items-start gap-3">
+        <div>
+          <h3 class="h4 mb-1">{{ plan_title }}</h3>
+          {% if plan_badge %}
+            <span class="badge checkout-plan-badge">{{ plan_badge }}</span>
+          {% endif %}
+        </div>
+        <div class="text-end">
+          <div class="checkout-price-current">{{ display_price }}</div>
+          {% if list_price_display %}
+            <div class="small text-muted"><del>{{ list_price_display }}</del></div>
+          {% endif %}
+          {% if show_economy %}
+            <div class="small text-success">
+              {% translate "Vous économisez" %} {{ savings_display }}
+              {% if savings_percent_display %}
+                <span>({{ savings_percent_display }})</span>
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if show_daily %}
+            <div class="small text-muted">{{ daily_display }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 text-muted small">
+        <span class="checkout-rating-icon" aria-hidden="true">★</span>
+        <span>{{ social_proof_text }}</span>
+      </div>
+
+      <div class="checkout-guarantee" role="status">
+        {{ guarantee_text }}
+      </div>
+
+      <div>
+        <h4 class="h6 text-uppercase text-muted mb-2">{% translate "Ce que vous obtenez" %}</h4>
+        {% if primary_features %}
+          <ul class="checkout-feature-list list-unstyled mb-0">
+            {% for feature in primary_features %}
+              <li class="d-flex align-items-start gap-2">
+                <span class="checkout-feature-icon" aria-hidden="true">✓</span>
+                <span>{{ feature }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if has_extra_features %}
+          <details class="checkout-features-more mt-2">
+            <summary class="btn btn-link btn-sm ps-0">{{ features_more_label }}</summary>
+            <ul class="checkout-feature-list list-unstyled mb-0 mt-2">
+              {% for feature in extra_features %}
+                <li class="d-flex align-items-start gap-2">
+                  <span class="checkout-feature-icon" aria-hidden="true">✓</span>
+                  <span>{{ feature }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </details>
+        {% endif %}
+      </div>
+
+      {% if order_bump %}
+        <div class="checkout-order-bump border rounded p-3">
+          <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+              <p class="text-uppercase small text-muted mb-1">{% translate "Option recommandée" %}</p>
+              <h5 class="h6 mb-1">{{ order_bump.title }}</h5>
+              {% if order_bump.description %}
+                <p class="small mb-0">{{ order_bump.description }}</p>
+              {% endif %}
+            </div>
+            {% if order_bump.price_display %}
+              <span class="fw-semibold text-primary">{{ order_bump.price_display }}</span>
+            {% endif %}
+          </div>
+          {% if order_bump.cta_label and order_bump.cta_href %}
+            <a href="{{ order_bump.cta_href }}" class="btn btn-outline-primary w-100 mt-3">{{ order_bump.cta_label }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <p class="text-muted small mb-0">
+        {% if tax_amount_display %}
+          {% translate "Dont taxes" %}: {{ tax_amount_display }} ·
+        {% endif %}
+        {% if country %}
+          {% translate "Pays" %}: {{ country }} ·
+        {% endif %}
+        {% translate "Devise" %}: {{ currency }}
+      </p>
+    </div>
+  </div>
+</section>

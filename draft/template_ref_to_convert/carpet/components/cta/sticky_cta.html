@@ -1,0 +1,180 @@
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<style>
+  :root{
+    /* Palette & tokens */
+    --cta-bg:#16A34A;
+    --cta-bg-hover:#D4153E;
+    --cta-bg-press:#C21339;
+    --cta-text:#FFFFFF;
+    --cta-focus:#FFD3DC;
+
+    --bar-bg:rgba(255,255,255,.96);
+    --bar-border:#ECECEC;
+    --bar-shadow:0 -8px 24px rgba(16,24,40,.06);
+
+    --trust:#16A34A;
+    --sticky-cta-h:64px;
+  }
+
+  .sticky-cta{
+    position:fixed; left:0; right:0; bottom:0; z-index:1030;
+    background:var(--bar-bg);
+    border-top:1px solid var(--bar-border);
+    box-shadow:var(--bar-shadow);
+    padding:.5rem .75rem calc(.5rem + env(safe-area-inset-bottom));
+    will-change:transform,opacity;
+    transform:translateY(8px);
+    opacity:0;
+    transition:transform .22s cubic-bezier(.22,.61,.36,1), opacity .22s ease;
+  }
+  .sticky-cta.is-in{ transform:translateY(0); opacity:1; }
+  .sticky-cta.is-hidden{ transform:translateY(100%); opacity:1; }
+
+  /* Eviter que le contenu passe dessous */
+  body, main{ padding-bottom:calc(var(--sticky-cta-h) + env(safe-area-inset-bottom)); }
+
+  .sticky-cta .cta-wrap{ display:flex; align-items:center; gap:.75rem; }
+  .sticky-cta .price{ font-weight:700; font-size:1.0625rem; line-height:1.1; }
+  .sticky-cta .note{ font-size:.75rem; opacity:.9; color:var(--trust); }
+
+  .btn-cta{
+    display:inline-flex; align-items:center; gap:.55rem;
+    min-height:56px; padding-inline:1rem 1.1rem;
+    border:0; border-radius:14px;
+    background:var(--cta-bg); color:var(--cta-text);
+    font-weight:700; font-size:1rem; line-height:1;
+    box-shadow:0 8px 18px rgba(232,24,69,.18);
+    transform:translateY(0);
+    transition:transform .16s ease, box-shadow .16s ease, background-color .16s ease;
+  }
+  .btn-cta:hover{ background:var(--cta-bg-hover); transform:translateY(-1px); box-shadow:0 10px 22px rgba(232,24,69,.24); }
+  .btn-cta:active{ background:var(--cta-bg-press); transform:translateY(0); box-shadow:0 6px 14px rgba(232,24,69,.16); }
+  .btn-cta:focus-visible{
+    outline:0; box-shadow:0 0 0 3px var(--cta-focus), 0 8px 18px rgba(232,24,69,.18);
+  }
+
+  .btn-cta .icon{ width:20px; height:20px; display:inline-block; }
+
+  /* Nudge (1×/24h max, ajouté en JS via .is-nudging) */
+  @keyframes cta-breathe { 0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)} }
+  .btn-cta.is-nudging{ animation:cta-breathe 1.2s ease-in-out 1; }
+
+  /* Petit "pop" de l’icône au premier affichage */
+  @keyframes cart-pop { 0%{transform:translateY(2px) rotate(0)} 30%{transform:translateY(-1px) rotate(-3deg)} 60%{transform:translateY(0) rotate(2deg)} 100%{transform:none} }
+  .btn-cta .icon.is-pop{ animation:cart-pop .6s ease-out 1; }
+
+  /* RTL : CTA à gauche, bloc inversé */
+  {% if LANGUAGE_CODE == 'ar' %}
+  .sticky-cta .cta-wrap{ flex-direction:row-reverse; }
+  {% endif %}
+
+  /* Desktop : masquer (garde si tu veux l’afficher partout) */
+  @media (min-width:992px){ .sticky-cta{ display:none; } }
+
+  /* Respecte réductions d’animations */
+  @media (prefers-reduced-motion:reduce){
+    .sticky-cta, .btn-cta{ transition:none !important; animation:none !important; }
+  }
+</style>
+
+<div id="sticky-cta" class="sticky-cta d-lg-none" role="region" aria-label="{% trans 'Commande rapide' %}">
+  <div class="container">
+    <div class="cta-wrap">
+      <div class="flex-grow-1">
+        <div class="price">
+          {{ product.promotion_price|default_if_none:0|floatformat:0 }} {% trans "MAD" %}
+        </div>
+        <div class="note">{% trans "Livraison gratuite" %}</div>
+      </div>
+
+      <button id="sticky-cta-btn" class="btn btn-cta" type="button" aria-label="{% trans 'Commander maintenant' %}">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" focusable="false" aria-hidden="true">
+            <path d="M7 18a2 2 0 1 0 .001 3.999A2 2 0 0 0 7 18zm10 0a2 2 0 1 0 .001 3.999A2 2 0 0 0 17 18zM6.3 6l.4 2H20a1 1 0 0 1 .97 1.243l-1.5 6A1 1 0 0 1 18.5 16H8a1 1 0 0 1-.98-.804L5.2 5H3a1 1 0 1 1 0-2h3a1 1 0 0 1 .98.804L7.03 6H6.3z"/>
+          </svg>
+        </span>
+        <span class="label">
+          {% if LANGUAGE_CODE == 'ar' %}اطلب الآن{% else %}{% trans 'Commander' %}{% endif %}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var bar  = document.getElementById('sticky-cta');
+  if(!bar) return;
+
+  // Apparition douce (slide-up + fade)
+  requestAnimationFrame(function(){ bar.classList.add('is-in'); });
+
+  // Ajuste le padding bas de page selon la vraie hauteur
+  function setPadding(){
+    var h = bar.offsetHeight || 64;
+    document.documentElement.style.setProperty('--sticky-cta-h', h + 'px');
+  }
+  setPadding(); window.addEventListener('resize', setPadding);
+
+  var btn   = document.getElementById('sticky-cta-btn');
+  var icon  = btn && btn.querySelector('.icon');
+  var form  = document.getElementById('lead-form');
+  var mainCta = form ? form.querySelector('[type="submit"]') : null;
+
+  // Smart hide : masque la barre si le CTA principal est visible
+  if (mainCta && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      var e = entries[0];
+      bar.classList.toggle('is-hidden', !!e.isIntersecting);
+    }, {threshold:.1});
+    io.observe(mainCta);
+  }
+
+  // Nudge : 1 fois / 24h max
+  (function nudgeOncePerDay(){
+    try{
+      var key='stickyCtaNudge', now=Date.now();
+      var saved=localStorage.getItem(key);
+      var canNudge=true;
+      if(saved){
+        var obj=JSON.parse(saved);
+        if (obj && (now - obj.ts) < 24*3600*1000){ canNudge = !obj.did; }
+      }
+      if(!canNudge) return;
+
+      setTimeout(function(){
+        if (!btn) return;
+        btn.classList.add('is-nudging');
+        icon && icon.classList.add('is-pop'); // petit pop une fois
+        btn.addEventListener('animationend', function(){ btn.classList.remove('is-nudging'); }, {once:true});
+        icon && icon.addEventListener('animationend', function(){ icon.classList.remove('is-pop'); }, {once:true});
+
+        try { localStorage.setItem(key, JSON.stringify({ts:now, did:true})); } catch(e){}
+        try { (window.dataLayer=window.dataLayer||[]).push({event:'StickyCtaNudged'}); } catch(e){}
+      }, 6500); // léger délai pour éviter l’intrusion
+    }catch(e){}
+  })();
+
+  // Click = scroll au formulaire + focus prénom + analytics
+  btn && btn.addEventListener('click', function(ev){
+    ev.preventDefault();
+    try {
+      (window.dataLayer = window.dataLayer || []).push({
+        event:'StickyCtaClick',
+        lp_slug:"{{ lp.slug|default:'' }}",
+        vp_key:"{{ variant.key|default:'' }}",
+        vp_lang:"{{ variant.language|default:'' }}"
+      });
+    } catch(e){}
+    if (form){
+      form.scrollIntoView({behavior:'smooth', block:'start'});
+      setTimeout(function(){
+        var first = document.getElementById('firstname') || form.querySelector('input,textarea,select');
+        first && first.focus({preventScroll:true});
+      }, 350);
+    }
+  });
+});
+</script>

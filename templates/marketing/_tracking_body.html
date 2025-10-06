@@ -1,0 +1,7 @@
+{# GTM noscript + autres pixels body, conditionné par consentement #}
+{% if tracking.consent and tracking.GTM_ID %}
+  {% include "analytics/google_tag_manager/body.html" %}
+{% endif %}
+
+{# Meta Pixel body / TikTok body (si besoin) #}
+{# Placeholder — la plupart des pixels sont dans <head> via GTM #}

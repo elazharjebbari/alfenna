@@ -1,0 +1,12 @@
+alias: accounts/check_email
+template: "components/core/accounts/auth_message/component.html"
+assets:
+  css:
+    - "/static/css/auth.css"
+  js:
+    - "/static/js/auth.js"
+hydrate:
+  module: "apps.atelier.compose.hydrators.accounts.check_email"
+  func: "check_email"
+render:
+  cacheable: false

@@ -12,7 +12,7 @@ from apps.atelier.compose.hydrators.learning.hydrators import resolve_stream_url
 
 _PLACEHOLDER_POSTER = getattr(settings, "LEARNING_PLACEHOLDER_POSTER", "https://placehold.co/960x540")
 _FALLBACK_CACHE: dict[bool, dict] = {}
-_FALLBACK_PATH = Path(settings.BASE_DIR) / "lumierelearning" / "fixtures" / "course_bougies_fallback.yml"
+_FALLBACK_PATH = Path(settings.BASE_DIR) / "alfenna" / "fixtures" / "course_bougies_fallback.yml"
 _DEFAULT_UI = {
     "program_heading": "Parcours pédagogique",
     "demo_heading": "Sélection de démonstration",

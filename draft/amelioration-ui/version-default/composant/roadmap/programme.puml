@@ -1,0 +1,54 @@
+@startuml
+title PROGRAMME — Aperçu (Timeline + Accordéon) • Rôle, flux, instrumentation
+
+skinparam dpi 150
+skinparam rectangle {
+  BackgroundColor #F2FFF7
+  BorderColor #0D5C4F
+  RoundCorner 12
+}
+skinparam note {
+  BackgroundColor #FFFFFF
+  BorderColor #0D5C4F
+}
+
+rectangle "Avant/Après — Stop-scroll\n(émotion, contraste)" as AA #E7F8EE
+rectangle "PROGRAMME — Aperçu" as PROG {
+  rectangle "Timeline 5 étapes\n(Bases → Matières → Recettes → Parfums → Mise en vente)\n• icônes FA5\n• pastilles 1..5\n• hover/active sync" as TL
+  rectangle "Accordéon 7 modules\n• titres ≤ 4 mots\n• bullets concrets (3–5)\n• ARIA + clavier\n• CTA unique sous le bloc" as ACC
+  rectangle "CTA: Voir 1 leçon gratuite" as CTA #309255/white
+}
+
+AA -down-> PROG : scroll
+PROG -down-> CTA : intention → preuve
+
+note right of TL
+Mobile : rail horizontal (scroll-snap)
+Desktop : grille responsive
+Sync : étape active = module ouvert
+end note
+
+note right of ACC
+A11y : role=button, aria-expanded
+Bullets orientées actions
+Zéro distraction
+end note
+
+rectangle "Hints (Driver.js)\n• 1ère visite uniquement\n• 'Tape pour dérouler'\n• 'Fais glisser la timeline'" as HINT #FFFFFF
+
+HINT .. TL
+HINT .. ACC
+
+cloud "Instrumentation GA4" as GA4
+TL --> GA4 : timeline_view, step_click
+ACC --> GA4 : accordion_open, accordion_depth
+CTA --> GA4 : cta_lecon_click
+
+rectangle "KPI business\n• Scroll>70%\n• CTR leçon gratuite\n• Temps par module" as KPI #FFFFFF
+
+GA4 --> KPI
+
+rectangle "Charte UI\n• Montserrat\n• Vert #309255\n• Fond #E7F8EE\n• Radius 20px\n• Ombres soft" as UI #FFFFFF
+UI .. PROG
+
+@enduml

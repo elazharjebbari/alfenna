@@ -15,7 +15,7 @@ def run():
     started = time.time()
     logs, ok = [], True
 
-    call_command("loaddata", "lumierelearning/fixtures/catalog_courses.json", verbosity=0)
+    call_command("loaddata", "alfenna/fixtures/catalog_courses.json", verbosity=0)
     logs.append("Fixtures catalog_courses.json chargées.")
 
     module = import_module("apps.atelier.compose.hydrators.course_detail.hydrators")

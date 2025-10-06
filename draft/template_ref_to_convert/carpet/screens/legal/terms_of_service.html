@@ -1,0 +1,121 @@
+{# templates/legal/terms_of_service.html #}
+{% extends "carpet/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Conditions générales | Maroc" %}{% endblock title %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <header class="mb-4">
+      <h1 class="h3 mb-1">Conditions générales de vente et d’utilisation</h1>
+      <p class="text-muted mb-0">
+        Dernière mise à jour :
+        <time datetime="{% now 'Y-m-d' %}">{% now "d/m/Y" %}</time>
+      </p>
+    </header>
+
+    <div class="row g-4">
+      <aside class="col-lg-4">
+        <nav class="list-group position-sticky" style="top: 1rem;">
+          <a href="#identity" class="list-group-item list-group-item-action">1. Identité & contact</a>
+          <a href="#products" class="list-group-item list-group-item-action">2. Produits & disponibilité</a>
+          <a href="#prices" class="list-group-item list-group-item-action">3. Prix, devises & paiement</a>
+          <a href="#order" class="list-group-item list-group-item-action">4. Commande & conclusion du contrat</a>
+          <a href="#delivery" class="list-group-item list-group-item-action">5. Livraison</a>
+          <a href="#withdrawal" class="list-group-item list-group-item-action">6. Droit de rétractation & retours</a>
+          <a href="#warranty" class="list-group-item list-group-item-action">7. Garanties & non-conformité</a>
+          <a href="#liability" class="list-group-item list-group-item-action">8. Responsabilité</a>
+          <a href="#whatsapp" class="list-group-item list-group-item-action">9. Communication via WhatsApp</a>
+          <a href="#ip" class="list-group-item list-group-item-action">10. Propriété intellectuelle</a>
+          <a href="#privacy" class="list-group-item list-group-item-action">11. Données personnelles</a>
+          <a href="#law" class="list-group-item list-group-item-action">12. Droit applicable & litiges</a>
+        </nav>
+      </aside>
+
+      <article class="col-lg-8">
+        <section id="identity" class="mb-4">
+          <h2 class="h5">1. Identité & contact</h2>
+          <p>
+            <strong>Zonex</strong>
+            — SARL,
+            Adresse : 25 bis avenue Patrice Lumumba, Rabat}<br>
+            E-mail : info@zonex.site — Tél. : 08085-44450
+          </p>
+        </section>
+
+        <section id="products" class="mb-4">
+          <h2 class="h5">2. Produits & disponibilité</h2>
+          <p>Les caractéristiques essentielles (photos, descriptions, matériaux, dimensions) sont indiquées sur la fiche produit. Les offres sont valables tant qu’elles sont visibles et dans la limite des stocks disponibles. De légères variations de couleur/texture peuvent survenir selon l’écran ou le lot de fabrication.</p>
+        </section>
+
+        <section id="prices" class="mb-4">
+          <h2 class="h5">3. Prix, devises & paiement</h2>
+          <ul>
+            <li>Les prix sont exprimés en <strong>dirham marocain (MAD)</strong> et s’entendent toutes taxes comprises (TTC) sauf indication contraire".</li>
+            <li>Frais de livraison affichés au panier/checkout selon l’adresse et le transporteur.</li>
+            <li>Moyens de paiement pris en charge : paiement à la livraison (COD), carte bancaire via prestataire sécurisé, virement.</li>
+          </ul>
+        </section>
+
+        <section id="order" class="mb-4">
+          <h2 class="h5">4. Commande & conclusion du contrat</h2>
+          <p>Le processus comporte : ajout au panier → coordonnées & livraison → paiement → confirmation. La commande est ferme après confirmation affichée et/ou reçue par e-mail/WhatsApp. Les données enregistrées constituent la preuve des transactions (loi 53-05 — échange électronique).</p>
+        </section>
+
+        <section id="delivery" class="mb-4">
+          <h2 class="h5">5. Livraison</h2>
+          <ul>
+            <li><strong>Zone</strong> : Maroc (sauf mention contraire).</li>
+            <li><strong>Délais indicatifs</strong> : 24-72h en ville principale, 3-7 jours pour autres zones.</li>
+            <li><strong>Réserves</strong> : à formuler auprès du transporteur et de Zonex sous 48h en cas d’avarie/perte.</li>
+          </ul>
+        </section>
+
+        <section id="withdrawal" class="mb-4">
+          <h2 class="h5">6. Droit de rétractation & retours</h2>
+          <p>Conformément à la loi 31-08, pour la vente à distance, le consommateur dispose d’un <strong>délai de 7 jours</strong> pour se rétracter à compter de la réception du bien (hors exceptions légales). Si l’obligation d’information préalable n’a pas été respectée, ce délai peut être porté à <strong>30 jours</strong>.</p>
+          <p><strong>Exceptions usuelles</strong> (non exhaustif) : produits personnalisés, biens descellés ne pouvant être repris pour des raisons d’hygiène/santé, enregistrements/logiciels descellés, journaux/périodiques.</p>
+          <p><strong>Procédure</strong> : contactez-nous (e-mail/WhatsApp) en indiquant numéro de commande. Les produits doivent être renvoyés complets, non utilisés et dans l’emballage d’origine. Les frais de retour sont à votre charge sauf erreur de notre part ou non-conformité avérée. Remboursement dans un délai raisonnable après réception et contrôle.</p>
+        </section>
+
+        <section id="warranty" class="mb-4">
+          <h2 class="h5">7. Garanties & non-conformité</h2>
+          <p>Vous bénéficiez des garanties légales. En cas de défaut ou non-conformité, signalez-le avec photos sous 48h après réception. Nous proposerons réparation, échange, avoir ou remboursement selon le cas.</p>
+        </section>
+
+        <section id="liability" class="mb-4">
+          <h2 class="h5">8. Responsabilité</h2>
+          <p>"L’entreprise ne saurait être tenue pour responsable des dommages indirects ou résultant d’un usage non conforme des produits. Aucune responsabilité en cas d’indisponibilité temporaire du site, force majeure ou fait d’un tiers.</p>
+        </section>
+
+        <section id="whatsapp" class="mb-4">
+          <h2 class="h5">9. Communication via WhatsApp</h2>
+          <ul>
+            <li>Nous pouvons vous contacter sur WhatsApp pour le suivi de commande, le support et, avec votre consentement, des offres.</li>
+            <li>Vous pouvez vous opposer aux messages marketing à tout moment (réponse <strong>« STOP »</strong>).</li>
+            <li>Vous vous engagez à ne pas abuser de ce canal (contenus illicites, spam, harcèlement). Nous respectons les politiques de WhatsApp/Meta.</li>
+          </ul>
+        </section>
+
+        <section id="ip" class="mb-4">
+          <h2 class="h5">10. Propriété intellectuelle</h2>
+          <p>Tous contenus (textes, visuels, logos, marques) sont protégés. Toute reproduction ou usage non autorisé est interdit.</p>
+        </section>
+
+        <section id="privacy" class="mb-4">
+          <h2 class="h5">11. Données personnelles</h2>
+          <p>Le traitement de vos données est décrit dans notre <a href="{% url 'privacy_policy' %}">Politique de confidentialité</a>. Vous disposez des droits prévus par la loi 09-08.</p>
+        </section>
+
+        <section id="law" class="mb-4">
+          <h2 class="h5">12. Droit applicable & litiges</h2>
+          <p>Les présentes sont régies par le droit marocain. À défaut d’accord amiable, compétence des tribunaux marocains du lieu du siège social.</p>
+        </section>
+
+        <p class="small text-muted mt-4">Note : adaptez les champs variables (prix/TVA, délais, moyens de paiement, exceptions spécifiques) à votre activité et à vos transporteurs/prestataires.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock content %}

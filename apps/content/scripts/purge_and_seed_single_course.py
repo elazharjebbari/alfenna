@@ -6,7 +6,7 @@ Purge TOTALE de tous les cours puis seed d'un SEUL cours depuis media/videos/str
 - Démo: 1, 1-1, 2, 2-1 (free)
 - Vérifie l'existence réelle des fichiers (default_storage.exists)
 Usage:
-  export DJANGO_SETTINGS_MODULE=lumierelearning.settings.test_cli
+  export DJANGO_SETTINGS_MODULE=alfenna.settings.test_cli
   python manage.py runscript apps.content.scripts.purge_and_seed_single_course --script-args "slug=bougies-naturelles title='Bougies naturelles' --apply"
 Dry-run (sans écrire):
   python manage.py runscript apps.content.scripts.purge_and_seed_single_course --script-args "slug=bougies-naturelles"

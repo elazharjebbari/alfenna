@@ -1,0 +1,21 @@
+alias: checkout/order_summary
+template: components/core/checkout/order_summary.html
+
+assets:
+  css: []
+  js: []
+
+hydrate:
+  module: apps.atelier.compose.hydrators.checkout.hydrators
+  func: hydrate_order_summary
+
+params:
+  show_economy: true
+  show_daily_approx: true
+  features_primary_limit: 4
+  features_more_label: "Voir tout le contenu"
+  social_proof_text: "★ 4,8/5 — 500+ avis"
+  guarantee_text: "Garantie 14 jours satisfaite ou remboursée"
+
+render:
+  cacheable: true

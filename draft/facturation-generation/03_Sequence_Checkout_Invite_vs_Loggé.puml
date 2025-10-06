@@ -1,0 +1,41 @@
+@startuml
+title Sequence — Checkout (invité vs loggé)
+
+actor User
+participant "Browser\n(Stripe Elements)" as B
+participant "views.create_payment_intent\n/ checkout_view" as V
+participant "PaymentService\n(create_or_update_order_and_intent)" as PS
+participant "Stripe API" as S
+database "DB" as DB
+
+== Lancement ==
+User -> B : Ouvre page checkout / lance POST JSON
+
+alt Invité (email+cours/plan)
+  B -> V : POST /billing/intent/create {email, course_id|slug|plan_slug, currency}
+else Loggé
+  B -> V : GET /billing/checkout/<slug>\n(bootstrap client_secret)
+end
+
+V -> PS : Calcul totals + fige pricing + build metadata
+PS -> DB : Upsert Order + idempotency_key
+PS -> S : Create/modify PaymentIntent\n(automatic_payment_methods, metadata)
+S --> PS : client_secret
+PS --> V : {client_secret, publishable_key, orderId, amount, currency}
+V --> B : Stripe(elements).mount()
+
+== Confirmation ==
+User -> B : Click "Payer"
+B -> S : confirmPayment(elements, redirect='if_required')
+S --> B : success | requires_action | error
+
+== Finalisation serveur ==
+S -> V : Webhook payment_intent.succeeded\n(signature OK)
+V -> V : _process_event()
+V -> DB : select_for_update(Order)
+V -> DB : EntitlementService.grant_entitlement()
+V -> DB : PaymentLog + Payment upsert
+V -> DB : Order.status = PAID
+V -> "apps.messaging" : notify_order_paid(order)
+
+@enduml

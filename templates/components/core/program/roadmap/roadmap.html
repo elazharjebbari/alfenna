@@ -1,0 +1,78 @@
+{% load static %}
+
+<div class="section" id="program">
+
+    <section class="roadmap-section section"
+             style="--rm-bg: {{ style.bg_color|default:'#e7f8ee' }};
+                     --rm-line: {{ style.line_color|default:'#98c9aa' }};
+                     --rm-bullet: {{ style.bullet_color|default:'#309255' }};
+                     --rm-radius: {{ style.radius|default:20 }}px;">
+        <div class="container">
+            {% if title %}<h3 class="section-title h4 mb-2">{{ title }}</h3>{% endif %}
+            {% if subtitle %}<p class="text-muted mb-4">{{ subtitle|safe }}</p>{% endif %}
+
+            <div id="{{ id }}" class="roadmap"
+                 data-ev-view="roadmap_view"
+                 data-ev-step="roadmap_step_click"
+                 data-ev-acc-open="roadmap_accordion_open">
+
+                <div class="roadmap-grid">
+                    {# -------- Timeline (col gauche) -------- #}
+                    <ol class="rm-timeline list-unstyled m-0" role="list">
+                        {% for s in steps %}
+                            <li class="rm-node" data-step="{{ forloop.counter0 }}">
+                                <button class="rm-dot btn p-0"
+                                        aria-label="Aller à l’étape {{ forloop.counter }} : {{ s.title }}">
+                                    <span class="rm-dot-inner"></span>
+                                </button>
+                                <div class="rm-node-label">
+                                    <i class="{{ s.icon }} me-2 text-success"></i>
+                                    <strong>{{ s.title }}</strong>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ol>
+
+                    {# -------- Accordéon (col droite) -------- #}
+                    <div class="accordion rm-accordion" id="{{ id }}-acc">
+                        {% for s in steps %}
+                            {% with idx=forloop.counter0 %}
+                                <div class="accordion-item rm-item" data-step="{{ idx }}">
+                                    <h2 class="accordion-header" id="{{ id }}-h-{{ idx }}">
+                                        <button class="accordion-button collapsed" type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#{{ id }}-c-{{ idx }}"
+                                                aria-expanded="false"
+                                                aria-controls="{{ id }}-c-{{ idx }}">
+                                            <i class="{{ s.icon }} me-2 text-success"></i>{{ s.title }}
+                                        </button>
+                                    </h2>
+                                    <div id="{{ id }}-c-{{ idx }}" class="accordion-collapse collapse"
+                                         aria-labelledby="{{ id }}-h-{{ idx }}" data-bs-parent="#{{ id }}-acc">
+                                        <div class="accordion-body">
+                                            <div class="small text-muted mb-2">{{ s.summary_html|safe }}</div>
+                                            {% if s.bullets %}
+                                                <ul class="rm-bullets">
+                                                    {% for b in s.bullets %}
+                                                        <li>{{ b|safe }}</li>{% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if cta %}
+                    <div class="text-center mt-3">
+                        <a class="btn btn-primary btn-hover-dark px-4 py-2" href="{{ cta.url|default:'#' }}">
+                            <i class="fa fa-play-circle me-2"></i>{{ cta.label|default:"Je me lance" }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <body style="font-family: Arial, sans-serif; background: #f7f7f9; padding: 32px;">
+    <table style="max-width: 640px; margin: auto; background: #ffffff; border-radius: 8px; padding: 32px;">
+      <tr>
+        <td>
+          <p style="font-size: 16px; color: #222;">Bonjour {{ user_first_name }},</p>
+          <p style="font-size: 16px; color: #222;">
+            {{ offer_summary }}
+          </p>
+          <p style="text-align: center; margin: 24px 0;">
+            <a href="{{ offer_url }}" style="background: #4f46e5; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+              Découvrir l'offre
+            </a>
+          </p>
+          <p style="font-size: 14px; color: #555;">
+            Offre valable jusqu'au {{ offer_expiry_date }}. Tu reçois ce message car tu as confirmé ton opt-in marketing.
+          </p>
+          <p style="font-size: 12px; color: #999;">
+            Plus d'intérêt ? <a href="{{ unsubscribe_url }}">Se désinscrire</a>.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

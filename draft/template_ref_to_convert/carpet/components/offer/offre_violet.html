@@ -1,0 +1,49 @@
+{% load static i18n %}
+
+<style>
+  /* on lit la variable --ad-bg */
+  .ul-ad{ position:relative; overflow:hidden; }
+  .ul-ad::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(90deg, rgba(197,30,93,.25), rgba(229,146,0,.25)),
+      var(--ad-bg) center/cover no-repeat;
+    opacity:.3;            /* pas 30% => utilise 0.3 */
+    mix-blend-mode:multiply;
+    z-index:-1;
+  }
+</style>
+
+<div class="ul-container">
+  <section class="ul-ad"
+           style="--ad-bg: url('{% static "carpet/images/promo/back_violet_1800x340.webp" %}')">
+    <div class="ul-inner-container">
+      <div class="ul-ad-content">
+        <div class="ul-ad-txt">
+          <span class="ul-ad-sub-title">{% trans "Nouvelle couleur — 48 h" %}</span>
+          <h2 class="ul-section-title">
+            {% trans "Violet Nuit :" %} <strong>{% trans "–69 MAD aujourd’hui" %}</strong>
+            <span class="ul-timer">• {% trans "Se termine dans" %} <strong>{% trans "2 jours" %}</strong></span>
+          </h2>
+
+          <div class="ul-ad-categories">
+            <span class="category"><span><i class="flaticon-check-mark"></i></span>{% trans "Livraison 24–48 h" %}</span>
+            <span class="category"><span><i class="flaticon-check-mark"></i></span>{% trans "Paiement à la livraison" %}</span>
+            <span class="category"><span><i class="flaticon-check-mark"></i></span>{% trans "Échange couleur 7 j" %}</span>
+            <span class="category"><span><i class="flaticon-check-mark"></i></span>{% trans "+1000 avis" %}</span>
+          </div>
+        </div>
+
+        <div class="ul-ad-img">
+          <img src="{% static 'carpet/images/promo/tapis_violet_bg_transparent.webp' %}"
+               alt="{% trans 'Tapis Violet Nuit - mémoire de forme, antiglisse' %}">
+        </div>
+
+        <a href="#lead-form" class="ul-btn" aria-label="{% trans 'Commander le tapis en Violet Nuit' %}">
+          {% trans "Commander en violet" %} <i class="flaticon-up-right-arrow"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

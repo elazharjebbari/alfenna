@@ -1,0 +1,111 @@
+alias: faq/main
+template: "components/core/faq/faq.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+# Valeurs par défaut (aussi whitelist)
+params:
+  title_html: "Questions & <span>Réponses.</span>"
+  padding_top: "60px"
+  padding_bottom: "60px"
+
+  tabs:
+    # 0) Objections (Sniper) — 6 Q/R clés, courte et orientée conversion
+    - label: "Objections (Sniper)"
+      icon: "fa fa-check-circle"
+      type: "faqs"
+      id: "objections"
+      faqs:
+        - question_html: "Et si je n’ai <strong>aucun matériel</strong> ?"
+          answer_html: "<p><strong>Tu peux commencer sans achat.</strong></p><ul><li>3 recettes « zéro matos » (verres récupérés, bain‑marie, cuillère).</li><li>Check‑list fournie avec fournisseurs (local &amp; en ligne).</li><li>Ta 1<sup>ère</sup> bougie en <strong>2&nbsp;heures</strong>.</li></ul><p><a href=\"#programme\">Voir la check‑list</a></p>"
+        - question_html: "Je débute totalement, <strong>c’est trop technique</strong> ?"
+          answer_html: "<p><strong>Tu suis 5 étapes guidées, pas à pas.</strong></p><ul><li>Vidéos courtes (10–12&nbsp;min) et claires.</li><li>Erreurs fréquentes évitées &amp; corrigées.</li><li>Support questions/réponses quand tu bloques.</li></ul><p><a href=\"#programme\">Voir le programme</a></p>"
+        - question_html: "Les <strong>parfums</strong> et <strong>cires</strong> sont‑ils sûrs à la maison ?"
+          answer_html: "<p><strong>Oui, conformes IFRA et 0% paraffine.</strong></p><ul><li>Dosages testés pour l’usage domestique.</li><li>Mèches coton &amp; cires végétales.</li><li>Bonnes pratiques d’aération et de sécurité.</li></ul><p><a href=\"#parfums\">Parfums &amp; sécurité</a></p>"
+        - question_html: "<strong>Combien de temps</strong> ça prend vraiment ?"
+          answer_html: "<p><strong>2&nbsp;heures pour ta 1<sup>ère</sup> bougie, autonome en 7&nbsp;jours.</strong></p><ul><li>Playlist courte et progression simple.</li><li>Rythme flexible, quand tu veux.</li><li>Accès à vie 24/7.</li></ul><p><a href=\"#packs\">Je commence aujourd’hui</a></p>"
+        - question_html: "Et si je veux <strong>vendre</strong>, c’est réaliste ?"
+          answer_html: "<p><strong>Oui, en micro‑activité simple.</strong></p><ul><li>Fichiers étiquettes + pricing conseillé.</li><li>Exemple réel&nbsp;: <strong>12 ventes / week‑end</strong>.</li><li>Checklist stand &amp; conseils pratiques.</li></ul><p><a href=\"#module-vente\">Voir le module Vente</a></p>"
+        - question_html: "Et si je <strong>change d’avis</strong> ?"
+          answer_html: "<p><strong>Remboursement 14&nbsp;jours, en 2&nbsp;clics.</strong></p><ul><li>Accès immédiat pour essayer sereinement.</li><li>Process simple via le support.</li><li>Pas de piège, pas de petites lignes.</li></ul><p><a href=\"#packs\">Je me lance</a></p>"
+
+    # 1) Formateurs
+    - label: "Formateurs"
+      icon: "fa fa-chalkboard-teacher"
+      type: "faqs"
+      id: "formateurs"
+      faqs:
+        - question_html: "Qui sont les formateurs de Lumière Academy ?"
+          answer_html: "<em>Souheila Jebbari</em> (<u>biologiste</u> et experte en <strong>cosmétique naturelle</strong> et <strong>bougies écologiques</strong>), <em>Naila Baiga</em> (spécialiste bougies) et <em>Taib Jebbari</em> (expert marketing digital)."
+        - question_html: "Quelle est l'expertise de Souheila Jebbari ?"
+          answer_html: "<em>Biologiste passionnée</em> par l'artisanat, spécialisée en <strong>fabrication de bougies naturelles</strong> et en <strong>produits cosmétiques écologiques</strong>, auteure du <u>Guide des Bougies Marocaines</u>."
+
+    # 2) Formation & Certificat
+    - label: "Formation & Certificat"
+      icon: "fa fa-graduation-cap"
+      type: "faqs"
+      id: "formation"
+      faqs:
+        - question_html: "En quoi consiste précisément la formation ?"
+          answer_html: "Formation complète en ligne avec <em>30 vidéos</em> réparties en <u>4 modules</u>, incluant des séances de <em>questions-réponses interactives</em> et des ressources pédagogiques variées."
+        - question_html: "Quel certificat est délivré à la fin de la formation ?"
+          answer_html: "Un <strong>certificat officiel</strong> vous est délivré, récupérable à Lumière Academy ou envoyé par voie postale."
+
+    # 3) Partenaires
+    - label: "Partenaires"
+      icon: "fa fa-handshake"
+      type: "faqs"
+      id: "partenaires"
+      faqs:
+        - question_html: "Quels sont nos partenaires institutionnels ?"
+          answer_html: "Nous collaborons avec <strong>Safran</strong>, <strong>Sofitel Spa</strong>, <strong>AMAPPE</strong>, <strong>COFICAB</strong>, <strong>AMIDEAST</strong>, <strong>Eclipse Event</strong> et d'autres institutions reconnues."
+        - question_html: "Quels établissements éducatifs collaborent avec Lumière Academy ?"
+          answer_html: "Nos partenaires incluent <strong>Grand Univers</strong>, <strong>École Riad Al Andalus</strong>, <strong>AMIDEAST</strong> et <strong>AMAPPE</strong>."
+
+    # 4) Paiement & Matériel
+    - label: "Paiement & Matériel"
+      icon: "fa fa-credit-card"
+      type: "faqs"
+      id: "paiement"
+      faqs:
+        - question_html: "Comment effectuer le paiement en ligne ?"
+          answer_html: "<strong>Étape 1 :</strong> Sélectionnez votre formation et cliquez sur <em>S’inscrire</em>.<br><strong>Étape 2 :</strong> Remplissez le formulaire d’inscription.<br><strong>Étape 3 :</strong> Choisissez votre mode de paiement (carte bancaire ou méthode alternative sécurisée).<br><strong>Étape 4 :</strong> Validez votre paiement pour obtenir immédiatement votre accès à la formation."
+        - question_html: "Quel matériel dois-je prévoir pour suivre la formation ?"
+          answer_html: "Un <strong>matériel simple</strong> suffit (moules, mèches, cire, huiles parfumées). Une <u>liste détaillée des fournisseurs recommandés</u> est fournie lors de l'inscription."
+
+    # 5) Assistance
+    - label: "Assistance"
+      icon: "fa fa-life-ring"
+      type: "faqs"
+      id: "assistance"
+      faqs:
+        - question_html: "Quel support aurai-je durant la formation ?"
+          answer_html: "Vous bénéficierez d'un groupe privé WhatsApp et de <em>sessions par chat</em> avec nos formateurs pour un accompagnement personnalisé."
+        - question_html: "Puis-je accéder au livre « Guide des Bougies Marocaines » ?"
+          answer_html: "Oui, vous recevrez un accès complet en format PDF du livre inclus dans votre formation."
+
+contract:
+  required:
+    tabs: "Liste d'onglets. Chaque onglet: {label, icon, id?, type='faqs'|'contenu'|'modalites', ...}"
+  optional:
+    title_html: "HTML du titre au-dessus des onglets"
+    padding_top: "Padding top de la section (string)"
+    padding_bottom: "Padding bottom de la section (string)"
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.faq.hydrators.faq_main"
+  module: "apps.atelier.compose.hydrators.faq.hydrators"
+  func: "faq_main"
+
+  params:
+    title_html: ""
+    padding_top: "60px"
+    padding_bottom: "60px"
+    tabs: []
+
+render:
+  cacheable: true

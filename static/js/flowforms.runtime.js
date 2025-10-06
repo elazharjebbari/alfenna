@@ -1,0 +1,442 @@
+/* flowforms.runtime.js — runtime générique multi-étapes (compose/legacy)
+   - Boot sûr (DOMContentLoaded / defer-friendly)
+   - Scope config près du root (script[data-ff-config] adjacent)
+   - Listeners next/prev/submit
+   - Idempotency, signature HMAC (si sign_url), CSRF same-origin
+*/
+(function () {
+  "use strict";
+
+  // ---------- utilitaires ----------
+  function $(root, sel) { return (root || document).querySelector(sel); }
+  function $all(root, sel) { return Array.from((root || document).querySelectorAll(sel)); }
+
+  function uuid4() {
+    const b = crypto.getRandomValues(new Uint8Array(16));
+    b[6] = (b[6] & 0x0f) | 0x40;
+    b[8] = (b[8] & 0x3f) | 0x80;
+    const hex = [...b].map(x => x.toString(16).padStart(2, "0")).join("");
+    return `${hex.substr(0, 8)}-${hex.substr(8, 4)}-${hex.substr(12, 4)}-${hex.substr(16, 4)}-${hex.substr(20)}`;
+  }
+
+  function getCookie(name) {
+    const m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+    return m ? m.pop() : "";
+  }
+
+  // Cherche le <script data-ff-config> le plus proche du root (sibling suivant prioritaire)
+  function jsonFromConfigScript(root) {
+    // 1) sibling scan après root
+    if (root && root.parentElement) {
+      let sib = root.nextElementSibling;
+      while (sib) {
+        if (sib.tagName === "SCRIPT" && sib.hasAttribute("data-ff-config")) {
+          try { return JSON.parse(sib.textContent || "{}"); } catch (_) { return {}; }
+        }
+        sib = sib.nextElementSibling;
+      }
+      // 2) fallback: chercher dans le parent
+      const el2 = root.parentElement.querySelector('script[data-ff-config]');
+      if (el2) { try { return JSON.parse(el2.textContent || "{}"); } catch (_) { return {}; } }
+    }
+    // 3) dernier recours: document
+    const el = document.querySelector('script[data-ff-config]');
+    if (!el) return {};
+    try { return JSON.parse(el.textContent || "{}"); } catch (_) { return {}; }
+  }
+
+  function coerce(val, cast) {
+    if (cast === "bool") {
+      if (typeof val === "boolean") return val;
+      const s = String(val).trim().toLowerCase();
+      return (s === "1" || s === "true" || s === "on" || s === "yes");
+    }
+    if (cast === "int") {
+      const n = parseInt(val, 10); return Number.isFinite(n) ? n : 0;
+    }
+    if (cast === "float") {
+      const n = parseFloat(val); return Number.isFinite(n) ? n : 0.0;
+    }
+    if (cast === "date") {
+      const d = new Date(val);
+      return isNaN(d.getTime()) ? val : d.toISOString();
+    }
+    return val; // default: string
+  }
+
+  function deduceValue(input) {
+    const cast = (input.getAttribute("data-ff-cast") || "").trim();
+    if (input.type === "checkbox") {
+      return cast === "bool" ? !!input.checked : (input.checked ? "on" : "");
+    }
+    if (input.type === "radio") {
+      if (!input.checked) return null;
+      return coerce(input.value, cast || "");
+    }
+    return coerce(input.value, cast || "");
+  }
+
+  function parseFieldsMap(root, cfg) {
+    let datasetMap = {};
+    const raw = root && (root.getAttribute("data-fields-map") || (root.dataset ? root.dataset.fieldsMap : ""));
+    if (raw) {
+      try { datasetMap = JSON.parse(raw); } catch (_) { datasetMap = {}; }
+    }
+    const cfgMap = (cfg && (cfg.fields_map || cfg.fieldsMap)) || {};
+    if (cfgMap && typeof cfgMap === "object") {
+      return Object.assign({}, cfgMap, datasetMap);
+    }
+    return datasetMap;
+  }
+
+  function collectFields(root, cfg) {
+    const out = {};
+    const fieldsMap = parseFieldsMap(root, cfg);
+    const skipNames = new Set(["csrfmiddlewaretoken"]);
+
+    function assign(key, value) {
+      if (value === null || key === "") return;
+      out[key] = value;
+    }
+
+    $all(root, "[data-ff-field]").forEach(el => {
+      const rawName = (el.getAttribute("data-ff-field") || "").trim();
+      if (!rawName) return;
+      const v = deduceValue(el);
+      if (v === null) return;
+      const mapped = fieldsMap && fieldsMap[rawName] ? fieldsMap[rawName] : rawName;
+      if (skipNames.has(mapped)) return;
+      assign(mapped, v);
+    });
+
+    $all(root, "input[name], select[name], textarea[name]").forEach(el => {
+      const nameAttr = (el.getAttribute("name") || "").trim();
+      if (!nameAttr || skipNames.has(nameAttr)) return;
+      if (el.type === "radio" && !el.checked) return;
+      const v = deduceValue(el);
+      if (v === null) return;
+      assign(nameAttr, v);
+    });
+
+    const phoneKeys = new Set(["phone", "phone_number"]);
+    if (fieldsMap && typeof fieldsMap === "object") {
+      if (fieldsMap.phone) phoneKeys.add(fieldsMap.phone);
+      if (fieldsMap.phone_number) phoneKeys.add(fieldsMap.phone_number);
+    }
+    phoneKeys.forEach(key => {
+      if (typeof out[key] === "string") {
+        out[key] = sanitizePhone(out[key]);
+      }
+    });
+
+    return out;
+  }
+
+  function buildFinalBody(root, cfg) {
+    const payload = collectFields(root, cfg);
+    payload.form_kind = cfg.form_kind || "email_ebook";
+    payload.client_ts = (cfg.context && cfg.context.client_ts) || nowIso();
+    if (payload.honeypot === undefined) payload.honeypot = "";
+
+    const mergedCtx = Object.assign({}, (cfg.context || {}), pick(qsParams(), [
+      "campaign", "source", "utm_source", "utm_medium", "utm_campaign"
+    ]));
+
+    const finalBody = Object.assign({}, payload);
+    if (mergedCtx && Object.keys(mergedCtx).length) {
+      finalBody.context = mergedCtx;
+    } else if (finalBody.context !== undefined) {
+      delete finalBody.context;
+    }
+
+    return { payload, mergedCtx, finalBody };
+  }
+
+  async function signBody(signUrl, finalBody) {
+    const response = await fetch(signUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken") || "",
+      },
+      body: JSON.stringify({ payload: finalBody }),
+      credentials: "same-origin",
+    });
+    const data = await response.json().catch(() => ({}));
+    if (window.DEBUG_FF) {
+      console.debug("[ff] sign status", response.status, data);
+    }
+    if (!response.ok || !data.signed_token) {
+      throw new Error("Signature échouée");
+    }
+    return data.signed_token;
+  }
+
+  function qsParams() {
+    const p = new URLSearchParams(window.location.search || "");
+    const o = {};
+    for (const [k, v] of p.entries()) o[k] = v;
+    return o;
+  }
+
+  function pick(o, keys) {
+    const r = {};
+    keys.forEach(k => { if (o[k] !== undefined) r[k] = o[k]; });
+    return r;
+  }
+
+  function sanitizePhone(value) {
+    const raw = String(value || "");
+    const cleaned = raw.replace(/[^0-9+()\-\s]/g, "").replace(/(?!^)\+/g, "").trim();
+    if (cleaned.startsWith("00")) {
+      return "+" + cleaned.slice(2);
+    }
+    return cleaned;
+  }
+
+  function stepElements(root) {
+    return $all(root, "[data-ff-step]");
+  }
+
+  function numericSteps(root) {
+    return stepElements(root)
+      .map(s => s.getAttribute("data-ff-step"))
+      .filter(id => id && id !== "done")
+      .map(id => parseInt(id, 10))
+      .filter(n => Number.isFinite(n));
+  }
+
+  function getMaxStep(root) {
+    const nums = numericSteps(root);
+    return nums.length ? Math.max.apply(null, nums) : 1;
+  }
+
+  function getCurrentStep(root) {
+    const panes = stepElements(root);
+    const visible = panes.find(p => !p.classList.contains("d-none") && (p.getAttribute("data-ff-step") || "") !== "done");
+    if (!visible) return 1;
+    const idx = parseInt(visible.getAttribute("data-ff-step"), 10);
+    return Number.isFinite(idx) ? idx : 1;
+  }
+
+  function updateProgress(root, targetId) {
+    const prog = root.querySelector('[data-ff-progress]');
+    if (!prog) return;
+    const total = getMaxStep(root);
+    if (targetId === "done") {
+      prog.textContent = `Étape ${total} / ${total}`;
+      return;
+    }
+    const cur = parseInt(targetId, 10);
+    const safeCur = Number.isFinite(cur) ? cur : 1;
+    prog.textContent = `Étape ${safeCur} / ${total}`;
+  }
+
+  function showStep(root, idxOrDone) {
+    const target = String(idxOrDone);
+    stepElements(root).forEach(s => {
+      const stepId = String(s.getAttribute("data-ff-step") || "");
+      s.classList.toggle("d-none", stepId !== target);
+    });
+    updateProgress(root, target);
+  }
+
+  function showFinalStep(root) {
+    const finalNumeric = String(getMaxStep(root));
+    const steps = stepElements(root);
+    const hasNumeric = steps.some(s => String(s.getAttribute("data-ff-step") || "") === finalNumeric);
+    if (hasNumeric) {
+      showStep(root, finalNumeric);
+      return;
+    }
+    const hasDone = steps.some(s => (s.getAttribute("data-ff-step") || "") === "done");
+    if (hasDone) {
+      showStep(root, "done");
+      return;
+    }
+    showStep(root, finalNumeric);
+  }
+
+  function setBusy(root, busy) {
+    if (!root) return;
+    if (busy) root.setAttribute("data-ff-busy", "1"); else root.removeAttribute("data-ff-busy");
+  }
+
+  function setMsg(root, html) {
+    const box = root.querySelector(".ff-form-msg");
+    if (box) box.innerHTML = html || "";
+  }
+
+  function nowIso() {
+    try { return new Date().toISOString(); } catch (_) { return ""; }
+  }
+
+  // ---------- noyau ----------
+  async function handleSubmit(root, cfg) {
+    const endpoint =
+      cfg.endpoint_url ||
+      (cfg.backend_config && cfg.backend_config.endpoint_url) ||
+      "/api/leads/collect/";
+
+    const requireIdem = cfg.require_idempotency !== false; // défaut: true
+    const requireSigned = !!(cfg.require_signed_token || cfg.require_signed);
+    const signUrl = cfg.sign_url || (cfg.backend_config && cfg.backend_config.sign_url) || "";
+
+    const { payload, mergedCtx, finalBody } = buildFinalBody(root, cfg);
+
+    if (window.DEBUG_FF) {
+      try {
+        console.debug("[ff] payload", payload);
+        console.debug("[ff] context", mergedCtx);
+        console.debug("[ff] finalBody (signed+sent)", finalBody);
+      } catch (_) {
+        // ignore logging errors
+      }
+    }
+
+    // 1) Signature si requise
+    let signed_token = "";
+    setBusy(root, true); setMsg(root, "");
+    try {
+      if (requireSigned) {
+        if (!signUrl) throw new Error("Configuration de signature manquante");
+        signed_token = await signBody(signUrl, finalBody);
+      }
+
+      const finalBodyToSend = Object.assign({}, finalBody, signed_token ? { signed_token } : {});
+      const baseHeaders = {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken") || "",
+      };
+      const paymentMethod = (finalBody.payment_method || "").toString().toLowerCase();
+
+      if (paymentMethod === "online") {
+        const checkoutUrl = root.getAttribute("data-checkout-url") || cfg.checkout_url || cfg.checkout_endpoint_url || "/api/checkout/sessions/";
+        const checkoutHeaders = Object.assign({}, baseHeaders);
+        if (requireIdem) checkoutHeaders["X-Idempotency-Key"] = "ff-" + uuid4();
+
+        const checkoutRes = await fetch(checkoutUrl, {
+          method: "POST",
+          headers: checkoutHeaders,
+          body: JSON.stringify(finalBodyToSend),
+          credentials: "same-origin",
+        });
+        const checkoutTxt = await checkoutRes.text();
+        if (window.DEBUG_FF) {
+          console.debug("[ff] checkout status", checkoutRes.status, checkoutTxt);
+        }
+        if (checkoutRes.ok) {
+          let session = null;
+          try { session = checkoutTxt ? JSON.parse(checkoutTxt) : null; } catch (_) { session = null; }
+          const redirectUrl = session && (session.url || session.redirect_url);
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
+            return;
+          }
+          showFinalStep(root);
+          setMsg(root, "");
+        } else {
+          setMsg(root, "Une erreur est survenue. Merci de réessayer.");
+          console.warn("[FlowForms] checkout failed:", checkoutRes.status, checkoutTxt);
+        }
+        return;
+      }
+
+      const headers = Object.assign({}, baseHeaders);
+      if (requireIdem) headers["X-Idempotency-Key"] = "ff-" + uuid4();
+
+      const r = await fetch(endpoint, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(finalBodyToSend),
+        credentials: "same-origin",
+      });
+
+      const txt = await r.text();
+      if (window.DEBUG_FF) {
+        console.debug("[ff] collect status", r.status, txt);
+      }
+      if (r.ok) {
+        let json = null;
+        try { json = txt ? JSON.parse(txt) : null; } catch (_) { json = null; }
+        const redirectUrl = json && (json.redirect_url || json.url);
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+          return;
+        }
+        showFinalStep(root);
+        setMsg(root, "");
+      } else {
+        // feedback simple — les détails sont en console
+        setMsg(root, "Une erreur est survenue. Merci de réessayer.");
+        console.warn("[FlowForms] collect failed:", r.status, txt);
+      }
+    } catch (err) {
+      console.error("[FlowForms] submit error:", err);
+      setMsg(root, "Une erreur est survenue. Merci de réessayer.");
+    } finally {
+      setBusy(root, false);
+    }
+  }
+
+  function wireEvents(root) {
+    // Navigation
+    root.addEventListener("click", (e) => {
+      const t = e.target;
+      if (!t) return;
+      if (t.closest("[data-ff-next]")) {
+        e.preventDefault();
+        const cur = getCurrentStep(root);
+        const max = getMaxStep(root);
+        const next = cur < max ? cur + 1 : max;
+        showStep(root, next);
+      }
+      if (t.closest("[data-ff-prev]")) {
+        e.preventDefault();
+        const cur = getCurrentStep(root);
+        const prev = cur > 1 ? cur - 1 : 1;
+        showStep(root, prev);
+      }
+    });
+
+    // Submit
+    root.addEventListener("click", async (e) => {
+      const btn = e.target && e.target.closest && e.target.closest("[data-ff-submit]");
+      if (!btn) return;
+      e.preventDefault();
+      const cfg = jsonFromConfigScript(root) || {};
+      await handleSubmit(root, cfg);
+    });
+  }
+
+  function init(root) {
+    root = root || document.getElementById("ff-root") || document.querySelector("[data-ff-root]");
+    if (!root) return;
+    const params = new URLSearchParams(window.location.search || "");
+    if (params.get("paid") === "1") {
+      showFinalStep(root);
+    } else if (root.querySelector('[data-ff-step="1"]')) {
+      showStep(root, 1);
+    }
+    wireEvents(root);
+  }
+
+  // Boot idempotent
+  function __ff_boot() {
+    try {
+      const roots = document.querySelectorAll("#ff-root, [data-ff-root]");
+      if (!roots.length) return;
+      roots.forEach(r => init(r));
+    } catch (e) {
+      console.error("[FlowForms] init failed:", e);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", __ff_boot, { once: true });
+  } else {
+    __ff_boot();
+  }
+})();

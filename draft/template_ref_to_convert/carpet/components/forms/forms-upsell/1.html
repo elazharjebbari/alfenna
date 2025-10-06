@@ -1,0 +1,149 @@
+{% load i18n static widget_tweaks %}
+
+<style>
+/* ===== Base (inchangée) ===== */
+.lp-form{--pill-bg:#fff7f8;--pill-bd:#ffd2d7;--pill-bd-focus:#ff4757;--pill-txt:#111;--pill-ph:#8a8a8a}
+.lp-form .form-header h4{font-size:1.1rem;margin:0}
+.lp-form .badge-sale{background:#ff4757;color:#fff;padding:.2em .6em;font-size:.75rem;border-radius:6px;margin-inline-start:.5em}
+.lp-form .grid{display:grid;gap:.65rem}
+@media(min-width:992px){.lp-form .grid{grid-template-columns:1fr 1fr}.lp-form .grid .span-2{grid-column:1/-1}}
+.lp-form .field{display:flex;flex-direction:column;gap:.35rem}
+.lp-form .field label{font-size:.85rem;font-weight:600;color:#222}
+.lp-form .pill{position:relative;display:flex;align-items:center;background:var(--pill-bg);border:1px solid var(--pill-bd);border-radius:12px;min-height:56px;padding:.75rem 1rem .75rem 2.6rem;transition:border-color .15s ease,box-shadow .15s ease}
+.lp-form .pill:focus-within{border-color:var(--pill-bd-focus);box-shadow:0 0 0 .2rem rgba(255,71,87,.15)}
+.lp-form .pill input{width:100%;border:0;background:transparent;color:var(--pill-txt);font-size:1rem;outline:none}
+.lp-form .pill input::placeholder{color:var(--pill-ph)}
+.lp-form .icon{position:absolute;inset-inline-start:.9rem;top:50%;transform:translateY(-50%);font-size:1.05rem;opacity:.9;pointer-events:none}
+.lp-form .help{font-size:.75rem;color:#666;margin:.25rem 0 0}
+.lp-form .error{font-size:.8rem;color:#b00020;margin:.25rem 0 0}
+.lp-form .is-invalid{border-color:#b00020!important;box-shadow:none}
+.lp-form .btn-cta{width:100%;margin-top:.35rem;padding:.9rem 1rem;border:0;border-radius:10px;background:#ff4757;color:#fff;font-weight:700;font-size:1rem}
+.lp-form .btn-cta:focus-visible{outline:3px solid rgba(255,71,87,.35);outline-offset:2px}
+.lp-form .pill,.lp-form .btn-cta{min-height:56px}
+
+/* Réassurance */
+.reassure-line{display:flex;flex-wrap:wrap;gap:.5rem .75rem;align-items:center;justify-content:flex-start}
+{% if LANGUAGE_CODE == 'ar' %}.reassure-line{flex-direction:row-reverse}{% endif %}
+.reassure-item{display:inline-flex;align-items:center;gap:.375rem;padding:.35rem .6rem;border-radius:999px;background:rgba(13,110,253,.08);color:#0d6efd;font-weight:500;line-height:1;font-size:.88rem}
+.reassure-item i{font-size:.95rem;line-height:1}
+
+/* === Cartes offres === */
+.offer-group{margin:.4rem 0 .2rem}
+.offer-title{font-weight:800;font-size:1.05rem;margin:0 0 .45rem}
+.offer-options{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.offer-card{position:relative;border:2px solid #e7e8ea;border-radius:14px;padding:.75rem .8rem;cursor:pointer;background:#fff;display:flex;flex-direction:column;gap:.25rem;min-height:116px}
+.offer-card input{position:absolute;inset:0;opacity:0}
+.offer-card .line1{font-weight:750}
+.offer-card .price{font-weight:800;font-size:1rem}
+.offer-card .strike{font-size:.85rem;text-decoration:line-through;color:#9a9a9a}
+.offer-card .badge{position:absolute;top:.5rem;inset-inline-end:.5rem;background:#0d6efd;color:#fff;border-radius:8px;padding:.18rem .5rem;font-size:.75rem;font-weight:700}
+.offer-card.is-selected{border-color:#0d6efd;box-shadow:0 0 0 .15rem rgba(13,110,253,.14)}
+.offer-card .save{font-size:.78rem;color:#0d6efd;font-weight:700}
+.offer-note{font-size:.8rem;color:#555;margin:.35rem 0 0}
+</style>
+
+<form id="lead-form" method="post" class="lp-form" novalidate {% if LANGUAGE_CODE == 'ar' %}dir="rtl"{% endif %}>
+  {% csrf_token %}
+  {{ form.product }}{{ form.promotion_selected }}
+
+  <!-- Header promo -->
+  <div class="form-header mt-4" style="text-align:center;margin-bottom:.75rem">
+    <h4 id="promo-form" style="display:flex;gap:.5rem;align-items:center;justify-content:center;flex-wrap:wrap">
+      {% if price_ui.show %}
+        <span class="badge-sale">{{ price_ui.percent_text }}</span>
+        <span style="font-weight:700">{% trans "Vous économisez" %} {{ price_ui.savings_text }}</span>
+      {% else %}<span>{% trans "Prix spécial aujourd’hui" %}</span>{% endif %}
+    </h4>
+  </div>
+
+  <!-- Choix d’offre -->
+  <div class="offer-group" role="group" aria-labelledby="offer-title">
+    <p id="offer-title" class="offer-title">{% trans "Combien de tapis souhaitez-vous acheter ?" %}</p>
+    <div class="offer-options" role="radiogroup" aria-label="{% trans 'Options de pack' %}">
+      <!-- 1 tapis -->
+      <label class="offer-card is-selected" data-offer="solo">
+        <input type="radio" name="offer" value="solo" checked aria-label="{% trans '1 tapis' %}">
+        <span class="line1">{% trans "1 tapis" %}</span>
+        <span class="price">273&nbsp;DHS</span>
+        <span class="strike" aria-hidden="true">—</span>
+      </label>
+      <!-- 2 tapis -->
+      <label class="offer-card" data-offer="duo">
+        <input type="radio" name="offer" value="duo" aria-label="{% trans '2 tapis' %}">
+        <span class="badge">{% trans "Meilleur choix" %}</span>
+        <span class="line1">{% trans "2 tapis" %}</span>
+        <span class="price">499&nbsp;DHS</span>
+        <span class="strike">546&nbsp;DHS</span>
+        <span class="save">{% trans "Économisez 47 DHS" %}</span>
+      </label>
+    </div>
+    <p class="offer-note">{% trans "Le Pack Duo est idéal pour offrir à un proche (parents, grands-parents) tout en économisant." %}</p>
+    <input type="hidden" name="quantity" id="quantity" value="1">
+    <input type="hidden" name="selected_price" id="selected_price" value="273">
+  </div>
+
+  <!-- Champs -->
+  <div class="grid" role="group" aria-labelledby="promo-form">
+    {% trans "Ex : Amine" as ph_name %}
+    {% trans "Ex : 06 12 34 56 78 ou +212 6 12 34 56 78 (WhatsApp)" as ph_phone %}
+    {% trans "Ex : 10 rue Anfa, Résidence Atlas, 3e étage, Casablanca" as ph_addr %}
+
+    <div class="field">
+      <label for="firstname">{% trans "Votre prénom pour la remise" %}</label>
+      <div class="pill"><span class="icon"><i class="flaticon-user"></i></span>
+        {% render_field form.full_name id="firstname" placeholder=ph_name autocomplete="name" class+="form-control" %}</div>
+      {% if form.full_name.errors %}<div class="error">{{ form.full_name.errors|join:", " }}</div>{% endif %}
+    </div>
+
+    <div class="field">
+      <label for="phone-number">{% trans "Téléphone ou WhatsApp" %}</label>
+      <div class="pill"><span class="icon"><i class="fas fa-phone"></i></span>
+        {% render_field form.phone_number id="phone-number" placeholder=ph_phone autocomplete="tel" inputmode="tel" dir="ltr" pattern="^[0-9+()\-\\s]{6,}$" class+="form-control" %}</div>
+      <p class="help">{% trans "Nous utilisons ce numéro uniquement pour confirmer la livraison." %}</p>
+      {% if form.phone_number.errors %}<div class="error">{{ form.phone_number.errors|join:", " }}</div>{% endif %}
+    </div>
+
+    <div class="field span-2">
+      <label for="address">{% trans "Votre adresse de livraison" %}</label>
+      <div class="pill"><span class="icon"><i class="flaticon-location-1"></i></span>
+        <input type="text" name="address" id="address" class="form-control"
+               placeholder="{{ ph_addr }}" autocomplete="street-address" required></div>
+      <p class="help" id="rgpd-note">{% trans "Données protégées (RGPD)" %}</p>
+    </div>
+
+    <input type="hidden" name="product_id" id="product_id" value="{{ product.pk }}">
+    <input type="hidden" name="promotion_selected" id="promotion_selected" value="{{ product.promotion_price|default:'273' }}">
+  </div>
+
+  <button type="submit" class="btn-cta">{% trans "J'achète mon tapis" %}</button>
+
+  <div class="reassure-line mt-2" role="list" aria-label="{% trans 'Garanties & assistance' %}">
+    <div class="reassure-item" role="listitem"><i class="fas fa-truck"></i><span>{% trans "Livraison gratuite" %}</span></div>
+    <div class="reassure-item" role="listitem"><i class="fas fa-shield-alt"></i><span>{% trans "Paiement à la livraison" %}</span></div>
+    <div class="reassure-item" role="listitem"><i class="fas fa-undo-alt"></i><span>{% trans "Retour 7 jours" %}</span></div>
+    <a class="reassure-item" role="listitem" href="https://wa.me/212625113848" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i><span>{% trans "Support WhatsApp" %}</span></a>
+  </div>
+
+  <p class="help" style="text-align:center;margin-top:.5rem">{% trans "+1000 clients satisfaits" %}</p>
+</form>
+
+<script>
+(function(){
+  const cards=document.querySelectorAll('.offer-card');
+  const qty=document.getElementById('quantity');
+  const price=document.getElementById('selected_price');
+  const promo=document.getElementById('promotion_selected');
+  function selectCard(card){
+    cards.forEach(c=>c.classList.remove('is-selected'));
+    card.classList.add('is-selected');
+    const offer=card.getAttribute('data-offer');
+    if(offer==='duo'){qty.value='2';price.value='499';promo.value='499';}
+    else{qty.value='1';price.value='273';promo.value='273';}
+  }
+  cards.forEach(card=>{
+    card.addEventListener('click',()=>selectCard(card));
+    const radio=card.querySelector('input[type="radio"]');
+    radio.addEventListener('change',()=>selectCard(card));
+  });
+})();
+</script>

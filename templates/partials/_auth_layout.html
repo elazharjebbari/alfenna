@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block messages %}{% endblock messages %}
+
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock styles %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/auth.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block content %}
+<section class="auth-wrap" data-auth-screen>
+  <header class="auth-header">
+    <h1 class="auth-title">{% block auth_title %}{% endblock %}</h1>
+    <p class="auth-sub">{% block auth_sub %}{% endblock %}</p>
+  </header>
+
+  {% if messages %}
+    <div class="auth-alerts" role="status" aria-live="polite">
+      {% for m in messages %}<div class="alert {{ m.tags }}">{{ m }}</div>{% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="auth-card">
+    {% block auth_form %}{% endblock %}
+  </div>
+
+  <footer class="auth-footer">
+    {% block auth_footer %}{% endblock %}
+  </footer>
+</section>
+{% endblock content %}

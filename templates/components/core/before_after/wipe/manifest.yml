@@ -1,0 +1,78 @@
+alias: before-after/wipe
+template: "components/core/before_after/wipe/wipe.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/before-after/wipe.css"
+  js:
+    - "/static/components/before-after/wipe.js"
+  vendors: []
+
+params:
+  title: "Avant / Après — Stop-scroll"
+  subtitle: "Erreurs fréquentes vs. résultat après formation"
+  before:
+    image: "images/components/wipe/bougies-avant"
+    alt: "Bougies ratées (cire fissurée, suie, parfum trop fort)"
+    label: "Avant / Apres"
+    pills:
+      - { icon: "fa-solid fa-circle-exclamation", text: "Cire fissurée" }
+      - { icon: "fa-solid fa-smog",               text: "Suie noire" }
+      - { icon: "fa-solid fa-wind",               text: "Parfum trop fort" }
+  after:
+    image: "images/components/wipe/bougies-apres"
+    alt: "Bougies réussies (rendu lisse, mèche coton, parfum sans phtalates)"
+    label: "Après"
+    pills:
+      - { icon: "fa-solid fa-ban",        text: "0% paraffine" }
+      - { icon: "fa-solid fa-clock",      text: "x3 tenue du parfum" }
+      - { icon: "fa-solid fa-stopwatch",  text: "1ère bougie en 2h" }
+  cta: { label: "Je me lance", url: "#program" }
+  style:
+    bg_color: "#e7f8ee"
+    handle_color: "#309255"
+    radius: 20
+    shadow: true
+  options:
+    default_value: 50
+    snap_points: [ 0, 50, 100 ]
+
+contract:
+  optional:
+    title: "str"
+    subtitle: "str"
+    before:
+      image: "str"
+      alt: "str"
+      label?: "str"
+      pills?:
+        - icon?: "str"
+          text?: "str"
+    after:
+      image: "str"
+      alt: "str"
+      label?: "str"
+      pills?:
+        - icon?: "str"
+          text?: "str"
+    cta?:
+      label: "str"
+      url: "str"
+    style?:
+      bg_color?: "str"
+      handle_color?: "str"
+      radius?: "int"
+      shadow?: "bool"
+    options?:
+      default_value?: "int"
+      snap_points?: [ ]
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.before_after.hydrators.wipe"
+  module: "apps.atelier.compose.hydrators.before_after.hydrators"
+  func: "wipe"
+  params: { }
+
+render:
+  cacheable: false

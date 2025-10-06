@@ -1,0 +1,682 @@
+{% extends 'carpet/base.html' %}
+{% load i18n static %}
+{% block title %}{{ variant.headline }}{% endblock title %}
+
+{% block extra_css %}
+    <style>
+    :root{
+      --trust:#10B981;           /* vert rassurant */
+      --trust-bg:#ECFDF5;
+      --trust-bd:#A7F3D0;
+      --trust-text:#065F46;
+    }
+
+    /* Conteneur fixe (gauche FR / droite AR automatiquement) */
+    .sp-toaster{
+      position:fixed; inset-block-end:1rem; inset-inline-start:1rem; z-index:1060;
+      display:grid; gap:.5rem; pointer-events:none;
+    }
+    html[lang="ar"] .sp-toaster{ inset-inline-start:auto; inset-inline-end:1rem; }
+
+    /* Toast */
+    .sp-toast{
+      pointer-events:auto; display:grid; grid-auto-flow:column; align-items:center; gap:.6rem;
+      max-width:320px; padding:.65rem .75rem; border-radius:.75rem;
+      background:var(--trust-bg); color:var(--trust-text);
+      border:1px solid var(--trust-bd);
+      box-shadow:0 6px 18px rgba(16,185,129,.15);
+      transform:translateY(8px); opacity:0; transition:transform .2s ease, opacity .2s ease;
+    }
+    .sp-toast.is-in{ transform:none; opacity:1; }
+    .sp-toast__icon{ inline-size:20px; block-size:20px; color:var(--trust); }
+    .sp-toast__txt{ font-size:.92rem; line-height:1.25; font-weight:600; }
+    .sp-toast__meta{ font-size:.8rem; opacity:.75; }
+    .sp-toast__close{
+      margin-inline-start:auto; background:none; border:0; color:inherit; opacity:.6;
+      inline-size:28px; block-size:28px; border-radius:999px; display:grid; place-items:center; cursor:pointer;
+    }
+    .sp-toast__close:hover{ opacity:1; }
+    @media (prefers-reduced-motion:reduce){ .sp-toast{ transition:none; } }
+    </style>
+{% endblock extra_css %}
+
+{% block content %}
+
+    {#    {% include 'carpet/components/sidebar/sidebar.html' %}#}
+    {% include 'carpet/components/header/header.html' %}
+
+    {# Logo centré avec effet arrondi #}
+
+    <div class="d-flex justify-content-center my-1">
+        <img
+                src="{% static 'carpet/images/logo/al-raha_500x500.webp' %}"
+                alt="Logo Al-Raha"
+                class="img-fluid rounded"
+                style="max-width: 100px;"
+        >
+    </div>
+
+    {% include 'carpet/components/shared/lang_switch.html' %}
+
+
+    <div class="ul-inner-page-container">
+        <div class="row ul-bs-row justify-content-center">
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="ul-blog-details">
+                    <div class="ul-blog ul-blog-big">
+                        <blockquote class="text-end">
+                            <span class="icon"><i class="flaticon-quote"></i></span>
+                            <strong class="d-block mb-1">{% trans "« La religion est facilité. »" %}</strong>
+                            <small class="d-block text-muted">
+                                {% trans "Ṣaḥīḥ al-Bukhārī, Kitāb al-Īmān (Foi)" %}
+                            </small>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Composant produit dynamique #}
+    {% include 'carpet/components/product/product_oud_dynamic.html' %}
+{#    {% include 'carpet/components/faq/mini-faq.html' %}#}
+
+    {% include 'carpet/components/benefits/benefits.html' %}
+    {% include 'carpet/components/reviews/reviews.html' %}
+    {% include 'carpet/components/faq/faq.html' %}
+    {% include 'carpet/components/cta/sticky_cta.html' %}
+
+
+
+    <div id="sp-toaster"
+         class="sp-toaster"
+         data-purchase-feed-url="#"
+         data-locale="{{ LANGUAGE_CODE }}"
+         data-lp="{{ lp.slug|default:'' }}"
+         data-variant="{{ variant.key|default:'' }}"
+         aria-live="polite" aria-atomic="true">
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    {{ block.super }}
+    {# ton JS lead form existant (copié de shop-details.html) #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('lead-form');
+            if (!form) return;
+
+            const submitBtn = form.querySelector('[type="submit"]');
+            const url = "{% url 'create-lead' %}";
+
+            function getCSRFTOKEN() {
+                const inp = document.querySelector('[name=csrfmiddlewaretoken]');
+                return inp ? inp.value : '';
+            }
+
+            function sanitizePhone(t) {
+                return String(t || '').trim().replace(/\s+/g, '').replace(/[^\d+]/g, '').replace(/^00/, '+');
+            }
+
+            function setLoading(x) {
+                if (!submitBtn) return;
+                submitBtn.disabled = x;
+                submitBtn.innerHTML = x ? 'Envoi…' : (submitBtn.dataset._txt || 'Envoyer');
+            }
+
+            submitBtn && (submitBtn.dataset._txt = submitBtn.innerHTML);
+
+            function validate() {
+                const fullNameEl = document.getElementById('firstname');
+                const phoneEl = document.getElementById('phone-number');
+                const productEl = document.getElementById('product_id') || document.getElementById('id_product');
+                const promoEl = document.getElementById('promotion_selected') || document.getElementById('id_promotion_selected');
+                [fullNameEl, phoneEl].forEach(el => el && el.classList.remove('is-invalid'));
+                let ok = true, errs = [];
+                if (!fullNameEl || fullNameEl.value.trim().length < 2) {
+                    ok = false;
+                    errs.push('Veuillez saisir votre prénom.');
+                    fullNameEl && fullNameEl.classList.add('is-invalid');
+                }
+                if (!phoneEl) {
+                    ok = false;
+                    errs.push('Champ téléphone manquant.');
+                } else {
+                    phoneEl.value = sanitizePhone(phoneEl.value);
+                    if (phoneEl.value.length < 6) {
+                        ok = false;
+                        errs.push('Numéro de téléphone invalide.');
+                        phoneEl.classList.add('is-invalid');
+                    }
+                }
+                if (!productEl || !productEl.value) {
+                    ok = false;
+                    errs.push('Produit introuvable.');
+                }
+                if (!promoEl) {
+                    ok = false;
+                    errs.push('promotion_selected manquant.');
+                }
+                return {ok, errs};
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const {ok, errs} = validate();
+                if (!ok) {
+                    Swal.fire({icon: 'error', title: 'Erreur', text: errs.join('\n')});
+                    return;
+                }
+                setLoading(true);
+                fetch(url, {method: 'POST', headers: {'X-CSRFToken': getCSRFTOKEN()}, body: new FormData(form)})
+                    .then(async r => ({s: r.status, b: await r.json().catch(() => ({}))}))
+                    .then(({s, b}) => {
+                        if (s === 200 && b.status === 'ok' && b.redirect_url) {
+                            window.location.href = b.redirect_url;
+                        } else {
+                            const lines = [];
+                            Object.entries(b.errors || {}).forEach(([f, a]) => (a || []).forEach(e => lines.push(`${f}: ${e.message || e}`)));
+                            Swal.fire({icon: 'error', title: 'Erreur', text: lines.join('\n') || 'Merci de corriger.'});
+                        }
+                    })
+                    .catch(() => Swal.fire({icon: 'error', title: 'Erreur réseau', text: 'Impossible de soumettre.'}))
+                    .finally(() => setLoading(false));
+            });
+        });
+    </script>
+
+    <script>
+    /* Social proof toaster — discret, vert rassurant (fallback élargi MAROC) */
+    (function(){
+      'use strict';
+      const host = document.getElementById('sp-toaster');
+      if(!host) return;
+
+      const isAR   = (host.dataset.locale||'').toLowerCase().startsWith('ar') || document.dir==='rtl';
+      const feed   = (host.dataset.purchaseFeedUrl||'').trim();
+      const lp     = host.dataset.lp||'';
+      const vKey   = host.dataset.variant||'';
+      const capKey = `sp_shown__${lp}__${vKey}`;
+      const MAX_PER_SESSION = 4;
+
+      // Pause pendant saisie (ne pas gêner)
+      let paused=false;
+      document.addEventListener('focusin', e=>{
+        if(['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) paused=true;
+      });
+      document.addEventListener('focusout', ()=>{ paused=false; });
+
+      // File d’événements
+      let queue = [];
+      const boot = () => {
+        if (feed){
+          fetch(feed, {cache:'no-store'}).then(r=>r.json()).then(arr=>{
+            queue = Array.isArray(arr)? sanitize(arr) : fallbackQueue();
+          }).catch(()=>queue = fallbackQueue());
+        } else { queue = fallbackQueue(); }
+      };
+      boot();
+
+      const firstDelay = 8000 + Math.floor(Math.random()*4000); // 8–12s
+      setTimeout(play, firstDelay);
+
+      function play(){
+        if (paused) return void setTimeout(play, 3000);
+        const shown = +localStorage.getItem(capKey) || 0;
+        if (shown >= MAX_PER_SESSION) return;
+
+        const ev = queue.shift();
+        if (!ev) return;
+
+        showToast(ev);
+        localStorage.setItem(capKey, String(shown+1));
+        const gap = 25000 + Math.floor(Math.random()*20000);     // 25–45s
+        setTimeout(play, gap);
+      }
+
+      function showToast(ev){
+        const el = document.createElement('div');
+        el.className = 'sp-toast';
+        el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
+        el.innerHTML = `
+          <svg class="sp-toast__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6" opacity=".25"></circle>
+            <path d="M7 12.5l3 3 7-7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <div><div class="sp-toast__txt">${ev.text}</div><div class="sp-toast__meta">${ev.meta}</div></div>
+          <button class="sp-toast__close" aria-label="${isAR?'إغلاق':'Fermer'}">×</button>
+        `;
+        host.appendChild(el); requestAnimationFrame(()=>el.classList.add('is-in'));
+        const close = ()=>{ el.classList.remove('is-in'); setTimeout(()=>el.remove(),220); };
+        el.querySelector('.sp-toast__close').addEventListener('click', close);
+        setTimeout(close, 5200);
+      }
+
+      function sanitize(arr){
+        return arr.slice(0,20).map(x=>{
+          const name = anonymize(x.name||x.full_name||'');
+          const city = x.city || (isAR?'المغرب':'Maroc');
+          const ago  = Number(x.ago_min||1);
+          const txt  = isAR
+            ? `<strong>${name}</strong> اشترى الآن من <strong>${city}</strong>`
+            : `<strong>${name}</strong> vient d’acheter à <strong>${city}</strong>`;
+          const meta = isAR ? `منذ ${ago} د` : `il y a ${ago} min`;
+          return {text:txt, meta};
+        });
+      }
+
+      function anonymize(full){
+        const p = String(full).trim().split(/\s+/);
+        const first = p[0] || (isAR?'عميل':'Client');
+        const lastI = (p[1]||'').charAt(0);
+        return isAR ? `${first} ${lastI? lastI+'ـ.':''}` : `${first} ${lastI? lastI+'.':''}`;
+      }
+
+      /* ================================
+         Fallback MAROC — listes élargies
+         ================================ */
+
+      // Helpers
+      const pick = (arr)=> arr[Math.floor(Math.random()*arr.length)];
+
+      // Prénoms FR (marocains, M/F)
+      const FIRST_FR_M = ['Youssef','Amine','Hamza','Mohamed','Anas','Othmane','Yassine','Mehdi','Rachid','Reda','Hicham','Adil','Ismail','Zakaria','Abdelaziz','Abdelali','Ayoub','Soufiane','Saad','Taha','Walid','Marouane','Nabil','Karim','Ayman','Anouar','Imad','Badr','Tarik','Jalal','Idriss','Younes','Omar','Ali','Sami','Hassan','Khalid','Mustapha','Abdelkerim','Ibrahim','Yahya','Skander','Amir','Chakib','Fouad','Lotfi','Mounir','Noureddine'];
+      const FIRST_FR_F = ['Salma','Hajar','Imane','Sara','Khadija','Fatima','Fatima-Zahra','Asmae','Maryam','Nisrine','Kawtar','Dounia','Ghita','Rania','Nadia','Rajae','Soukaina','Aicha','Samira','Wafae','Laila','Meryem','Ikram','Safae','Hanane','Basma','Nawal','Amal','Siham','Ibtissam','Inès','Farah','Yasmina','Nada','Ilham','Chaimae','Houda','Lamiae','Mouna','Zineb','Naoual','Hind','Rachida','Jamila','Bahia','Karima','Amine?']; // 'Amine?' safety if typo occurs ignored
+      const FIRST_FR = FIRST_FR_M.concat(FIRST_FR_F);
+
+      // Prénoms AR
+      const FIRST_AR_M = ['يوسف','أمين','حمزة','محمد','أنس','عثمان','ياسين','مهدي','رشيد','رضا','هشام','عادل','إسماعيل','زكريا','عبدالعزيز','عبدالعالي','أيوب','سفيان','سعد','طه','وليد','مروان','نبيل','كريم','أيمن','أنور','عماد','بدر','طارق','جلال','إدريس','يونس','عمر','علي','سامي','حسن','خالد','مصطفى','إبراهيم','يحيى','سكندر','أمير','شكيب','فؤاد','لطفي','منير','نورالدين'];
+      const FIRST_AR_F = ['سلمى','هاجر','إيمان','سارة','خديجة','فاطمة','فاطمة الزهراء','أسماء','مريم','نسرين','كوثر','دنيا','غيثة','رانية','نادية','رجاء','سكينة','عائشة','سميرة','وفاء','ليلى','مريم','إكرام','صفاء','حنان','بسمة','نوال','أمل','سهام','ابتسام','إيناس','فرح','ياسمين','ندى','إلهام','شيماء','هدى','لمياء','منى','زينب','نوال','هند','رشيدة','جميلة','بهية','كريمة'];
+      const FIRST_AR = FIRST_AR_M.concat(FIRST_AR_F);
+
+      // Noms de famille (on n’utilise que l’initiale)
+      const LAST_FR = ['El Mansouri','Benali','Bennis','El Fassi','Amrani','Lahlou','El Idrissi','Choukri','Alaoui','Kettani','Saadi','Tahar','Harrak','Alami','Cherkaoui','El Ouazzani','Berrada','Skalli','Azzouzi','Ouahbi','Ait Taleb','Boudraa','Bouhout','Belaid','Ouazzani','El Yamani','El Haddaoui','El Ghazali','Moutawakil','Jarmouni'];
+      const LAST_AR = ['المنصوري','بنعلي','بنيس','الفاسي','العمراني','لعلو','الإدريسي','شكري','العلوي','الكتاني','السعدي','الطهري','الحراق','العلمي','الشرقاوي','الوزاني','برادة','اسكالي','العزوزي','وهبي','آيت طالب','بودراعة','بوهوت','بلعيد','اليَمَني','الحداوي','الغزالي','المتوكل','جرموني'];
+
+      // Villes élargies (FR / AR)
+      const CITIES_FR = ['Casablanca','Rabat','Salé','Marrakech','Fès','Tanger','Agadir','Meknès','Oujda','Kénitra','Mohammedia','Tétouan','Nador','El Jadida','Safi','Laâyoune','Béni Mellal','Khouribga','Khemisset','Settat','Taza','Taroudant','Larache','Errachidia','Guelmim'];
+      const CITIES_AR = ['الدار البيضاء','الرباط','سلا','مراكش','فاس','طنجة','أكادير','مكناس','وجدة','القنيطرة','المحمدية','تطوان','الناظور','الجديدة','آسفي','العيون','بني ملال','خريبكة','الخميسات','سطات','تازة','تارودانت','العرائش','الرشيدية','كلميم'];
+
+      function makeNameFR(){
+        const f = pick(FIRST_FR);
+        const l = pick(LAST_FR);
+        const i = (l.charAt(0) || 'X').toUpperCase();
+        return `${f} ${i}.`;
+      }
+      function makeNameAR(){
+        const f = pick(FIRST_AR);
+        const l = pick(LAST_AR);
+        const i = l.charAt(0) || 'ع';
+        return `${f} ${i}ـ.`; // initiale arabe + الكشيدة + نقطة
+      }
+
+      function fallbackQueue(){
+        const C = isAR ? CITIES_AR : CITIES_FR;
+        const makeName = isAR ? makeNameAR : makeNameFR;
+
+        const len = 12; // un peu plus de diversité
+        return Array.from({length: len}, () => {
+          const name = makeName();
+          const city = pick(C);
+          const ago  = 1 + Math.floor(Math.random()*9); // 1–9 min
+          const txt  = isAR
+            ? `<strong>${name}</strong> اشترى الآن من <strong>${city}</strong>`
+            : `<strong>${name}</strong> vient d’acheter à <strong>${city}</strong>`;
+          const meta = isAR ? `منذ ${ago} د` : `il y a ${ago} min`;
+          return { text: txt, meta };
+        });
+      }
+    })();
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const root = document.getElementById('cta-mini-faq');
+      if (!root) return;
+
+      const items = Array.from(root.querySelectorAll('.ul-single-accordion-item'));
+
+      const getBtn   = (item) => item.querySelector('.ul-single-accordion-item__header');
+      const getPanel = (item) => {
+        const btn = getBtn(item);
+        const id  = btn && btn.getAttribute('aria-controls');
+        return id ? document.getElementById(id) : null;
+      };
+      const setIcon = (btn, expanded) => {
+        const ic = btn.querySelector('.icon i');
+        if (!ic) return;
+        ic.classList.toggle('flaticon-plus',  !expanded);
+        ic.classList.toggle('flaticon-minus',  expanded);
+      };
+      const setExpanded = (item, expanded) => {
+        const btn = getBtn(item);
+        const panel = getPanel(item);
+        if (!btn || !panel) return;
+        btn.setAttribute('aria-expanded', String(expanded));
+        panel.hidden = !expanded;
+        panel.setAttribute('aria-hidden', String(!expanded));
+        item.classList.toggle('is-open', expanded);
+        setIcon(btn, expanded);
+      };
+      const collapseAll = (exceptItem) => {
+        items.forEach((it) => { if (it !== exceptItem) setExpanded(it, false); });
+      };
+
+      // Initialisation — si plusieurs marqués "ouverts", on n’en garde qu’un
+      let hasOpen = false;
+      items.forEach((item) => {
+        const btn = getBtn(item), panel = getPanel(item);
+        const wantsOpen = (btn && btn.getAttribute('aria-expanded') === 'true') ||
+                          (panel && panel.hidden === false);
+        if (wantsOpen && !hasOpen) { setExpanded(item, true); hasOpen = true; }
+        else                        { setExpanded(item, false); }
+      });
+
+      // Clic (délégation)
+      root.addEventListener('click', function (e) {
+        const btn = e.target.closest('.ul-single-accordion-item__header');
+        if (!btn || !root.contains(btn)) return;
+
+        const item = btn.closest('.ul-single-accordion-item');
+        const panel = getPanel(item);
+        if (!panel) return;
+
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        if (expanded) {
+          setExpanded(item, false);
+        } else {
+          collapseAll(item);
+          setExpanded(item, true);
+        }
+      });
+
+      // Navigation clavier (↑ ↓ Home End)
+      root.addEventListener('keydown', function (e) {
+        const btn = e.target.closest('.ul-single-accordion-item__header');
+        if (!btn) return;
+
+        const headers = items.map(getBtn).filter(Boolean);
+        const idx = headers.indexOf(btn);
+        if (idx < 0) return;
+
+        let target = null;
+        if (e.key === 'ArrowDown') { target = headers[(idx + 1) % headers.length]; }
+        else if (e.key === 'ArrowUp') { target = headers[(idx - 1 + headers.length) % headers.length]; }
+        else if (e.key === 'Home') { target = headers[0]; }
+        else if (e.key === 'End') { target = headers[headers.length - 1]; }
+        if (target) { e.preventDefault(); target.focus(); }
+      });
+
+    });
+
+
+
+    </script>
+
+    <script>
+    /* deal-timer v2.1 — tick chaque seconde (aligné sur la seconde) */
+    (function () {
+      'use strict';
+
+      // ---------- utils ----------
+      function toArNum(n){ try{ return n.toLocaleString('ar'); }catch(e){ return String(n); } }
+
+      function fmtRemaining(ms, locale){
+        if (ms <= 0) return { text: locale==='ar' ? 'انتهى العرض' : 'Offre expirée', warn:false, expired:true };
+        const total = Math.floor(ms/1000);
+        const d = Math.floor(total/86400);
+        const h = Math.floor((total%86400)/3600);
+        const m = Math.floor((total%3600)/60);
+        const s = total%60;
+        const ar = (locale==='ar');
+        const N = (x)=> ar ? toArNum(x) : String(x);
+        const pack=(x,u)=> N(x)+u;
+
+        // Affichage : jours => j/h/m, sinon on montre les secondes (défilement)
+        if (d>0)       return { text: ar ? `${pack(d,'ي')} ${pack(h,'س')} ${pack(m,'د')}` : `${pack(d,'j')} ${pack(h,'h')} ${pack(m,'m')}`, warn:false, expired:false };
+        if (h>0)       return { text: ar ? `${pack(h,'س')} ${pack(m,'د')} ${pack(s,'ث')}` : `${pack(h,'h')} ${pack(m,'m')} ${pack(s,'s')}`, warn:false, expired:false };
+        return            { text: ar ? `${pack(m,'د')} ${pack(s,'ث')}` : `${pack(m,'m')} ${pack(s,'s')}`, warn:(m===0), expired:false };
+      }
+
+      function storageKey(lp,variant){ return `deal_deadline__${lp||'lp'}__${variant||''}`; }
+
+      // Ticker aligné sur la seconde système
+      function startSecondTicker(cb){
+        let toId = null, intId = null;
+        function clear(){ if(toId) clearTimeout(toId); if(intId) clearInterval(intId); toId=intId=null; }
+        const align = 1000 - (Date.now() % 1000);           // jusqu’à la prochaine seconde pile
+        toId = setTimeout(function(){
+          cb();                                             // premier rendu aligné
+          intId = setInterval(cb, 1000);                    // puis chaque seconde
+        }, align);
+        return { stop: clear };
+      }
+
+      // ---------- core ----------
+      function initTimer(el){
+        const locale  = el.dataset.locale || 'fr';
+        const mode    = el.dataset.mode   || 'rolling';
+        const lp      = el.dataset.lp     || '';
+        const variant = el.dataset.variant|| '';
+        const valueEl = el.querySelector('[data-role="value"]');
+        const timeEl  = el.querySelector('[data-role="deadline"]');
+
+        // deadline
+        let deadlineISO = (el.dataset.deadlineIso || '').trim();
+        if (!deadlineISO && mode==='rolling'){
+          const hours = parseInt(el.dataset.rollingHours || '24', 10);
+          const key = storageKey(lp, variant);
+          let saved = localStorage.getItem(key);
+          if (!saved){
+            saved = new Date(Date.now() + hours*3600e3).toISOString();
+            localStorage.setItem(key, saved);
+          }
+          deadlineISO = saved;
+        }
+
+        const deadline = deadlineISO ? new Date(deadlineISO) : null;
+        if (!deadline || isNaN(deadline.getTime())){
+          valueEl.textContent = (locale==='ar') ? 'العرض متاح' : 'Offre en cours';
+          return;
+        }
+
+        timeEl.setAttribute('datetime', deadline.toISOString());
+        try { (window.dataLayer=window.dataLayer||[]).push({event:'timer_init', mode, deadline_iso:deadline.toISOString(), locale}); } catch(e){}
+
+        let ticker = null;
+
+        function render(){
+          const left = deadline.getTime() - Date.now();
+          const fmt  = fmtRemaining(left, locale);
+          valueEl.textContent = fmt.text;
+          el.classList.toggle('deal-timer--warn',    fmt.warn);
+          el.classList.toggle('deal-timer--expired', fmt.expired);
+
+          if (fmt.expired){
+            if (ticker) ticker.stop();
+            const sub = el.querySelector('.deal-timer__sub');
+            if (sub) sub.textContent = (locale==='ar') ? 'انتهى العرض. تم تحديث السعر.' : 'L’offre vient d’expirer. Prix mis à jour.';
+            try { (window.dataLayer=window.dataLayer||[]).push({event:'timer_expired'}); } catch(e){}
+          }
+        }
+
+        // Démarrage + réalignement quand l’onglet redevient visible (évite le drift)
+        function start(){
+          if (ticker) ticker.stop();
+          render();
+          ticker = startSecondTicker(render);
+        }
+
+        start();
+        document.addEventListener('visibilitychange', function(){
+          if (document.visibilityState === 'visible') start();
+        });
+
+        // Analytics au clic CTA
+        document.addEventListener('click', function (ev){
+          const btn = ev.target.closest('#order .btn, [data-cta="primary"]');
+          if (!btn) return;
+          const left = Math.max(0, deadline.getTime() - Date.now());
+          try { (window.dataLayer=window.dataLayer||[]).push({event:'cta_click_with_timer', seconds_left: Math.floor(left/1000)}); } catch(e){}
+        }, {passive:true});
+      }
+
+      // ---------- boot ----------
+      function bootTimers(){ document.querySelectorAll('.deal-timer').forEach(initTimer); }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootTimers, { once:true });
+      } else { bootTimers(); }
+
+    })();
+    </script>
+
+    <script>
+/* Social proof toaster — discret, vert rassurant (fallback élargi MAROC) */
+(function(){
+  'use strict';
+  const host = document.getElementById('sp-toaster');
+  if(!host) return;
+
+  const isAR   = (host.dataset.locale||'').toLowerCase().startsWith('ar') || document.dir==='rtl';
+  const feed   = (host.dataset.purchaseFeedUrl||'').trim();
+  const lp     = host.dataset.lp||'';
+  const vKey   = host.dataset.variant||'';
+  const capKey = `sp_shown__${lp}__${vKey}`;
+  const MAX_PER_SESSION = 4;
+
+  // Pause pendant saisie (ne pas gêner)
+  let paused=false;
+  document.addEventListener('focusin', e=>{
+    if(['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) paused=true;
+  });
+  document.addEventListener('focusout', ()=>{ paused=false; });
+
+  // File d’événements
+  let queue = [];
+  const boot = () => {
+    if (feed){
+      fetch(feed, {cache:'no-store'}).then(r=>r.json()).then(arr=>{
+        queue = Array.isArray(arr)? sanitize(arr) : fallbackQueue();
+      }).catch(()=>queue = fallbackQueue());
+    } else { queue = fallbackQueue(); }
+  };
+  boot();
+
+  const firstDelay = 8000 + Math.floor(Math.random()*4000); // 8–12s
+  setTimeout(play, firstDelay);
+
+  function play(){
+    if (paused) return void setTimeout(play, 3000);
+    const shown = +localStorage.getItem(capKey) || 0;
+    if (shown >= MAX_PER_SESSION) return;
+
+    const ev = queue.shift();
+    if (!ev) return;
+
+    showToast(ev);
+    localStorage.setItem(capKey, String(shown+1));
+    const gap = 25000 + Math.floor(Math.random()*20000);     // 25–45s
+    setTimeout(play, gap);
+  }
+
+  function showToast(ev){
+    const el = document.createElement('div');
+    el.className = 'sp-toast';
+    el.setAttribute('role','status'); el.setAttribute('aria-live','polite');
+    el.innerHTML = `
+      <svg class="sp-toast__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6" opacity=".25"></circle>
+        <path d="M7 12.5l3 3 7-7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+      <div><div class="sp-toast__txt">${ev.text}</div><div class="sp-toast__meta">${ev.meta}</div></div>
+      <button class="sp-toast__close" aria-label="${isAR?'إغلاق':'Fermer'}">×</button>
+    `;
+    host.appendChild(el); requestAnimationFrame(()=>el.classList.add('is-in'));
+    const close = ()=>{ el.classList.remove('is-in'); setTimeout(()=>el.remove(),220); };
+    el.querySelector('.sp-toast__close').addEventListener('click', close);
+    setTimeout(close, 5200);
+  }
+
+  function sanitize(arr){
+    return arr.slice(0,20).map(x=>{
+      const name = anonymize(x.name||x.full_name||'');
+      const city = x.city || (isAR?'المغرب':'Maroc');
+      const ago  = Number(x.ago_min||1);
+      const txt  = isAR
+        ? `<strong>${name}</strong> اشترى الآن من <strong>${city}</strong>`
+        : `<strong>${name}</strong> vient d’acheter à <strong>${city}</strong>`;
+      const meta = isAR ? `منذ ${ago} د` : `il y a ${ago} min`;
+      return {text:txt, meta};
+    });
+  }
+
+  function anonymize(full){
+    const p = String(full).trim().split(/\s+/);
+    const first = p[0] || (isAR?'عميل':'Client');
+    const lastI = (p[1]||'').charAt(0);
+    return isAR ? `${first} ${lastI? lastI+'ـ.':''}` : `${first} ${lastI? lastI+'.':''}`;
+  }
+
+  /* ================================
+     Fallback MAROC — listes élargies
+     ================================ */
+
+  // Helpers
+  const pick = (arr)=> arr[Math.floor(Math.random()*arr.length)];
+
+  // Prénoms FR (marocains, M/F)
+  const FIRST_FR_M = ['Youssef','Amine','Hamza','Mohamed','Anas','Othmane','Yassine','Mehdi','Rachid','Reda','Hicham','Adil','Ismail','Zakaria','Abdelaziz','Abdelali','Ayoub','Soufiane','Saad','Taha','Walid','Marouane','Nabil','Karim','Ayman','Anouar','Imad','Badr','Tarik','Jalal','Idriss','Younes','Omar','Ali','Sami','Hassan','Khalid','Mustapha','Abdelkerim','Ibrahim','Yahya','Skander','Amir','Chakib','Fouad','Lotfi','Mounir','Noureddine'];
+  const FIRST_FR_F = ['Salma','Hajar','Imane','Sara','Khadija','Fatima','Fatima-Zahra','Asmae','Maryam','Nisrine','Kawtar','Dounia','Ghita','Rania','Nadia','Rajae','Soukaina','Aicha','Samira','Wafae','Laila','Meryem','Ikram','Safae','Hanane','Basma','Nawal','Amal','Siham','Ibtissam','Inès','Farah','Yasmina','Nada','Ilham','Chaimae','Houda','Lamiae','Mouna','Zineb','Naoual','Hind','Rachida','Jamila','Bahia','Karima','Amine?']; // 'Amine?' safety if typo occurs ignored
+  const FIRST_FR = FIRST_FR_M.concat(FIRST_FR_F);
+
+  // Prénoms AR
+  const FIRST_AR_M = ['يوسف','أمين','حمزة','محمد','أنس','عثمان','ياسين','مهدي','رشيد','رضا','هشام','عادل','إسماعيل','زكريا','عبدالعزيز','عبدالعالي','أيوب','سفيان','سعد','طه','وليد','مروان','نبيل','كريم','أيمن','أنور','عماد','بدر','طارق','جلال','إدريس','يونس','عمر','علي','سامي','حسن','خالد','مصطفى','إبراهيم','يحيى','سكندر','أمير','شكيب','فؤاد','لطفي','منير','نورالدين'];
+  const FIRST_AR_F = ['سلمى','هاجر','إيمان','سارة','خديجة','فاطمة','فاطمة الزهراء','أسماء','مريم','نسرين','كوثر','دنيا','غيثة','رانية','نادية','رجاء','سكينة','عائشة','سميرة','وفاء','ليلى','مريم','إكرام','صفاء','حنان','بسمة','نوال','أمل','سهام','ابتسام','إيناس','فرح','ياسمين','ندى','إلهام','شيماء','هدى','لمياء','منى','زينب','نوال','هند','رشيدة','جميلة','بهية','كريمة'];
+  const FIRST_AR = FIRST_AR_M.concat(FIRST_AR_F);
+
+  // Noms de famille (on n’utilise que l’initiale)
+  const LAST_FR = ['El Mansouri','Benali','Bennis','El Fassi','Amrani','Lahlou','El Idrissi','Choukri','Alaoui','Kettani','Saadi','Tahar','Harrak','Alami','Cherkaoui','El Ouazzani','Berrada','Skalli','Azzouzi','Ouahbi','Ait Taleb','Boudraa','Bouhout','Belaid','Ouazzani','El Yamani','El Haddaoui','El Ghazali','Moutawakil','Jarmouni'];
+  const LAST_AR = ['المنصوري','بنعلي','بنيس','الفاسي','العمراني','لعلو','الإدريسي','شكري','العلوي','الكتاني','السعدي','الطهري','الحراق','العلمي','الشرقاوي','الوزاني','برادة','اسكالي','العزوزي','وهبي','آيت طالب','بودراعة','بوهوت','بلعيد','اليَمَني','الحداوي','الغزالي','المتوكل','جرموني'];
+
+  // Villes élargies (FR / AR)
+  const CITIES_FR = ['Casablanca','Rabat','Salé','Marrakech','Fès','Tanger','Agadir','Meknès','Oujda','Kénitra','Mohammedia','Tétouan','Nador','El Jadida','Safi','Laâyoune','Béni Mellal','Khouribga','Khemisset','Settat','Taza','Taroudant','Larache','Errachidia','Guelmim'];
+  const CITIES_AR = ['الدار البيضاء','الرباط','سلا','مراكش','فاس','طنجة','أكادير','مكناس','وجدة','القنيطرة','المحمدية','تطوان','الناظور','الجديدة','آسفي','العيون','بني ملال','خريبكة','الخميسات','سطات','تازة','تارودانت','العرائش','الرشيدية','كلميم'];
+
+  function makeNameFR(){
+    const f = pick(FIRST_FR);
+    const l = pick(LAST_FR);
+    const i = (l.charAt(0) || 'X').toUpperCase();
+    return `${f} ${i}.`;
+  }
+  function makeNameAR(){
+    const f = pick(FIRST_AR);
+    const l = pick(LAST_AR);
+    const i = l.charAt(0) || 'ع';
+    return `${f} ${i}ـ.`; // initiale arabe + الكشيدة + نقطة
+  }
+
+  function fallbackQueue(){
+    const C = isAR ? CITIES_AR : CITIES_FR;
+    const makeName = isAR ? makeNameAR : makeNameFR;
+
+    const len = 12; // un peu plus de diversité
+    return Array.from({length: len}, () => {
+      const name = makeName();
+      const city = pick(C);
+      const ago  = 1 + Math.floor(Math.random()*9); // 1–9 min
+      const txt  = isAR
+        ? `<strong>${name}</strong> اشترى الآن من <strong>${city}</strong>`
+        : `<strong>${name}</strong> vient d’acheter à <strong>${city}</strong>`;
+      const meta = isAR ? `منذ ${ago} د` : `il y a ${ago} min`;
+      return { text: txt, meta };
+    });
+  }
+})();
+</script>
+
+{% endblock js %}
+
+{% block before_end_body %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock before_end_body %}

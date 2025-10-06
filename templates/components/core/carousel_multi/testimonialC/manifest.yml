@@ -1,0 +1,67 @@
+alias: carousel_multi/multimedia_c
+aliases:
+  - carousel_multi/swiper
+template: "components/core/carousel_multi/multimedia.html"
+
+assets:
+  head: [ ]
+  css:
+    - "static/components/carousel_multi/mc-carousel.css"
+    - "https://unpkg.com/driver.js@0.9.8/dist/driver.min.css"
+    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  js:
+    - "static/components/carousel_multi/mc-carousel.js"
+  vendors:
+    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+    - "https://unpkg.com/driver.js@0.9.8/dist/driver.min.js"
+
+
+params:
+  variant: "social_proof_c"
+  section_key: "temoignages"
+  show_header: true
+  title: "Des cadeaux qui ont du sens"
+  subtitle: "★ 4,8/5 • 500+ avis — naturel, artisanal, durable"
+  persona_filters:
+    - { key: "gift",  label: "Offrir" }
+    - { key: "learn", label: "Apprendre" }
+    - { key: "sell",  label: "Vendre" }
+  options: { items_desktop: 3, items_tablet: 2, items_mobile: 1, gap_px: 16 }
+  slides:
+    - type: "image"
+      persona: "gift"
+      image_src: "/static/images/testimonial/resized/photo8.webp"
+      alt: "Set cadeau vert"
+      caption: "Cadeau maison — anniversaire"
+      badges: ["Sans phtalates", "Mèche coton", "Pots réutilisés"]
+    - type: "quote"
+      persona: "gift"
+      avatar_src: "/static/images/testimonial/resized/photo9.webp"
+      quote: "J’ai offert un trio lavande/rose/bois. Les retours: « odeur nette, aucune fumée »."
+      author: "Lina"
+      role: "Cadeaux"
+      verified: true
+      city: "Rabat"
+      when: "il y a 3 sem."
+    - type: "video"
+      persona: "learn"
+      poster_src: "/static/images/testimonial/resized/photo7.webp"
+      video_src: "/media/videos/temoignages/fr_therapeute-temoignage.mp4"
+      caption: "24s — Coulage 65 °C, surface lisse, cure 48 h."
+    - type: "image"
+      persona: "sell"
+      image_src: "/static/images/testimonial/resized/photo4.webp"
+      alt: "Stand simple"
+      caption: "Stand minimal — dimanche"
+      badges: ["+9 ventes", "Packaging kraft", "Étiquettes claires"]
+
+contract:
+  # (inchangé)
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.carousel_multi.hydrators"
+  func: "mc_carousel"
+  params: {}
+
+render:
+  cacheable: false

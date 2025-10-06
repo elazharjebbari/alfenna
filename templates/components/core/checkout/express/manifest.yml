@@ -1,0 +1,30 @@
+alias: checkout/express
+template: components/core/checkout/express.html
+
+assets:
+  css: []
+  js:
+    - "/static/js/checkout/checkout.js"
+
+
+hydrate:
+  module: apps.atelier.compose.hydrators.checkout.hydrators
+  func: hydrate_express_buttons
+
+params:
+  show_payment_request: true
+  headline: "Payez en un tap"
+  helper: "Choisissez votre portefeuille préféré et accédez instantanément."
+  providers:
+    - id: "apple_pay"
+      label: "Apple Pay"
+      cta: "Payer avec Apple Pay — accès immédiat"
+    - id: "google_pay"
+      label: "Google Pay"
+      cta: "Payer avec Google Pay — accès immédiat"
+    - id: "stripe_link"
+      label: "Stripe Link"
+      cta: "Payer avec Link — accès immédiat"
+
+render:
+  cacheable: true

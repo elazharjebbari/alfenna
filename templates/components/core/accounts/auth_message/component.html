@@ -1,0 +1,53 @@
+{# templates/components/core/accounts/auth_message/component.html #}
+{% load i18n %}
+<section class="auth-wrap auth-slot" data-auth-screen>
+  <header class="auth-header">
+    <h1 class="auth-title">{{ title }}</h1>
+    {% if subtitle %}<p class="auth-sub">{{ subtitle|safe }}</p>{% endif %}
+  </header>
+
+  {% if messages %}
+    <div class="auth-alerts" role="status" aria-live="polite">
+      {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="auth-card">
+    {% if alert_text %}
+      <div class="alert {{ alert_kind|default:'success' }}">{{ alert_text }}</div>
+    {% endif %}
+
+    {% if description %}
+      <p class="text-muted">{{ description }}</p>
+    {% endif %}
+
+    {% if resend_url %}
+      <form class="auth-form" method="post" action="{{ resend_url }}">
+        {% csrf_token %}
+        <div class="auth-actions">
+          <button class="btn-primary" type="submit">{{ resend_label|default:_('Renvoyer l’e-mail') }}</button>
+        </div>
+      </form>
+    {% endif %}
+
+    {% if cta_url %}
+      <div class="auth-actions">
+        <a class="btn-primary" href="{{ cta_url }}">{{ cta_label|default:_('Continuer') }}</a>
+      </div>
+    {% endif %}
+
+    {% if extra_html %}
+      {{ extra_html|safe }}
+    {% endif %}
+
+    {% if links %}
+      <div class="meta-links">
+        {% for link in links %}
+          <a href="{{ link.url }}">{{ link.label }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>

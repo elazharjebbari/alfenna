@@ -1,0 +1,78 @@
+{% load static atelier_images atelier_utils %}
+
+<div class="container">
+  <div class="section">
+
+    <div class="section-title shape-01 section-padding mb-3">
+      <h2 class="main-title">{{ title_html|safe }}</h2>
+      {% if subtitle %}
+        <h3 class="sub-title text-black mb-4">{{ subtitle }}</h3>
+      {% endif %}
+    </div>
+
+    <section id="learning-card" class="learning-card">
+      <div class="container">
+        <div class="row g-0">
+          <!-- Col gauche -->
+          <div class="col-md-6 order-2 order-md-1 position-relative">
+            <div class="lf-decor-line"></div>
+
+            <div class="lf-intro">
+              <ul class="lf-intro-list">
+                <li>
+                  <span class="lf-intro-arrow">&gt;</span>
+                  <span class="fw-bold">Formation en Ligne &amp; Visioconférences</span> avec supports complets
+                </li>
+              </ul>
+            </div>
+
+            <div class="lf-details">
+              {% if features %}
+                {% for item in features %}
+                  <div class="lf-item">
+                    <i class="fa fa-circle lf-bullet"></i>
+                    <div>{% render_string item.html %}</div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+
+              {% if bundle_items %}
+                <div class="lf-bundle">
+                  <h3 class="lf-bundle-title">Ce que comprend votre pack :</h3>
+                  <ul class="lf-bundle-list">
+                    {% for it in bundle_items %}
+                      <li>
+                        <i class="{{ it.icon_class }}"></i> {{ it.text_html|safe }}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Col droite (image) -->
+          <div class="col-md-6 order-1 order-md-2">
+            {% if image_src %}
+              {% responsive_picture image_src alt=image_alt|default:"" cls="img-fluid lf-image" %}
+            {% else %}
+              {# Fallback léger si pas d'image #}
+              <img src="{% static 'images/placeholders/course_cover.png' %}" alt="{{ image_alt|default:'' }}" class="img-fluid lf-image" />
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% if cta.label and cta.url %}
+      <p class="lead mb-0 text-center my-4">
+        <a href="{{ cta.url }}"
+           class="btn btn-md fw-bold text-uppercase bg-success text-white btn-inscription btn-hover-secondary rounded-3">
+          <i class="fa fa-user-plus me-2"></i>
+          {{ cta.label }}
+        </a>
+      </p>
+    {% endif %}
+
+  </div>
+</div>

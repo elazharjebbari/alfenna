@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <body style="font-family: Arial, sans-serif; background: #f7f7f9; padding: 32px;">
+    <table style="max-width: 640px; margin: auto; background: #ffffff; border-radius: 8px; padding: 32px;">
+      <tr>
+        <td>
+          <p style="font-size: 16px; color: #222;">Salut {{ user_first_name }},</p>
+          <p style="font-size: 16px; color: #222;">
+            Merci de confirmer ton adresse e-mail pour sécuriser ton compte.
+          </p>
+          <p style="text-align: center; margin: 32px 0;">
+            <a href="{{ verification_url }}" style="background: #4f46e5; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+              Confirmer mon e-mail
+            </a>
+          </p>
+          <p style="font-size: 14px; color: #555;">
+            Le lien reste actif {{ verification_ttl_hours }} heures. Après ce délai, demande simplement un nouveau lien depuis ton espace.
+          </p>
+          <p style="font-size: 12px; color: #999;">
+            Besoin d'aide ? <a href="mailto:{{ support_email }}">{{ support_email }}</a>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

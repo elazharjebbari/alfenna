@@ -1,0 +1,115 @@
+{% load static atelier_utils %}
+
+<div class="container">
+  <div class="section">
+
+    {% if title_html %}
+    <div class="section-title shape-01 section-padding mb-3">
+      <h2 class="main-title">{% render_string title_html %}</h2>
+    </div>
+    {% endif %}
+
+    <section id="learning-card" class="py-5" style="background-color: {{ bg_color|default:'#E7F8EE' }};">
+      <div class="container">
+        <div class="row g-0">
+          <!-- Bloc gauche : Description détaillée -->
+          <div class="col-md-6 order-2 order-md-1 position-relative">
+            <!-- Ligne verticale décorative -->
+            {% if deco_line_enabled %}
+              <div style="position: absolute; left: {{ line_left|default:'27px' }}; top: {{ line_top|default:'100px' }}; bottom: 0; width: 3px; background-color: {{ line_color|default:'#EDEFF3' }}; z-index: 1;"></div>
+            {% endif %}
+
+            <!-- Bandeau d'introduction -->
+            {% if intro_items %}
+              <div class="mb-4 p-3" style="background-color: {{ banner_bg|default:'#EDEFF3' }}; border-left: 5px solid {{ accent|default:'#309255' }};">
+                <ul class="list-unstyled ms-3 mb-0">
+                  {% for it in intro_items %}
+                    <li>
+                      <span style="font-weight: bold; color: #000;">&gt;</span>
+                      {% render_string it.text_html %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+
+            <!-- Détails du programme -->
+            <div class="ms-3" style="position: relative; z-index: 2;">
+              {% for f in features_top %}
+              <div class="mb-3 d-flex align-items-start">
+                <i class="{{ f.icon|default:'fa fa-circle' }}" style="color: {{ accent|default:'#309255' }}; margin-right: 10px;"></i>
+                <div>
+                  {% if f.text_html %}{% render_string f.text_html %}{% else %}{% if f.title %}<strong>{{ f.title }}</strong>{% if f.value %} {{ f.value }}{% endif %}{% endif %}{% endif %}
+                </div>
+              </div>
+              {% endfor %}
+
+              {% if trainers %}
+              <div class="mb-3 d-flex align-items-start">
+                <i class="fa fa-circle" style="color: {{ accent|default:'#309255' }}; margin-right: 10px;"></i>
+                <div>
+                  <strong>Formateurs :</strong> Animés par
+                  {% for t in trainers %}
+                    <span class="text-info fw-bold">{{ t.name }}</span>{% if not forloop.last %}{% if forloop.revcounter0 == 1 %} et {% else %}, {% endif %}{% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              {% endif %}
+
+              {% if feature_evaluation %}
+              <div class="mb-3 d-flex align-items-start">
+                <i class="fa fa-circle" style="color: {{ accent|default:'#309255' }}; margin-right: 10px;"></i>
+                <div>{% render_string feature_evaluation.text_html %}</div>
+              </div>
+              {% endif %}
+
+              {% if price %}
+              <div class="mb-3 d-flex align-items-start">
+                <i class="fa fa-circle" style="color: {{ accent|default:'#309255' }}; margin-right: 10px;"></i>
+                <div><strong>Prix :</strong> <span class="text-success">{{ price }}</span> DHS pour un <u>accès à vie</u></div>
+              </div>
+              {% endif %}
+
+              {% for f in features_after %}
+              <div class="mb-3 d-flex align-items-start">
+                <i class="{{ f.icon|default:'fa fa-circle' }}" style="color: {{ accent|default:'#309255' }}; margin-right: 10px;"></i>
+                <div>
+                  {% if f.text_html %}{% render_string f.text_html %}{% else %}{% if f.title %}<strong>{{ f.title }}</strong>{% if f.value %} {{ f.value }}{% endif %}{% endif %}{% endif %}
+                </div>
+              </div>
+              {% endfor %}
+
+              {% if bundle_items %}
+              <div class="mt-4 " style="padding-left: 30px">
+                <h3 class="fw-bold" style="text-decoration: underline;">{{ bundle_title|default:"Ce que comprend votre pack :" }}</h3>
+                <ul class="list-unstyled ms-4">
+                  {% for b in bundle_items %}
+                  <li class="mb-2">
+                    <i class="{{ b.icon|default:'fa fa-check' }} text-success"></i>
+                    {% if b.text_html %}{% render_string b.text_html %}{% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Bloc droit : Image inspirante -->
+          <div class="col-md-6 order-1 order-md-2">
+            <img src="{% static image_static_path %}" alt="{{ image_alt|default:'Bougie artisanale' }}" class="img-fluid" style="height: 100%; width: 100%; object-fit: cover;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% if cta %}
+    <p class="lead mb-0 text-center my-4">
+      <a href="{{ cta.url|default:'#' }}" class="btn btn-md fw-bold text-uppercase bg-success text-white btn-inscription btn-hover-secondary rounded-3">
+        <i class="{{ cta.icon|default:'fa fa-user-plus me-2' }}"></i>{{ cta.label|default:'Je Participe' }}
+      </a>
+    </p>
+    {% endif %}
+
+  </div>
+</div>

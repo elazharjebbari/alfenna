@@ -1,0 +1,112 @@
+{% load i18n %}
+
+{# slot = { stripe_publishable_key, client_secret?, order_id?, plan_id, plan_slug, plan_title, currency, amount_total } #}
+
+<section class="checkout-payment card border-0 shadow-sm">
+  <div class="card-body">
+    <h3 class="h4 mb-2">{% trans "Paiement sécurisé" %}</h3>
+    <p class="text-muted small mb-4">{% trans "Dernière étape : validez votre accès immédiat." %}</p>
+
+    <div id="guest-block" class="mb-4">
+      {% if not request.user.is_authenticated %}
+        <div class="row g-3" data-track="add_payment_info">
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold" for="guest-email">{% trans "Adresse e-mail" %}</label>
+            <input
+              id="guest-email"
+              type="email"
+              class="form-control"
+              placeholder="prenom.nom@email.tld"
+              required
+              autocomplete="email"
+              autofocus
+              aria-invalid="false"
+              aria-describedby="email-error"
+            >
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label fw-semibold" for="confirm-guest-email">{% trans "Confirmez l’e-mail" %}</label>
+            <input
+              id="confirm-guest-email"
+              type="email"
+              class="form-control"
+              placeholder="{% trans 'Re-saisir l’e-mail' %}"
+              required
+              autocomplete="email"
+              disabled
+              aria-invalid="false"
+              aria-describedby="email-error"
+            >
+          </div>
+        </div>
+        <div id="email-error" class="invalid-feedback d-block" role="alert" aria-live="polite" hidden></div>
+      {% else %}
+        <div class="alert alert-success" role="status" aria-live="polite">
+          {% trans "Connecté en tant que" %} <strong>{{ request.user.get_username }}</strong> — {{ request.user.email }}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if show_coupon_link %}
+      <div class="checkout-coupon mb-4">
+        <button
+          type="button"
+          class="btn btn-link p-0"
+          id="checkout-coupon-toggle"
+          data-event="coupon_reveal"
+          aria-expanded="false"
+          aria-controls="checkout-coupon-field"
+        >
+          {% trans "J’ai un code promo" %}
+        </button>
+        <div id="checkout-coupon-field" class="checkout-coupon-field mt-2" hidden>
+          <label class="form-label fw-semibold" for="checkout-coupon-input">{{ coupon_label }}</label>
+          <input
+            type="text"
+            id="checkout-coupon-input"
+            class="form-control"
+            name="coupon_code"
+            placeholder="{{ coupon_placeholder }}"
+            autocomplete="off"
+            inputmode="text"
+            aria-describedby="checkout-coupon-help"
+          >
+          <div id="checkout-coupon-help" class="form-text">{% trans "Entrez votre code et validez lors du paiement." %}</div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <label class="form-label fw-semibold" for="card-element">{% trans "Informations de paiement" %}</label>
+      <div id="card-element" class="form-control checkout-card-element" role="group" aria-describedby="card-helper"></div>
+      <div id="card-helper" class="form-text text-muted">{% trans "Carte bancaire, SEPA ou portefeuille selon disponibilité." %}</div>
+      <div id="card-errors" class="invalid-feedback d-block" role="alert" aria-live="polite"></div>
+    </div>
+
+    {% include "components/core/checkout/button_checkout.html" with plan_slug=plan_slug plan_title=plan_title amount_total=amount_total amount_total_display=amount_total_display currency=currency cta_label=cta_label amount_cents=amount_cents %}
+    <p class="checkout-microcopy text-muted small mt-3 mb-0">{% trans "Paiement sécurisé" %} • {% trans "Remboursée 14 j" %} • {% trans "Accès immédiat" %}</p>
+  </div>
+</section>
+
+<form style="display:none">{% csrf_token %}</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  window.__CHECKOUT__ = {
+    stripePK: "{{ stripe_publishable_key|default_if_none:''|escapejs }}",
+    initialClientSecret: {% if client_secret %}"{{ client_secret|escapejs }}"{% else %}null{% endif %},
+    currency: "{{ currency|default_if_none:''|upper|escapejs }}",
+    planId: {{ plan_id|default:'0' }},
+    planSlug: "{{ plan_slug|escapejs }}",
+    planTitle: "{{ plan_title|escapejs }}",
+    amountCents: {{ amount_cents|default:0 }},
+    orderId: {% if order_id %}{{ order_id }}{% else %}null{% endif %},
+    courseId: {% if course_id %}{{ course_id }}{% else %}null{% endif %},
+    courseSlug: "{{ course_slug|escapejs }}",
+    thankYouUrl: {% if plan_slug %}"{% url 'pages:thank-you' plan_slug=plan_slug %}"{% else %}null{% endif %},
+    endpoints: { createIntent: "{% url 'billing:create_payment_intent' %}" }
+  };
+  if (!window.__CHECKOUT__.stripePK) {
+    console.warn("STRIPE_PUBLISHABLE_KEY est vide côté serveur (settings/env).");
+  }
+</script>

@@ -1,0 +1,8 @@
+alias: accounts/register/shell
+template: "components/core/accounts/register_shell/component.html"
+compose:
+  children:
+    form:
+      alias: "accounts/register/form"
+render:
+  cacheable: false

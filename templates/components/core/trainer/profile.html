@@ -1,0 +1,59 @@
+{% load static atelier_utils %}
+
+<div class="container my-4">
+  <div class="section">
+
+    <div class="section-title shape-01 section-padding-02 mb-4">
+      <h2 class="main-title">{% render_string section_title_html %}</h2>
+    </div>
+
+    <div class="container">
+      <ul class="nav nav-tabs" id="{{ tablist_id|default:'myTab' }}" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active text-dark"
+                  id="{{ tab_button_id|default:'home-tab' }}"
+                  data-bs-toggle="tab"
+                  data-bs-target="#{{ tab_id|default:'home' }}"
+                  type="button" role="tab"
+                  aria-controls="{{ tab_id|default:'home' }}"
+                  aria-selected="true">
+            {{ tab_label|default:"La formatrice" }}
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="{{ tabcontent_id|default:'myTabContent' }}">
+        <div class="tab-pane fade show active"
+             id="{{ tab_id|default:'home' }}"
+             role="tabpanel"
+             aria-labelledby="{{ tab_button_id|default:'home-tab' }}">
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-12 col-md-6 d-flex justify-content-center pr-md-2 mb-3">
+                <img data-src="{% static image_static_path %}"
+                     class="img-fluid img-thumbnail max-height-img lazy"
+                     alt="{{ image_alt|default:'graphique' }}">
+              </div>
+              <div class="col-12 col-md-6 pl-md-2">
+                <div class="text-dark" style="font-family:var(--bs-body-font-family);">
+                  <div class="section-title shape-02 section-padding mb-4">
+                    <h2 class="custom-h1 fw-bolder text-center">{% render_string intro_title_html %}</h2>
+                  </div>
+
+                  <p class="custom-h3" style="font-size:1.1rem;">
+                    {% render_string paragraph_1_html %}
+                  </p>
+
+                  <p class="fw-medium" style="font-family:var(--bs-body-font-family);">
+                    {% render_string paragraph_2_html %}
+                  </p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /.tab-pane -->
+      </div> <!-- /.tab-content -->
+    </div> <!-- /.container -->
+  </div>
+</div>

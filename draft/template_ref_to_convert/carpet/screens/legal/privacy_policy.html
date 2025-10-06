@@ -1,0 +1,154 @@
+{# templates/legal/privacy_policy.html #}
+{% extends "carpet/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Politique de confidentialité | Maroc" %}{% endblock title %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <header class="mb-4">
+      <h1 class="h3 mb-1">Politique de confidentialité</h1>
+      <p class="text-muted mb-0">
+        Dernière mise à jour :
+        <time datetime="{% now 'Y-m-d' %}">{% now "d/m/Y" %}</time>
+      </p>
+    </header>
+
+    <div class="row g-4">
+      <aside class="col-lg-4">
+        <nav class="list-group position-sticky" style="top: 1rem;">
+          <a href="#scope" class="list-group-item list-group-item-action">1. Objet & champ d’application</a>
+          <a href="#identity" class="list-group-item list-group-item-action">2. Identité du responsable</a>
+          <a href="#data" class="list-group-item list-group-item-action">3. Données traitées</a>
+          <a href="#purposes" class="list-group-item list-group-item-action">4. Finalités & bases légales</a>
+          <a href="#whatsapp" class="list-group-item list-group-item-action">5. Intégration WhatsApp Business</a>
+          <a href="#cookies" class="list-group-item list-group-item-action">6. Cookies & traceurs</a>
+          <a href="#recipients" class="list-group-item list-group-item-action">7. Destinataires & transferts</a>
+          <a href="#retention" class="list-group-item list-group-item-action">8. Durées de conservation</a>
+          <a href="#security" class="list-group-item list-group-item-action">9. Sécurité</a>
+          <a href="#rights" class="list-group-item list-group-item-action">10. Vos droits (Loi 09-08)</a>
+          <a href="#minors" class="list-group-item list-group-item-action">11. Mineurs</a>
+          <a href="#changes" class="list-group-item list-group-item-action">12. Modifications</a>
+          <a href="#contact" class="list-group-item list-group-item-action">13. Contact</a>
+        </nav>
+      </aside>
+
+      <article class="col-lg-8">
+
+        <section id="scope" class="mb-4">
+          <h2 class="h5">1. Objet & champ d’application</h2>
+          <p>La présente politique explique comment nous collectons et traitons vos données personnelles lors de votre navigation et de vos achats sur notre site, ainsi que dans le cadre de nos échanges (site, e-mail, téléphone et WhatsApp Business).</p>
+          <p>Elle s’applique à tous nos produits (tapis, gadgets et dérivés) vendus au Maroc.</p>
+        </section>
+
+        <section id="identity" class="mb-4">
+          <h2 class="h5">2. Identité du responsable du traitement</h2>
+          <p>
+            <strong>Zonex</strong>
+            — Sarl,
+            Adresse : 25 bis avenue Patrice Lumumba <br>
+            E-mail : info@zonex.site — Tél. : +212 8085-44450 — WhatsApp : +212 630-035905
+          </p>
+        </section>
+
+        <section id="data" class="mb-4">
+          <h2 class="h5">3. Données traitées</h2>
+          <ul>
+            <li><strong>Données d’identification</strong> : nom, prénom, numéro de téléphone, e-mail, adresse.</li>
+            <li><strong>Données de commande</strong> : produits, montants, adresse de livraison/facturation, référence commande.</li>
+            <li><strong>Données de paiement</strong> : via prestataires sécurisés (nous ne stockons pas vos données de carte).</li>
+            <li><strong>Échanges clients</strong> : messages, pièces jointes et métadonnées (horodatage, canal), y compris via WhatsApp Business.</li>
+            <li><strong>Données techniques</strong> : logs serveur, identifiants de terminal, pages consultées, cookies/traceurs.</li>
+          </ul>
+        </section>
+
+        <section id="purposes" class="mb-4">
+          <h2 class="h5">4. Finalités & bases légales</h2>
+          <ul>
+            <li><em>Exécution du contrat</em> : prise de commande, paiement, livraison, service après-vente.</li>
+            <li><em>Intérêt légitime</em> : prévention de la fraude, amélioration du site, statistiques anonymisées, gestion des demandes.</li>
+            <li><em>Obligation légale</em> : facturation, garanties légales, réponses aux autorités compétentes.</li>
+            <li><em>Consentement</em> : prospection (e-mail/SMS/WhatsApp), cookies non nécessaires. Vous pouvez retirer votre consentement à tout moment.</li>
+          </ul>
+        </section>
+
+        <section id="whatsapp" class="mb-4">
+          <h2 class="h5">5. Intégration WhatsApp Business</h2>
+          <p>Nous utilisons WhatsApp Business (API/Cloud API) pour vous informer de l’état de vos commandes, répondre à vos questions et vous envoyer, le cas échéant, des messages marketing <em>avec votre accord</em>.</p>
+          <ul>
+            <li>Nous recueillons et traitons votre numéro, votre nom de profil et le contenu de nos échanges sur WhatsApp afin d’assurer le support client et le suivi de commande.</li>
+            <li>Vous pouvez refuser à tout moment la prospection via WhatsApp en nous écrivant ou en envoyant <strong>« STOP »</strong>.</li>
+            <li>Nous maintenons une politique de confidentialité publiée et recueillons les consentements requis, conformément à la politique de messagerie de WhatsApp/Meta.</li>
+          </ul>
+          <p class="small text-muted">Réf. : Business Messaging Policy (obligation d’avoir une politique de confidentialité publiée et d’obtenir les consentements requis).</p>
+        </section>
+
+        <section id="cookies" class="mb-4">
+          <h2 class="h5">6. Cookies & traceurs</h2>
+          <p>Nous utilisons des cookies nécessaires au fonctionnement du site ainsi que, sous réserve de votre consentement, des cookies de mesure d’audience et de marketing.</p>
+          <ul>
+            <li><strong>Nécessaires</strong> : panier, session, sécurité.</li>
+            <li><strong>Mesure d’audience</strong> : ex. Google Analytics/Tag Manager (statistiques agrégées).</li>
+            <li><strong>Expérience & feedback</strong> : ex. Hotjar (cartes de chaleur, parcours anonymisés).</li>
+            <li><strong>Marketing</strong> : ex. Meta (retargeting/attribution).</li>
+          </ul>
+          <p>Vous pouvez gérer vos préférences via la bannière cookies (si affichée) et/ou paramétrer votre navigateur pour refuser certains traceurs. Le refus peut dégrader certaines fonctionnalités.</p>
+        </section>
+
+        <section id="recipients" class="mb-4">
+          <h2 class="h5">7. Destinataires & transferts</h2>
+          <p>Accès limité aux personnes habilitées au sein de l’entreprise. Partage avec des prestataires impliqués dans l’exécution du contrat : hébergeur, paiement, livraison, messagerie, analytics, outils marketing. Si des transferts ont lieu hors Maroc, nous nous assurons de garanties appropriées (clauses contractuelles types ou mécanismes équivalents).</p>
+        </section>
+
+        <section id="retention" class="mb-4">
+          <h2 class="h5">8. Durées de conservation (principes)</h2>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead><tr><th>Donnée</th><th>Durée</th></tr></thead>
+              <tbody>
+                <tr><td>Compte & commandes</td><td>Durée de la relation + obligations légales (ex. comptables : 10 ans max.)</td></tr>
+                <tr><td>Support & WhatsApp</td><td>Jusqu’à 3 ans après la dernière interaction utile (preuve de service & suivi litiges)</td></tr>
+                <tr><td>Prospection</td><td>3 ans après dernier contact ou jusqu’à retrait du consentement</td></tr>
+                <tr><td>Cookies analytics</td><td>13 mois (valeur indicative, selon l’outil choisi)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="security" class="mb-4">
+          <h2 class="h5">9. Sécurité</h2>
+          <p>Mesures organisationnelles et techniques raisonnables : chiffrement en transit (HTTPS), contrôle d’accès, journalisation, sauvegardes, cloisonnement des environnements, revue périodique des prestataires.</p>
+        </section>
+
+        <section id="rights" class="mb-4">
+          <h2 class="h5">10. Vos droits (Loi 09-08)</h2>
+          <p>Vous disposez des droits d’<strong>accès</strong>, de <strong>rectification</strong> et d’<strong>opposition</strong> aux traitements vous concernant. Pour exercer vos droits :</p>
+          <ul>
+            <li>E-mail : info@zonex.site</li>
+            <li>Adresse : 25 bis avenue Patrice Lumumba, Rabat</li>
+          </ul>
+          <p>En cas de difficulté, vous pouvez saisir la <strong>CNDP</strong> : Avenue Al Arz, Secteur 4, M1, Hay Riad – Rabat, Tél. +212 537 57 11 24, e-mail : plainte@cndp.ma, <a href="https://www.cndp.ma/deposer-une-plainte/" target="_blank" rel="noopener">formulaire en ligne</a>.</p>
+        </section>
+
+        <section id="minors" class="mb-4">
+          <h2 class="h5">11. Mineurs</h2>
+          <p>Notre site s’adresse aux personnes majeures. Les achats de mineurs doivent être réalisés par un représentant légal.</p>
+        </section>
+
+        <section id="changes" class="mb-4">
+          <h2 class="h5">12. Modifications</h2>
+          <p>Nous pouvons mettre à jour cette politique pour refléter des évolutions légales ou techniques. La version en vigueur est celle publiée sur cette page.</p>
+        </section>
+
+        <section id="contact" class="mb-4">
+          <h2 class="h5">13. Contact</h2>
+          <p>Pour toute question relative à la protection des données : contactez nopus par email.</p>
+        </section>
+
+        <p class="small text-muted mt-4">Note : ce modèle est fourni à titre informatif et doit être adapté à vos outils réels (prestataires, cookies, durées exactes, etc.).</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock content %}

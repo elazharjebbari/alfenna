@@ -1,0 +1,153 @@
+
+/* Pricing component scoped styles — relies on Bootstrap variables from the project's stylesheet */
+.pricing-packs {
+  background: linear-gradient(180deg, rgba(231,248,238,0.6) 0%, rgba(231,248,238,0.35) 100%);
+  padding: 48px 0;
+}
+.pricing-title {
+  color: #1d2733;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+.pricing-limited {
+  display: inline-block;
+  margin: 6px auto 22px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(48,146,85,.1);
+  color: #2b834d;
+  font-weight: 600;
+}
+
+/* --- Card -------------------------------------------------- */
+.pack-card {
+  position: relative;
+  height: 100%;
+  border: 1px solid #e5efe9;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 40px rgba(25,135,84,.06);
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+.pack-card:hover { transform: translateY(-2px); box-shadow: 0 16px 56px rgba(48,146,85,.12); }
+.pack-card--featured {
+  border-width: 2px;
+  border-color: #309255;
+  box-shadow: 0 18px 60px rgba(48,146,85,.22);
+  background: linear-gradient(180deg, #ffffff 0%, #f7fffb 100%);
+}
+.pack-ribbon {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2b834d;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* --- Head -------------------------------------------------- */
+.pack-head { text-align: center; margin-bottom: 10px; }
+.pack-title { font-weight: 700; margin: 6px 0 2px; }
+.pack-card--featured .pack-title { color: #1a5a3b; }
+
+/* --- Price block (psychology-driven micro-UI) --------------- */
+/* Small word grouped near price → “smallness” prime (cf. Kolenda) */
+.price-small-word {
+  font-size: 12px;
+  font-weight: 700;
+  color: #6c757d;
+  letter-spacing: .2px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.pack-price-wrap { text-align: center; }
+.pack-price {
+  font-size: 40px;
+  font-weight: 800;
+  color: #1d2733;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.pack-card--featured .pack-price { font-size: 44px; }
+
+/* Monnaie plus petite & désancrée des chiffres → moins “douloureux” */
+.pack-price .price-curr { font-size: .75em; opacity: .95; transform: translateY(-0.06em); display: inline-block; }
+/* Décimales visuellement secondaires (si affichées) */
+.pack-price .price-sep,
+.pack-price .price-cents { font-size: .58em; opacity: .9; }
+
+/* Ancien prix très différencié visuellement (taille, couleur, espacements) */
+.pack-old-price {
+  font-size: 16px;
+  color: #8a98a8;
+  margin-top: 4px;            /* distance ↑ pour agrandir l’écart perçu */
+  letter-spacing: .3px;
+}
+
+/* ≈ par jour : nuance verte, discrète */
+.pack-daily { font-size: 14px; color: #309255; opacity: .9; }
+
+/* Échéancier “nice” (3× …) */
+.installments-note { font-size: 13px; color: #2b834d; font-weight: 600; }
+
+/* --- Value box --------------------------------------------- */
+.pack-valuebox {
+  border: 1px solid #e6f2eb;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #f8fffb;
+  margin: 8px 0 12px;
+}
+.valuebox-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #1d2733;
+}
+.valuebox-list { margin-top: 8px; }
+.valuebox-item { padding: 6px 0; border-top: 1px dashed #e5efe9; }
+.valuebox-item:first-child { border-top: 0; }
+.valuebox-amount { font-weight: 600; color: #1d2733; }
+
+/* --- Features ---------------------------------------------- */
+.pack-features { margin: 12px 0; }
+.pack-feature { display:flex; align-items:center; padding: 6px 0; }
+.pack-feature i { color: #309255; }
+
+/* --- CTA --------------------------------------------------- */
+.pack-cta { margin-top: auto; }
+.pack-cta .btn { line-height: 2.75rem; border-radius: 12px; }
+.pack-card--featured .pack-cta .btn {
+  background: linear-gradient(90deg, #198754 0%, #22a56b 100%);
+  border: 0;
+  box-shadow: 0 6px 18px rgba(25,135,84,.28);
+}
+.pack-card--featured .pack-cta .btn:hover { box-shadow: 0 8px 22px rgba(25,135,84,.33); }
+.pack-payment-note { margin: 10px 0 0; font-size: 12px; color: #6c757d; text-align: center; }
+
+/* --- Proof ------------------------------------------------- */
+.proof-usps li { display:flex; align-items:center; padding: 6px 0; color:#1d2733; }
+.proof-usps i { color: #198754; }
+.proof-ratings .stars { letter-spacing: 2px; }
+.proof-ratings .rating-text { margin-left: 8px; color:#1d2733; font-weight:600; }
+
+/* --- Responsive -------------------------------------------- */
+@media (max-width: 991.98px) {
+  /* A1: favoriser l’alignement gauche sur mobile pour lecture rapide des prix */
+  .mobile-align-left .pack-head,
+  .mobile-align-left .pack-price-wrap,
+  .mobile-align-left .pack-title,
+  .mobile-align-left .pack-cta { text-align: left; }
+  .pack-price { font-size: 34px; }
+  .pack-card--featured .pack-price { font-size: 38px; }
+  .pack-ribbon { top: -10px; }
+}

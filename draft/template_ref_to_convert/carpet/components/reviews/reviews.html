@@ -1,0 +1,124 @@
+{% load static i18n carpet_images %}
+
+<!-- REVIEWS SECTION START -->
+<div class="overflow-hidden">
+  <div class="ul-container">
+    <div class="ul-flash-sale">
+      <div class="ul-inner-container">
+        <!-- heading -->
+        <div class="ul-section-heading ul-flash-sale-heading">
+          <div class="left">
+            <span class="ul-section-sub-title">{% trans "Ce que disent nos clients" %}</span>
+            <h2 class="ul-section-title">{% trans "Ils ont testé, ils ont adoré !" %}</h2>
+          </div>
+
+          <div class="ul-flash-sale-countdown-wrapper">
+            <div class="ul-flash-sale-countdown">
+              <div class="days-wrapper">
+                <div class="days number">+1000</div>
+                <span class="txt">{% trans "Clients" %}</span>
+              </div>
+            </div>
+          </div>
+
+          <a href="#couleur-tapis" class="ul-btn">
+            {% trans "J'achète mon tapis" %}<i class="flaticon-up-right-arrow"></i>
+          </a>
+        </div>
+
+        <!-- reviews slider -->
+        <div class="ul-flash-sale-slider swiper">
+          <div class="swiper-wrapper">
+            <!-- START SINGLE REVIEW -->
+            <div class="swiper-slide">
+              <div class="ul-product ul-review">
+                <div class="ul-product-img">
+                  {% image_picture 'carpet/images/reviews/1.webp' alt=_("Avis client — photo 1") class="img-fluid" loading="lazy" decoding="async" %}
+                </div>
+                <div class="ul-product-txt">
+                  <span class="rating">
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i><i class="flaticon-star"></i>
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i>
+                  </span>
+                  <h4 class="ul-product-title">{% trans "Un confort absolu !" %}</h4>
+                  <h5 class="ul-product-category"><em>{% trans "Le coussin intégré est une merveille, doux et relaxant." %}</em></h5>
+                  <div class="ul-review-author">— Amal Z., {% trans "Casablanca" %} ✅</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="ul-product ul-review">
+                <div class="ul-product-img">
+                  {% image_picture 'carpet/images/reviews/2.webp' alt=_("Avis client — photo 2") class="img-fluid" loading="lazy" decoding="async" %}
+                </div>
+                <div class="ul-product-txt">
+                  <span class="rating">
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i><i class="flaticon-star"></i>
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i>
+                  </span>
+                  <h4 class="ul-product-title">{% trans "Je recommande vivement !" %}</h4>
+                  <h5 class="ul-product-category"><em>{% trans "C'est doux, ça ne glisse pas, parfait pour la prière." %}</em></h5>
+                  <div class="ul-review-author">— Idriss E., {% trans "Tanger" %} ✅</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="ul-product ul-review">
+                <div class="ul-product-img">
+                  {% image_picture 'carpet/images/reviews/3.webp' alt=_("Avis client — photo 3") class="img-fluid" loading="lazy" decoding="async" %}
+                </div>
+                <div class="ul-product-txt">
+                  <span class="rating">
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i><i class="flaticon-star"></i>
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i>
+                  </span>
+                  <h4 class="ul-product-title">{% trans "Une expérience unique" %}</h4>
+                  <h5 class="ul-product-category"><em>{% trans "On sent que c'est fait avec soin, la qualité est exceptionnelle." %}</em></h5>
+                  <div class="ul-review-author">— Lina H., {% trans "Agadir" %} ✅</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="ul-product ul-review">
+                <div class="ul-product-img">
+                  {% image_picture 'carpet/images/reviews/4.webp' alt=_("Avis client — photo 4") class="img-fluid" loading="lazy" decoding="async" %}
+                </div>
+                <div class="ul-product-txt">
+                  <span class="rating">
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i><i class="flaticon-star"></i>
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i>
+                  </span>
+                  <h4 class="ul-product-title">{% trans "Un vrai moment de paix" %}</h4>
+                  <h5 class="ul-product-category"><em>{% trans "Le tapis est doux, ça apaise l'esprit rien qu'en le touchant." %}</em></h5>
+                  <div class="ul-review-author">— Omar N., {% trans "Fès" %} ✅</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="swiper-slide">
+              <div class="ul-product ul-review">
+                <div class="ul-product-img">
+                  {% image_picture 'carpet/images/reviews/5.webp' alt=_("Avis client — photo 5") class="img-fluid" loading="lazy" decoding="async" %}
+                </div>
+                <div class="ul-product-txt">
+                  <span class="rating">
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i><i class="flaticon-star"></i>
+                    <i class="flaticon-star"></i><i class="flaticon-star"></i>
+                  </span>
+                  <h4 class="ul-product-title">{% trans "Top qualité !" %}</h4>
+                  <h5 class="ul-product-category"><em>{% trans "Rien à dire, je l'utilise tous les jours." %}</em></h5>
+                  <div class="ul-review-author">— Sara K., {% trans "Marrakech" %} ✅</div>
+                </div>
+              </div>
+            </div>
+            <!-- END SINGLE REVIEW -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- REVIEWS SECTION END -->

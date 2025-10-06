@@ -1,0 +1,12 @@
+alias: accounts/verify_success
+template: "components/core/accounts/auth_message/component.html"
+assets:
+  css:
+    - "/static/css/auth.css"
+  js:
+    - "/static/js/auth.js"
+hydrate:
+  module: "apps.atelier.compose.hydrators.accounts.verify_success"
+  func: "verify_success"
+render:
+  cacheable: false

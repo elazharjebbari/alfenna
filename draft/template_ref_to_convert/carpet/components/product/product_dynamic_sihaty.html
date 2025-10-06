@@ -1,0 +1,292 @@
+{% load i18n static sihaty_images %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{# ==== RTL ==== #}
+{% if LANGUAGE_CODE == 'ar' %}
+<style>
+  .ul-product-details-rating{ text-align:right; direction:rtl; }
+  .ul-product-details-options.rtl{ direction:rtl; }
+  .ul-product-details-options.rtl .title{ text-align:right; display:block; margin-bottom:.5rem; }
+  .ul-product-details-options.rtl .variants{ display:flex; flex-direction:row-reverse; gap:.5rem; justify-content:flex-start; }
+  .ul-product-details-options.rtl .badge{ font-size:1rem; direction:rtl; display:inline-block; }
+  form[dir="rtl"]{ direction:rtl!important; }
+  form[dir="rtl"] .form-control, form[dir="rtl"] input, form[dir="rtl"] textarea{ text-align:right!important; }
+  form[dir="rtl"] .input-group{ flex-direction:row-reverse!important; }
+  form[dir="rtl"] .input-group .input-group-text{ text-align:right!important; }
+</style>
+{% endif %}
+
+<style>
+  #product-media-col,#product-info-col{min-width:0;}
+  #product-media-col .ul-product-details-img{max-width:none;width:100%;}
+  #product-hero .hero-media{background:#f6f6f6;position:relative;}
+  #product-hero .hero-nav{position:absolute;inset:0;pointer-events:none;}
+  #product-hero .btn-hero{position:absolute;top:50%;transform:translateY(-50%);inline-size:48px;block-size:48px;border-radius:999px;display:grid;place-items:center;border:0;pointer-events:auto;background:rgba(255,255,255,.92);box-shadow:0 6px 14px rgba(0,0,0,.12);cursor:pointer;}
+  #product-hero .btn-prev{inset-inline-start:.5rem;}
+  #product-hero .btn-next{inset-inline-end:.5rem;}
+  #product-hero .btn-hero:focus-visible{outline:3px solid var(--bs-primary);}
+  #product-hero .thumbs{display:flex;gap:.5rem;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:.25rem;}
+  #product-hero .thumbs::-webkit-scrollbar{display:none;}
+  #product-hero .thumb{inline-size:92px;block-size:68px;flex:0 0 auto;position:relative;outline:none;}
+  #product-hero .thumb img{width:100%;height:100%;object-fit:cover;border-radius:.75rem;display:block;}
+  #product-hero .thumb--selected::after{content:"";position:absolute;inset:0;border:2px solid var(--bs-primary);border-radius:.75rem;box-shadow:0 0 0 2px #fff inset;}
+  #product-hero .thumb:focus-visible{outline:3px solid var(--bs-primary);outline-offset:2px;}
+  @media (min-width: 992px){
+    #product-media-col .hero-media{aspect-ratio:4/3;}
+    #product-media-col .thumb{inline-size:112px;block-size:84px;}
+  }
+  .ul-product-details-price-helper{font-size:.78rem;margin-top:-.7rem;}
+  .badge-list{display:flex;flex-wrap:wrap;gap:.5rem .75rem;align-items:center;}
+  .badge-list .badge{background:rgba(13,110,253,.08);color:#0d6efd;font-weight:500;}
+  .lp-form-card{background:#fff;border:1px solid #f4c6cc;border-radius:16px;padding:1rem;box-shadow:0 10px 24px rgba(0,0,0,.06);}
+  html[lang="ar"] .lp-form-card{direction:rtl;text-align:right;}
+</style>
+
+{% comment %}
+- images = variant.hero_media si dispo, sinon variant.media_list
+- si vide → on affichera quand même un DEFAULT_HERO sans rail/contrôles
+{% endcomment %}
+
+{% static 'sihaty/cover/style_de_vie_3_680x582.webp' as DEFAULT_HERO %}
+{% trans "Sihaty — Soin naturel des ongles" as DEFAULT_ALT %}
+
+<div class="ul-inner-page-container">
+  <div class="ul-product-details">
+    <div class="ul-product-details-top">
+      <div class="row g-4 g-lg-5 align-items-start">
+
+        <!-- MEDIA -->
+        <div class="col-12 col-lg-7" id="product-media-col">
+          <div class="ul-product-details-img" id="product-hero" data-gallery="{{ lp.slug }}">
+
+            {% with images=variant.hero_media|default:variant.media_list %}
+              {% if images and images.0 %}
+                {% with first_src=images.0.src|default:DEFAULT_HERO first_alt=images.0.alt|default:DEFAULT_ALT %}
+                  {% with first_fb=first_src|image_fallback_url %}
+                    <figure class="hero-media ratio ratio-4x3 rounded-4 overflow-hidden mb-2">
+                      <a id="hero-link"
+                         href="{{ first_src }}"
+                         data-href-webp="{{ first_src }}"
+                         data-href-fallback="{{ first_fb }}"
+                         data-fslightbox="product-hero">
+                        {% image_picture first_src alt=first_alt id="hero-picture" img_id="hero-img" width="1200" height="900" class="w-100 h-100 object-fit-cover" fetchpriority="high" loading="eager" decoding="async" %}
+                      </a>
+
+                      {% if images|length > 1 %}
+                      <div class="hero-nav" aria-hidden="false">
+                        <button type="button" class="btn-hero btn-prev" aria-label="{% trans 'Image précédente' %}">
+                          <i class="flaticon-left-arrow"></i>
+                        </button>
+                        <button type="button" class="btn-hero btn-next" aria-label="{% trans 'Image suivante' %}">
+                          <i class="flaticon-arrow-point-to-right"></i>
+                        </button>
+                      </div>
+                      {% endif %}
+                    </figure>
+
+                    {% if images %}
+                    <div class="thumbs {% if LANGUAGE_CODE == 'ar' %}flex-row-reverse{% endif %} mb-3"
+                         role="tablist" aria-label="{% trans 'Images du produit' %}">
+                      {% for m in images %}
+                        {% with webp=m.src fb=m.src|image_fallback_url %}
+                          <button type="button"
+                                  class="thumb btn p-0 border-0 rounded-3 {% if forloop.first %}thumb--selected{% endif %}"
+                                  role="tab"
+                                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                                  aria-controls="hero-img"
+                                  data-index="{{ forloop.counter0 }}"
+                                  data-full-webp="{{ webp }}"
+                                  data-full-fallback="{{ fb }}"
+                                  data-alt="{{ m.alt|default_if_none:'' }}">
+                            {% image_picture webp alt="" width="140" height="105" loading="lazy" %}
+                          </button>
+                        {% endwith %}
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                  {% endwith %}
+                {% endwith %}
+              {% else %}
+                {# Fallback dur: aucune image en base → DEFAULT_HERO sans rail #}
+                {% with first_src=DEFAULT_HERO first_alt=DEFAULT_ALT %}
+                  {% with first_fb=first_src|image_fallback_url %}
+                    <figure class="hero-media ratio ratio-4x3 rounded-4 overflow-hidden mb-2">
+                      <a id="hero-link"
+                         href="{{ first_src }}"
+                         data-href-webp="{{ first_src }}"
+                         data-href-fallback="{{ first_fb }}"
+                         data-fslightbox="product-hero">
+                        {% image_picture first_src alt=first_alt id="hero-picture" img_id="hero-img" width="1200" height="900" class="w-100 h-100 object-fit-cover" fetchpriority="high" loading="eager" decoding="async" %}
+                      </a>
+                    </figure>
+                  {% endwith %}
+                {% endwith %}
+              {% endif %}
+            {% endwith %}
+
+          </div>
+        </div>
+
+        <!-- INFO -->
+        <div class="col-12 col-lg-5" id="product-info-col" {% if LANGUAGE_CODE == 'ar' %}dir="rtl"{% endif %}>
+          <div class="ul-product-details-txt">
+
+            <div class="ul-product-details-rating">
+              <span class="rating">
+                <i class="flaticon-star"></i><i class="flaticon-star"></i><i class="flaticon-star"></i>
+                <i class="flaticon-star"></i><i class="flaticon-star"></i>
+              </span>
+              <span class="review-number"></span>
+            </div>
+
+            <span class="ul-product-details-price d-inline-flex align-items-baseline gap-2">
+              <span class="fw-bold text-danger fs-4">
+                {{ product.promotion_price|floatformat:0 }} {% trans 'MAD' %}
+              </span>
+              {% if product.price and product.price > product.promotion_price %}
+                <span class="text-muted text-decoration-line-through fs-6">
+                  {{ product.price|floatformat:0 }} {% trans 'MAD' %}
+                </span>
+              {% endif %}
+            </span>
+
+            <small class="d-block text-success opacity-75 ul-product-details-price-helper">
+              {% trans "Livraison gratuite partout au Maroc" %}
+            </small>
+
+            {# Timer conservé #}
+            {% include 'carpet/components/timer/timer.html' %}
+
+            <h1 class="ul-product-details-title h3 mt-2">
+              {% trans "Sihaty – Sérum naturel ongles & cuticules, lavande-citron-girofle" %}
+            </h1>
+
+            <p class="ul-product-details-descr">
+              {% trans "Ce soin cosmétique concentré améliore visiblement l’apparence des ongles épaissis et jaunis. Sa formule 100 % naturelle associe la lavande apaisante, le citron ravive-éclat et le clou de girofle purifiant, pour une surface plus lisse, un rose translucide et des cuticules hydratées. Déposez 1–2 gouttes sur l’ongle et son contour matin et soir ; massez jusqu’à absorption et laissez agir. En 6–8 semaines d’utilisation régulière, vos ongles retrouvent éclat et netteté. Sans parabènes ni parfums synthétiques. Satisfaction garantie." %}
+            </p>
+
+            <div class="ul-product-details-options {% if LANGUAGE_CODE == 'ar' %}rtl{% endif %}">
+              <div class="ul-product-details-option">
+                <span class="title">{% trans "Contenance" %}</span>
+                <span class="badge bg-primary">{% trans "30 ml" %}</span>
+              </div>
+              <div class="ul-product-details-option">
+                <span class="title">{% trans "Durée d'utilisation" %}</span>
+                <span class="badge bg-success">{% trans "6 à 8 semaines" %}</span>
+              </div>
+              <div class="ul-product-details-option">
+                <span class="title">{% trans "Résultats visibles dès" %}</span>
+                <span class="badge bg-info">{% trans "4 semaines" %}</span>
+              </div>
+            </div>
+
+            <div id="order" class="lp-form-card mt-3">
+              {% include 'carpet/components/forms/form-lead_cosmetic.html' %}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var heroLink = document.getElementById('hero-link');
+  var heroPicture = document.getElementById('hero-picture') || (heroLink ? heroLink.querySelector('picture') : null);
+  var heroImg = document.getElementById('hero-img') || (heroPicture ? heroPicture.querySelector('img') : null);
+  var srcWebpEl = heroPicture ? heroPicture.querySelector('source[type="image/webp"]') : null;
+
+  var thumbsBox = document.querySelector('#product-hero .thumbs');
+  var btnPrev = document.querySelector('#product-hero .btn-prev');
+  var btnNext = document.querySelector('#product-hero .btn-next');
+
+  if (!heroLink || !heroPicture || !heroImg || !srcWebpEl) return;
+
+  // Détection simple support WebP (une seule fois)
+  var _supportsWebP = (function () {
+    try {
+      var c = document.createElement('canvas');
+      return !!(c.getContext && c.toDataURL('image/webp').indexOf('data:image/webp') === 0);
+    } catch (e) { return false; }
+  })();
+
+  function applyHero(webpUrl, fallbackUrl, altText) {
+    // Met à jour <picture>
+    srcWebpEl.setAttribute('srcset', webpUrl);
+    heroImg.setAttribute('src', fallbackUrl);
+    if (altText) heroImg.setAttribute('alt', altText);
+
+    // Lightbox → meilleur format dispo pour l’utilisateur
+    heroLink.setAttribute('href', _supportsWebP ? webpUrl : fallbackUrl);
+
+    try {
+      (window.dataLayer = window.dataLayer || []).push({
+        event: 'product_media_switch',
+        src: _supportsWebP ? webpUrl : fallbackUrl
+      });
+    } catch (e) {}
+  }
+
+  function selectThumb(btn) {
+    var webp = btn.getAttribute('data-full-webp');
+    var fb = btn.getAttribute('data-full-fallback');
+    var alt = btn.getAttribute('data-alt') || heroImg.getAttribute('alt') || '';
+    applyHero(webp, fb, alt);
+
+    // UI state
+    if (!thumbsBox) return;
+    var all = thumbsBox.querySelectorAll('.thumb');
+    all.forEach(function (t) {
+      t.classList.remove('thumb--selected');
+      t.setAttribute('aria-selected', 'false');
+    });
+    btn.classList.add('thumb--selected');
+    btn.setAttribute('aria-selected', 'true');
+
+    try { btn.scrollIntoView({block: 'nearest', inline: 'center', behavior: 'smooth'}); } catch (e) {}
+  }
+
+  function currentIndex() {
+    if (!thumbsBox) return 0;
+    var cur = thumbsBox.querySelector('.thumb.thumb--selected');
+    return cur ? parseInt(cur.getAttribute('data-index'), 10) : 0;
+  }
+  function selectByIndex(i) {
+    if (!thumbsBox) return;
+    var thumbs = thumbsBox.querySelectorAll('.thumb');
+    if (!thumbs.length) return;
+    var idx = (i + thumbs.length) % thumbs.length;
+    selectThumb(thumbs[idx]);
+  }
+
+  if (thumbsBox) {
+    thumbsBox.addEventListener('click', function (e) {
+      var b = e.target.closest('.thumb');
+      if (b) selectThumb(b);
+    });
+    thumbsBox.addEventListener('keydown', function (e) {
+      var i = currentIndex();
+      if (e.key === 'ArrowRight') { e.preventDefault(); selectByIndex(i + 1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); selectByIndex(i - 1); }
+    });
+  }
+  if (btnPrev) btnPrev.addEventListener('click', function () { selectByIndex(currentIndex() - 1); });
+  if (btnNext) btnNext.addEventListener('click', function () { selectByIndex(currentIndex() + 1); });
+
+  // Initialiser le href correct selon support
+  var initWebp = heroLink.getAttribute('data-href-webp') || heroLink.getAttribute('href');
+  var initFb = heroLink.getAttribute('data-href-fallback') || (heroImg.getAttribute('src') || '');
+  heroLink.setAttribute('href', _supportsWebP ? initWebp : initFb);
+
+  try {
+    (window.dataLayer = window.dataLayer || []).push({
+      event: 'lp_variant_view',
+      lp_slug: "{{ lp.slug }}",
+      vp_key: "{{ variant.key }}",
+      vp_lang: "{{ variant.language }}"
+    });
+  } catch (e) {}
+});
+</script>

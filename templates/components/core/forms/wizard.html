@@ -1,0 +1,69 @@
+{# templates/components/forms/wizard.html #}
+<div id="flowforms-sentinel" style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
+
+<div data-ff-root id="ff-root" class="ff-shell">
+  <header class="ff-header">
+    <div class="ff-progress" data-ff-progress aria-label="progression">Étape 1 / 2</div>
+    <h1 class="ff-title">{{ title_html|default:"Accédez à la formation" }}</h1>
+    {% if subtitle_html %}<p class="ff-sub">{{ subtitle_html|safe }}</p>{% endif %}
+  </header>
+
+  <!-- Étape 1 -->
+  <section data-ff-step="1" class="ff-step">
+    <label class="ff-label">Email</label>
+    <input type="email" class="ff-input" data-ff-field="email" placeholder="vous@exemple.com" />
+    <div class="ff-actions">
+      <button type="button" class="ff-btn ff-btn-primary" data-ff-next>Continuer</button>
+    </div>
+  </section>
+
+  <!-- Étape 2 -->
+  <section data-ff-step="2" class="ff-step d-none">
+    <label class="ff-label">Prénom (optionnel)</label>
+    <input type="text" class="ff-input" data-ff-field="first_name" placeholder="Prénom" />
+
+    <label class="ff-check">
+      <input type="checkbox" data-ff-field="accept_terms" data-ff-cast="bool">
+      <span>J’accepte les conditions</span>
+    </label>
+
+    <!-- Honeypot silencieux (si activé côté back) -->
+    <input type="text" data-ff-field="honeypot" class="d-none" tabindex="-1" autocomplete="off"/>
+
+    <div class="ff-actions">
+      <button type="button" class="ff-btn" data-ff-prev>Retour</button>
+      <button type="button" class="ff-btn ff-btn-primary" data-ff-submit>Envoyer</button>
+    </div>
+
+    <div class="ff-form-msg" aria-live="polite"></div>
+  </section>
+
+  <!-- Étape finale normalisée -->
+  <section data-ff-step="done" class="ff-step d-none" aria-live="polite">
+    <h2>Merci !</h2>
+    <p>Votre demande a bien été enregistrée.</p>
+  </section>
+</div>
+
+<!-- Configuration envoyée côté serveur -->
+<script type="application/json" data-ff-config>
+{{ config_json|default:"{}"|safe }}
+</script>
+
+<style>
+  .d-none{display:none}
+  .ff-shell{max-width:720px;margin:2rem auto;padding:1rem;border:1px solid #eee;border-radius:14px}
+  .ff-header{margin-bottom:1rem}
+  .ff-title{margin:.25rem 0 .25rem 0;font-size:1.25rem}
+  .ff-sub{opacity:.8;margin:0}
+  .ff-progress{font-size:.875rem;opacity:.8}
+  .ff-step{margin-top:.75rem}
+  .ff-label{display:block;margin:.5rem 0 .25rem}
+  .ff-input{width:100%;padding:.6rem .7rem;border:1px solid #ccc;border-radius:10px}
+  .ff-check{display:flex;align-items:center;gap:.5rem;margin-top:.75rem}
+  .ff-actions{display:flex;gap:.5rem;margin-top:1rem}
+  .ff-btn{padding:.6rem .9rem;border-radius:10px;border:1px solid #ddd;background:#f7f7f7;cursor:pointer}
+  .ff-btn-primary{background:#111;color:#fff;border-color:#111}
+  .ff-btn[disabled],[data-ff-busy] .ff-btn{opacity:.6;cursor:wait}
+  .ff-form-msg{margin-top:.5rem;min-height:1.2em;opacity:.95}
+</style>

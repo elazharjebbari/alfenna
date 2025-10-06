@@ -1,0 +1,166 @@
+{% load static i18n %}
+{% static 'sihaty/img/review-placeholder.webp' as REVIEW_PLACEHOLDER %}
+
+
+<!-- ================= REVIEWS SECTION START ================= -->
+<div class="overflow-hidden">
+    <div class="ul-container">
+        <div class="ul-flash-sale">
+            <div class="ul-inner-container">
+                <!-- heading -->
+                <div class="ul-section-heading ul-flash-sale-heading">
+                    <div class="left">
+                        <span class="ul-section-sub-title">{% trans "Ce que disent nos clients" %}</span>
+                        <h2 class="ul-section-title">{% trans "Ils ont testé, ils ont adoré !" %}</h2>
+                    </div>
+                    <div class="ul-flash-sale-countdown-wrapper">
+                        <div class="ul-flash-sale-countdown">
+                            <div class="days-wrapper">
+                                <div class="days number">+1000</div>
+                                <span class="txt">{% trans "Clients" %}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#couleur-tapis" class="ul-btn">{% trans "J'achète mon sérum" %}<i
+                            class="flaticon-up-right-arrow"></i></a>
+                </div>
+
+                <!-- reviews slider -->
+                <div class="ul-flash-sale-slider swiper" id="audio-slider"
+                     data-static-bu-base="{% static 'sihaty/audio/audio_built/' %}">
+                    <div class="swiper-wrapper">
+
+                        {% for review in audio_reviews %}
+                            <div class="swiper-slide">
+                                <article class="card audio-review-card h-100 border-0 shadow-sm rounded-4 bg-body"
+                                         data-audio-card>
+                                    <div class="card-body p-3">
+
+                                        <!-- Cover + Play -->
+                                        <div class="position-relative rounded-4 overflow-hidden ratio ratio-1x1 mb-2">
+                                            <img
+                                                    src="{{ review.image_url|default_if_none:REVIEW_PLACEHOLDER|default:REVIEW_PLACEHOLDER }}"
+                                                    alt="Illustration du témoignage de
+                                                            {{ review.author }}{% if review.city %}, {{ review.city }}{% endif %}"
+                                                    class="w-100 h-100 object-fit-cover">
+                                            <button
+                                                    class="btn btn-play-audio position-absolute top-50 start-50 translate-middle rounded-circle d-flex align-items-center justify-content-center"
+                                                    type="button"
+                                                    aria-label="{% trans 'Lire le témoignage audio' %}"
+                                                    aria-pressed="false"
+                                                    data-audio-toggle
+                                                    data-audio-target="#audio-{{ forloop.counter }}">
+                                                <i class="fa-solid fa-play" aria-hidden="true"></i>
+                                            </button>
+
+
+
+                                            {{ review.duration_human|default:"" }}
+                                            </span>
+                                        </div>
+
+                                        <!-- Stars -->
+                                        <div class="mb-2" aria-label="{{ review.rating|default:5 }}/5">
+                                            {% with r=review.rating|default:5 %}
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= r %}
+                                                        <i class="fa-solid fa-star text-warning"></i>
+                                                    {% else %}
+                                                        <i class="fa-regular fa-star text-warning"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </div>
+
+                                        <!-- Texte -->
+                                        <p class="fw-semibold text-dark-emphasis mb-1">{{ review.headline }}</p>
+                                        <p class="text-muted small mb-2">
+                                            {{ review.author }}{% if review.city %}, {{ review.city }}{% endif %}</p>
+
+                                        <!-- VU meter -->
+                                        <canvas class="audio-viz"
+                                                data-audio-viz="#audio-{{ forloop.counter }}"></canvas>
+
+                                        <!-- Transport -->
+                                        <div class="d-flex align-items-center gap-2 px-2 py-2 bg-body-secondary rounded-pill">
+                                            <button class="btn btn-sm p-0 ps-2 pe-1 text-success" type="button"
+                                                    aria-label="{% trans 'Lire / Pause' %}"
+                                                    aria-pressed="false"
+                                                    data-audio-toggle data-audio-target="#audio-{{ forloop.counter }}">
+                                                <i class="fa-solid fa-play" aria-hidden="true"></i>
+                                            </button>
+
+                                            <div class="flex-grow-1">
+                                                <div class="progress bg-success-subtle"
+                                                     style="height:6px; cursor:pointer"
+                                                     data-audio-seekbar role="progressbar" aria-valuemin="0"
+                                                     aria-valuemax="100" aria-valuenow="0">
+                                                    <div class="progress-bar bg-success" style="width:0%"></div>
+                                                </div>
+                                                <div class="d-flex justify-content-between align-items-center small pt-1">
+                                                    <span class="audio-time-current">0:00</span>
+                                                    <span><span class="opacity-75">/</span>
+                          <span class="audio-time-total">{{ review.duration_human|default:"0:45" }}</span></span>
+                                                </div>
+                                            </div>
+
+                                            <button class="btn btn-sm p-0 pe-2 ps-1 text-success" type="button"
+                                                    aria-label="{% trans 'Activer / couper le son' %}"
+                                                    data-audio-mute data-audio-target="#audio-{{ forloop.counter }}">
+                                                <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Audio -->
+                                        <audio id="audio-{{ forloop.counter }}"
+                                               preload="metadata"
+                                               playsinline
+                                               tabindex="-1"
+                                               aria-hidden="true"
+                                               data-audio-base="{{ review.basename }}">
+                                            {% if review.sources and review.sources|length %}
+                                                {% for s in review.sources %}
+                                                    <source src="{{ s.src }}" type="{{ s.type }}">
+                                                {% endfor %}
+                                            {% else %}
+                                                <source src="
+                                                        {% static 'sihaty/audio/audio_built/' %}{{ review.basename }}/m4a/{{ review.basename }}.m4a"
+                                                        type="audio/mp4">
+                                                <source src="
+                                                        {% static 'sihaty/audio/audio_built/' %}{{ review.basename }}/mp3/{{ review.basename }}.mp3"
+                                                        type="audio/mpeg">
+                                                <source src="
+                                                        {% static 'sihaty/audio/audio_built/' %}{{ review.basename }}/ogg/{{ review.basename }}.ogg"
+                                                        type="audio/ogg">
+                                            {% endif %}
+                                            {% trans "Votre navigateur ne prend pas en charge l’audio HTML5." %}
+                                        </audio>
+
+                                        {% if review.transcript %}
+                                            <button class="btn btn-link p-0 mt-2 small" data-bs-toggle="collapse"
+                                                    data-bs-target="#tr-{{ forloop.counter }}" aria-expanded="false"
+                                                    aria-controls="tr-{{ forloop.counter }}">
+                                                {% trans "Lire la transcription" %}
+                                            </button>
+                                            <div class="collapse" id="tr-{{ forloop.counter }}">
+                                                <p class="small text-muted mb-0">{{ review.transcript }}</p>
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <div class="swiper-pagination d-lg-none mt-2"></div>
+                    <div class="swiper-button-prev d-none d-lg-flex"></div>
+                    <div class="swiper-button-next d-none d-lg-flex"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

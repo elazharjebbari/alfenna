@@ -1,0 +1,75 @@
+alias: training/content_training
+template: components/content_training/content_training.html
+assets:
+  css:
+    - /static/components/training/content_training.css
+contract:
+  required: {}
+  optional:
+    title: str
+    title_suffix: str
+    subtitle: str
+    image_src: str
+    image_alt: str
+    price: int
+    videos_count: int
+    modules_count: int
+    bullets: list
+    bundle_items: list
+    bundle_title: str
+    intro_banner: dict
+    cta: { label: str, url: str }
+hydrate:
+  python: apps.atelier.compose.hydrators.training_content
+  params:
+    title: str
+    title_suffix: str
+    subtitle: str
+    image_src: str
+    image_alt: str
+    price: int
+    videos_count: int
+    modules_count: int
+    bullets: list
+    bundle_items: list
+    bundle_title: str
+    intro_banner: dict
+    cta: dict
+  defaults:
+    title: "Tout Savoir"
+    title_suffix: "sur les Bougies Artisanales"
+    subtitle: "Formation complète : théorie, pratique et accompagnement"
+    image_src: "images/candles/pot-bougie-detail-formation.webp"
+    image_alt: "Bougie artisanale"
+    videos_count: 30
+    modules_count: 4
+    intro_banner:
+      enabled: true
+      text_html: "Formation en Ligne &amp; Visioconférences avec supports complets"
+    cta:
+      label: "Découvrir la formation"
+      url: "/courses/formation-bougies/"
+    bullets:
+      - { icon: "fa fa-circle", html: "<strong>Vidéos :</strong> <span class='text-success'>{{ videos_count }}</span> vidéos réparties en <u>{{ modules_count }} modules</u>" }
+      - { icon: "fa fa-circle", html: "<strong>Public :</strong> Accessible aux <u>débutants</u> et aux professionnels en reconversion" }
+      - { icon: "fa fa-circle", html: "<strong>Pré-requis :</strong> <em>Aucun</em>" }
+      - { icon: "fa fa-circle", html: "<strong>Accès :</strong> Immédiat, <u>24/7</u>" }
+      - { icon: "fa fa-circle", html: "<strong>Matériel :</strong> Ressources et recommandations" }
+      - { icon: "fa fa-circle", html: "<strong>Support :</strong> Groupe WhatsApp <u>continu</u>" }
+      - { icon: "fa fa-circle", html: "<strong>Horaires :</strong> Libre + séances Q&amp;R" }
+      - { icon: "fa fa-circle", html: "<strong>Formateurs :</strong> <span class='text-info fw-bold'>Souheila Jebbari</span>, <span class='text-info fw-bold'>Naila Baiga</span>, <span class='text-info fw-bold'>Taib Jebbari</span>" }
+      - { icon: "fa fa-circle", html: "<strong>Évaluation :</strong> QCM + <u>certification officielle</u>" }
+      - { icon: "fa fa-circle", html: "<strong>Prix :</strong> <span class='text-success'>{{ price }} DHS</span> — <u>accès à vie</u>" }
+      - { icon: "fa fa-circle", html: "<strong>Communauté :</strong> Groupe WhatsApp privé" }
+      - { icon: "fa fa-circle", html: "<strong>Supports :</strong> Vidéos, PDF, fiches, Q&amp;A" }
+      - { icon: "fa fa-circle", html: "<strong>Attestation :</strong> <u>Lumière Academy</u>" }
+    bundle_items:
+      - "<i class='fa fa-video text-success'></i> <strong>30 vidéos</strong>"
+      - "<i class='fa fa-comments text-success'></i> <strong>1 mois</strong> d’accompagnement"
+      - "<i class='fa fa-book text-success'></i> <strong>Guide complet de 100 pages</strong>"
+      - "<i class='fa fa-list text-success'></i> <strong>Liste des fournisseurs</strong>"
+      - "<i class='fa fa-tag text-success'></i> <strong>60% de réduction</strong> marketing"
+      - "<i class='fa fa-handshake text-success'></i> <strong>Ateliers à tarif réduit</strong>"
+      - "<i class='fa fa-users text-success'></i> <strong>Communauté WhatsApp</strong>"
+render:
+  cacheable: true

@@ -1,0 +1,7 @@
+Bonjour {{ user_first_name }},
+
+{{ offer_summary }}
+Découvre tous les détails ici : {{ offer_url }}
+
+Offre valable jusqu'au {{ offer_expiry_date }}. Tu reçois ce message car tu as confirmé ton opt-in marketing.
+Pour te désinscrire : {{ unsubscribe_url }}

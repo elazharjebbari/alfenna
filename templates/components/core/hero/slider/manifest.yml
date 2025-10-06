@@ -1,0 +1,51 @@
+alias: hero/slider
+template: "components/core/slider/slider.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/core/slider/slider.css"
+  js: []
+  vendors:
+    - swiper
+
+params:
+  badge_html: ""
+  title_sub: "Découvrez nos parcours avancés"
+  title_main: "Approfondissez votre art de la bougie"
+  description: "Créez des collections signature avec l’accompagnement de nos formateurs."
+  price: 249
+  promotion_pct: 15
+  cta:
+    label: "Découvrir le programme"
+    url: "#"
+  slider_image: "images/slider/slider-2"
+  video_url: "https://www.youtube.com/watch?v=G9Zu0-4V88Y"
+  rating:
+    value: 4.9
+    count: 92000
+  style:
+    price_box_bg: "#FF7846"
+
+contract:
+  required: {}
+  optional:
+    badge_html: "str"
+    title_sub: "str"
+    title_main: "str"
+    description: "str"
+    price: "float"
+    promotion_pct: "int"
+    cta:
+      label: "str"
+      url: "str"
+    slider_image: "str"
+    video_url: "str"
+    rating:
+      value: "float"
+      count: "int"
+    style:
+      price_box_bg?: "str"
+
+render:
+  cacheable: true

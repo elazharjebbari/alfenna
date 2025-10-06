@@ -1,0 +1,36 @@
+alias: learning/lecture
+template: "components/core/learning/lecture/lecture.html"
+
+assets:
+  head: []
+  css: []
+  js:
+    - "/static/js/learning_player.js"
+  vendors: []
+
+compose:
+  children:
+    video: learning/video_player
+    enroll: learning/enroll_content
+    playlist: learning/playlist
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.learning.hydrators"
+  func: "lecture_layout"
+
+params:
+  assets:
+    images:
+      poster: null
+
+contract:
+  optional:
+    course: "Course"
+    lecture: "Lecture"
+    section_list: "list"
+    checkout_url: "str"
+    poster_url: "str"
+    stream_url: "str|null"
+
+render:
+  cacheable: false

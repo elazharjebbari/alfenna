@@ -1,0 +1,17 @@
+{% extends "partials/_auth_layout.html" %}
+{% load i18n %}
+
+{% block auth_title %}{% trans "Lien invalide ou expiré" %}{% endblock %}
+
+{% block auth_form %}
+  <div class="alert error">{% trans "Ce lien de vérification n’est plus valide. Demande un nouvel e‑mail." %}</div>
+  <form class="auth-form" method="post" action="{% url 'accounts:resend_verification' %}">
+    {% csrf_token %}
+    <div class="auth-actions">
+      <button class="btn-primary" type="submit">{% trans "Renvoyer l’e‑mail" %}</button>
+    </div>
+  </form>
+  <div class="meta-links">
+    <a href="{% url 'pages:login' %}">{% trans "Retour à la connexion" %}</a>
+  </div>
+{% endblock %}

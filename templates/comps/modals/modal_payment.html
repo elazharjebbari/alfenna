@@ -1,0 +1,80 @@
+
+<!-- Styles personnalisés -->
+<style>
+  /* Header sécurisé */
+  #paymentModal .modal-header {
+    background-color: #007bff;
+  }
+  #paymentModal .btn-close-white {
+    filter: invert(1);
+  }
+  /* Style de la zone Stripe Elements */
+  #card-element {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  /* Bouton de paiement avec transition */
+  #payment-button {
+    transition: background-color 0.3s ease;
+  }
+  #payment-button:hover {
+    background-color: #006fdd;
+  }
+  /* Style des icônes de paiement */
+  .payment-icon {
+    font-size: 2rem;
+    margin: 0 8px;
+    color: #555;
+  }
+  .payment-icon:hover {
+    color: #007bff;
+  }
+</style>
+
+<!-- Modal de paiement sécurisé -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-sm">
+      <!-- Header sécurisé -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="paymentModalLabel">
+          <i class="fa fa-lock me-2"></i> Paiement sécurisé - Finalisation
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+      </div>
+      <!-- Corps du modal -->
+      <div class="modal-body">
+        <p class="text-center text-muted small mb-3">Vos informations sont chiffrées et protégées.</p>
+
+        <!-- Conteneur pour le PaymentRequestButton (Apple Pay/Google Pay) -->
+        <div id="payment-request-button" class="mb-3"></div>
+
+        <!-- Formulaire de paiement par carte -->
+        <form id="payment-form">
+          <div id="card-element" class="form-control mb-2"></div>
+          <div id="card-errors" role="alert" class="text-danger mb-2"></div>
+          <button id="payment-button" type="button" class="btn btn-success w-100 mb-3">
+            Payer {{ promotion }} DHS
+          </button>
+
+          <!-- Message rassurant indiquant l'accès immédiat au cours -->
+          <p class="text-center text-success mb-3">
+            <i class="fas fa-graduation-cap me-1"></i>
+            Après votre paiement, l'accès à la formation vous sera directement accordé.
+          </p>
+
+          <!-- Icônes de paiement avec Font Awesome -->
+          <div class="text-center mb-3">
+            <i class="fab fa-cc-visa payment-icon"></i>
+            <i class="fab fa-cc-mastercard payment-icon"></i>
+            <i class="fab fa-cc-apple-pay payment-icon"></i>
+            <i class="fab fa-google-pay payment-icon"></i>
+            <i class="fas fa-lock payment-icon"></i>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

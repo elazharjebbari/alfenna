@@ -1,0 +1,39 @@
+alias: chatbot/panel
+template: "components/chatbot/panel/component.html"
+
+params:
+  title: "Assistant Lumière"
+  subtitle: "Toujours là pour vous guider."
+  session_id: null
+  messages_alias: "chatbot/messages"
+  messages_params: {}
+  input_alias: "chatbot/input"
+  input_params: {}
+  footer_links: []
+
+contract:
+  optional:
+    title: "str"
+    subtitle: "str"
+    session_id: "str"
+    messages_alias: "str"
+    messages_params: "dict"
+    input_alias: "str"
+    input_params: "dict"
+    footer_links: "list"
+
+compose:
+  children:
+    messages:
+      alias: "{{ messages_alias }}"
+      with: "{{ messages_params }}"
+    input:
+      alias: "{{ input_alias }}"
+      with: "{{ input_params }}"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.chatbot.hydrators"
+  func: "chatbot_panel"
+
+render:
+  cacheable: false

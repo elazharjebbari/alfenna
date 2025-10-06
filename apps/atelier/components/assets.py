@@ -14,8 +14,8 @@ from .registry import get as get_component
 _VENDORS: Dict[str, Dict[str, List[str]]] = {
     # Exemple : Swiper (utilisé par hero/slider)
     "swiper": {
-        "css": ["vendor/swiper/swiper-bundle.min.css"],
-        "js": ["vendor/swiper/swiper-bundle.min.js"],
+        "css": ["https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"],
+        "js": ["https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"],
         "head": [],
     },
 }

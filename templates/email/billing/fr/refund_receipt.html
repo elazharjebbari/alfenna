@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <body style="font-family: Arial, sans-serif; background: #f7f7f9; padding: 32px;">
+    <table style="max-width: 640px; margin: auto; background: #ffffff; border-radius: 8px; padding: 32px;">
+      <tr>
+        <td>
+          <p style="font-size: 16px; color: #222;">Bonjour {{ customer_name|default:"" }},</p>
+          <p style="font-size: 16px; color: #222;">
+            Nous avons confirmé le remboursement{% if is_full_refund %} total{% else %} partiel{% endif %} lié à votre commande {{ order_reference }}.
+          </p>
+          <p style="font-size: 14px; color: #555;">
+            Montant remboursé : {{ refund_amount }} {{ currency }}<br />
+            Montant initial : {{ original_amount }} {{ currency }}
+          </p>
+          <p style="font-size: 14px; color: #555;">
+            Vous pouvez télécharger la facture/avoir à jour en suivant ce lien sécurisé :
+          </p>
+          <p style="text-align: center; margin: 24px 0;">
+            <a href="{{ invoice_url }}" style="background: #059669; color: #fff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 600;">
+              Accéder à la facture
+            </a>
+          </p>
+          <p style="font-size: 12px; color: #999;">
+            Pour toute question, écrivez-nous à l'équipe {{ site_name }}.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

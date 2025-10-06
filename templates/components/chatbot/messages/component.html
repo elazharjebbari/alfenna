@@ -1,0 +1,24 @@
+{# components/chatbot/messages/component.html #}
+<div
+  class="chatbot-messages"
+  data-chatbot-messages
+  role="log"
+  aria-live="polite"
+  aria-relevant="additions"
+  tabindex="0"
+>
+  {% if messages %}
+    <ul class="chatbot-messages__list">
+      {% for message in messages %}
+        <li class="chatbot-messages__item chatbot-messages__item--{{ message.role }}" data-message-id="{{ message.id }}">
+          <div class="chatbot-messages__bubble" data-role="{{ message.role }}">{{ message.content_html|safe }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="chatbot-messages__empty">
+      <h3 class="chatbot-messages__empty-title">{{ empty_title }}</h3>
+      <p class="chatbot-messages__empty-body">{{ empty_body }}</p>
+    </div>
+  {% endif %}
+</div>

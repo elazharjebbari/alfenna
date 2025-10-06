@@ -1,10 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Al Fenna – Étape 1 (Luxe)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+<style>
+:root{
+  --af-page:#20352e;
+  --af-card:#f5f2ea;
+  --af-ink:#1d352e;
+  --af-ink-2:#38574f;
+  --af-line:#dfe7e1;
+  --af-accent:#1c4a3e;
+  --af-accent-2:#173f34;
+  --af-price:#2d6a57;
+}
+body{background:var(--af-page); font-family:"Raleway",sans-serif; color:var(--af-ink);}
+.af-card{
+  max-width:900px; margin:48px auto; background:var(--af-card); border-radius:28px;
+  box-shadow:0 18px 60px rgba(0,0,0,.35);
+  padding:44px 40px 30px; border:1px solid rgba(255,255,255,.35);
+}
+.af-logo{width:96px;height:76px;}
+.af-brand{font-family:"Great Vibes",cursive; font-size: clamp(2.3rem,4.7vw,3.6rem);}
+.af-baseline{letter-spacing:.08em; color:var(--af-ink-2);}
+
+.af-stepper{display:flex; align-items:center; gap:26px; margin:18px 0 8px;}
+.af-pill{padding:.25rem .5rem; border-radius:999px; font-weight:800;}
+.af-pill.active{background:#e9f3ef; color:var(--af-ink);}
+.af-divider{height:3px; flex:1; background:linear-gradient(90deg,#a2cbb9,#d8e2de); border-radius:3px;}
+
+.af-banner{
+  background:linear-gradient(180deg,#fbf8f1 0%,#f9f3e6 100%);
+  border:1px solid var(--af-line); border-radius:16px; padding:18px 18px;
+}
+.af-price-now{color:var(--af-price); font-weight:900; font-size:clamp(2rem,3.1vw,2.4rem);}
+.af-price-old{text-decoration:line-through; color:#8a9a97;}
+.af-saving{color:#2f7e66; font-weight:800;}
+.af-chip{display:inline-flex; align-items:center; gap:.45rem; padding:.45rem .7rem; border-radius:999px; background:#e7f1ec; font-weight:700;}
+
+.input-group-text{background:#eaf2ee; font-weight:800;}
+.form-control{border-radius:12px; padding:.9rem 1rem;}
+.btn-af{background:linear-gradient(180deg,var(--af-accent),var(--af-accent-2)); color:#fff; font-weight:900; border:none; border-radius:14px; padding:.95rem 1rem; box-shadow:0 10px 24px rgba(28,74,62,.3);}
+.btn-af:hover{filter:brightness(.98);}
+</style>
 </head>
 <body>
+  <div class="af-card">
+    <div class="text-center">
+      <img class="af-logo" src="https://placehold.co/96x76?text=Logo" alt="Logo">
+      <div class="af-brand mt-1">Al Fenna</div>
+      <div class="af-baseline small fw-bold text-uppercase">NATUREL • SOIN • CONFIANCE</div>
+    </div>
 
+    <div class="af-stepper mt-3">
+      <span class="af-pill active">Contact</span>
+      <div class="af-divider"></div>
+      <span class="af-pill">Offres</span>
+      <div class="af-divider"></div>
+      <span class="af-pill">Confirmation</span>
+    </div>
+
+    <div class="af-banner mt-2 mb-4">
+      <div class="row g-3 align-items-stretch">
+        <div class="col-lg-5">
+          <div class="p-3 border rounded-3 h-100" style="border-color:var(--af-line)">
+            <div class="fw-extrabold">Seulement</div>
+            <div class="af-price-now">120&nbsp;DH</div>
+            <div class="af-price-old mt-2">180&nbsp;DH</div>
+            <div class="af-saving mt-2">Vous économisez 60&nbsp;DH</div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <ul class="list-unstyled mb-2">
+            <li class="mb-1">🚚 <strong>Livraison 48&nbsp;h</strong></li>
+            <li class="mb-1">💳 <strong>Paiement à la livraison</strong></li>
+            <li class="mb-1">🌿 <strong>100&nbsp;% naturel</strong></li>
+          </ul>
+          <span class="af-chip">👩‍🦰 +&nbsp;500 clientes</span>
+        </div>
+      </div>
+    </div>
+
+    <form class="vstack gap-3">
+      <div>
+        <label class="fw-bold mb-1" for="name">Nom complet</label>
+        <input id="name" type="text" class="form-control" placeholder="Ex. Salma Benali" required>
+      </div>
+
+      <div>
+        <label class="fw-bold mb-1" for="tel">Numéro de téléphone</label>
+        <div class="input-group">
+          <span class="input-group-text rounded-start-3">+212 / 06</span>
+          <input id="tel" type="tel" class="form-control rounded-end-3" placeholder="WhatsApp ou mobile actif" minlength="6" maxlength="20" required>
+        </div>
+        <div class="form-text mt-1">Format libre. Les caractères non numériques seront nettoyés automatiquement.</div>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="wa" checked>
+        <label class="form-check-label" for="wa">OK pour être contacté(e) sur WhatsApp pour confirmer la livraison</label>
+      </div>
+
+      <button type="button" class="btn btn-af w-100 mt-2">Continuer &#8250;</button>
+      <div class="small text-muted">Étape 1 / 3</div>
+    </form>
+  </div>
 </body>
 </html>

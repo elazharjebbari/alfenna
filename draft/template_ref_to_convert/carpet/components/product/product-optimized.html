@@ -1,0 +1,364 @@
+{% load i18n static humanize  %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{# ==== RTL (ar) ==== #}
+{% if LANGUAGE_CODE == 'ar' %}
+    <style>
+        .ul-product-details-rating {
+            text-align: right;
+            direction: rtl;
+        }
+
+        .ul-product-details-options.rtl {
+            direction: rtl;
+        }
+
+        .ul-product-details-options.rtl .title {
+            text-align: right;
+            display: block;
+            margin-bottom: .5rem;
+        }
+
+        .ul-product-details-options.rtl .variants {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: .5rem;
+            justify-content: flex-start;
+        }
+
+        .ul-product-details-options.rtl .badge {
+            font-size: 1rem;
+            direction: rtl;
+            display: inline-block;
+        }
+
+        form[dir="rtl"] {
+            direction: rtl !important;
+        }
+
+        form[dir="rtl"] .form-control, form[dir="rtl"] input, form[dir="rtl"] textarea {
+            text-align: right !important;
+        }
+
+        form[dir="rtl"] .input-group {
+            flex-direction: row-reverse !important;
+        }
+
+        form[dir="rtl"] .input-group .input-group-text {
+            text-align: right !important;
+        }
+    </style>
+{% endif %}
+
+<style>
+    /* Variantes couleurs si tu réactives la sélection */
+    .variants .black {
+        background: #000 !important;
+    }
+
+    .variants .grey {
+        background: grey !important;
+    }
+
+    .variants .brown {
+        background: saddlebrown !important;
+    }
+
+    /* ===== HERO + THUMBS + ARROWS ===== */
+    #product-media-col, #product-info-col {
+        min-width: 0;
+    }
+
+    #product-media-col .ul-product-details-img {
+        max-width: none;
+        width: 100%;
+    }
+
+    #product-hero .hero-media {
+        background: #f6f6f6;
+        position: relative;
+    }
+
+    /* Flèches */
+    #product-hero .hero-nav {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+    }
+
+    #product-hero .hero-nav .btn-hero {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        inline-size: 48px;
+        block-size: 48px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        border: 0;
+        pointer-events: auto;
+        background: rgba(255, 255, 255, .92);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, .12);
+        cursor: pointer;
+    }
+
+    #product-hero .hero-nav .btn-prev {
+        inset-inline-start: .5rem;
+    }
+
+    #product-hero .hero-nav .btn-next {
+        inset-inline-end: .5rem;
+    }
+
+    #product-hero .hero-nav .btn-hero i {
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    #product-hero .hero-nav .btn-hero:focus-visible {
+        outline: 3px solid var(--bs-primary);
+    }
+
+    /* Miniatures */
+    #product-hero .thumbs {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: .25rem;
+    }
+
+    #product-hero .thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+    #product-hero .thumb {
+        inline-size: 92px;
+        block-size: 68px;
+        flex: 0 0 auto;
+        position: relative;
+        outline: none;
+    }
+
+    #product-hero .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: .75rem;
+        display: block;
+    }
+
+    #product-hero .thumb--selected::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 2px solid var(--bs-primary);
+        border-radius: .75rem;
+        box-shadow: 0 0 0 2px #fff inset;
+    }
+
+    #product-hero .thumb:focus-visible {
+        outline: 3px solid var(--bs-primary);
+        outline-offset: 2px;
+    }
+
+    /* Desktop : visuel et thumbs plus grands */
+    @media (min-width: 992px) {
+        #product-media-col .hero-media {
+            aspect-ratio: 4/3;
+        }
+
+        #product-media-col .thumb {
+            inline-size: 112px;
+            block-size: 84px;
+        }
+    }
+
+    /* Détail prix (ton helper vert) */
+    .ul-product-details-price-helper {
+        font-size: .78rem;
+        margin-top: -.7rem;
+    }
+</style>
+
+<style>
+  .ul-product-details-savings-helper{
+    color:#198754;        /* même teinte success bootstrap */
+    margin-top:.15rem;
+    font-size:.9rem;
+  }
+</style>
+
+
+<!-- ======= PAGE ======= -->
+<div class="ul-inner-page-container">
+    <div class="ul-product-details">
+        <div class="ul-product-details-top">
+
+            <div class="row g-4 g-lg-5 align-items-start">
+                <!-- MEDIA (7/12) -->
+                <div class="col-12 col-lg-7" id="product-media-col">
+                    <div class="ul-product-details-img" id="product-hero" data-gallery="sajadat">
+
+                        <!-- Media principal -->
+                        <figure class="hero-media ratio ratio-4x3 rounded-4 overflow-hidden mb-2">
+                            <a id="hero-link" href="{% static 'carpet/images/cover/cadre-domestique.webp' %}"
+                               data-fslightbox="product-hero">
+                                <picture id="hero-picture">
+                                    <source id="hero-src-webp" type="image/webp"
+                                            srcset="{% static 'carpet/images/cover/cadre-domestique.webp' %}">
+                                    <img id="hero-img"
+                                         width="1200" height="900"
+                                         class="w-100 h-100 object-fit-cover"
+                                         fetchpriority="high" loading="eager" decoding="async"
+                                         src="{% static 'carpet/images/cover/cadre-domestique.webp' %}"
+                                         alt="{% trans 'Tapis Sajadat Al-Raha — coussin mémoire intégré' %}">
+                                </picture>
+                            </a>
+
+                            <!-- Flèches (optionnelles) -->
+                            <div class="hero-nav" aria-hidden="false">
+                                <button type="button" class="btn-hero btn-prev"
+                                        aria-label="{% trans 'Image précédente' %}">
+                                    <i class="flaticon-left-arrow"></i>
+                                </button>
+                                <button type="button" class="btn-hero btn-next"
+                                        aria-label="{% trans 'Image suivante' %}">
+                                    <i class="flaticon-arrow-point-to-right"></i>
+                                </button>
+                            </div>
+                        </figure>
+
+                        <!-- Miniatures -->
+                        <div class="thumbs {% if LANGUAGE_CODE == 'ar' %}flex-row-reverse{% endif %} mb-3"
+                             role="tablist" aria-label="{% trans 'Images du produit' %}">
+                            <button type="button" class="thumb btn p-0 border-0 rounded-3 thumb--selected"
+                                    role="tab" aria-selected="true" aria-controls="hero-img"
+                                    data-index="0"
+                                    data-full="{% static 'carpet/images/cover/cadre-domestique.webp' %}"
+                                    data-alt="{% trans 'Vue principale du tapis' %}">
+                                <img width="140" height="105" loading="lazy"
+                                     src="{% static 'carpet/images/cover/cadre-domestique.webp' %}" alt="">
+                            </button>
+
+                            <button type="button" class="thumb btn p-0 border-0 rounded-3"
+                                    role="tab" aria-selected="false" aria-controls="hero-img"
+                                    data-index="1"
+                                    data-full="{% static 'carpet/images/cover/genous-coussin.webp' %}"
+                                    data-alt="{% trans 'Coussin mémoire — gros plan' %}">
+                                <img width="140" height="105" loading="lazy"
+                                     src="{% static 'carpet/images/cover/genous-coussin.webp' %}" alt="">
+                            </button>
+
+                            <button type="button" class="thumb btn p-0 border-0 rounded-3"
+                                    role="tab" aria-selected="false" aria-controls="hero-img"
+                                    data-index="2"
+                                    data-full="{% static 'carpet/images/cover/toucher.webp' %}"
+                                    data-alt="{% trans 'Texture et toucher du tapis' %}">
+                                <img width="140" height="105" loading="lazy"
+                                     src="{% static 'carpet/images/cover/toucher.webp' %}" alt="">
+                            </button>
+
+                            <button type="button" class="thumb btn p-0 border-0 rounded-3"
+                                    role="tab" aria-selected="false" aria-controls="hero-img"
+                                    data-index="3"
+                                    data-full="{% static 'carpet/images/cover/image-profil.webp' %}"
+                                    data-alt="{% trans 'Vue d’ensemble du tapis' %}">
+                                <img width="140" height="105" loading="lazy"
+                                     src="{% static 'carpet/images/cover/image-profil.webp' %}" alt="">
+                            </button>
+
+                            <button type="button" class="thumb btn p-0 border-0 rounded-3"
+                                    role="tab" aria-selected="false" aria-controls="hero-img"
+                                    data-index="4"
+                                    data-full="{% if LANGUAGE_CODE == 'ar' %}
+                                   {% static 'carpet/images/cover/mouse-memoire-airgel-ar.webp' %}
+                                 {% else %}
+                                   {% static 'carpet/images/cover/mouse-memoire-airgel.webp' %}
+                                 {% endif %}"
+                                    data-alt="{% trans 'Schéma coussin mémoire intégré' %}">
+                                <img width="140" height="105" loading="lazy"
+                                     src="{% if LANGUAGE_CODE == 'ar' %}
+                            {% static 'carpet/images/cover/mouse-memoire-airgel-ar.webp' %}
+                          {% else %}
+                            {% static 'carpet/images/cover/mouse-memoire-airgel.webp' %}
+                          {% endif %}" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFO (5/12) -->
+                <div class="col-12 col-lg-5" id="product-info-col">
+                    <div class="ul-product-details-txt">
+                        <!-- rating -->
+                        <div class="ul-product-details-rating">
+              <span class="rating">
+                <i class="flaticon-star"></i><i class="flaticon-star"></i><i class="flaticon-star"></i>
+                <i class="flaticon-star"></i><i class="flaticon-star"></i>
+              </span>
+                            <span class="review-number"></span>
+                        </div>
+
+                        <!-- prix -->
+                        {% comment %} Bloc prix existant {% endcomment %}
+                        <span class="ul-product-details-price d-inline-flex align-items-baseline gap-2">
+                          <span class="fw-bold text-danger fs-4">
+                            {{ product.promotion_price|floatformat:0 }} {% trans 'MAD' %}
+                          </span>
+                                                    {% if product.price and product.price > product.promotion_price %}
+                                                        <span class="text-muted text-decoration-line-through fs-6">
+                              {{ product.price|floatformat:0 }} {% trans 'MAD' %}
+                            </span>
+                                                    {% endif %}
+                        </span>
+
+                        {# aide verte déjà en place #}
+                        <small class="d-block text-success opacity-75 ul-product-details-price-helper">
+                            {% trans "Livraison gratuite partout au Maroc" %}
+                        </small>
+
+                        {# === NOUVELLE LIGNE ÉCONOMIE (P1) === #}
+                        {% if price_ui.show %}
+                          <small class="d-block text-success ul-product-details-savings-helper">
+                            {% trans "Vous économisez" %} {{ price_ui.savings_text }} ({{ price_ui.percent_text }})
+                          </small>
+                        {% endif %}
+
+                        <small class="d-block text-success opacity-75 ul-product-details-price-helper">
+                            {% trans "Livraison gratuite partout au Maroc" %}
+                        </small>
+
+                        <!-- titre + description -->
+                        <h1 class="ul-product-details-title h3 mt-2">
+                            {% trans "Sajadat Al-Raha – Tapis de prière confortable et élégant" %}
+                        </h1>
+                        <p class="ul-product-details-descr">
+                            {% trans "Conçu pour allier confort et spiritualité, ce tapis de prière ergonomique soulage vos genoux et apporte une sérénité nouvelle à vos moments de recueillement. Idéal pour les adultes, seniors, ou personnes souffrant de douleurs articulaires." %}
+                        </p>
+
+                        <!-- options -->
+                        <div class="ul-product-details-options {% if LANGUAGE_CODE == 'ar' %}rtl{% endif %}">
+                            <div class="ul-product-details-option ul-product-details-sizes">
+                                <span class="title">{% trans "Taille" %}</span>
+                                <form action="#" class="variants" {% if LANGUAGE_CODE == 'ar' %} dir="rtl" {% endif %}>
+                                    <label for="size-unique" class="d-inline-block">
+                                        <input type="radio" name="product-size" id="size-unique" checked hidden>
+                                        <span class="badge bg-primary">{% trans "120 cm x 72 cm" %}</span>
+                                    </label>
+                                </form>
+                            </div>
+                        </div>
+
+                        {# ton formulaire lead #}
+                        {% include 'carpet/components/forms/form-lead.html' %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

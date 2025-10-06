@@ -1,0 +1,20 @@
+alias: chatbot/messages
+template: "components/chatbot/messages/component.html"
+
+params:
+  messages: []
+  empty_state:
+    title: "Aucune conversation"
+    body: "Démarrez un échange pour voir les réponses ici."
+
+contract:
+  optional:
+    messages: "list"
+    empty_state: "dict"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.chatbot.hydrators"
+  func: "chatbot_messages"
+
+render:
+  cacheable: false

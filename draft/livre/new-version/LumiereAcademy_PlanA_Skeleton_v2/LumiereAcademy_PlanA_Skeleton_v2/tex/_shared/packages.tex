@@ -1,0 +1,56 @@
+% =========================
+% Packages communs (preambule)
+% =========================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage[a4paper,margin=25mm,includeheadfoot]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable,most}
+\usepackage{fancyhdr}
+\usepackage{subfiles}
+\usepackage{fontawesome5}
+\usepackage{csquotes}
+\usepackage[pdfencoding=auto,psdextra,hidelinks]{hyperref}
+\usepackage{cleveref}
+
+
+% ==== VISUELS & BLOCS ====
+\tcbuselibrary{skins,breakable}
+\usepackage{caption}
+\usepackage{subcaption}      % sous-figures avant/après
+\usepackage[export]{adjustbox} % max width images/tableaux
+\usepackage{overpic}         % annotations sur images
+\usepackage{makecell}        % sauts de ligne dans cellules
+% ==== TABLEAUX (choix A conseillé) ====
+\IfFileExists{tabularray.sty}{
+  \usepackage{tabularray}
+  \UseTblrLibrary{booktabs, siunitx, varwidth}
+}{% fallback si tabularray absent
+  \usepackage{tabularx}
+}
+
+
+% Bibliographie (optionnelle)
+\usepackage[
+  backend=biber,
+  style=authoryear,
+  natbib=false,
+  url=false,
+  doi=false,
+  isbn=false,
+  eprint=false
+]{biblatex}
+\addbibresource{tex/_shared/bibliography.bib}

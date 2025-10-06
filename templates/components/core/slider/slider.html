@@ -1,0 +1,267 @@
+{% load static atelier_images humanize atelier_utils %}
+
+<style>
+  /* ===========================
+     HERO / Slider – Inline fixes
+     =========================== */
+
+  /* Desktop/Mobile harmonisation générale */
+  .hero-price-strip{display:none}
+
+  /* Masquage décor selon préférences */
+  {% if not style.show_shapes_desktop %}.slider-section .slider-shape{display:none !important}{% endif %}
+
+  /* Desktop only tweaks */
+  @media (min-width: 768px){
+    .slider-content{max-width:560px}
+  }
+
+  /* Mobile first corrections */
+  @media (max-width: 767.98px){
+    .slider-section{padding-top:120px; display:block;}
+    .slider-content{max-width:none; padding:0 16px; position:relative; z-index:2}
+    .slider-content .sub-title{font-size:15px}
+    .slider-content .main-title{font-size:clamp(24px,6vw,32px); line-height:1.25; margin-top:12px}
+    .slider-content p{font-size:16px; margin-top:14px}
+    .slider-content .btn{width:100%; justify-content:center}
+    .slider-content .btn + .btn-link{width:auto}
+    /* rating bubble & shapes — allégés sur mobile */
+    .slider-rating-box{display:none !important}
+    {% if not style.show_shapes_mobile %}.slider-section .slider-shape{display:none !important}{% endif %}
+    /* Pastille prix : on passe en strip lisible sous les CTA */
+    .slider-courses-box{display:none}
+    .hero-price-strip{display:block; margin-top:12px}
+  }
+
+  /* Ribbon option (desktop inline) */
+  {% if style.layout == 'ribbon' %}
+  .slider-courses-box{display:none}
+  {% endif %}
+</style>
+
+<div class="section slider-section">
+
+  {% if style.show_shapes_desktop or style.show_shapes_mobile %}
+    <div class="slider-shape">
+      {% responsive_picture 'images/shape/shape-8' alt="Shape" cls="shape-1 animation-round" %}
+    </div>
+  {% endif %}
+
+  <div class="container">
+    <div class="slider-content" id="hero-slider-content" style="max-width: 560px;">
+
+      {% if badge_html %}
+        <div class="mb-2">{% render_string badge_html %}</div>
+      {% endif %}
+
+      {% if title_sub %}<h3 class="sub-title">{{ title_sub }}</h3>{% endif %}
+      {% if title_main %}<h1 class="main-title">{{ title_main }}</h1>{% endif %}
+      {% if description %}<p>{{ description }}</p>{% endif %}
+
+      <!-- preuve sociale + micro-progress -->
+      <div class="d-flex align-items-center flex-wrap gap-2 mt-3">
+        {% if rating.value %}
+          <span class="d-inline-flex align-items-center" style="font-weight:700;color:#309255;">
+            {{ rating.value }} <i class="flaticon-star ms-1" style="font-size:14px;color:#ffa200;"></i>
+          </span>
+          {% if proof_text %}
+            <small class="text-muted">| {{ proof_text }}</small>
+          {% else %}
+            <small class="text-muted">({{ rating.count|intcomma }})</small>
+          {% endif %}
+        {% endif %}
+      </div>
+      <!-- preuve sociale + micro-progress -->
+{#      <div class="d-flex align-items-center flex-wrap gap-2 mt-3">#}
+{#        {% if micro_progress_html %}#}
+{#          <span class="ms-2 text-muted" style="font-size:.9rem;">• {% render_string micro_progress_html %}</span>#}
+{#        {% endif %}#}
+{#      </div>#}
+
+      <!-- CTA primary + secondaire -->
+      <div class="mt-4 d-flex align-items-center flex-wrap" style="gap:12px;">
+        {% if cta %}
+          <a href="{{ cta.url|default:'#' }}"
+             class="btn btn-primary btn-hover-dark"
+             aria-label="{{ cta.label|default:'Je me lance' }}"
+             data-ev="hero_cta_click"
+             data-ev-loc="primary"
+             data-ev-price="{{ price.current }}"
+             data-ev-currency="{{ price.currency }}"
+             data-ab="{{ ab_variant }}">
+            <i class="fa fa-play-circle me-2" aria-hidden="true"></i>{{ cta.label|default:"Je me lance" }}
+          </a>
+        {% endif %}
+
+        {% if cta_secondary %}
+          <a href="{{ cta_secondary.url|default:'#' }}"
+             class="btn btn-link p-0"
+             style="text-decoration:underline;color:#309255;font-weight:700;"
+             aria-label="{{ cta_secondary.label|default:'Voir le programme' }}"
+             data-ev="hero_cta_secondary_click"
+             data-ev-loc="secondary"
+             data-ab="{{ ab_variant }}">
+            {{ cta_secondary.label|default:"Voir le programme" }}
+          </a>
+        {% endif %}
+      </div>
+
+      {% if safety_note %}
+        <div class="mt-1"><small class="text-muted">{{ safety_note }}</small></div>
+      {% endif %}
+
+      {% if timer_deadline_ts %}
+        <div class="mt-2" style="font-weight:700;">
+          <small>⏳ Offre se termine dans&nbsp;
+            <span id="hero-timer"
+                  aria-live="polite"
+                  data-deadline="{{ timer_deadline_ts }}"></span>
+          </small>
+        </div>
+      {% endif %}
+
+      {% if trust_badges %}
+        <ul class="list-unstyled d-flex align-items-center gap-3 mt-3 mb-0">
+          {% for b in trust_badges %}
+            <li class="d-flex align-items-center" style="gap:8px;">
+              {% if b.icon %}<i class="{{ b.icon }}" style="color:#309255;" aria-hidden="true"></i>{% endif %}
+              {% if b.text %}<small class="text-muted">{{ b.text }}</small>{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {# --- Mobile price strip (lisible, non-absolute) --- #}
+      {% if style.mobile_price_mode == 'strip' %}
+        <div class="hero-price-strip">
+          <div class="d-flex align-items-center justify-content-between p-2"
+               style="background:#e7f8ee;border-radius:12px;">
+            <div class="d-flex flex-column">
+              {% if price.before %}
+                <small class="text-muted" style="text-decoration:line-through;">{{ price.before_str }}</small>
+              {% endif %}
+              <strong style="color:#309255;">{{ price.current_str }}</strong>
+              <small class="text-muted">{{ price.cost_per_day_str }}</small>
+            </div>
+            <div class="text-end">
+              <span class="badge rounded-pill text-white"
+                    style="background:#309255;">{{ price.label_only }}</span>
+              {% if price.discount_pct %}
+                <div><small class="text-success fw-bold d-block d-md-none">-{{ price.discount_pct }}%</small></div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if style.layout == 'ribbon' %}
+        {# Variante desktop "ribbon" : prix intégré au flux (aussi visible desktop) #}
+        <div class="d-none d-md-block mt-3">
+          <div class="d-inline-flex align-items-center gap-2 px-3 py-2"
+               style="background:#e7f8ee;border-radius:999px;">
+            {% if price.before %}
+              <small class="text-muted" style="text-decoration:line-through;">{{ price.before_str }}</small>
+            {% endif %}
+            <strong style="color:#309255;">{{ price.current_str }}</strong>
+            {% if price.discount_pct %}<small class="text-success fw-bold">-{{ price.discount_pct }}%</small>{% endif %}
+            <small class="text-muted ms-1">{{ price.cost_per_day_str }}</small>
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  {# --- Pastille prix desktop (layout circle) --- #}
+  {% if style.layout == 'circle' %}
+    <div class="slider-courses-box">
+      {% responsive_picture 'images/shape/shape-5' alt="Shape" cls="shape-1 animation-left" %}
+      <div class="box-content ring-box-content" style="background-color: {{ style.price_box_bg|default:'#309255' }};">
+        <div class="box-wrapper" style="display:flex;flex-direction:column;align-items:center;">
+          {% if price.before %}
+            <small style="color:#fff;opacity:.85;text-decoration:line-through;">{{ price.before_str }}</small>
+          {% endif %}
+          <i class="fa fa-coins mb-1" aria-hidden="true"></i>
+          <span class="count">{{ price.current_str }}</span>
+          <p class="fw-bolder mb-0">{{ price.label_only }}</p>
+          <small style="color:#fff;opacity:.95;">{{ price.cost_per_day_str }}</small>
+          {% if price.discount_pct %}
+            <small class="mt-1"
+                   style="display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;padding:.1rem .45rem;">-{{ price.discount_pct }}%</small>
+          {% endif %}
+        </div>
+      </div>
+      {% responsive_picture 'images/shape/shape-6' alt="Shape" cls="shape-2" %}
+    </div>
+  {% endif %}
+
+  {% if style.show_rating_bubble_desktop %}
+    <div class="slider-rating-box">
+      <div class="box-rating">
+        <div class="box-wrapper">
+          <span class="count">{{ rating.value|default:4.8 }} <i class="flaticon-star"></i></span>
+          {% if proof_text %}
+            <p>{{ proof_text }}</p>
+          {% else %}
+            <p>Note ({{ rating.count|default:86000|intcomma }})</p>
+          {% endif %}
+        </div>
+      </div>
+      {% responsive_picture 'images/shape/shape-7' alt="Shape" cls="shape animation-up" %}
+    </div>
+  {% endif %}
+
+  <!-- image héro -->
+  <div class="slider-images">
+    <div class="images">
+      {% responsive_picture slider_image|default:'images/slider/slider-1' alt="Formatrice de la formation bougies" %}
+    </div>
+  </div>
+
+  <!-- bulle vidéo (optionnelle) -->
+  <div class="slider-video">
+    {% responsive_picture 'images/shape/shape-9' alt="Shape" cls="shape-1" %}
+    <div class="video-play">
+      {% responsive_picture 'images/shape/shape-10' alt="Shape" %}
+      <a href="{{ video_url|default:'https://www.youtube.com/watch?v=Aj75R0ojBa0' }}"
+         class="play video-popup"
+         role="button"
+         aria-label="Voir l’aperçu vidéo"
+         rel="noopener"
+         data-ev="hero_video_play"
+         data-ab="{{ ab_variant }}">
+        <i class="flaticon-play" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+{% if timer_deadline_ts %}
+  <!-- Timer JS (léger, inline, sans dépendance) -->
+  <script>
+    (function () {
+      var el = document.getElementById('hero-timer');
+      if (!el) return;
+      var iso = el.getAttribute('data-deadline');
+      if (!iso) return;
+
+      function two(n){return n<10?'0'+n:n;}
+
+      function tick(){
+        var end = Date.parse(iso), now = Date.now(), t = end - now;
+        if (isNaN(end)){ el.textContent=''; return; }
+        if (t <= 0){ el.textContent='0j 00:00:00'; clearInterval(iv); return; }
+        var d = Math.floor(t/86400000),
+            h = Math.floor((t%86400000)/3600000),
+            m = Math.floor((t%3600000)/60000),
+            s = Math.floor((t%60000)/1000);
+        el.textContent = (d>0? (d+'j '):'') + two(h)+':'+two(m)+':'+two(s);
+      }
+
+      var iv = setInterval(tick, 1000);
+      tick();
+    })();
+  </script>
+  <noscript><small>Offre valable jusqu’à {{ timer_deadline_ts }}</small></noscript>
+{% endif %}

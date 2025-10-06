@@ -1,0 +1,95 @@
+/* Wrapper */
+.eco-section {
+  background: var(--eco-bg, #e7f8ee);
+  border-radius: var(--eco-radius, 20px);
+  padding: 28px 0;
+}
+
+/* Grille : image à gauche, badges à droite (stack en mobile) */
+.eco-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 991.98px) {
+  .eco-grid { grid-template-columns: 1fr; }
+}
+
+/* Visuel */
+.eco-visual {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+}
+.eco-visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Liste des badges */
+.eco-item + .eco-item { margin-top: 10px; }
+
+.eco-badge {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 40px 1fr 18px;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid rgba(17,58,44,.08);
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.04);
+  padding: 10px 12px;
+  font-weight: 700;
+  color: #113a2c;
+  text-align: left;
+  transition: transform .05s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.eco-badge:hover,
+.eco-badge:focus {
+  border-color: var(--eco-accent, #309255);
+  box-shadow: 0 10px 28px rgba(48,146,85,.12);
+}
+.eco-ico {
+  width: 36px; height: 36px; border-radius: 999px;
+  display: grid; place-items: center;
+  background: rgba(48,146,85,.12);
+  color: var(--eco-accent, #309255);
+  font-size: 16px;
+}
+.eco-label { line-height: 1.2; }
+.eco-caret {
+  width: 18px; height: 18px; border: 2px solid rgba(17,58,44,.35);
+  border-left: 0; border-top: 0; transform: rotate(-45deg);
+  justify-self: end;
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+/* État ouvert */
+.eco-item.is-open .eco-caret {
+  transform: rotate(135deg);
+  border-color: var(--eco-accent, #309255);
+}
+.eco-desc {
+  background: #fff;
+  border: 1px solid rgba(17,58,44,.08);
+  border-top: 0;
+  border-radius: 0 0 12px 12px;
+  padding: 10px 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.04);
+}
+
+/* Micro-hint Driver : éviter TOUT débordement horizontal */
+html.driver-enabled, body.driver-enabled { overflow-x: hidden !important; }
+.driver-popover {
+  max-width: min(320px, calc(100vw - 24px)) !important;
+  word-break: break-word;
+}
+.driver-popover-title, .driver-popover-description {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Accent sur la CT A (cohérent avec thème) – le style de ton thème s'applique déjà */

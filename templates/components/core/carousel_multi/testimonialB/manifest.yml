@@ -1,0 +1,72 @@
+alias: carousel_multi/multimedia_b
+aliases:
+  - carousel_multi/swiper
+template: "components/core/carousel_multi/multimedia.html"
+
+assets:
+  head: [ ]
+  css:
+    - "static/components/carousel_multi/mc-carousel.css"
+    - "https://unpkg.com/driver.js@0.9.8/dist/driver.min.css"
+    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  js:
+    - "static/components/carousel_multi/mc-carousel.js"
+  vendors:
+    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+    - "https://unpkg.com/driver.js@0.9.8/dist/driver.min.js"
+
+params:
+  variant: "social_proof_b"
+  section_key: "temoignages"
+  show_header: true
+  title: "Des ventes réelles, rapidement"
+  subtitle: "★ 4,8/5 • 500+ avis — premières ventes en 30 jours"
+  persona_filters:
+    - { key: "sell",  label: "Vendre" }
+    - { key: "learn", label: "Apprendre" }
+    - { key: "gift",  label: "Offrir" }
+  options: { items_desktop: 3, items_tablet: 2, items_mobile: 1, gap_px: 16 }
+  slides:
+    - type: "image"
+      persona: "sell"
+      image_src: "/static/images/testimonial/resized/photo10.webp"
+      alt: "Stand et clients"
+      caption: "Marché quartier — samedi"
+      badges: ["+18 ventes", "Ticket moyen 11 €", "Marge 40 %"]
+    - type: "quote"
+      persona: "sell"
+      avatar_src: "/static/images/testimonial/resized/photo2.webp"
+      quote: "J’ai structuré mes prix avec les fiches coût. Résultat: 40 % de marge en marché local."
+      author: "Sarah"
+      role: "Créatrice"
+      verified: true
+      city: "Nantes"
+      when: "ce mois‑ci"
+    - type: "video"
+      persona: "sell"
+      poster_src: "/static/images/testimonial/resized/photo6.webp"
+      video_src: "/media/videos/temoignages/testimonal2.mp4"
+      caption: "21s — Mise en place du stand, packaging simple, vente en direct."
+    - type: "quote"
+      persona: "learn"
+      avatar_src: "/static/images/testimonial/resized/photo1.webp"
+      quote: "Première bougie réussie en 2 h. Le module mèche a tout changé."
+      author: "Camille"
+      role: "Débutante"
+      verified: true
+      city: "Bordeaux"
+      when: "il y a 1 sem."
+    - type: "image"
+      persona: "gift"
+      image_src: "/static/images/testimonial/resized/photo11.webp"
+      alt: "Coffret cadeau"
+      caption: "Coffret fête des mères"
+      badges: ["Personnalisé", "Zéro suie", "Parfums IFRA"]
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.carousel_multi.hydrators"
+  func: "mc_carousel"
+  params: {}
+
+render:
+  cacheable: false

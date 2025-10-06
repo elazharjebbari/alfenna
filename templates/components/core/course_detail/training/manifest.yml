@@ -1,0 +1,81 @@
+alias: course_detail/training
+template: "components/core/course_detail/training.html"
+
+params:
+  hero_tag: "Artisanat & Créativité"
+  video_url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  video_label: "Lire la présentation"
+  title: "Formation complète en fabrication de bougies"
+  subtitle: "Découverte, techniques avancées et lancement d'activité."
+  enrollment_label: "+500 apprenants satisfaits"
+  rating_value: 4.8
+  rating_count: 1250
+  description_title: "Description"
+  description_blocks:
+    - "Découvrez comment créer des bougies uniques pas à pas."
+    - "Approfondissez votre savoir-faire avec des modules vidéo détaillés."
+  bundle_title: "Bundle exclusif"
+  bundle_items:
+    - "Accès illimité à la bibliothèque vidéo"
+    - "Guide PDF téléchargeable"
+    - "Support communauté pendant 30 jours"
+  curriculum_title: "Programme"
+  curriculum_sections:
+    - title: "Module 1 — Bases"
+      items:
+        - "Choisir les matériaux essentiels"
+        - "Préparer son atelier"
+    - title: "Module 2 — Techniques"
+      items:
+        - "Techniques de coulée"
+        - "Finitions et parfums"
+  instructors_title: "Formateurs"
+  instructors:
+    - name: "Souheila Jebbari"
+      role: "Formatrice principale"
+      bio: "Spécialiste des bougies naturelles."
+    - name: "Naila Baiga"
+      role: "Experte design"
+      bio: "Accompagne les apprenants sur les finitions décoratives."
+  reviews_title: "Avis"
+  reviews:
+    - author: "Salma"
+      location: "Artisane, Tanger"
+      content: "Une formation inspirante avec un excellent suivi."
+    - author: "Mehdi"
+      location: "Entrepreneur, Fès"
+      content: "Parcours structuré et concret pour lancer son activité."
+  reviews_cta_label: "Voir tous les avis"
+  reviews_cta_url: "https://example.com/temoignages"
+
+contract:
+  optional:
+    hero_image_url: "url"
+    hero_tag: "str"
+    video_url: "url"
+    video_label: "str"
+    title: "str"
+    subtitle: "str"
+    enrollment_label: "str"
+    rating_value: "float"
+    rating_percentage: "int"
+    rating_count: "int"
+    description_title: "str"
+    bundle_title: "str"
+    curriculum_title: "str"
+    instructors_title: "str"
+    reviews_title: "str"
+    description_blocks: "list[str]"
+    bundle_items: "list[str]"
+    curriculum_sections: "list[dict]"
+    instructors: "list[dict]"
+    reviews: "list[dict]"
+    reviews_cta_label: "str"
+    reviews_cta_url: "url"
+hydrate:
+  module: "apps.atelier.compose.hydrators.course_detail.hydrators"
+  func: "training"
+render:
+  cacheable: false
+  vary_on:
+    - course_slug

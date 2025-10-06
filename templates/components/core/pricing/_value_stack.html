@@ -1,0 +1,79 @@
+{# templates/components/core/pricing/_value_stack.html #}
+<div class="value-stack" data-vs-plan="{{ plan.slug }}" aria-labelledby="vs-{{plan.slug}}-title">
+  <header class="vs-head">
+    <h4 class="vs-title" id="vs-{{plan.slug}}-title">
+      Bonus offerts aujourd’hui : <strong>{{ plan.value_breakdown.total }}{{ plan.currency }}</strong>
+    </h4>
+    <p class="vs-subtitle">Tout ce que vous débloquez avec <em>{{ plan.title }}</em></p>
+  </header>
+
+  <section class="vs-receipt" role="region" aria-label="Reçu des bonus">
+    <ul class="vs-lines list-unstyled m-0">
+      {% for it in plan.value_breakdown.items_visible %}
+        <li class="vs-line d-flex justify-content-between">
+          <span class="vs-label"><i class="fas fa-check-circle me-2" aria-hidden="true"></i>{{ it.label }}</span>
+          <span class="vs-amount">{{ it.amount }}{{ plan.currency }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if plan.value_breakdown.has_more %}
+      <div class="vs-accordion">
+        <button class="vs-toggle" type="button"
+                data-target="#vs-{{plan.slug}}-more"
+                aria-expanded="false"
+                aria-controls="vs-{{plan.slug}}-more">
+          {{ value_stack.more_label|default:"Voir tous les bonus" }}
+          <i class="fas fa-chevron-down ms-1" aria-hidden="true"></i>
+        </button>
+        <div id="vs-{{plan.slug}}-more" class="vs-more collapse" hidden>
+          <ul class="vs-lines list-unstyled m-0">
+            {% for it in plan.value_breakdown.items_hidden %}
+              <li class="vs-line d-flex justify-content-between">
+                <span class="vs-label"><i class="fas fa-check-circle me-2" aria-hidden="true"></i>{{ it.label }}</span>
+                <span class="vs-amount">{{ it.amount }}{{ plan.currency }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="vs-subtotal d-flex justify-content-between align-items-center">
+      <span class="vs-subtotal-label">Sous‑total bonus</span>
+      <span class="vs-subtotal-amount">
+        {{ plan.value_breakdown.total }}{{ plan.currency }}
+        <span class="vs-badge-offert" aria-label="inclus aujourd’hui">Offert</span>
+      </span>
+    </div>
+  </section>
+
+  {% if value_stack.belt_enabled %}
+    <aside class="vs-belt" role="note" aria-label="Bandeau valeur">
+{#      <span class="vs-instead">#}
+{#        Au lieu de <del>{{ plan.value_breakdown.total }}{{ plan.currency }}</del> + <span class="vs-instead-course">cours</span>#}
+{#      </span>#}
+      <span class="vs-only">
+        {{ small_word_near_price|default:"Seulement" }}
+        <strong>{{ plan.price_amount }}</strong>{{ plan.currency_nbsp }}
+      </span>
+      {% if plan.badge_percent %}
+        <span class="vs-discount-badge" aria-label="-{{ plan.badge_percent }}% de réduction">-{{ plan.badge_percent }}%</span>
+      {% endif %}
+    </aside>
+  {% endif %}
+</div>
+{##}
+{# Sticky bar mobile (affichée uniquement en < lg) #}
+{#{% if value_stack.sticky_mobile.enabled and plan.is_highlighted %}#}
+{#  <div class="vs-sticky d-lg-none" data-plan="{{ plan.slug }}" role="region" aria-label="Rappel valeur et CTA">#}
+{#    <div class="vs-sticky-text">#}
+{#      Bonus {{ plan.value_breakdown.total }}{{ plan.currency }} offerts → {{ small_word_near_price|default:"Seulement"}} {{ plan.price_amount }}{{ plan.currency_nbsp }}#}
+{#    </div>#}
+{#    <a class="btn btn-primary vs-sticky-cta"#}
+{#       href="{{ plan.cta.url|default:cta_default.url }}"#}
+{#       aria-label="{{ plan.cta.aria|default:cta_default.aria }}">#}
+{#      {{ plan.cta.label|default:cta_default.label }}#}
+{#    </a>#}
+{#  </div>#}
+{#{% endif %}#}

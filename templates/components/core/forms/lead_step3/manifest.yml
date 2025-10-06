@@ -1,0 +1,16 @@
+alias: core/forms/lead_step3
+aliases:
+  - forms/lead_step3
+template: "components/core/forms/lead_step3/lead_step3.html"
+assets:
+  head: []
+  css: []
+  js:
+    - "/static/js/flowforms.runtime.js"
+  vendors: []
+contract:
+  optional:
+    action_url: "str"
+    fields_map: "dict"
+render:
+  cacheable: false

@@ -24,7 +24,11 @@ from typing import List, Tuple, Dict, Any, Iterable
 # ========= CONFIG PAR DÉFAUT =========
 BASE_DIRS = [
     # Ajoute autant de dossiers que tu veux:
-    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\draft\\template_ref_to_convert"),
+    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\templates\\components\\core\\product"),
+    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\templates\\components\\core\\forms"),
+    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\apps\\atelier\\compose\\hydrators\\product"),
+    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\static\\components\\product"),
+    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\static\\components\\forms"),
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\apps\\messaging"),
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\static\\components\\pricing"),
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\apps\\content"),
@@ -34,7 +38,7 @@ BASE_DIRS = [
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\templates\\screens"),
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\configs"),
 ]
-OUTPUT_DIR = Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\reports\\temlpates_alfenna")
+OUTPUT_DIR = Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\reports\\component_product")
 EXTENSIONS = {".py", ".html", ".htm", ".yml", ".yaml", ".css", ".js", ".json", ".md", ".txt"}
 TARGET_LINES_PER_MD = 10000
 PROJECT_ROOT_NAME = "alfenna"  # utilisé pour raccourcir l'affichage des chemins relatifs

@@ -1,0 +1,108 @@
+@startuml 01_architecture_globale
+title LumièreLearning – Architecture globale (Django + Atelier Compose)
+
+skinparam shadowing false
+skinparam defaultTextAlignment left
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+skinparam ArrowColor #888
+skinparam FrameBorderColor #bbb
+skinparam ComponentBorderColor #999
+skinparam NoteBorderColor #ccc
+
+actor "Utilisateur (Navigateur)" as User
+
+node "Reverse proxy / CDN (optionnel)" as Edge
+
+node "Django : lumierelearning\n(Gunicorn/WSGI)" as Django {
+  package "Middleware clés" as MW {
+    [PathPrefixSiteVersionMiddleware\n(/maroc → ma, /france → fr)]
+    [RequestIdMiddleware]
+    [SegmentResolverMiddleware\n(lang, device, consent, utm)]
+    [VaryHeadersMiddleware]
+    [SeoGuardMiddleware]
+  }
+
+  component "URLConf\nlumierelearning/urls.py" as URLS
+
+  package "Apps Django" {
+    component "pages\n(UI screens)" as Pages
+    component "atelier\n(Compose runtime)" as Atelier
+    component "catalog\n(Courses, sitemaps)" as Catalog
+    component "content\n(Streaming & gating)" as Content
+    component "billing\n(Stripe, webhooks)" as Billing
+    component "learning\n(Lecture/consommation)" as Learning
+    component "leads\n(API DRF + throttling)" as Leads
+    component "flowforms\n(wizard/engine)" as Flowforms
+    component "marketing\n(SEO, sitemaps)" as Marketing
+    component "accounts\n(Auth + StudentProfile)" as Accounts
+    component "common\n(helpers, harness)" as Common
+  }
+
+  component "Templates\n+ WhiteNoise (static)" as TPL
+}
+
+database "Base de données\n(SQLite dev / SQL prod)" as DB
+cloud "Redis\n(cache de fragments + throttling\n+ Celery broker & results)" as REDIS
+node "Celery worker(s)" as CELERY
+cloud "Stripe API" as STRIPE
+node "SMTP (email)" as SMTP
+node "Fichiers médias\n(FileSystemStorage /media)" as MEDIA
+
+'--- Routage principal
+User --> Edge : HTTPS
+Edge --> Django : HTTP(S)
+
+URLS --> Pages : "/", "/maroc", "/france"
+URLS --> Accounts : "/accounts/*"
+URLS --> Content : "/cours/*" (content avant catalog)
+URLS --> Catalog : "/cours/*" (liste & détail)
+URLS --> Billing : "/billing/*"
+URLS --> Learning : "/learning/*"
+URLS --> Leads : "/api/leads/*"
+URLS --> Flowforms : "/flows/*"
+
+'--- Orchestration d’interface
+Pages --> Atelier : "compose pipeline (pages.yml)"
+Atelier ..> Catalog : "hydrate"
+Atelier ..> Content : "hydrate"
+Atelier ..> Billing : "hydrate"
+Atelier ..> Flowforms : "forms/shell + wizard"
+Atelier ..> Leads : "collect, signature (policy)"
+Atelier ..> Marketing : "SEO, sitemaps"
+Atelier ..> Accounts : "login shell (forms)"
+
+'--- Cache & assets
+Atelier --> REDIS : "Fragments (atelier.compose.cache)"
+Leads ..> REDIS : "Throttling DRF (IP/email)"
+Django ..> TPL : "Templates & assets statiques"
+
+'--- Données et intégrations
+'{Pages, Atelier, Catalog, Content, Billing, Learning, Leads, Flowforms, Marketing, Accounts} --> DB
+
+Billing --> STRIPE : "Payments, intents, webhooks"
+Django --> SMTP : "Emails (DEFAULT_FROM_EMAIL)"
+Django --> MEDIA : "Streaming/serve fichiers (content)"
+Django --> REDIS : "cache par défaut (django-redis)"
+
+'--- Celery
+CELERY --> REDIS : "broker + result backend"
+CELERY --> DB : "lecture/écriture tâches"
+Django ==> CELERY : "tâches (beat optionnel)"
+
+note right of Atelier
+  Atelier/Compose :
+  • Registry + discovery manifests (templates/components/**)
+  • Hydration (Python), merge params manifest/pages.yml
+  • Cache de fragments (clé stable) + L1 request
+  • Namespaces de site : core / ma / fr (fallback → core)
+end note
+
+note bottom of REDIS
+  Redis :
+  • Cache fragments slots / TTL
+  • DRF throttling leads (IP/email)
+  • Celery broker + results
+end note
+
+@enduml

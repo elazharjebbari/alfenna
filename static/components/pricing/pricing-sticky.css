@@ -1,0 +1,38 @@
+/* Sticky bar mobile compacte (Starter/Complet) */
+.vs-sticky{
+  position: sticky;
+  bottom: 0; left: 0; right: 0;
+  z-index: 40;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  background: #fff;
+  border-top: 1px solid #e9ecef;
+  padding: 8px 10px;
+}
+.vs-sticky[hidden]{ display:none !important; }
+
+.vs-sticky-text{
+  font-weight: 700;
+  font-size: .90rem; line-height: 1.2;
+  color: #1d2733;
+}
+
+.vs-sticky-cta.btn{
+  line-height: 2rem;
+  padding: .35rem .7rem;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+/* micro-anim à l’apparition pour éviter le “saut” */
+.vs-sticky.is-visible{ animation: vsSlideUp .18s ease-out; }
+@keyframes vsSlideUp{
+  0%{ transform: translateY(10px); opacity: 0; }
+  100%{ transform: translateY(0); opacity: 1; }
+}
+
+/* Très petits écrans */
+@media (max-width: 360px){
+  .vs-sticky{ padding: 6px 8px; }
+  .vs-sticky-text{ font-size: .82rem; }
+  .vs-sticky-cta.btn{ padding: .3rem .6rem; }
+}

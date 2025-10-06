@@ -1,0 +1,78 @@
+alias: footer/main
+template: "components/core/footer/footer.html"
+
+assets:
+  head: []
+  css:
+#    - "/static/components/core/footer/footer.css"
+  js: []
+  vendors: []
+
+# Valeurs de référence (documentaires)
+params:
+  address_url: "https://www.google.com/maps/place//data=!4m2!3m1!1s0xda76b62d7669bc3:0xeedf82994aca610?sa=X"
+  address_text: "N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc"
+  email: "partenariat@lumiereacademy.com"
+  phone_tel: "+212808544450"
+  phone_display: "+212 8085-44450"
+  opening_hours: "Lun. - Dim. 10:00 - 18:00"
+  socials:
+    - { icon: "flaticon-instagram", url: "https://www.instagram.com/lumieresrabat/", new_tab: true }
+  links_activities:
+    - { label: "Atelier Divertissement à Rabat", url: "https://lumiereacademy.com/workshop/workshop_product/" }
+    - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
+  links_trainings:
+    - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
+    - { label: "Formation en Atelier Casablanca", url: "https://lumiereacademy.com/training-casablanca" }
+  links_quick:
+    - { label: "FAQ", url: "#" }
+    - { label: "Termes et conditions", url: "#" }
+    - { label: "Données privées", url: "#" }
+  year: 0   # 0 => hydrateur mettra l'année courante
+
+contract:
+  required: {}
+  optional:
+    address_url: "Lien adresse Google Maps"
+    address_text: "Texte adresse"
+    email: "Email contact"
+    phone_tel: "Numéro (tel:)"
+    phone_display: "Numéro affiché"
+    opening_hours: "Horaires"
+    socials: "Liste {icon, url, new_tab?}"
+    links_activities: "Liste {label, url}"
+    links_trainings: "Liste {label, url}"
+    links_quick: "Liste {label, url}"
+    year: "Année d’affichage (int)"
+
+hydrate:
+  # Pour l’exécution
+  python: "apps.atelier.compose.hydrators.footer.hydrators.footer_main"
+  # Pour l’audit/trace
+  module: "apps.atelier.compose.hydrators.footer.hydrators"
+  func: "footer_main"
+
+  # Whitelist + defaults (manifest-first robuste)
+  params:
+    address_url: "https://www.google.com/maps/place//data=!4m2!3m1!1s0xda76b62d7669bc3:0xeedf82994aca610?sa=X"
+    address_text: "N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc"
+    email: "partenariat@lumiereacademy.com"
+    phone_tel: "+212808544450"
+    phone_display: "+212 8085-44450"
+    opening_hours: "Lun. - Dim. 10:00 - 18:00"
+    socials:
+      - { icon: "flaticon-instagram", url: "https://www.instagram.com/lumieresrabat/", new_tab: true }
+    links_activities:
+      - { label: "Atelier Divertissement à Rabat", url: "https://lumiereacademy.com/workshop/workshop_product/" }
+      - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
+    links_trainings:
+      - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
+      - { label: "Formation en Atelier Casablanca", url: "https://lumiereacademy.com/training-casablanca" }
+    links_quick:
+      - { label: "FAQ", url: "#" }
+      - { label: "Termes et conditions", url: "#" }
+      - { label: "Données privées", url: "#" }
+    year: 0
+
+render:
+  cacheable: true

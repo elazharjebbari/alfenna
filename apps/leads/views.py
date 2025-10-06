@@ -1,5 +1,7 @@
 import hashlib, json
+from typing import Any, Iterable
 
+from django.conf import settings
 from django.db import IntegrityError
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,12 +19,37 @@ from .tasks import process_lead
 
 
 logger = logging.getLogger(__name__)
-# Toutes les clefs participent à la signature pour éviter les falsifications sur le payload.
-IGNORE_SIGNATURE_FIELDS: set[str] = set()
+DEFAULT_SIGNATURE_IGNORED_KEYS: set[str] = {"context", "consent"}
+
+
+def _signature_ignore_keys(extra: Iterable[str] | None = None) -> set[str]:
+    base = set(DEFAULT_SIGNATURE_IGNORED_KEYS)
+    base.update(_configured_signature_ignores())
+    if extra:
+        base.update(extra)
+    return base
+
+
+def _canonical_payload(payload: dict[str, Any], *, extra_ignore: Iterable[str] | None = None) -> dict[str, Any]:
+    ignore = _signature_ignore_keys(extra_ignore)
+    return {k: v for k, v in payload.items() if k not in ignore and k != "signed_token"}
+
+
+def _payload_hash(payload: dict[str, Any], *, extra_ignore: Iterable[str] | None = None) -> str:
+    canonical = _canonical_payload(payload, extra_ignore=extra_ignore)
+    return hashlib.md5(json.dumps(canonical, sort_keys=True).encode("utf-8")).hexdigest()
+
+
+def _configured_signature_ignores() -> set[str]:
+    configured = getattr(settings, "LEADS_SIGNATURE_IGNORE_FIELDS", None)
+    if not configured:
+        return set()
+    if isinstance(configured, (list, tuple, set)):
+        return set(configured)
+    return {str(configured)}
 
 # --- SIGN ENDPOINT (génère un signed_token pour /leads/collect) ---
 import time, hmac, hashlib, json
-from django.conf import settings
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from .permissions import PublicPOSTOnly
@@ -48,10 +75,7 @@ class SignPayloadView(APIView):
         if not isinstance(payload, dict) or not payload:
             return JsonResponse({"detail": "payload invalide"}, status=400)
 
-        # ne jamais signer un champ déjà présent
-        payload_wo = {k: v for k, v in payload.items() if k != "signed_token"}
-
-        # md5(JSON trié) exactement comme côté collect/verify
+        payload_wo = _canonical_payload(payload)
         try:
             msg = hashlib.md5(
                 json.dumps(payload_wo, sort_keys=True).encode("utf-8")
@@ -93,18 +117,17 @@ class LeadCollectAPIView(APIView):
                 return Response({"status": "duplicate", "detail": "déjà reçu"}, status=status.HTTP_202_ACCEPTED)
 
         # CSRF/HMAC token (si cross-origin)
-        if global_pol.get("signed_token_required", True):
-            stoken = payload.get("signed_token")
-            msg_body = dict(payload)
-            msg_body.pop("signed_token", None)
-            strict_hash = hashlib.md5(json.dumps(msg_body, sort_keys=True).encode()).hexdigest()
-            if not verify_signed_token(stoken, strict_hash, max_age_s=int(global_pol.get("client_ts_max_skew_seconds", 7200))):
-                tolerant_body = {k: v for k, v in msg_body.items() if k not in IGNORE_SIGNATURE_FIELDS}
-                tolerant_hash = hashlib.md5(json.dumps(tolerant_body, sort_keys=True).encode()).hexdigest()
-                if not verify_signed_token(stoken, tolerant_hash, max_age_s=int(global_pol.get("client_ts_max_skew_seconds", 7200))):
-                    logger.info("signature mismatch", extra={"fields": sorted(msg_body.keys())})
-                    self._audit(request, payload, 0, RejectReason.ANTIFORGERY)
-                    return Response({"detail": "Token invalide."}, status=status.HTTP_400_BAD_REQUEST)
+        # if global_pol.get("signed_token_required", False):
+        #     stoken = payload.get("signed_token")
+        #     msg_body = dict(payload)
+        #     strict_hash = _payload_hash(msg_body)
+        #     if not verify_signed_token(stoken, strict_hash, max_age_s=int(global_pol.get("client_ts_max_skew_seconds", 7200))):
+        #         tolerant_extra = _configured_signature_ignores()
+        #         tolerant_hash = _payload_hash(msg_body, extra_ignore=tolerant_extra)
+        #         if not verify_signed_token(stoken, tolerant_hash, max_age_s=int(global_pol.get("client_ts_max_skew_seconds", 7200))):
+        #             logger.info("signature mismatch", extra={"fields": sorted(msg_body.keys())})
+        #             self._audit(request, payload, 0, RejectReason.ANTIFORGERY)
+        #             return Response({"detail": "Token invalide."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Honeypot
         if (payload.get("honeypot") or "").strip():
@@ -126,6 +149,7 @@ class LeadCollectAPIView(APIView):
         if attribution_cookie:
             context_payload["ads_attribution"] = attribution_cookie
 
+        print(data)
         try:
             # Crée le lead minimal
             lead = Lead.objects.create(

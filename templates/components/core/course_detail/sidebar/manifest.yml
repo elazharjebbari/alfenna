@@ -1,0 +1,24 @@
+alias: course_detail/sidebar
+template: "components/core/course_detail/sidebar.html"
+
+contract:
+  required:
+    course_slug: "str"
+  optional:
+    currency: "str"
+    promo_badge: "str"
+    info_items: "list[dict]"
+    bundle_title: "str"
+    bundle_items: "list[str]"
+    cta_guest_label: "str"
+    cta_guest_url: "url"
+    cta_member_label: "str"
+    cta_member_url: "url"
+    cta_note: "str"
+hydrate:
+  module: "apps.atelier.compose.hydrators.course_detail.hydrators"
+  func: "sidebar"
+render:
+  cacheable: false
+  vary_on:
+    - course_slug

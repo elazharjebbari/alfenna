@@ -1,0 +1,73 @@
+{% load atelier_utils %}
+<div class="section section-padding">
+  <div class="container">
+    <div class="contact-wrapper">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+          <div class="contact-info mx-auto" style="max-width: 520px;">
+            {% if phone_display or phone_title %}
+            <div class="single-contact-info">
+              <div class="info-icon">
+                {% if phone_tel %}
+                  <a href="{{ phone_tel }}" rel="noopener"><i class="flaticon-phone-call"></i></a>
+                {% else %}
+                  <i class="flaticon-phone-call"></i>
+                {% endif %}
+              </div>
+              <div class="info-content">
+                {% if phone_title %}<h6 class="title">{% render_string phone_title %}</h6>{% endif %}
+                {% if phone_display %}
+                  {% if phone_tel %}
+                    <p><a href="{{ phone_tel }}">{{ phone_display }}</a></p>
+                  {% else %}
+                    <p>{{ phone_display }}</p>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+
+            {% if email or email_title %}
+            <div class="single-contact-info">
+              <div class="info-icon">
+                {% if email %}
+                  <a href="mailto:{{ email }}" rel="noopener"><i class="flaticon-email"></i></a>
+                {% else %}
+                  <i class="flaticon-email"></i>
+                {% endif %}
+              </div>
+              <div class="info-content">
+                {% if email_title %}<h6 class="title">{% render_string email_title %}</h6>{% endif %}
+                {% if email %}<p><a href="mailto:{{ email }}">{{ email }}</a></p>{% endif %}
+              </div>
+            </div>
+            {% endif %}
+
+            {% if address_text or address_title %}
+            <div class="single-contact-info">
+              <div class="info-icon">
+                {% if address_url %}
+                  <a href="{{ address_url }}" target="_blank" rel="noopener"><i class="flaticon-pin"></i></a>
+                {% else %}
+                  <i class="flaticon-pin"></i>
+                {% endif %}
+              </div>
+              <div class="info-content">
+                {% if address_title %}<h6 class="title">{% render_string address_title %}</h6>{% endif %}
+                {% if address_text %}
+                  {% if address_url %}
+                    <p><small><a href="{{ address_url }}" target="_blank" rel="noopener">{{ address_text }}</a></small></p>
+                  {% else %}
+                    <p><small>{{ address_text }}</small></p>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

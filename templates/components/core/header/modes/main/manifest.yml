@@ -1,0 +1,35 @@
+alias: header/modes/main
+template: "components/core/header/modes/main/header_modes_main.html"
+
+assets:
+  head: []
+  css: []
+  js: [ "" ]
+  vendors: []
+
+params:
+  logo_src: "images/logo/logo_text_black_200x60.webp"
+  logo_alt: "Lumiere"
+  show_rating_badge: true
+  primary_cta_label: "Je me lance"
+  primary_cta_sublabel: "Paiement sécurisé • Accès immédiat"
+  primary_cta_aria: "Je me lance — Accès immédiat"
+  course_slug: "bougies-naturelles"     # ← slug demandé
+
+contract:
+  optional:
+    logo_src: "str"
+    logo_alt: "str"
+    show_rating_badge: "bool"
+    primary_cta_label: "str"
+    primary_cta_sublabel: "str"
+    primary_cta_aria: "str"
+    course_slug: "str"
+    mode_override: "str"   # "guest" | "member" (utile pour QA)
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header_modes.hydrators"
+  func: "modes_main"
+
+render:
+  cacheable: false

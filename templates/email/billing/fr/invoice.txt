@@ -1,0 +1,8 @@
+Bonjour {{ user_first_name }},
+
+Ta facture n° {{ invoice_number }} pour {{ site_name }} est prête.
+Montant TTC : {{ invoice_amount }} • Date : {{ invoice_date }}
+Lien sécurisé (valide {{ invoice_ttl_hours }} heures) :
+{{ invoice_url }}
+
+Tu peux retrouver toutes tes factures dans ton espace client.

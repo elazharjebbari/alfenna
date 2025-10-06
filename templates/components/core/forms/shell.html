@@ -1,0 +1,22 @@
+{# components/forms/shell.html #}
+<div class="ff-shell">
+  {% comment %} Titre/sous-titre inchangés {% endcomment %}
+  {% if title_html %}<div class="ff-title">{{ title_html|safe }}</div>{% endif %}
+  {% if subtitle_html %}<div class="ff-subtitle">{{ subtitle_html|safe }}</div>{% endif %}
+
+  {# Branche COMPOSE — priorité au flag, sinon fallback à la présence de children (utile pour les tests isolés 2.B) #}
+  {% if use_child_compose and children and children.wizard %}
+    <!-- FF: composed child (slot) -->
+    <div data-ff-slot="wizard">{{ children.wizard|safe }}</div>
+
+  {# Branche LEGACY (fallback historique) #}
+  {% elif wizard_html %}
+    <!-- FF: wizard via renderer -->
+    <div data-ff-renderer="legacy">{{ wizard_html|safe }}</div>
+
+  {# Fallback dev/test: si on rend le template isolé en injectant `children` sans flag #}
+  {% elif children and children.wizard %}
+    <!-- FF: composed child (slot) -->
+    <div data-ff-slot="wizard">{{ children.wizard|safe }}</div>
+  {% endif %}
+</div>

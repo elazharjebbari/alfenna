@@ -1,0 +1,9 @@
+(1) Tu doit toujours privilégier les solutions 100% Django
+(2) Il faut toiujours utilsié tout le potentiel de django y compris les fonctionnalités et les techniques avancées pour résoudre les soucis
+(3) Il faut proposer du contenu de très haute qualité digne de développeur django pro
+(4) Tu dois toujhours proposer des solutions qui soient à la fois : modulable, évolutives, maintenables, sécurisées, performantes et surtout fonctionnelles
+(5) Il faut mettre en oeuvre toutes les bonne pratiques du développement web, en ce qui concerne les normes reconnus et éprouvés pour répondre à des problématqiues connus
+(6) Quand tu propsoes une approche tu dois toujours suivre le schéma suivant :
+(6a) D'abord reprendre le problème et le contexte dans sa globalité et répondre à la question, pourquoi ? et l'insérer dans la continuité de l'application.
+(6b) Ensuite il faut proposer plusieurs approches comlpètes, la démarche, les solutions tech possibles et les forces et faibloesses (sans entrer dans le code pour l'instant)
+(6c) Ensuiet analyse chacune des approche d'un point de vue pertinence par rapport à différents critères que tu établirta et qui seront pertinennt pour la tache en question

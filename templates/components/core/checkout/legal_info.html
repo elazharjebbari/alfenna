@@ -1,0 +1,61 @@
+{% load i18n %}
+
+{% if faq_items %}
+  <section class="checkout-faq card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <p class="text-uppercase text-muted small mb-1">{% trans "Besoin d’un coup d’œil ?" %}</p>
+      <h3 class="h5 mb-3">{{ faq_heading }}</h3>
+      <div class="d-flex flex-column gap-3">
+        {% for item in faq_items %}
+          <details class="checkout-faq-item" data-track-faq data-faq-id="faq-{{ forloop.counter }}">
+            <summary>
+              <span>{{ item.question }}</span>
+              <span class="checkout-faq-toggle" aria-hidden="true">+</span>
+            </summary>
+            <div class="checkout-faq-answer">
+              <p class="mb-2">{{ item.answer }}</p>
+              {% if item.href %}
+                <a class="small" href="{{ item.href }}">{% trans "En savoir plus" %}</a>
+              {% endif %}
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<section class="checkout-legal-compact card border-0 shadow-sm">
+  <div class="card-body">
+    <p class="text-uppercase text-muted small mb-2">{% trans "À retenir" %}</p>
+    {% if compact_points %}
+      <ul class="checkout-legal-points mb-3">
+        {% for point in compact_points %}
+          <li class="checkout-legal-point">
+            <span class="checkout-legal-point-icon" aria-hidden="true">
+              {% if point.icon == 'lock' %}🔒{% elif point.icon == 'rotate-left' %}↩{% elif point.icon == 'bolt' %}⚡{% else %}•{% endif %}
+            </span>
+            <span>{{ point.text }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if security_badges %}
+      <div class="d-flex align-items-center gap-2 text-muted small mb-2" aria-live="polite">
+        <span aria-hidden="true">🔐</span>
+        <span>{% trans "Connexion et paiement sécurisés (TLS + Stripe)" %}</span>
+      </div>
+    {% endif %}
+
+    <p class="text-muted small mb-3">{{ price_notice }}</p>
+
+    {% if legal_links %}
+      <ul class="checkout-legal-links">
+        {% for link in legal_links %}
+          <li><a href="{{ link.href }}" rel="nofollow noopener">{{ link.label }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>

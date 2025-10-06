@@ -1,0 +1,22 @@
+alias: checkout/thank_you_message     # ← underscore, identique à pages.yml
+template: "components/core/checkout/thank_you_message.html"
+hydrate:
+  module: "apps.atelier.compose.hydrators.checkout.hydrators"
+  func: "hydrate_thank_you_message"
+
+params:
+  # ⚙️ Texte 100% gérable par config
+  title: "Paiement confirmé — merci 🙌"
+  paragraphs:
+    - "Votre paiement pour <strong>{course_title}</strong> a bien été reçu."
+    - "Un e-mail de confirmation sera envoyé à <strong>{email}</strong> avec votre reçu et les détails d’accès."
+  info_box:
+    title: "Et maintenant ?"
+    paragraphs:
+      - "Accédez à vos leçons depuis la page du cours."
+      - "En cas de besoin, notre équipe est là pour vous aider."
+  contact_email: "support@lumiereacademy.com"
+  show_go_to_course: true
+
+render:
+  cacheable: false

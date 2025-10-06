@@ -1,0 +1,486 @@
+[
+  {
+    "model": "catalog.course",
+    "pk": 600,
+    "fields": {
+      "title": "Bougies naturelles — Atelier complet",
+      "slug": "bougies-naturelles",
+      "description": "Formation complète sur la fabrication artisanale de bougies naturelles.",
+      "is_published": true,
+      "free_lectures_count": 0,
+      "plan_version": 1,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6001,
+    "fields": {
+      "course": 600,
+      "title": "Introduction",
+      "order": 1,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6002,
+    "fields": {
+      "course": 600,
+      "title": "Théorie — Matières premières",
+      "order": 2,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6003,
+    "fields": {
+      "course": 600,
+      "title": "Théorie — Matériel",
+      "order": 3,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6004,
+    "fields": {
+      "course": 600,
+      "title": "Théorie — Mèches",
+      "order": 4,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6005,
+    "fields": {
+      "course": 600,
+      "title": "Théorie — Parfums & Colorants",
+      "order": 5,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6006,
+    "fields": {
+      "course": 600,
+      "title": "Formules",
+      "order": 6,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6007,
+    "fields": {
+      "course": 600,
+      "title": "Pratiques",
+      "order": 7,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.section",
+    "pk": 6008,
+    "fields": {
+      "course": 600,
+      "title": "Bonus",
+      "order": 8,
+      "is_published": true,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60001,
+    "fields": {
+      "course": 600,
+      "section": 6001,
+      "title": "Introduction et presentation du materiels",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/1_-_Introduction_et_presentation_du_materiels.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60002,
+    "fields": {
+      "course": 600,
+      "section": 6002,
+      "title": "Presentation des cires",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/2_-_Presentation_des_cires.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60003,
+    "fields": {
+      "course": 600,
+      "section": 6003,
+      "title": "Presentation des moules de bougies",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/3_-_Presentation_des_moules_de_bougies.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60004,
+    "fields": {
+      "course": 600,
+      "section": 6004,
+      "title": "Presentation des meches",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/4-_Presentation_des_meches.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60005,
+    "fields": {
+      "course": 600,
+      "section": 6004,
+      "title": "Presentation des meches ktwwjo",
+      "order": 2,
+      "type": "video",
+      "video_path": "videos/4_-_Presentation_des_meches_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60006,
+    "fields": {
+      "course": 600,
+      "section": 6005,
+      "title": "Presentation des parfums et colorants",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/5_-_Presentation_des_parfums_et_colorants.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60007,
+    "fields": {
+      "course": 600,
+      "section": 6005,
+      "title": "Presentation des parfums et colorants ktwwjo az2eyrs",
+      "order": 2,
+      "type": "video",
+      "video_path": "videos/5_presentation_des_parfums_et_colorants_KtwWjO_Az2EYrS.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60008,
+    "fields": {
+      "course": 600,
+      "section": 6006,
+      "title": "Formules de fabrication des bougies",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/6_-_Formules_de_fabrication_des_bougies.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60009,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Pratique 4  deux couleurs moule boules ktwwjo",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/10_-_Pratique_4__deux_couleurs_moule_boules_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60010,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Pratique 5 bougie creme ktwwjo",
+      "order": 2,
+      "type": "video",
+      "video_path": "videos/11_-_Pratique_5_Bougie_Creme_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60011,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Pratique 6 les fondants ktwwjo",
+      "order": 3,
+      "type": "video",
+      "video_path": "videos/12_-_Pratique_6_Les_fondants_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60012,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Partie des défaux et leurs résolution ktwwjo",
+      "order": 4,
+      "type": "video",
+      "video_path": "videos/13_-_Partie_des_défaux_et_leurs_résolution_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60013,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Pratique 5 fabrication de moules en gypse ktwwjo qfgmute",
+      "order": 5,
+      "type": "video",
+      "video_path": "videos/14_-_Pratique_5_Fabrication_de_moules_en_gypse_KtwWjO_QfGMUte.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60014,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "1 pratique 1 bougie florale ktwwjo",
+      "order": 6,
+      "type": "video",
+      "video_path": "videos/7-1_pratique_1_bougie_florale_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60015,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Pratique 1 calcul taille de bougie bougie florale",
+      "order": 7,
+      "type": "video",
+      "video_path": "videos/7_-_Pratique_1_Calcul_Taille_de_Bougie_Bougie_Florale.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60016,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Partie des défaux et leurs résolution",
+      "order": 8,
+      "type": "video",
+      "video_path": "videos/8_-_Partie_des_défaux_et_leurs_résolution.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60017,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Pratique 2 utilisation des colorants hibou ktwwjo",
+      "order": 9,
+      "type": "video",
+      "video_path": "videos/8_-_Pratique_2_utilisation_des_colorants_Hibou_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60018,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Pratique 3 meche en bois ktwwjo",
+      "order": 10,
+      "type": "video",
+      "video_path": "videos/9_-_Pratique_3_meche_en_bois_KtwWjO.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60019,
+    "fields": {
+      "course": 600,
+      "section": 6007,
+      "title": "Fin bougie",
+      "order": 11,
+      "type": "video",
+      "video_path": "videos/9_FIN_BOUGIE.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60020,
+    "fields": {
+      "course": 600,
+      "section": 6008,
+      "title": "Bonus module 0",
+      "order": 1,
+      "type": "video",
+      "video_path": "videos/BONUS_Module_0.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60021,
+    "fields": {
+      "course": 600,
+      "section": 6008,
+      "title": "Bonus module fin",
+      "order": 2,
+      "type": "video",
+      "video_path": "videos/BONUS_Module_FIN.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "content.lecture",
+    "pk": 60022,
+    "fields": {
+      "course": 600,
+      "section": 6008,
+      "title": "Bonus module fin 2",
+      "order": 3,
+      "type": "video",
+      "video_path": "videos/BONUS_Module_FIN_2.mp4",
+      "is_published": true,
+      "is_free": false,
+      "is_demo": false,
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  }
+]

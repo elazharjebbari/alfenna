@@ -1,0 +1,34 @@
+{
+  "cards": [
+    {
+      "icon": "fas fa-hands",
+      "title": "Compétences Artisanales Concrètes :",
+      "text": "Maîtrisez des compétences artisanales."
+    },
+    {
+      "icon": "fas fa-clock",
+      "title": "Flexibilité Totale :",
+      "text": "Apprenez où et quand vous voulez."
+    },
+    {
+      "icon": "fas fa-user-graduate",
+      "title": "Pour Débutants et Experts :",
+      "text": "Modules adaptés à tous niveaux."
+    },
+    {
+      "icon": "fas fa-tools",
+      "title": "Pratique et Interactive :",
+      "text": "70% de pratique, apprentissage immersif."
+    },
+    {
+      "icon": "fas fa-users",
+      "title": "Communauté Engagée :",
+      "text": "Rejoignez plus de 500 artisans."
+    },
+    {
+      "icon": "fas fa-briefcase",
+      "title": "Devenez Patron :",
+      "text": "Créez et développez votre business."
+    }
+  ]
+}

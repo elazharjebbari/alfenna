@@ -1,0 +1,51 @@
+alias: chatbot/shell
+template: "components/chatbot/shell/component.html"
+
+assets:
+  css:
+    - "/static/css/chatbot.css"
+  js:
+    - "/static/js/chatbot.js"
+
+params:
+  enabled: true
+  trigger_label: "Assistant"
+  trigger_aria: "Ouvrir le chatbot"
+  panel_title: "Assistant Lumière"
+  panel_description: "Posez vos questions et découvrez les réponses en direct."
+  panel_alias: "chatbot/panel"
+  panel_params: {}
+  consent_params: {}
+
+contract:
+  optional:
+    enabled: "bool"
+    trigger_label: "str"
+    trigger_aria: "str"
+    panel_title: "str"
+    panel_description: "str"
+    panel_alias: "str"
+    panel_params: "dict"
+    consent_params: "dict"
+
+compose:
+  children:
+    panel:
+      alias: "{{ panel_alias }}"
+      with:
+        session_id: "{{ panel_params.session_id }}"
+        messages_alias: "{{ panel_params.messages_alias }}"
+        messages_params: "{{ panel_params.messages_params }}"
+        input_alias: "{{ panel_params.input_alias }}"
+        input_params: "{{ panel_params.input_params }}"
+        header:
+          title: "{{ panel_title }}"
+          subtitle: "{{ panel_description }}"
+        footer: "{{ panel_params.footer }}"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.chatbot.hydrators"
+  func: "chatbot_shell"
+
+render:
+  cacheable: false

@@ -1,0 +1,74 @@
+% =========================
+% Métadonnées et configuration du document
+% =========================
+
+% Palette
+\definecolor{brandGreen}{HTML}{1E7B34}
+\definecolor{brandOcre}{HTML}{336600}
+\definecolor{brandLight}{HTML}{E9E9E9}
+\definecolor{brandInk}{HTML}{1A1A1A}
+
+% Métadonnées
+\newcommand{\BookTitle}{Journal de l’atelier}
+\newcommand{\BookSubtitle}{Plan A — Bougies artisanales}
+\newcommand{\BookAuthor}{Lumière Academy}
+\newcommand{\BookDate}{\today}
+
+% Grille de notes (désactivable)
+\newif\ifnotesgrid
+\notesgridfalse % basculer sur \notesgridtrue pour activer
+
+\newcommand\DrawGrid{
+    \begin{tikzpicture}[remember picture, overlay]
+      \def\gridwidth{4.5cm}
+      \def\gridheight{26cm}
+      \def\cellsize{0.75cm}
+      \draw[brandLight] 
+        ([xshift=-\gridwidth]current page.north east) 
+        grid [step=\cellsize] (current page.south east);
+    \end{tikzpicture}
+}
+\usepackage{eso-pic}
+\AddToShipoutPictureBG{%
+  \ifnotesgrid
+    \AtPageLowerLeft{\DrawGrid}%
+  \fi
+}
+
+% Hyperref
+\hypersetup{
+  pdfauthor={\BookAuthor},
+  pdftitle={\BookTitle\ — \BookSubtitle},
+  colorlinks=true,
+  linkcolor=brandOcre,
+  citecolor=brandOcre,
+  urlcolor=brandOcre
+}
+
+% En-têtes/pieds
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\BookTitle}
+\fancyhead[RE,LO]{\leftmark}
+\fancyfoot[CE,CO]{\thepage}
+\setlength{\headheight}{14pt}
+
+% Listes compactes
+\setlist{nosep,leftmargin=1.2em}
+
+% Théorèmes légers (optionnels)
+\usepackage{amsthm}
+\newtheoremstyle{atelier}% name
+  {6pt}% Space above
+  {6pt}% Space below
+  {\normalfont}% Body font
+  {}% Indent amount
+  {\bfseries}% Theorem head font
+  {.}% Punctuation after theorem head
+  {.5em}% Space after theorem head
+  {}% Theorem head spec
+\theoremstyle{atelier}
+\newtheorem{definition}{Définition}[chapter]
+\newtheorem{remark}{Remarque}[chapter]
+\newtheorem{example}{Exemple}[chapter]
+\newtheorem{corollary}{Corollaire}[chapter]

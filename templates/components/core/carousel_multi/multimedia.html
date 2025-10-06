@@ -1,0 +1,160 @@
+{% load static i18n %}
+<div class="section" id="reviews">
+  <section class="mc-carousel mt-3"
+           data-section="{{ section_key|default:variant|default:'carousel' }}"
+           data-variant="{{ variant|default:'carousel' }}"
+           data-onboarding="{{ onboarding.enabled|yesno:'true,false' }}"
+           data-onboarding-scope="{{ onboarding.scope|default:'session' }}"
+           data-step-title="{{ onboarding.step_title|default:'Parcourir les avis' }}"
+           data-step-desc="{{ onboarding.step_desc|default:'Faites défiler horizontalement pour tout voir.' }}"
+           data-items-desktop="{{ options.items_desktop|default:3 }}"
+           data-items-tablet="{{ options.items_tablet|default:2 }}"
+           data-gap="{{ options.gap_px|default:16 }}">
+
+    {% if show_header %}
+      {% if title or subtitle or persona_filters %}
+      <header class="mc-head container">
+        {% if title %}<h3 class="mc-title h4 mb-0">{{ title }}</h3>{% endif %}
+        {% if subtitle %}<p class="mc-sub">{{ subtitle }}</p>{% endif %}
+        {% if persona_filters %}
+        <ul class="mc-pills" role="tablist" aria-label="{% trans 'Filtres persona' %}">
+          <li>
+            <button class="mc-pill is-active" type="button" role="tab" aria-selected="true" data-filter="all">
+              {% trans "Tous" %}
+            </button>
+          </li>
+          {% for f in persona_filters %}
+          <li>
+            <button class="mc-pill" type="button" role="tab" aria-selected="false" data-filter="{{ f.key|default:'all' }}">
+              {{ f.label|default:_("Filtre") }}
+            </button>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </header>
+      {% endif %}
+    {% endif %}
+
+    <div class="mc-viewport container"
+         tabindex="0"
+         role="region"
+         aria-roledescription="carousel"
+         aria-label="{% trans 'Témoignages' %}"
+         aria-live="polite">
+
+      {% if slides %}
+      <ul class="mc-track"
+          role="list"
+          style="--mc-gap: {{ options.gap_px|default:16 }}px;
+                 --mc-items-desktop: {{ options.items_desktop|default:3 }};
+                 --mc-items-tablet:  {{ options.items_tablet|default:2 }};">
+
+        {% for s in slides %}
+        <li class="mc-slide"
+            role="listitem"
+            data-persona="{{ s.persona|default:'all' }}"
+            data-kind="{{ s.type|lower|default:'quote' }}">
+
+          {# === QUOTE (pattern A) === #}
+          {% if s.type == 'quote' or not s.type %}
+            <article class="mc-card mc-card--quote">
+              <div class="mc-body">
+                {% if s.quote %}
+                <blockquote class="mc-quote">
+                  <span class="mc-quote-mark" aria-hidden="true">“</span>{{ s.quote }}
+                </blockquote>
+                {% endif %}
+              </div>
+              <footer class="mc-footer">
+                <div class="mc-author">
+                  {% if s.avatar_src %}
+                    <img class="mc-avatar" src="{{ s.avatar_src }}" alt="" loading="lazy" decoding="async">
+                  {% endif %}
+                  <div class="mc-author-meta">
+                    {% if s.author %}<div class="mc-name">{{ s.author }}</div>{% endif %}
+                    {% if s.role %}<div class="mc-role">{{ s.role }}</div>{% endif %}
+                    <div class="mc-meta-pills">
+                      {% if s.verified %}<span class="mc-pill-mini">{% trans 'Achat vérifié' %}</span>{% endif %}
+                      {% if s.city %}<span class="mc-pill-mini">{{ s.city }}</span>{% endif %}
+                      {% if s.when %}<span class="mc-pill-mini">{{ s.when }}</span>{% endif %}
+                      {% if s.persona %}<span class="mc-pill-mini">{{ s.persona }}</span>{% endif %}
+                    </div>
+                  </div>
+                </div>
+              </footer>
+            </article>
+
+          {# === VIDEO === #}
+          {% elif s.type == 'video' %}
+            <figure class="mc-card mc-card--media">
+              <div class="mc-media mc-media--video">
+                <video class="mc-video mc-media-el"
+                       preload="metadata" playsinline controls muted
+                       poster="{{ s.poster_src|default:'' }}">
+                  <source src="{{ s.video_src|default:'' }}" type="video/mp4">
+                </video>
+                <div class="mc-video-mask" aria-hidden="true"></div>
+              </div>
+              <figcaption class="mc-footer">
+                {% if s.caption %}<div class="mc-caption-line">{{ s.caption }}</div>{% endif %}
+              </figcaption>
+            </figure>
+
+          {# === AUDIO === #}
+          {% elif s.type == 'audio' %}
+            <article class="mc-card mc-card--media">
+              {% if s.poster_src %}
+              <div class="mc-media">
+                <img class="mc-img" src="{{ s.poster_src }}" alt="" loading="lazy" decoding="async">
+              </div>
+              {% endif %}
+              <div class="mc-footer">
+                <audio class="mc-audio-el mc-media-el" controls preload="none" style="width:100%">
+                  <source src="{{ s.audio_src|default:'' }}" type="audio/mpeg">
+                </audio>
+                {% if s.caption %}<div class="mc-caption-line mt-2">{{ s.caption }}</div>{% endif %}
+              </div>
+            </article>
+
+          {# === IMAGE === #}
+          {% elif s.type == 'image' %}
+            <figure class="mc-card mc-card--media">
+              <div class="mc-media">
+                <img class="mc-img"
+                     src="{{ s.image_src|default:'https://placehold.co/960x540?text=Image' }}"
+                     alt="{{ s.alt|default:'' }}"
+                     loading="lazy" decoding="async">
+              </div>
+              <figcaption class="mc-footer">
+                {% if s.badges %}
+                  <div class="mc-badges">
+                    {% for b in s.badges %}<span class="mc-badge">{{ b }}</span>{% endfor %}
+                  </div>
+                {% endif %}
+                {% if s.caption %}<div class="mc-caption-line">{{ s.caption }}</div>{% endif %}
+              </figcaption>
+            </figure>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+        <div class="mc-empty">
+          <p class="text-muted m-0">{% trans "Aucun témoignage à afficher pour le moment." %}</p>
+        </div>
+      {% endif %}
+
+      <div class="mc-edge mc-edge--left" aria-hidden="true"></div>
+      <div class="mc-edge mc-edge--right" aria-hidden="true"></div>
+
+      <div class="mc-progress" aria-hidden="true"><div class="mc-progress-bar"></div></div>
+
+      <div class="mc-hint" hidden>
+        <span class="mc-gesture" aria-hidden="true">⇆</span>
+        <span class="mc-hint-text">{% trans 'Faites glisser pour parcourir' %}</span>
+        <button type="button" class="mc-hint-close" aria-label="{% trans 'Fermer' %}">OK</button>
+      </div>
+    </div>
+  </section>
+</div>

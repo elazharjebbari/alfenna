@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ slots_html.vendors|default_if_none:""|safe }}
+    {{ slots_html.header|default_if_none:""|safe }}
+    <main class="section-padding billing-outcome billing-outcome--success">
+        {{ slots_html.message|default_if_none:""|safe }}
+    </main>
+    {{ slots_html.footer|default_if_none:""|safe }}
+    {{ slots_html.chatbot|default_if_none:""|safe }}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% load i18n %}
+{% if options %}
+  {% with color=options.color %}
+    {% if color and color.enabled and color.items %}
+      <div class="border rounded p-3 bg-light">
+        <p class="mb-2 fw-semibold">{% trans "Couleur" %}</p>
+        <div class="d-flex flex-wrap gap-2">
+          {% for item in color.items %}
+            {% with value=item.key|default:item.value|default:item.label %}
+              <label class="btn btn-outline-secondary mb-0">
+                <input type="radio"
+                       class="btn-check"
+                       name="color-option"
+                       value="{{ value }}"
+                       autocomplete="off"
+                       {% if forloop.first %}checked{% endif %}
+                       data-option-value="{{ value }}">
+                <span>{{ item.label|default:value }}</span>
+              </label>
+            {% endwith %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endif %}

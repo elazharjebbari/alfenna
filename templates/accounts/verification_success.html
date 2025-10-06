@@ -1,0 +1,9 @@
+{% extends "partials/_auth_layout.html" %}
+{% load i18n %}
+
+{% block auth_title %}{% trans "Adresse e‑mail vérifiée" %}{% endblock %}
+
+{% block auth_form %}
+  <div class="alert success">{% trans "Ton compte est activé. Tu peux te connecter." %}</div>
+  <a class="btn-primary" href="{% url 'pages:login' %}">{% trans "Se connecter" %}</a>
+{% endblock %}

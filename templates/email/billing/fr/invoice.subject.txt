@@ -1,0 +1,1 @@
+Ta facture {{ invoice_number }} est prête

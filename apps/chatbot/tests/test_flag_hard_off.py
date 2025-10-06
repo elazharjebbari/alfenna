@@ -45,7 +45,7 @@ class ChatbotRoutingFlagTests(TestCase):
 
     def _reload_urls(self) -> None:
         clear_url_caches()
-        import lumierelearning.urls as project_urls
+        import alfenna.urls as project_urls
 
         reload(project_urls)
 

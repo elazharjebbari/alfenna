@@ -1,0 +1,71 @@
+{# templates/base.html — SOCLE UNIQUE (Étape 2) #}
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE|default:'fr' }}" dir="ltr">
+  <head>
+    {# -------- META/SEO (hook) -------- #}
+    {% block meta_header %}
+      <meta charset="utf-8">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      {# Option: si tu utilises django-meta/SEO centralisé #}
+      {% include "marketing/_seo_head.html" %}
+    {% endblock meta_header %}
+
+    {# -------- TAGS/ANALYTICS HEAD (hook) -------- #}
+    {% block tags_header %}{% endblock tags_header %}
+
+    {# -------- STYLES (hooks, pas de CSS de composant ici) -------- #}
+    {% block styles %}{% endblock styles %}
+    {% block extra_css %}{% endblock extra_css %}
+
+    {# -------- EXTRA HEAD (hook libre) -------- #}
+    {% block extra_head %}{% endblock extra_head %}
+  </head>
+
+  <body>
+    {# -------- TAGS/ANALYTICS BODY (hook) -------- #}
+    {% include 'components/core/modals/modal_connect.html' %}
+    {% include 'components/core/modals/modal_subscribe.html' %}`
+
+    {% block tags_body %}{% endblock tags_body %}
+
+    {# -------- HEADER (hook) -------- #}
+    {% block header %}
+      <header role="banner" aria-label="{% trans 'En-tête du site' %}"></header>
+    {% endblock header %}
+
+    {# -------- MESSAGES (hook) -------- #}
+    {% block messages %}
+      {% if messages %}
+        <div role="status" aria-live="polite">
+          {% for message in messages %}
+            <p class="msg msg-{{ message.tags }}">{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endblock messages %}
+
+    {# -------- CONTENU PRINCIPAL -------- #}
+    <main id="content" role="main">
+      {% block content %}{% endblock content %}
+    </main>
+
+    {# -------- SIDEBAR (hook) -------- #}
+    {% block sidebar %}{% endblock sidebar %}
+
+    {# -------- FOOTER (hook) -------- #}
+    {% block footer %}
+      <footer role="contentinfo" aria-label="{% trans 'Pied de page' %}"></footer>
+    {% endblock footer %}
+
+    {# -------- SCRIPTS (hooks, pas de JS de composant ici) -------- #}
+    {% block scripts %}{% endblock scripts %}
+    {% block js %}{% endblock js %}
+
+    {# -------- AVANT </BODY> (hook) -------- #}
+    {% block before_end_body %}{% endblock before_end_body %}
+  </body>
+</html>

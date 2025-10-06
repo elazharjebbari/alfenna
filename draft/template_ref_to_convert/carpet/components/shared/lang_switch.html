@@ -1,0 +1,73 @@
+{# Variante B : overlay, version centrée dans le flux #}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<style>
+    .lang-switch {
+        display: inline-flex;
+        gap: .25rem;
+        padding: .25rem;
+        border-radius: 999px;
+    }
+
+    /* ✅ Version centrée dans le flux, sans position absolue */
+    .lang-switch--overlay {
+        /* centrage natif */
+        display: flex;
+        margin: 1.5rem auto; /* centre horizontalement dans la colonne */
+        width: max-content; /* capsule compacte */
+        /* look “verre dépoli” */
+        background: rgba(255, 255, 255, .72);
+        backdrop-filter: saturate(1.2) blur(6px);
+        -webkit-backdrop-filter: saturate(1.2) blur(6px);
+        border: 1px solid rgba(231, 231, 234, .85);
+        box-shadow: 0 8px 22px rgba(2, 6, 23, .10);
+        /* option : si tu veux le rapprocher du bloc au-dessus, joue sur la marge */
+        /* margin-top:-6px;  <- décommente pour une légère superposition élégante */
+    }
+
+    .lang-pill {
+        min-height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: .34rem .7rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 800;
+        font-size: .9rem;
+        color: #0f172a;
+        border: 1px solid transparent;
+    }
+
+    .lang-pill:is(:hover,:focus) {
+        background: rgba(255, 255, 255, .85);
+        outline: none
+    }
+
+    .lang-pill.is-active {
+        background: linear-gradient(90deg, var(--ul-primary) 0%, var(--ul-secondary) 100%);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(239, 40, 83, .24);
+    }
+
+    @media (max-width: 576px) {
+        .lang-pill {
+            font-size: .86rem;
+            min-height: 38px;
+            padding: .3rem .58rem
+        }
+    }
+
+</style>
+<div class="lang-switch lang-switch--overlay" role="group" aria-label="{% trans 'Choisir la langue' %}">
+    {% if LANGUAGE_CODE|slice:":2" == "ar" %}
+        <span class="lang-pill is-active" aria-current="true" lang="ar" dir="rtl">العربية</span>
+        <a class="lang-pill" href="{{ alt_url }}" lang="fr" dir="ltr"
+           data-event="LangToggle_Click" data-origin="overlay" data-from="ar" data-to="fr">Français</a>
+    {% else %}
+        <span class="lang-pill is-active" aria-current="true" lang="fr" dir="ltr">Français</span>
+        <a class="lang-pill" href="{{ alt_url }}" lang="ar" dir="rtl"
+           data-event="LangToggle_Click" data-origin="overlay" data-from="fr" data-to="ar">العربية</a>
+    {% endif %}
+</div>

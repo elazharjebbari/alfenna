@@ -1,0 +1,71 @@
+{% load atelier_utils humanize static %}
+
+<div class="section">
+<section class="usp-section">
+  <div class="container">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+      <div class="usp-switch" role="tablist" aria-label="Choisir votre intention">
+        {% for p in personas %}
+          <button class="btn btn-outline-success {% if p.code == persona_default %}active{% endif %}"
+                  role="tab"
+                  data-persona-code="{{ p.code }}"
+                  aria-selected="{% if p.code == persona_default %}true{% else %}false{% endif %}"
+                  data-ev="persona_change">{{ p.label }}</button>
+        {% endfor %}
+      </div>
+      <small class="text-muted ms-auto">4 valeurs clés + 2 bénéfices selon votre intention</small>
+    </div>
+
+    <!-- ⚠️ Ajout de row-cols-1 en XS + classe helper usp-grid -->
+    <div class="row usp-grid row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="uspGrid">
+
+      {% for it in pillars %}
+        <div class="col">
+          <div class="usp-pill h-100" data-ev="usp_hover" data-kind="pillar">
+            <div class="usp-ico"><i class="{{ it.icon|default:'fas fa-star' }}"></i></div>
+            <div>
+              <p class="usp-title">{{ it.title }}</p>
+              {% if it.text %}<p class="usp-text usp-clamp-2">{{ it.text }}</p>{% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+
+      {% for code, arr in context_by_persona.items %}
+        {% for it in arr %}
+          <div class="col usp-context" data-persona="{{ code }}" {% if code != persona_default %}style="display:none"{% endif %}>
+            <div class="usp-pill h-100" data-ev="usp_hover" data-kind="context" data-persona="{{ code }}">
+              <div class="usp-ico"><i class="{{ it.icon|default:'fas fa-check' }}"></i></div>
+              <div>
+                <p class="usp-title">{{ it.title }}</p>
+                {% if it.text %}<p class="usp-text usp-clamp-2">{{ it.text }}</p>{% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+
+    </div>
+</section>
+  </div>
+
+<script>
+(function(){
+  var grid = document.getElementById('uspGrid');
+  var btns = document.querySelectorAll('[data-persona-code]');
+  function setPersona(code){
+    btns.forEach(function(b){
+      var active = (b.getAttribute('data-persona-code') === code);
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    grid.querySelectorAll('.usp-context').forEach(function(col){
+      col.style.display = (col.getAttribute('data-persona') === code) ? '' : 'none';
+    });
+  }
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){ setPersona(this.getAttribute('data-persona-code')); });
+  });
+})();
+</script>

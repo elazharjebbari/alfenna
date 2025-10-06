@@ -19,7 +19,7 @@ def run():
     missing = sorted(EXPECTED_SLUGS - existing)
 
     if missing:
-        call_command("loaddata", "lumierelearning/fixtures/price_plans.json", verbosity=0)
+        call_command("loaddata", "alfenna/fixtures/price_plans.json", verbosity=0)
         logs.append("Fixtures price_plans.json chargees")
         existing = set(PricePlan.objects.filter(slug__in=EXPECTED_SLUGS).values_list("slug", flat=True))
         missing = sorted(EXPECTED_SLUGS - existing)

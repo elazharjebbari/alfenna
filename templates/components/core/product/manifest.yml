@@ -1,0 +1,37 @@
+alias: product
+aliases:
+  - core/product
+  - product/detail
+  - product/hero
+
+template: "components/core/product/hero.html"
+
+assets:
+  head: []
+  css:
+    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    - "/static/components/forms/lead_step3.css"
+  js:
+    - "/static/components/product/product.js"
+    - "/static/js/flowforms.runtime.js"
+
+  vendors:
+    - "swiper"
+
+params: {}
+
+contract:
+  optional:
+    product: "dict"
+    media: "dict"
+    options: "dict"
+    form: "dict"
+    tracking: "dict"
+    rtl: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.product.product"
+  func: "hydrate_product"
+
+render:
+  cacheable: true

@@ -1,0 +1,48 @@
+{% load atelier_utils %}
+
+<div class="section mb-3">
+    <section
+  id="{{ id }}"
+  class="ll-choice ll-choice--pills section"
+  data-comp="micro-choice/pills"
+  data-anchor-next="{{ options.anchor_next|default:'#pack-offres' }}"
+  data-autoselect="{{ options.autoselect_from_storage|yesno:'true,false' }}"
+  data-ev-view="{{ events.view|default:'choice_view' }}"
+  data-ev-click="{{ events.click|default:'choice_card_click' }}"
+  style="
+    --ll-accent: {{ style.accent|default:'#0D5C4F' }};
+    --ll-pill-bg: {{ style.pill_bg|default:'#ffffff' }};
+    --ll-pill-selected: {{ style.pill_selected|default:'#E7F8EE' }};
+    --ll-pill-border: {{ style.pill_border|default:'rgba(0,0,0,.10)' }};
+    --ll-radius: {{ style.radius|default:999 }}px;
+    --ll-gap: {{ style.gap|default:'8px' }};
+  "
+>
+  <div class="container">
+    {% if show_header %}
+      {% if title or subtitle %}
+      <header class="ll-choice-head">
+        {% if title %}<h3 class="h5 mb-0">{% render_string title %}</h3>{% endif %}
+        {% if subtitle %}<p class="ll-sub">{% render_string subtitle %}</p>{% endif %}
+      </header>
+      {% endif %}
+    {% endif %}
+
+
+    <div class="ll-pills" role="group" aria-label="{{ aria_label|default:'Je veux' }}">
+      {% for c in choices %}
+      <button
+        type="button"
+        class="ll-pill"
+        data-persona="{{ c.persona }}"
+        aria-pressed="false"
+      >
+        {% if c.icon %}<i class="{{ c.icon }}" aria-hidden="true"></i>{% endif %}
+        <span class="ll-pill-label">{{ c.label }}</span>
+        {% if c.sublabel %}<span class="ll-pill-sub">{{ c.sublabel }}</span>{% endif %}
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+</div>

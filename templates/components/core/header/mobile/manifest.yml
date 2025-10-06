@@ -1,0 +1,98 @@
+alias: header/mobile
+template: "components/core/header/mobile/mobile_menu.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+# Valeurs par défaut (documentaires) — utilisées par l'audit et la découverte
+params:
+  contact:
+    phone_tel: "+212808544450"
+    phone_display: "+212 8085-44450"
+    email: "partenariat@lumiereacademy.com"
+    address_url: "https://maps.app.goo.gl/mmFtjAtAiujXCutw6"
+    address_text: "N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc"
+  socials:
+    - icon: "flaticon-instagram"
+      url: "https://www.instagram.com/lumieresrabat/"
+      new_tab: true
+    - icon: "flaticon-linkedin"
+      url: "https://www.linkedin.com/company/lumiereacadem"
+      new_tab: true
+  # Laisse à null pour laisser l’hydrateur résoudre via reverse('login'/'register')
+  login_url: null
+  register_url: null
+  menu:
+    - label: "Accueil"
+      url_name: "pages:home"
+    - label: "Nos Formations"
+      children:
+        - label: "Formation en ligne"
+          url: "#"
+    - label: "Nos Cours"
+      url: "#"
+    - label: "Q&A"
+      url: "#"
+    - label: "Contact"
+      url: "#"
+
+contract:
+  required:
+    contact:
+      phone_tel: "str"
+      phone_display: "str"
+      email: "str"
+      address_url: "str"
+      address_text: "str"
+    menu:
+      - label: "str"
+        url?: "str"
+        url_name?: "str"
+        children?:
+          - label: "str"
+            url?: "str"
+            url_name?: "str"
+  optional:
+    socials:
+      - icon: "str"
+        url: "str"
+        new_tab?: "bool"
+    login_url: "str"
+    register_url: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header.hydrators"
+  func: "header_mobile"
+  # Whitelist + defaults transmis à l’hydrateur (manifest-first robuste)
+  params:
+    contact:
+      phone_tel: "+212808544450"
+      phone_display: "+212 8085-44450"
+      email: "partenariat@lumiereacademy.com"
+      address_url: "https://maps.app.goo.gl/mmFtjAtAiujXCutw6"
+      address_text: "N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc"
+    socials:
+      - icon: "flaticon-instagram"
+        url: "https://www.instagram.com/lumieresrabat/"
+        new_tab: true
+      - icon: "flaticon-linkedin"
+        url: "https://www.linkedin.com/company/lumiereacadem"
+        new_tab: true
+    login_url: null         # => hydrateur fera reverse('login') → "/login/"
+    register_url: null      # => hydrateur fera reverse('register') → "/register/"
+    menu:
+      - label: "Accueil"
+        url_name: "pages:home"
+      - label: "Nos Formations"
+        children:
+          - label: "Formation en ligne"
+            url: "#"
+      - label: "Nos Cours"
+        url: "#"
+      - label: "Q&A"
+        url: "#"
+      - label: "Contact"
+        url: "#"

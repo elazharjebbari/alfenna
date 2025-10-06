@@ -1,0 +1,447 @@
+\documentclass[../../main.tex]{subfiles}
+\begin{document}
+
+% ===============================================================
+% (1) MARGE "CAHIER À CARREAUX" — activation pour tout l'acte
+% ===============================================================
+% Grille de notes en marge droite (cahier à carreaux, opacité douce)
+% Nécessite tikz + eso-pic (déjà présents dans le squelette)
+\newcommand{\ActeNotesGrid}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    % Largeur de la marge à quadriller
+    \def\gridwidth{4.6cm}
+    % Taille des carreaux
+    \def\cell{0.55cm}
+    % Opacité et teinte des traits
+    \def\gridcolor{black!18}
+    \def\gridopacity{0.28}
+    % Rectangle quadrillé : toute la hauteur de page, marge droite
+    \begin{scope}[shift={(0,0)}, opacity=\gridopacity]
+      \draw[\gridcolor, step=\cell]
+        ([xshift=-\gridwidth]current page.north east) grid
+        (current page.south east);
+    \end{scope}
+  \end{tikzpicture}%
+}
+% Activer la grille pour toutes les pages de cet acte
+\AddToShipoutPictureBG{\ActeNotesGrid}
+
+% ===============================================================
+% TITRE CHAPITRE
+% ===============================================================
+\chapter{Acte 1 — Déclic \& Sécurité}
+
+% ===============================================================
+% HOOK — accroche brève, narrative
+% ===============================================================
+\begin{Hook}
+  \HookItem{Pain}{Tu ne veux pas bricoler. Tu veux \textit{bien commencer}, sans frayeur ni gâchis, avec un poste qui te protège pour de vrai.}
+  \HookItem{Promesse}{En une soirée, l’atelier respire : espace clair, \textbf{10 réflexes} qui deviennent naturels, une \textbf{SOP 1‑page} accrochée.}
+  \HookItem{Preuve}{On démarre par une scène familière. On pose le \textit{pourquoi}, on montre le \textit{comment}. À la fin, poste prêt, quiz validé.}
+  \HookItem{Prochain geste}{Lis la scène, pose le couvercle \textit{à portée}, sors le thermomètre. On allume.}
+\end{Hook}
+
+
+% ===============================================================
+% SCÈNE D’OUVERTURE — narration immersive + illustration placeholder
+% ===============================================================
+\section*{Scène d'ouverture}
+
+L’eau chuchote. De petites bulles roulent le long de la paroi, fines, régulières. Le pichet repose au-dessus, le thermomètre plonge, discret. L’air sent le métal chaud et l’atelier rangé.
+Sur la lèvre du pichet, une \textit{fumée très fine} s’élève : pas un nuage, juste un fil. La main coupe la chauffe. Le \textbf{couvercle} se pose, naturellement. Le pichet glisse hors de la plaque. Trente secondes. La fumée s’efface. L’aiguille redescend. La \textbf{zone verte} revient, et avec elle le geste sûr.
+
+Ce soir, ce n’est pas la chance qui t’accompagne : c’est une \textit{réponse apprise}. Cette posture sera la base de toutes tes recettes.
+
+\begin{figure}[!h]
+  \centering
+  % Placeholder : remplace par ta photo "frémissement vs ébullition"
+  \fbox{\rule{0pt}{0.40\textheight}\rule{0.9\textwidth}{0pt}}
+  \caption{Frémissement vs ébullition : à gauche, petites bulles calmes ; à droite, bouillonnement large et projections.}
+\end{figure}
+
+% ===============================================================
+% CADRE — paragraphe naturel + bloc objectif concis
+% ===============================================================
+\section{Cadre de l'acte}
+
+À la fin de cet acte, ton poste est \textit{sûr, clair et prêt}. Tu connais tes \textit{fenêtres de température} (la zone verte où les gestes sont permis). Tu as \textbf{10 réflexes simples} qui évitent les ennuis avant qu’ils n’arrivent. Tu valides un \textbf{quiz sécurité} (\(\geq 80\,\%\)) et tu affiches une \textbf{SOP 1-page} plastifiée, bien en vue.
+
+\begin{BlocObjectif}
+\textbf{Résultat} : poste sûr, réflexes acquis, SOP affichée, quiz \(\geq 80\,\%\). \\
+\textbf{Livrables} : SOP (A4), journal sécurité (T° max, incidents, décisions), checklists pré / post, charte signée. \\
+\textbf{Ton} : phrases courtes, gestes clairs ; la sûreté comme une \textit{habitude élégante}.
+\end{BlocObjectif}
+
+% ===============================================================
+% LE KIT — texte détaillé + BOM synthétique + visuel annotable
+% ===============================================================
+\section{Le kit de sécurité : préparer sans encombrer}
+
+Commence léger. Une boîte claire, toujours prête. Tu l’ouvres :
+un \textit{couvercle métal} (diamètre \(\geq\) pichet), un \textit{thermomètre fiable} (\(\SIrange{0}{110}{\celsius}\)), un \textit{tapis silicone} pour sauver ton plan de travail, une paire de \textit{gants} qui ne craignent pas la chaleur, des \textit{lunettes}, un peu de \textit{bicarbonate}, un \textit{minuteur}, un \textit{chiffon dédié} et ta \textbf{SOP} plastifiée (feutre effaçable).
+Tout tient. Rien n’encombre. \textit{Option confort} : une couverture anti-feu et un bac d’eau tiède pour refroidir le matériel (jamais la cire).
+
+\begin{BlocMateriel}
+Starter : couvercle, thermomètre, tapis silicone, gants, lunettes, bicarbonate, minuteur, SOP plastifiée. \\
+Confort : couverture anti-feu, bac d’eau tiède, support anti-basculement. \\
+\textit{Astuce} : range toujours le kit au même endroit, visible.
+\end{BlocMateriel}
+
+\begin{figure}[!h]
+  \centering
+  % Placeholder : remplace par une photo annotée "kit sécurité"
+  \fbox{\rule{0pt}{0.28\textheight}\rule{0.9\textwidth}{0pt}}
+  \caption{Kit sécurité (placeholder) : place mentalement chaque élément autour du poste.}
+\end{figure}
+
+% ===============================================================
+% CARTOGRAPHIE DU POSTE — figure claire et lisible
+% ===============================================================
+\section{Cartographie du poste (vue du dessus)}
+
+Un \textit{poste lisible} se voit d’un coup d’œil : \textcolor{red!60!black}{zone chaude} (gauche), \textcolor{blue!70!black}{zone froide} (droite), \textcolor{green!50!black}{réflexes \& SOP} au centre. La zone chaude ne déborde \textit{jamais} sur la zone froide.
+
+\begin{figure}[htbp]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tikzpicture}[
+      font=\footnotesize,
+      every node/.style={align=left},
+      zone/.style={rounded corners=3pt, line width=.5pt},
+      badge/.style={draw, rounded corners=3pt, fill=white, inner sep=4pt, minimum width=4.1cm, minimum height=0.95cm},
+      title/.style={font=\bfseries\small}
+  ]
+    %--- dimensions (en cm, avant resizebox)
+    \def\W{16.0}
+    \def\H{7.0}
+    \def\wHot{5.6}
+    \def\wCore{3.2}
+    \def\wCold{7.0}
+
+    %--- cadre externe
+    \draw[rounded corners=3pt, line width=.6pt] (0,0) rectangle (\W,\H);
+
+    %--- légendes supérieures
+    \node[anchor=west] at (0.15,\H+0.1) {\scriptsize Plan de travail (vue du dessus)};
+    \node[anchor=east] at (\W-0.15,\H+0.1) {\scriptsize \faWind\; Ventilation douce};
+
+    %--- ZONES
+    % Zone chaude (gauche)
+    \filldraw[fill=red!7, draw=red!55, zone] (0.25,0.25) rectangle (\wHot, \H-0.25);
+    \node[title, text=red!60!black, anchor=west] at (0.4,\H-0.55) {ZONE CHAUDE};
+
+      % Badges (gauche)
+      \node[badge] at (2.9,\H-1.4) {\faFire\;\; Plaque + bain-marie};
+      \node[badge] at (2.9,\H-2.6) {\faThermometerHalf\;\; Thermomètre en place};
+      \node[badge] at (2.9,\H-3.8) {\faBan\;\; Pas de micro-ondes};
+      % Kit sécurité (bas gauche)
+      \draw[dashed, rounded corners=3pt] (0.45,0.6) rectangle (\wHot-0.2,1.35);
+      \node[anchor=west] at (0.55,0.95) {\scriptsize Kit sécurité (couvercle, bicarbonate, gants, lunettes)};
+
+    % Colonne réflexes & SOP (centre)
+    \filldraw[fill=green!8, draw=green!50!black, zone] (\wHot+0.15,0.25) rectangle (\wHot+\wCore-0.15,\H-0.25);
+    \node[title, text=green!50!black, anchor=west] at (\wHot+0.3,\H-0.55) {RÉFLEXES \& SOP};
+
+      \node[badge] at (\wHot+0.5+1.1,\H-1.6) {\faClipboardCheck\;\; SOP affichée + checklists};
+      \node[badge] at (\wHot+0.5+1.1,\H-3.0) {\faRecycle\;\; Éco-geste : zéro cire à l’évier};
+
+    % Zone froide (droite)
+    \filldraw[fill=blue!8, draw=blue!55, zone] (\wHot+\wCore+0.15,0.25) rectangle (\W-0.25,\H-0.25);
+    \node[title, text=blue!70!black, anchor=west] at (\wHot+\wCore+0.3,\H-0.55) {ZONE FROIDE};
+
+      \node[badge] at (\wHot+\wCore+3.8,\H-1.4) {\faSnowflake\;\; Tapis silicone, surface plane};
+      \node[badge] at (\wHot+\wCore+3.8,\H-2.8) {\faBoxOpen\;\; Contenants secs et propres};
+
+  \end{tikzpicture}}
+  \caption{Cartographie du poste : la \textcolor{red!60!black}{zone chaude} ne déborde jamais sur la \textcolor{blue!70!black}{zone froide}. La SOP vit au centre.}
+  \label{fig:cartographie-poste}
+\end{figure}
+
+% ===============================================================
+% CINQ GESTES — narration détaillée + bloc étapes (résumé)
+% ===============================================================
+\section{Cinq gestes, un rythme}
+
+Tes mains n’ont pas besoin de courir. Cinq réflexes, simples et cadencés, suffisent :
+\textit{ouvrir l’espace}, \textit{écouter l’eau}, \textit{lire la température}, \textit{ajouter doucement}, \textit{ranger en héros discret}.
+Chaque geste prépare le suivant ; le dernier installe la séance d’après.
+
+\paragraph{1. Ouvrir l’espace.}
+Une table claire, \(\geq 50\) cm dégagés, une fenêtre entrouverte. Le couvercle vit \textit{sur} le plan, jamais dans un tiroir. Cette place fixe évite les secondes perdues.
+
+\paragraph{2. Écouter l’eau.}
+Bain-marie seulement : \textit{frémissement} oui, \textit{grosse ébullition} non. Le pichet trempe sans débord ; la chauffe reste douce.
+
+\paragraph{3. Lire la température.}
+Le thermomètre ne quitte pas la scène ; tu sais lire ta \textit{fenêtre verte}. Toutes les 2–3 min, un œil suffit. La cire n’a pas besoin de vitesse ; elle a besoin d’attention.
+
+\paragraph{4. Ajouter doucement.}
+Parfum et additifs arrivent \textit{après} la chauffe, \textit{dans la bonne fenêtre}. On remue calmement, le temps que la matière s’accorde.
+
+\paragraph{5. Ranger en héros discret.}
+Essuyage \textit{à chaud} (chiffon dédié), zéro cire à l’évier. La SOP reste à vue ; le kit, toujours à sa place.
+
+\begin{BlocEtapes}
+\textbf{Cinq gestes, un rythme}
+\begin{arrowlist}
+  \item Ouvre l’espace → 50 cm dégagés, couvercle \textit{sur} le plan.
+  \item Écoute l’eau → frémissement oui, grosse ébullition non.
+  \item Lis la T° → un œil toutes 2–3 min, thermomètre toujours en scène.
+  \item Ajoute doucement → parfum et additifs \textit{après} la chauffe, dans la fenêtre.
+  \item Range en héros discret → essuyage à chaud, zéro cire à l’évier, kit à sa place.
+\end{arrowlist}
+\end{BlocEtapes}
+
+\begin{figure}[!h]
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth,frame]{figs/ouverture_espace.jpg}
+    \caption{Espace clair}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth,frame]{figs/fremissement.jpg}
+    \caption{Frémissement ≠ ébullition}
+  \end{subfigure}
+
+  \vspace{4pt}
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth,frame]{figs/lecture_temperature.jpg}
+    \caption{Lecture T° régulière}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth,frame]{figs/ajout_fenetre.jpg}
+    \caption{Ajout dans la fenêtre}
+  \end{subfigure}
+  \caption{Les cinq gestes en images. De courtes légendes, pas de roman.}
+\end{figure}
+
+
+% ===============================================================
+% CONTRÔLES — prose lisible + bloc synthèse (fenêtres prudentes)
+% ===============================================================
+\section{Ta boussole : contrôler sans s’alourdir}
+
+Quand tu doutes, reviens à l’essentiel : l’eau \textit{frémit} (pas de bouillonnement large) ; la T° se lit toutes les 2–3 min ; le thermomètre ne quitte pas la scène. Les fenêtres ci-dessous sont \textit{prudentes} et \textit{personnalisables} — remplace-les par tes fiches techniques dès que tu les as.
+
+\begin{BlocControles}
+\textbf{Fenêtres par défaut (prudentes)} : \\
+\(\triangleright\) \textbf{Soja (contenant)} : \textit{fonte} \(\SIrange{65}{75}{\celsius}\) ; \textit{ajout parfum} \(\SIrange{60}{70}{\celsius}\) ; \textit{coulée} \(\SIrange{55}{60}{\celsius}\) ; charges \(\,6{-}8\,\%\) (jusqu’à \(10\,\%\) si tests OK). \\
+\(\triangleright\) \textbf{Abeille (contenant)} : \textit{fonte} \(\SIrange{62}{70}{\celsius}\) ; \textit{ajout} \(\SIrange{68}{72}{\celsius}\) ; \textit{coulée} \(\SIrange{65}{68}{\celsius}\) ; charges \(\,2{-}4\,\%\). \\
+\(\triangleright\) \textbf{Paraffine (contenant)} : \textit{fonte} \(\SIrange{60}{70}{\celsius}\) ; \textit{ajout} \(\SIrange{60}{70}{\celsius}\) ; \textit{coulée} \(\SIrange{60}{65}{\celsius}\) ; charges \(\,6{-}8\,\%\). \\
+\textbf{Code couleur} : \textit{vert} = on agit ; \textit{orange} = on temporise (+5 à +10 °C) ; \textit{rouge} = fumée visible \(\Rightarrow\) stop net.
+\end{BlocControles}
+
+% ===============================================================
+% RÉFLEXES DÉPANNAGE — narration + bloc décision court
+% ===============================================================
+\section{Réflexes en cas d’imprévu}
+
+Une \textit{fumée fine} ? Respire. \textbf{Coupe}. \textbf{Couvre}. \textbf{Décale}. Attends la zone verte ; reprends au calme.
+Une \textit{flamme} ? Éteins la source. \textit{Ne déplace pas}. \textbf{Couvre} jusqu’à étouffement ; \textbf{bicarbonate} si besoin. \textit{Jamais d’eau}.
+La T° te semble \textit{folle} ? Test rapide : glace \(\approx \SI{0}{\celsius}\) ; eau qui bout \(\approx \SI{100}{\celsius}\). Marque tes fenêtres sur la tige ; remplace si dérive.
+
+\begin{BlocDepannage}
+\textbf{Si… alors… (version courte)} \\
+Fumée \(\Rightarrow\) couper / couvrir / décaler / attendre / reprendre. \\
+Feu \(\Rightarrow\) couper / \textit{ne pas déplacer} / couvrir / bicarbonate / attendre — \textit{jamais d’eau}. \\
+T° douteuse \(\Rightarrow\) tester 0 / 100 °C / marquer zones / remplacer si dérive. \\
+Poste encombré \(\Rightarrow\) stop / dégager \(\geq\) 50 cm / ventiler doux / reprendre.
+\end{BlocDepannage}
+
+\begin{figure}[!h]
+  \centering
+  % Placeholder : schéma "arbre réflexes"
+  \fbox{\rule{0pt}{0.26\textheight}\rule{0.9\textwidth}{0pt}}
+  \caption{Réflexes (placeholder) : fumée — feu — surchauffe.}
+\end{figure}
+
+% ===============================================================
+% 10 RÈGLES D'OR — tableau compact et lisible
+% ===============================================================
+\section{Les 10 règles d’or — simples, mémorisables, efficaces}
+
+Ces règles sont le \textit{pare-chocs} de l’atelier. Elles ne ralentissent pas : elles fluidifient.
+
+% --- TABLE : LES 10 RÈGLES D'OR (tabularx conseillé) ---
+%==================== TABLE : LES 10 RÈGLES D'OR (COMPACT & LISIBLE) ====================
+%==================== TABLE : LES 10 RÈGLES D'OR (ROBUSTE & LISIBLE) ====================
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.22}
+
+  % — Types de colonnes (déclarés localement pour éviter les conflits)
+  \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}} % texte aligné à gauche, largeur fixe
+  \newcolumntype{S}[1]{>{\raggedright\arraybackslash}p{#1}} % idem (seuils)
+  \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}   % centré, largeur fixe (icône)
+  \newcolumntype{Y}{>{\raggedright\arraybackslash}X}         % colonne flexible (s’adapte)
+
+  \begin{tabularx}{\linewidth}{L{2.9cm} Y Y S{3.05cm} C{0.95cm}}
+    \begin{TableauX}
+    \begin{tabularx}{\linewidth}{p{2.6cm} Y Y p{3.0cm} c}
+    \toprule
+    \textbf{Règle} & \textbf{Pourquoi (risque)} & \textbf{Comment (geste)} & \textbf{Fenêtre / seuil} & \textbf{Picto} \\
+    \midrule
+    \makecell[l]{Bain‑marie,\\ jamais direct} &
+    Point chaud, surchauffe &
+    Eau au frémissement, pichet stable; jamais d’eau sur la cire &
+    Eau \(\leq\) \SI{100}{\celsius} &
+    \faTint \\
+
+
+    Bain-marie, jamais chauffe directe &
+      Point chaud / surchauffe localisée &
+      Eau au \textit{frémissement}, pichet stable ; \textbf{jamais} d’eau sur la cire &
+      Côté eau $\leq$ \SI{100}{\celsius} &
+      \faTint \\
+
+    Thermomètre en continu &
+      Décision par la mesure (pas à l’intuition) &
+      Tige immergée ; lecture toutes 2–3\,min &
+      \textit{Zone verte} selon la cire (voir SOP) &
+      \faThermometerHalf \\
+
+    Ne quitte jamais la cire chauffée &
+      Départ fumée $\Rightarrow$ feu possible &
+      Si fumée : \textbf{couper}, \textbf{couvrir}, \textbf{décaler} ; reprise en zone verte &
+      Surveillance continue &
+      \faEye \\
+
+    Pas de micro-ondes &
+      Chauffe inégale, poches surchauffées &
+      Fonte \textbf{uniquement} au bain-marie &
+      — & \faBan \\
+
+    Parfum à \textit{basse} T\textsuperscript{o} &
+      Volatilité / évaporation, suintement &
+      Ajouter \textit{après} la chauffe, dans la \og fenêtre \fg{} &
+      Soja : ajout \SIrange{60}{70}{\celsius}, coulée \SIrange{55}{60}{\celsius} ;\\
+      & & & Abeille : ajout \SIrange{68}{72}{\celsius} ; Paraffine : ajout \SIrange{60}{70}{\celsius} &
+      \faFlask \\
+
+    Équipements de protection (PPE) &
+      Brûlures / projections &
+      Gants + lunettes \textit{avant} d’allumer ; cheveux attachés &
+      — & \faGlasses \\
+
+    Gestion feu de cire &
+      L’eau propage l’incendie &
+      \textbf{Couvrir} $\rightarrow$ \textbf{bicarbonate} $\rightarrow$ \textbf{couper la source} ; \textbf{jamais d’eau} &
+      — & \faFire \\
+
+    Enfants / animaux hors zone &
+      Chocs, renversements imprévus &
+      Zone séparée / porte fermée ; consigne visible &
+      — & \faChild \\
+
+    Surface dégagée &
+      Instabilité, salissures &
+      $\geq$ 50\,cm libres ; tapis silicone ; outils dédiés ; chiffon prêt &
+      $\geq$ 50\,cm dégagés &
+      \faBroom \\
+
+    Éco-geste / déchets &
+      Évier bouché, pollution &
+      Essuyage \textit{à chaud} ; chutes récupérées et réutilisées &
+      Zéro cire à l’évier &
+      \faRecycle \\
+
+\bottomrule
+\end{tabularx}
+\caption{Les 10 règles d’or — référence rapide. Adapter aux fiches techniques.}
+\label{tab:regles-dor}
+\end{TableauX}
+
+%========================================================================================
+
+% ===============================================================
+% JOURNAL SÉCURITÉ & TRAÇABILITÉ — modèle
+% ===============================================================
+\section{Journal sécurité \& traçabilité (modèle)}
+
+Un \textit{journal simple} garde la mémoire utile : T° max du jour, incident (oui/non), décision prise. C’est court, mais ça protège.
+
+% --- TABLE : JOURNAL SÉCURITÉ ---
+\begin{table}[htbp]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4.5pt}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabularx}{\textwidth}{
+      >{\centering\arraybackslash}p{1.6cm}
+      >{\centering\arraybackslash}p{1.1cm}
+      >{\raggedright\arraybackslash}p{1.8cm}
+      >{\raggedright\arraybackslash}p{2.0cm}
+      >{\centering\arraybackslash}p{1.35cm}
+      >{\centering\arraybackslash}p{1.45cm}
+      X
+  }
+    \toprule
+    \rowcolor{lightgray!35}
+    \textbf{Date} & \textbf{Lot} & \textbf{Cire} & \textbf{Parfum / \%} &
+    \textbf{T\textsuperscript{o} max} & \textbf{Incident (O/N)} & \textbf{Décision / Notes} \\
+    \midrule
+    \rule{0pt}{2.6ex} & & & & & & \\
+    & & & & & & \\
+    & & & & & & \\
+    & & & & & & \\
+    & & & & & & \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Journal sécurité \& traçabilité — à renseigner à chaque séance (T° max, incident, action corrective/validation).}
+  \label{tab:journal-securite}
+\end{table}
+
+% ===============================================================
+% CLÔTURE — récit bref + business en appoint
+% ===============================================================
+\section{Clôturer l’acte}
+
+Ton atelier est clair, ton kit prêt, ta SOP affichée. Tu viens de franchir ton premier seuil : tu as appris à voir avant que le problème n’arrive. Ce n’est plus un hasard ; c’est une \textit{habitude élégante} qui prépare la suite.
+
+\section{Bloc business}
+
+\begin{BlocCouts}
+\textbf{Le coût évité.} Un pichet oublié, c’est de la cire perdue, une odeur de brûlé, un moral qui chute. Le \textit{kit sécurité tient dans une boîte} et s’achète une fois ; l’\textit{affiche SOP} évite les questions du lendemain. Ranger \textit{à chaud}, \textit{zéro cire à l’évier} : du temps gagné, un atelier qui dure.
+\end{BlocCouts}
+
+\spacer
+
+\begin{BlocAVendre}
+\textbf{Preuves de fin d’acte} : photo « atelier prêt » (couvercle visible, SOP affichée), \textit{journal} daté (T° max, incidents, décisions), \textit{checklist} cochée, \textit{quiz} validé (\(\geq 80\,\%\)). \\
+\textit{Tu es prêt·e pour l’Acte 2.}
+\end{BlocAVendre}
+
+% ===============================================================
+% ASTUCES & CHECKLIST — derniers repères, ton naturel
+% ===============================================================
+\section*{Astuce \& Checklist}
+
+Avant de tourner la page, grave trois habitudes :
+\textit{marquer} au feutre tes fenêtres T° sur la tige ; \textit{poser} le couvercle \textit{sur} le plan (jamais dans un tiroir) ; \textit{essuyer} le pichet tant qu’il est tiède. Ce sont des minutes gagnées, et des soucis en moins.
+
+\begin{BlocAstuce}
+\textbf{Astuces rapides} : marquer les fenêtres T° ; couvercle toujours visible ; nettoyage \textit{à chaud} ; chutes conservées par type de cire.
+\end{BlocAstuce}
+
+\spacer
+
+\begin{BlocChecklist}
+\ChecklistItem{Espace clair et ventilé ; \(\geq 50\) cm dégagés}
+\ChecklistItem{Thermomètre en place ; \textit{fenêtres T°} connues}
+\ChecklistItem{Couvercle métal \& bicarbonate \textit{à portée}}
+\ChecklistItem{Gants, lunettes ; cheveux attachés, manches serrées}
+\ChecklistItem{Pas d’enfants/animaux dans la zone}
+\ChecklistItem{Aucune flamme libre ; pas de micro-ondes}
+\ChecklistItem{Zéro cire à l’évier ; chiffons dédiés prêts}
+\ChecklistItem{SOP affichée ; journal sécurité ouvert}
+\ChecklistItem{Quiz sécurité validé (\(\geq 80\,\%\)) \& charte signée}
+\end{BlocChecklist}
+
+% ===============================================================
+% (2) DÉSACTIVER LA GRILLE pour les actes suivants
+% ===============================================================
+\ClearShipoutPictureBG
+
+\end{document}

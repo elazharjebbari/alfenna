@@ -1,0 +1,100 @@
+%% =========================
+%% Styles & commandes (icônes, boîtes, etc.)
+%% =========================
+%
+%\tcbset{
+%  atelier/.style={
+%    colback=brandGreen!3,
+%    colframe=brandGreen!60!black,
+%    arc=1.2mm,
+%    boxrule=0.5pt,
+%    left=1em,right=1em,top=0.7em,bottom=0.7em,
+%    enhanced, breakable
+%  },
+%  alerte/.style={
+%    colback=red!3,
+%    colframe=red!60!black
+%  },
+%  info/.style={
+%    colback=brandOcre!3,
+%    colframe=brandOcre!60!black
+%  }
+%}
+%
+%\newtcolorbox{Hook}[1][]{atelier,title={Accroche — Pain • Promesse • Preuve • Prochain geste},#1}
+%\newcommand{\HookItem}[2]{\textbf{#1} — #2\par}
+%
+%\newtcolorbox{BlocObjectif}[1][]{atelier,title={\faBullseye\ \ Objectif},#1}
+%\newtcolorbox{BlocMateriel}[1][]{atelier,title={\faToolbox\ \ Matériel (BOM)},#1}
+%\newtcolorbox{BlocEtapes}[1][]{atelier,title={\faWrench\ \ Étapes},#1}
+%\newtcolorbox{BlocControles}[1][]{atelier,title={\faCheckCircle\ \ Contrôles qualité},#1}
+%\newtcolorbox{BlocDepannage}[1][]{atelier,title={\faLifeRing\ \ Dépannage},#1}
+%\newtcolorbox{BlocCouts}[1][]{atelier,title={\faBoxOpen\ \ Coûts \& Prix},#1}
+%\newtcolorbox{BlocAVendre}[1][]{atelier,title={\faShoppingCart\ \ À mettre en vente},#1}
+%\newtcolorbox{BlocAlerte}[1][]{atelier,alerte,title={\faExclamationTriangle\ \ Sécurité},#1}
+%\newtcolorbox{BlocAstuce}[1][]{atelier,info,title={\faLightbulb[regular]\ \ Astuce},#1}
+%\newtcolorbox{BlocChecklist}[1][]{atelier,title={\faTasks\ \ Checklist},#1}
+%
+%\newcommand{\ChecklistItem}[1]{\faCheckSquare[regular]\ \ #1\par}
+%
+%\newcommand{\spacer}{\vspace{0.6em}}
+
+
+% -------- Palette soft --------
+\definecolor{CandleGreen}{HTML}{2E7D32}
+\definecolor{CandleBlue}{HTML}{1565C0}
+\definecolor{CandleRed}{HTML}{C62828}
+\definecolor{CandleGray}{HTML}{F5F7FA}
+\definecolor{CandleInk}{HTML}{1A1D22}
+
+% -------- Listes fléchées humaines --------
+\newlist{arrowlist}{itemize}{1}
+\setlist[arrowlist]{label=\(\rightarrow\), left=1.4em, itemsep=.25\baselineskip, topsep=.4\baselineskip}
+
+% -------- Cartons (blocs) --------
+\tcbset{
+  candlebox/.style={
+    enhanced, breakable, sharp corners,
+    colback=CandleGray,
+    colframe=CandleInk!12,
+    borderline west={2.2pt}{0pt}{CandleInk!22},
+    boxrule=0.2pt,
+    left=6mm, right=6mm, top=3.5mm, bottom=3.5mm,
+    before skip=8pt, after skip=10pt
+  },
+  titleCandle/.style={
+    fonttitle=\bfseries,
+    colbacktitle=white,
+    coltitle=CandleInk,
+    attach boxed title to top left={yshift=-2mm, xshift=0mm},
+    boxed title style={sharp corners, colframe=white, boxrule=0pt}
+  }
+}
+
+% — variantes colorées par type
+\newenvironment{BlocObjectif}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleBlue!65}, title={Objectif}]}{\end{tcolorbox}}
+\newenvironment{BlocMateriel}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleBlue!65}, title={Matériel}]}{\end{tcolorbox}}
+\newenvironment{BlocEtapes}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleBlue!65}, title={Procédure}]}{\end{tcolorbox}}
+\newenvironment{BlocControles}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleGreen!70}, title={Contrôles}]}{\end{tcolorbox}}
+\newenvironment{BlocDepannage}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleRed!75}, title={Dépannage}]}{\end{tcolorbox}}
+\newenvironment{BlocCouts}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleInk!40}, title={Coûts \& impact}]}{\end{tcolorbox}}
+\newenvironment{BlocAVendre}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleGreen!70}, title={À vendre}]}{\end{tcolorbox}}
+\newenvironment{BlocAstuce}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleBlue!65}, title={Astuces}]}{\end{tcolorbox}}
+\newenvironment{BlocChecklist}{\begin{tcolorbox}[candlebox,titleCandle, borderline west={2.2pt}{0pt}{CandleInk!40}, title={Checklist}]}{\end{tcolorbox}}
+
+% -------- Interrupteur de grille de marge --------
+%\newif\ifNotesGrid
+%\NotesGridtrue % activer par défaut ici ; tu peux désactiver par acte
+%\newcommand{\ActeNotesGrid}{%
+%  \ifNotesGrid
+%  \begin{tikzpicture}[remember picture, overlay]
+%    \def\gridwidth{4.6cm}
+%    \def\cell{0.55cm}
+%    \begin{scope}[opacity=.18] % plus léger
+%      \draw[CandleInk!20, step=\cell]
+%        ([xshift=-\gridwidth]current page.north east) grid
+%        (current page.south east);
+%    \end{scope}
+%  \end{tikzpicture}%
+%  \fi
+%}

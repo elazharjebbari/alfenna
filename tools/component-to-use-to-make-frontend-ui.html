@@ -1,0 +1,260 @@
+    <div class="section section-padding">
+
+        <!-- Courses Enroll Wrapper Start -->
+        <div class="courses-enroll-wrapper">
+
+            <!-- Courses Video Player Start -->
+            <div class="courses-video-player">
+
+                <!-- Courses Video Container Start -->
+                <div class="vidcontainer">
+                    <video id="myvid" controls preload="none"
+                           poster="{% static 'images/formateurs/cover-video-landing.jpg' %}">
+                        {% if lecture.video_file %}
+                        <source data-src="{{ lecture.video_file.video_file.url }}" type="video/mp4">
+                        {% endif %}
+                        Your browser does not support the video tag.
+                    </video>
+
+                    <!-- Loading Spinner -->
+                    <div class="loading" id="video-loading" style="display: none;">
+                        <div class="spinner-border spinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Courses Video Container End -->
+
+                <!-- Courses Enroll Content Start -->
+                <div class="courses-enroll-content">
+
+                    <!-- Courses Enroll Title Start -->
+                    <div class="courses-enroll-title">
+                        <h2 class="title">Atelier de Fabrication de Bougies : Créez vos Propres Bougies Décoratives et
+                            Parfumées</h2>
+                        <p><i class="icofont-eye-alt"></i> <span>1,200</span> Participants inscrits</p>
+                    </div>
+                    <!-- Courses Enroll Title End -->
+
+                    <!-- Courses Enroll Tab Start -->
+                    <div class="courses-enroll-tab">
+                        <div class="enroll-tab-menu">
+                            <ul class="nav">
+                                <li>
+                                    <button class="active" data-bs-toggle="tab" data-bs-target="#tab1">Aperçu</button>
+                                </li>
+                                <li>
+                                    <button data-bs-toggle="tab" data-bs-target="#tab3">Certificat</button>
+                                </li>
+                                <li>
+                                    <button data-bs-toggle="tab" data-bs-target="#tab4">Formateur</button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="enroll-share ">
+                            <a href="#" id="share-button"><i
+                                    class="icofont-share-alt sharethis-inline-share-buttons"></i> Partager</a>
+                        </div>
+
+                    </div>
+                    <!-- Courses Enroll Tab End -->
+
+                    <!-- Courses Enroll Tab Content Start -->
+                    <div class="courses-enroll-tab-content">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tab1">
+
+                                <!-- Overview Start -->
+                                <div class="overview">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="enroll-tab-title">
+                                                <h3 class="title">Détails du Cours</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="enroll-tab-content">
+                                                <p>Dans cette formation, vous apprendrez à fabriquer différentes sortes
+                                                    de bougies : des bougies parfumées, des bougies de décoration, ainsi
+                                                    que des bougies fondantes. Vous découvrirez les matériaux et
+                                                    techniques nécessaires pour créer des produits uniques et
+                                                    personnalisés.</p>
+
+                                                <table class="table">
+                                                    <tbody>
+                                                    <tr>
+                                                        <th>Formatrice <span>:</span></th>
+                                                        <td>Souheila Jebbari</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Nombre de Chapitres <span>:</span></th>
+                                                        <td>{{ section_list|length }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Nombre de Cours <span>:</span></th>
+                                                        <td>{{ section_list|total_lectures }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Niveau <span>:</span></th>
+                                                        <td>Débutant</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Langue <span>:</span></th>
+                                                        <td>Darija (Arabe Marocain)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Langue technique <span>:</span></th>
+                                                        <td>Français</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <p>Ce cours est conçu pour les personnes qui souhaitent apprendre à
+                                                    fabriquer des bougies à la maison et créer leur propre marque. Que
+                                                    vous soyez débutant ou que vous ayez déjà une certaine expérience,
+                                                    vous découvrirez toutes les techniques nécessaires pour créer des
+                                                    bougies uniques et de qualité professionnelle.</p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Overview End -->
+
+                            </div>
+                            <div class="tab-pane fade" id="tab3">
+
+                                <!-- Certificates Start -->
+                                <div class="certificates">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="enroll-tab-title">
+                                                <h3 class="title">Certificat</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="enroll-tab-content">
+                                                <p>À la fin de la formation, un certificat officiel de participation
+                                                    sera délivré. Vous pouvez choisir de le recevoir par voie postale ou
+                                                    venir le récupérer directement chez nous à Lumière Academy.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Certificates End -->
+
+                            </div>
+                            <div class="tab-pane fade" id="tab4">
+
+                                <!-- Instructor Start -->
+                                <div class="instructor">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="enroll-tab-title">
+                                                <h3 class="title">Formateur</h3>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <div class="enroll-tab-content">
+
+                                                <!-- Single Instructor Start -->
+                                                <div class="single-instructor">
+                                                    <div class="review-author">
+                                                        <div class="author-thumb">
+                                                            <img src="{% static 'images/formateurs/formatrice_souheila_carre.webp' %}"
+                                                                 alt="Souheila Jebbari">
+                                                        </div>
+                                                        <div class="author-content">
+                                                            <h4 class="name">Souheila Jebbari</h4>
+                                                            <span class="designation">Biologiste et spécialiste en fabrication de bougies, Maroc</span>
+                                                            <span class="rating-star">
+                                                <span class="rating-bar" style="width: 100%;"></span>
+                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <p>
+                                                        Souheila Jebbari est passionnée par l'artisanat et spécialisée
+                                                        dans la fabrication de bougies naturelles. Elle partage son
+                                                        expertise et ses connaissances pour aider les participants à
+                                                        créer des bougies uniques et respectueuses de
+                                                        l'environnement.
+                                                    </p>
+                                                </div>
+                                                <!-- Single Instructor End -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Instructor End -->
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Courses Enroll Tab Content End -->
+
+                </div>
+                <!-- Courses Enroll Content End -->
+            </div>
+            <!-- Courses Video Player End -->
+
+            <!-- Courses Video Playlist Start -->
+            <div class="courses-video-playlist">
+                <div class="playlist-title">
+                    <h3 class="title">Contenu de la Formation</h3>
+                    <span>{{ section_list|total_lectures }} Leçons</span>
+                </div>
+
+                <!-- Video Playlist Start  -->
+                <div class="video-playlist">
+                    <div class="accordion" id="videoPlaylist">
+
+                        {% for sec in section_list %}
+                        <!-- Accordion Items Start  -->
+                        <div class="accordion-item">
+                            <button type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse{{ sec.id }}" {% if forloop.first %} aria-expanded="true"
+                                    {% else %} class="collapsed" {% endif %}>
+                                <p>{{ sec.title }}</p>
+                            </button>
+
+                            <div id="collapse{{ sec.id }}"
+                                 class="accordion-collapse collapse {% if forloop.first %} show {% endif %}"
+                                 data-bs-parent="#videoPlaylist">
+                                <nav class="vids">
+                                    {% for lec in sec.ordered_lectures %}
+                                    {% if is_subscribed or lec in free_lectures %}
+                                    <!-- Leçon accessible -->
+                                    <a class="{% if lec == lecture %}active{% endif %}"
+                                       href="{% url 'lecture-online-learning' course.course_slug lec.lecture_slug %}"
+                                       data-id="{{ lec.video_file.video_file.url }}">
+                                        <p>{{ lec.order }}. {{ lec.title }}</p>
+                                    </a>
+                                    {% else %}
+                                    <!-- Leçon verrouillée pour les utilisateurs non inscrits -->
+                                    <!-- Lien verrouillé pour les autres vidéos si non authentifié -->
+                                    <a class="locked" data-id="{{ lec.id }}"
+                                       style="color: #999; cursor: pointer; text-decoration: none; opacity: 0.6;">
+                                        <p>{{ lec.order }}. {{ lec.title }} <i class="fa fa-lock"></i></p>
+                                    </a>
+                                    {% endif %}
+
+                                    {% endfor %}
+                                </nav>
+                            </div>
+                        </div>
+                        <!-- Accordion Items End  -->
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <!-- Video Playlist End  -->
+
+
+            </div>
+            <!-- Courses Video Playlist End -->
+
+        </div>
+        <!-- Courses Enroll Wrapper End -->
+
+    </div>

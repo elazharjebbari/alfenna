@@ -1,0 +1,65 @@
+{% load atelier_images i18n %}
+<div class="header-main-wrapper" id="header-main-wrapper"
+     style="display:flex;align-items:center;gap:16px;min-height:72px;">
+
+  <!-- Logo + preuve -->
+  <div class="header-logo" style="display:flex;align-items:center;gap:8px;">
+    <a href="{{ home_url|default:'/' }}" style="display:inline-flex;align-items:center;">
+      {% responsive_picture logo_src|default:'images/logo.webp' alt=logo_alt|default:'logo' cls="img-fluid" %}
+    </a>
+    {% if show_rating_badge %}
+      <span class="badge-rating d-none d-lg-inline-flex"
+            style="background:#0f5132;color:#fff;border-radius:999px;padding:4px 10px;font-size:12px;line-height:1;white-space:nowrap;">
+        {{ rating_badge_text }}
+      </span>
+    {% endif %}
+  </div>
+
+  <!-- Menu -->
+  <div class="header-menu d-none d-lg-block" style="margin-left:auto;">
+    <ul class="nav-menu" style="display:flex;gap:20px;list-style:none;margin:0;padding:0;">
+      {% for item in menu %}
+        <li>
+          <a href="{{ item.url }}" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            {% if item.icon %}<i class="{{ item.icon }} me-1"></i>{% endif %}{{ item.label }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="header-cta d-none d-lg-block" style="margin-left:8px;">
+    <a id="headerCta"
+       href="{{ primary_cta.url }}"
+       aria-label="{{ primary_cta.aria }}"
+       data-ev="header_cta_click" data-ev-loc="desktop"
+       style="display:inline-block;background:#198754;color:#fff;border-radius:12px;padding:10px 14px;text-decoration:none;box-shadow:0 4px 12px rgba(25,135,84,.3);">
+      <span style="font-weight:800;">{{ primary_cta.label }}</span>
+      <small style="display:block;font-weight:400;opacity:.9;">{{ primary_cta.sublabel }}</small>
+    </a>
+  </div>
+
+  <!-- Zone auth -->
+  <div class="header-auth d-none d-lg-block" style="margin-left:8px;">
+    {% if mode == "member" %}
+      <form method="post" action="{{ logout_url }}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-outline-danger">
+          <i class="fas fa-sign-out-alt me-1"></i> {% trans "Se déconnecter" %}
+        </button>
+      </form>
+    {% else %}
+      <a class="btn btn-sm btn-outline-secondary" href="{{ login_url }}">
+        <i class="fas fa-user me-1"></i> {% trans "Se connecter" %}
+      </a>
+    {% endif %}
+  </div>
+
+  <!-- Toggle mobile -->
+  <div class="header-toggle d-lg-none ms-auto pe-2">
+    <a class="menu-toggle" href="javascript:void(0)" id="mobileToggle" aria-label="Ouvrir le menu" style="display:inline-block;">
+      <span></span><span></span><span></span>
+    </a>
+  </div>
+</div>

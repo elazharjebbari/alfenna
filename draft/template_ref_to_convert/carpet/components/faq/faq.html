@@ -1,0 +1,176 @@
+{% load static i18n %}
+
+<!-- FAQ SECTION START -->
+<section class="ul-faq" id="faq">
+  <div class="ul-inner-page-container">
+
+    <div class="text-center mb-3">
+      <h2 class="mb-2">{% trans "Questions fréquentes" %}</h2>
+      <p class="text-muted mb-0">{% trans "Tout ce qu’il faut savoir avant de commander." %}</p>
+    </div>
+
+    <div class="ul-accordion">
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Ça glisse sur carrelage ou marbre ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-2">
+            {% trans "Non. La base antiglisse reste en place sur les surfaces lisses (carrelage, marbre, parquet). Pour de meilleurs résultats : surface propre et sèche." %}
+          </p>
+          <a href="#couleur-tapis" class="btn btn-primary btn-sm">{% trans "J’achète mon tapis" %}</a>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Quelle épaisseur et quelle densité ? À quoi sert la mousse mémoire ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-2">
+            {% trans "Un rembourrage confortable qui réduit la pression dès le premier contact, sans être trop mou. La mémoire de forme épouse le genou et revient en place après l’appui." %}
+          </p>
+          <a href="#couleur-tapis" class="btn btn-primary btn-sm">{% trans "Commander maintenant" %}</a>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Votre tapis convient-il aux prières longues (Taraweeh/Qiyam) ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-2">
+            {% trans "Oui, il est pensé pour la stabilité et le confort prolongé. Idéal à la maison pour rester concentré plus longtemps." %}
+          </p>
+          <a href="#couleur-tapis" class="btn btn-outline-dark btn-sm">{% trans "Voir les avis" %}</a>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Le front touche-t-il bien le sol pendant la prosternation ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-0">
+            {% trans "Oui : la zone du front est plus fine pour permettre le contact avec le sol, tout en gardant un appui stable pour le corps." %}
+          </p>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Quelles sont les dimensions ? Convient-il aux grands gabarits ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-2">
+            {% trans "Format confortable pour la majorité des adultes : 170 cm x 72 cm. Reportez-vous aussi aux photos sur modèle." %}
+          </p>
+          <a href="#couleur-tapis" class="btn btn-outline-dark btn-sm">{% trans "Voir les dimensions" %}</a>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Comment l’entretenir ? Lavage et séchage ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <ul class="mb-0">
+            <li>{% trans "Lavage doux (main/eau froide)." %}</li>
+            <li>{% trans "Séchage à l’air, à plat." %}</li>
+            <li>{% trans "Couleur noire stable avec un entretien simple." %}</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Quelle différence avec un tapis standard, un tapis de yoga ou un coussin séparé ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-0">
+            {% trans "Amorti ciblé + base antiglisse + format adapté à la prière : plus stable et plus pratique au quotidien." %}
+          </p>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Est-ce un bon cadeau ? Proposez-vous un emballage ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-2">
+            {% trans "Oui, c’est un cadeau utile et élégant pour la maison. Option emballage et message disponible." %}
+          </p>
+          <a href="#couleur-tapis" class="btn btn-outline-dark btn-sm">{% trans "Ajouter l’option cadeau" %}</a>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Livraison au Maroc et paiement à la livraison (COD) ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-2">
+            {% trans "Livraison rapide partout au Maroc. Paiement à la livraison disponible." %}
+          </p>
+          <a href="#couleur-tapis" class="btn btn-primary btn-sm">{% trans "Vous Faire Livrer à Domicile" %}</a>
+        </div>
+      </div>
+
+      <!-- single question -->
+      <div class="ul-single-accordion-item">
+        <div class="ul-single-accordion-item__header">
+          <div class="left">
+            <h3 class="ul-single-accordion-item__title">{% trans "Retours et échanges : comment ça marche ?" %}</h3>
+          </div>
+          <span class="icon"><i class="flaticon-plus"></i></span>
+        </div>
+        <div class="ul-single-accordion-item__body">
+          <p class="mb-2">
+            {% trans "Simple et rapide. Contactez-nous sur WhatsApp, nous vous guidons pas à pas." %}
+          </p>
+          <a href="https://wa.me/212630035905" class="btn btn-outline-dark btn-sm">{% trans "Écrire sur WhatsApp" %}</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- FAQ SECTION END -->

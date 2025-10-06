@@ -1,0 +1,576 @@
+{% load static i18n widget_tweaks %}
+
+<style>
+    /* ---------- SCOPE ---------- */
+    .product-hero-luxe {
+        --_radius: 18px;
+        --_gap: 1.25rem;
+        margin: 1.25rem auto 1.75rem;
+        max-width: 1100px;
+    }
+
+    .product-hero-luxe .grid {
+        display: grid;
+        gap: var(--_gap);
+        grid-template-columns:1fr;
+    }
+
+    @media (min-width: 992px) {
+        .product-hero-luxe .grid {
+            grid-template-columns:1.15fr 1fr;
+        }
+    }
+
+    .product-hero-luxe.rtl {
+        direction: rtl;
+    }
+
+    /* ---------- CARDS ---------- */
+    .phl-card {
+        background: #121212;
+        border: 1px solid rgba(212, 175, 55, .22);
+        border-radius: var(--_radius);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+
+    /* ---------- MEDIA ---------- */
+    .phl-media {
+        padding: .75rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .phl-figure {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        background: #0d0d0d;
+        display: grid;
+    }
+
+    .phl-figure > * {
+        grid-area: 1/1;
+    }
+
+    .phl-figure img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: opacity .28s ease;
+        opacity: 1;
+    }
+
+    .phl-figure img.is-fading {
+        opacity: .08;
+    }
+
+    .phl-nav {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+    }
+
+    .phl-nav .btn {
+        pointer-events: auto;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        inline-size: 46px;
+        block-size: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #1c1c1c, #0e0e0e);
+        border: 1px solid rgba(212, 175, 55, .18);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
+        color: #d4af37;
+    }
+
+    .phl-nav .btn:focus-visible {
+        outline: 3px solid rgba(212, 175, 55, .25);
+    }
+
+    .phl-nav .prev {
+        inset-inline-start: .5rem;
+    }
+
+    .phl-nav .next {
+        inset-inline-end: .5rem;
+    }
+
+    @media (max-width: 576px) {
+        .phl-media {
+            padding: .5rem;
+        }
+
+        .phl-figure {
+            border-radius: 12px;
+        }
+
+        .phl-nav .btn {
+            inline-size: 40px;
+            block-size: 40px;
+        }
+    }
+
+    /* Thumbs */
+    .phl-thumbs {
+        display: flex;
+        gap: .5rem;
+        padding: .6rem 0 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .phl-thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .phl-thumb {
+        inline-size: 96px;
+        block-size: 72px;
+        flex: 0 0 auto;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        border: 0;
+        background: #0f0f0f;
+        cursor: pointer;
+    }
+
+    .phl-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .phl-thumb--sel::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        border: 2px solid rgba(212, 175, 55, .7);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, .75) inset;
+    }
+
+    /* ---------- INFO ---------- */
+    .phl-info {
+        padding: 1rem 1.25rem 1.1rem;
+    }
+
+    .phl-stars {
+        color: #d4af37;
+        letter-spacing: .05em;
+        font-size: 1rem;
+    }
+
+    .phl-price {
+        display: flex;
+        align-items: baseline;
+        gap: .6rem;
+        margin: .35rem 0 .25rem;
+    }
+
+    .phl-price .now {
+        font-weight: 800;
+        font-size: 1.75rem;
+        background: linear-gradient(180deg, #f1d27a, #d4af37);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, .55);
+    }
+
+    .phl-price .old {
+        color: #8a8a8a;
+        text-decoration: line-through;
+    }
+
+    .phl-ship {
+        color: #e6c85a;
+        font-size: .92rem;
+        opacity: .9;
+    }
+
+    .phl-save {
+        color: #f2d980;
+        font-weight: 600;
+        margin: .35rem 0 .6rem;
+        font-size: .98rem;
+    }
+
+    /* ---------- FORM (base) ---------- */
+    .phl-form .field {
+        display: flex;
+        flex-direction: column;
+        gap: .45rem;
+        margin: .55rem 0;
+    }
+
+    .phl-form label {
+        font-size: .9rem;
+        color: #e6e6e6;
+        opacity: .88;
+    }
+
+    .phl-pill {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        min-height: 54px;
+        padding: .65rem .95rem .65rem 2.6rem;
+        border-radius: 12px;
+        background: #0e0e0e;
+        border: 1px solid rgba(212, 175, 55, .18);
+        transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .product-hero-luxe.rtl .phl-pill {
+        padding: .65rem 2.6rem .65rem .95rem;
+    }
+
+    .phl-pill input {
+        width: 100%;
+        background: transparent;
+        color: #ffffff;
+        border: 0;
+        outline: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+        letter-spacing: .15px;
+        caret-color: #d4af37;
+    }
+
+    .phl-pill input::placeholder {
+        color: #7b7b7b;
+        opacity: .95;
+    }
+
+    .phl-pill:focus-within input::placeholder {
+        color: #555;
+    }
+
+    .phl-pill:focus-within {
+        background: #141414;
+        border-color: rgba(212, 175, 55, .55);
+        box-shadow: 0 0 0 .16rem rgba(212, 175, 55, .22), 0 14px 28px rgba(0, 0, 0, .45);
+    }
+
+    .phl-icon {
+        position: absolute;
+        inset-inline-start: .9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #e7c964;
+        font-size: 1.05rem;
+    }
+
+    .product-hero-luxe.rtl .phl-icon {
+        inset-inline-start: auto;
+        inset-inline-end: .9rem;
+    }
+
+    .phl-help {
+        color: #9a9a9a;
+        font-size: .78rem;
+        margin: .2rem 0;
+    }
+
+    /* CTA */
+    .phl-cta {
+        width: 100%;
+        margin: .35rem 0 .25rem;
+        padding: .95rem 1.25rem;
+        font-weight: 800;
+        font-size: 1.05rem;
+        border: 0;
+        border-radius: 12px;
+        color: #181818;
+        cursor: pointer;
+        background: linear-gradient(180deg, #f4d97e, #d4af37);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .08);
+    }
+
+    .phl-cta:hover {
+        filter: saturate(1.02) brightness(1.02);
+    }
+
+    .phl-cta:focus-visible {
+        outline: 3px solid rgba(212, 175, 55, .35);
+        outline-offset: 2px;
+    }
+
+    /* Réassurance */
+    .phl-reassure {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .55rem .7rem;
+        margin: .5rem 0 .2rem;
+    }
+
+    .phl-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: .45rem;
+        padding: .38rem .65rem;
+        border-radius: 999px;
+        background: rgba(212, 175, 55, .12);
+        color: #e9cd6a;
+        border: 1px solid rgba(212, 175, 55, .24);
+        font-weight: 600;
+        font-size: .88rem;
+        text-decoration: none;
+    }
+
+    /* Mini-FAQ */
+    .phl-faq {
+        margin-top: .5rem;
+    }
+
+    .phl-acc + .phl-acc {
+        margin-top: .45rem;
+    }
+
+    .phl-acc__h {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: .6rem .85rem;
+        border-radius: 12px;
+        border: 1px solid rgba(212, 175, 55, .16);
+        background: #0e0e0e;
+        color: #e6e6e6;
+        cursor: pointer;
+    }
+
+    .phl-acc__h:focus-visible {
+        outline: 3px solid rgba(212, 175, 55, .30);
+    }
+
+    .phl-acc__body {
+        padding: .55rem .9rem .7rem;
+        color: #bdbdbd;
+        font-size: .95rem;
+    }
+
+    .phl-acc__icon {
+        color: #d4af37;
+        font-size: 1rem;
+    }
+
+    .phl-muted {
+        color: #9a9a9a;
+    }
+
+    /* Autofill (Chrome) */
+    .phl-pill input:-webkit-autofill {
+        -webkit-text-fill-color: #fff;
+        -webkit-box-shadow: 0 0 0 1000px #141414 inset;
+    }
+
+    /* Erreur visible */
+    .phl-form .is-invalid {
+        border-color: #e55353 !important;
+        box-shadow: 0 0 0 .14rem rgba(229, 83, 83, .30);
+    }
+
+    /* ---------- GLOW CARD autour du formulaire ---------- */
+    .phl-form-glow {
+        position: relative;
+        padding: 14px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #141414, #0f0f0f);
+        box-shadow: 0 22px 48px rgba(0, 0, 0, .55), 0 0 0 1px rgba(212, 175, 55, .28);
+    }
+
+    .phl-form-glow::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: 18px;
+        pointer-events: none;
+        background: radial-gradient(80% 60% at 50% 0%, rgba(212, 175, 55, .25), rgba(212, 175, 55, 0) 60%);
+        filter: blur(14px);
+        opacity: .55;
+    }
+
+    /* RTL : retourner uniquement le pictogramme des flèches */
+    .product-hero-luxe.rtl .phl-nav .btn i {
+        transform: scaleX(-1);
+    }
+</style>
+
+
+<section class="product-hero-luxe {% if LANGUAGE_CODE == 'ar' %}rtl{% endif %}" id="product-hero-luxe">
+    <div class="grid">
+
+        {# ---------- MEDIA ---------- #}
+        <div class="phl-card phl-media" id="product-hero" data-gallery="{{ lp.slug }}">
+            {% static 'carpet/images/cover/cadre-domestique.webp' as DEFAULT_HERO %}
+            {% trans "Tapis Sajadat Al-Raha — coussin mémoire intégré" as DEFAULT_ALT %}
+            {% with images=variant.media_list img=images|first %}
+                {% with first_src=img.src|default:DEFAULT_HERO first_alt=img.alt|default:DEFAULT_ALT %}
+                    <figure class="phl-figure">
+                        <a id="hero-link" href="{{ first_src }}" data-fslightbox="phl-hero">
+                            <img id="hero-img" src="{{ first_src }}" alt="{{ first_alt }}" width="1200" height="900"
+                                 loading="eager" decoding="async">
+                        </a>
+                        <div class="phl-nav" aria-hidden="false">
+                            <button type="button" class="btn prev" aria-label="{% trans 'Image précédente' %}"><i
+                                    class="flaticon-left-arrow"></i></button>
+                            <button type="button" class="btn next" aria-label="{% trans 'Image suivante' %}"><i
+                                    class="flaticon-arrow-point-to-right"></i></button>
+                        </div>
+                    </figure>
+                {% endwith %}
+
+                {# vignettes (si dispo) #}
+                {% if images %}
+                    <div class="phl-thumbs {% if LANGUAGE_CODE == 'ar' %}flex-row-reverse{% endif %}" role="tablist"
+                         aria-label="{% trans 'Images du produit' %}">
+                        {% for m in images %}
+                            <button type="button" class="phl-thumb {% if forloop.first %}phl-thumb--sel{% endif %}"
+                                    role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                                    aria-controls="hero-img"
+                                    data-index="{{ forloop.counter0 }}"
+                                    data-full="{{ m.src }}" data-alt="{{ m.alt|default_if_none:'' }}">
+                                <img src="{{ m.src }}" alt="">
+                            </button>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# JSON embarqué = secours si jamais aucune vignette n'est rendue #}
+                {{ images|default:"[]"|json_script:"phl-images-data" }}
+            {% endwith %}
+        </div>
+
+        {# ---------- INFO / FORM ---------- #}
+        <div class="phl-card phl-info">
+            <div class="phl-stars" aria-hidden="true">★★★★★</div>
+
+            <div class="phl-price">
+                <div class="now">
+                    {{ product.promotion_price|floatformat:0 }}
+                    {% if LANGUAGE_CODE == 'ar' %} درهم {% else %} MAD {% endif %}
+                </div>
+                {% if product.price and product.price > product.promotion_price %}
+                    <div class="old">{{ product.price|floatformat:0 }} {% if LANGUAGE_CODE == 'ar' %}درهم{% else %}
+                        MAD{% endif %}</div>
+                {% endif %}
+            </div>
+
+            <div class="phl-ship">{% trans "Livraison gratuite partout au Maroc" %}</div>
+            {% if price_ui.show %}
+                <div class="phl-save">{% trans "Vous économisez" %} {{ price_ui.savings_text }}
+                    ({{ price_ui.percent_text }})
+                </div>
+            {% endif %}
+
+            <h1 class="h4 mb-2" style="color:#e6e6e6">{{ variant.headline }}</h1>
+            {% if variant.subline %}<p class="phl-muted">{{ variant.subline }}</p>{% endif %}
+
+            <form id="lead-form" method="post" class="phl-form phl-form--edge" novalidate
+                  {% if LANGUAGE_CODE == 'ar' %}dir="rtl"{% endif %}>
+                {% csrf_token %}
+
+                {# Champs du ModelForm (cachés) #}
+                {{ form.product }} {# -> input#id_product #}
+                {{ form.promotion_selected }} {# -> input#id_promotion_selected #}
+
+                {# Doublons cachés (compat 100% avec l'ancien JS / backend) #}
+                <input type="hidden" name="product_id" id="product_id" value="{{ product.pk }}">
+                <input type="hidden" name="promotion_selected" id="promotion_selected"
+                       value="{{ product.promotion_price|default:'' }}">
+
+                {% trans "Ex : Amine" as ph_name %}
+                {% trans "Ex : +212 6X XX XX XX (WhatsApp)" as ph_phone %}
+                {% trans "Ex : 10 rue Anfa, Résidence Atlas, 3e étage" as ph_addr %}
+
+                <div class="field">
+                    <label for="firstname">{% trans "Votre prénom pour la remise" %}</label>
+                    <div class="phl-pill">
+                        <span class="phl-icon"><i class="flaticon-user"></i></span>
+                        {% render_field form.full_name id="firstname" placeholder=ph_name autocomplete="name" class+="form-control" %}
+                    </div>
+                    {% if form.full_name.errors %}
+                        <div class="phl-help">{{ form.full_name.errors|join:", " }}</div>{% endif %}
+                </div>
+
+                <div class="field">
+                    <label for="phone-number">{% trans "Téléphone ou WhatsApp" %}</label>
+                    <div class="phl-pill">
+                        <span class="phl-icon"><i class="fas fa-phone"></i></span>
+                        {% render_field form.phone_number id="phone-number" placeholder=ph_phone autocomplete="tel" inputmode="tel" dir="ltr" class+="form-control" %}
+                    </div>
+                    <div class="phl-help">{% trans "WhatsApp accepté. Format : 06 12 34 56 78 ou +212…" %}</div>
+                    {% if form.phone_number.errors %}
+                        <div class="phl-help">{{ form.phone_number.errors|join:", " }}</div>{% endif %}
+                </div>
+
+                <div class="field">
+                    <label for="address">{% trans "Votre adresse de livraison" %}</label>
+                    <div class="phl-pill">
+                        <span class="phl-icon"><i class="flaticon-location-1"></i></span>
+                        {% render_field form.address id="address" placeholder=ph_addr autocomplete="street-address" class+="form-control" %}
+                    </div>
+                    <div class="phl-help">{% trans "Données protégées (RGPD)" %}</div>
+                    {% if form.address.errors %}
+                        <div class="phl-help">{{ form.address.errors|join:", " }}</div>{% endif %}
+                </div>
+
+                <button type="submit" class="phl-cta">{% trans "J'achète mon tapis" %}</button>
+
+                <div class="phl-reassure" role="list" aria-label="{% trans 'Garanties & assistance' %}">
+                    <span class="phl-tag" role="listitem"><i class="fas fa-truck"
+                                                             aria-hidden="true"></i> {% trans "Livraison gratuite" %}</span>
+                    <span class="phl-tag" role="listitem"><i class="fas fa-shield-alt"
+                                                             aria-hidden="true"></i> {% trans "Paiement à la livraison" %}</span>
+                    <a class="phl-tag" role="listitem" href="https://wa.me/212625113848" target="_blank" rel="noopener">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i> {% trans "Support WhatsApp" %}
+                    </a>
+                </div>
+
+                {# Mini-FAQ inchangé #}
+                <div class="phl-faq" id="cta-mini-faq" aria-label="{% trans 'Questions clés' %}">
+                    <div class="phl-acc">
+                        <button type="button" class="phl-acc__h" aria-expanded="false" aria-controls="mf-1">
+                            <span>{% trans "J’ai mal aux genoux : ça aide vraiment ?" %}</span>
+                            <span class="phl-acc__icon"><i class="flaticon-plus"></i></span>
+                        </button>
+                        <div class="phl-acc__body" id="mf-1" hidden>
+                            {% trans "Oui. Le coussin à mémoire de forme placé au centre réduit la pression sur la rotule et soulage pendant et après la prière." %}
+                        </div>
+                    </div>
+
+                    <div class="phl-acc">
+                        <button type="button" class="phl-acc__h" aria-expanded="false" aria-controls="mf-2">
+                            <span>{% trans "Quelle est l’épaisseur du coussin ?" %}</span>
+                            <span class="phl-acc__icon"><i class="flaticon-plus"></i></span>
+                        </button>
+                        <div class="phl-acc__body" id="mf-2" hidden>
+                            {% trans "Environ 2 cm de mousse mémoire, confort ferme mais accueillant, qui reprend sa forme après chaque usage." %}
+                        </div>
+                    </div>
+
+                    <div class="phl-acc">
+                        <button type="button" class="phl-acc__h" aria-expanded="false" aria-controls="mf-3">
+                            <span>{% trans "Comment l’entretenir ?" %}</span>
+                            <span class="phl-acc__icon"><i class="flaticon-plus"></i></span>
+                        </button>
+                        <div class="phl-acc__body" id="mf-3" hidden>
+                            {% trans "Aspiration douce. Taches : chiffon humide + savon neutre. Pas de javel ni sèche-linge. Séchage à l’air." %}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</section>

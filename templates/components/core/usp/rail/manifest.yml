@@ -1,0 +1,61 @@
+# templates/components/core/usp/rail/manifest.yml
+alias: usp/rail
+template: "components/core/usp/rail/usp_rail.html"   # <= bon chemin
+
+
+assets:
+  head: []
+  css:
+    - "/static/components/usp/usp.css"
+  js: []
+  vendors: []
+
+params:
+  persona_default: "APPR"
+  personas:
+    - { code: "APPR",   label: "Apprendre" }
+    - { code: "VENDRE", label: "Vendre" }
+    - { code: "OFFRIR", label: "Offrir" }
+  pillars:
+    - { icon: "fas fa-certificate",   title: "Qualité",    text: "Méthode claire et reproductible" }
+    - { icon: "fas fa-leaf",          title: "Naturel",    text: "Cires végétales, zéro paraffine" }
+    - { icon: "fas fa-lightbulb",     title: "Créativité", text: "Styles, couleurs et finitions" }
+    - { icon: "fas fa-hands-helping", title: "Autonomie",  text: "Deviens créatrice indépendante" }
+  context:
+    APPR:
+      - { icon: "fas fa-stopwatch", title: "1ère bougie en 2h", text: "Sans matériel coûteux" }
+      - { icon: "fas fa-seedling",  title: "Recettes guidées",  text: "Pas-à-pas débutant" }
+    VENDRE:
+      - { icon: "fas fa-store",     title: "Micro-activité",    text: "Poser des prix & marges" }
+      - { icon: "fas fa-box-open",  title: "Process rentable",  text: "Batch & contrôle qualité" }
+    OFFRIR:
+      - { icon: "fas fa-gift",      title: "Cadeaux durables",  text: "Zéro déchet, personnalisés" }
+      - { icon: "fas fa-heart",     title: "Fait-main qui touche", text: "Du sens, pas du jetable" }
+  style: { tone: "light" }
+
+contract:
+  required: {}
+  optional:
+    persona_default: "str"
+    personas:
+      - { code: "str", label: "str" }
+    pillars:
+      - { "icon?": "str", title: "str", "text?": "str" }
+    context:
+      "APPR?":
+        - { "icon?": "str", title: "str", "text?": "str" }
+      "VENDRE?":
+        - { "icon?": "str", title: "str", "text?": "str" }
+      "OFFRIR?":
+        - { "icon?": "str", title: "str", "text?": "str" }
+    style:
+      "tone?": "str"
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.usp.hydrators.usp_block"
+  module: "apps.atelier.compose.hydrators.usp.hydrators"
+  func: "usp_block"
+  params: {}
+
+render:
+  cacheable: false

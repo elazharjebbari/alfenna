@@ -1,0 +1,22 @@
+alias: chatbot/input
+template: "components/chatbot/input/component.html"
+
+params:
+  placeholder: "Écrire un message..."
+  submit_label: "Envoyer"
+  disabled: false
+  actions: []
+
+contract:
+  optional:
+    placeholder: "str"
+    submit_label: "str"
+    disabled: "bool"
+    actions: "list"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.chatbot.hydrators"
+  func: "chatbot_input"
+
+render:
+  cacheable: false

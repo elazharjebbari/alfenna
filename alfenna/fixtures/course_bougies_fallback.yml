@@ -1,0 +1,17 @@
+course:
+  title: "Bougies naturelles — Atelier complet"
+  slug: "bougies-naturelles"
+  description: "Programme de référence pour amorcer la fabrication de bougies."
+sections:
+  - title: "Introduction"
+    lectures:
+      - title: "Introduction au matériel"
+        video_url: "#"
+        poster_url: "https://placehold.co/960x540"
+        is_demo: true
+  - title: "Pratiques"
+    lectures:
+      - title: "Démonstration pratique"
+        video_url: "#"
+        poster_url: "https://placehold.co/960x540"
+        is_demo: true

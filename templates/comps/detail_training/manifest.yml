@@ -1,0 +1,56 @@
+alias: training/detail_training
+template: components/detail_training/detail_training.html
+
+assets:
+  css:
+    - /static/components/training/detail_formation.css
+
+contract:
+  required: {}
+  optional:
+    title_html: str
+    subtitle: str
+    image_src: str          # chemin "static-like" (idéalement SANS extension pour profiter des variantes)
+    image_alt: str
+    price: int
+    features: list          # liste de dicts {html: str}
+    bundle_items: list      # liste de dicts {icon_class: str, text_html: str}
+    cta: dict               # {label: str, url: str}
+
+hydrate:
+  python: apps.atelier.compose.hydrators.training_detail_formation
+  # Defaults pris si la page ne fournit pas de params.
+  defaults:
+    title_html: "<span>Créez</span> et <span>Vendez</span> Vos Bougies"
+    subtitle: ""
+    image_src: "images/candles/pot-bougie-detail-formation"   # sans extension → AVIF/WEBP/PNG auto si dispos
+    image_alt: "Bougie artisanale"
+    price: 179
+    cta:
+      label: "Je Participe"
+      url: "#"
+    features:
+      - { html: "<strong>Vidéos :</strong> <span class='text-success'>30</span> vidéos réparties en <u>4 modules</u>" }
+      - { html: "<strong>Public :</strong> Accessible aux <u>débutants</u> et aux professionnels en reconversion" }
+      - { html: "<strong>Pré-requis :</strong> <em>Aucun</em>" }
+      - { html: "<strong>Accès :</strong> Immédiat, <u>24/7</u>" }
+      - { html: "<strong>Matériel :</strong> Ressources et recommandations" }
+      - { html: "<strong>Support :</strong> Groupe WhatsApp <u>continu</u>" }
+      - { html: "<strong>Horaires :</strong> Libre + séances Q&amp;R" }
+      - { html: "<strong>Formateurs :</strong> <span class='text-info fw-bold'>Souheila Jebbari</span>, <span class='text-info fw-bold'>Naila Baiga</span>, <span class='text-info fw-bold'>Taib Jebbari</span>" }
+      - { html: "<strong>Évaluation :</strong> QCM + <u>certification officielle</u>" }
+      - { html: "<strong>Prix :</strong> <span class='text-success'>{{ price }}</span> DHS — <u>accès à vie</u>" }
+      - { html: "<strong>Communauté :</strong> Groupe WhatsApp privé" }
+      - { html: "<strong>Supports :</strong> Vidéos, PDF, fiches, Q&amp;A" }
+      - { html: "<strong>Attestation :</strong> <u>Lumière Academy</u>" }
+    bundle_items:
+      - { icon_class: "fa fa-video text-success", text_html: "<strong>30 vidéos</strong>" }
+      - { icon_class: "fa fa-comments text-success", text_html: "<strong>1 mois</strong> d’accompagnement" }
+      - { icon_class: "fa fa-book text-success", text_html: "<strong>Guide complet de 100 pages</strong>" }
+      - { icon_class: "fa fa-list text-success", text_html: "<strong>Liste des fournisseurs</strong>" }
+      - { icon_class: "fa fa-tag text-success", text_html: "<strong>60% de réduction</strong> marketing" }
+      - { icon_class: "fa fa-handshake text-success", text_html: "<strong>Ateliers à tarif réduit</strong>" }
+      - { icon_class: "fa fa-users text-success", text_html: "<strong>Communauté WhatsApp</strong>" }
+
+render:
+  cacheable: false

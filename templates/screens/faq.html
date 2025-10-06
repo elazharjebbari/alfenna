@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section id="faq" class="section faq-wrapper">
+    {{ slots_html.faq|default_if_none:""|safe }}
+  </section>
+{% endblock content %}

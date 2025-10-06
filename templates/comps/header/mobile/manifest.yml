@@ -1,0 +1,35 @@
+alias: "header/mobile"
+template: "components/header/mobile/mobile_menu.html"
+assets:
+  css:
+    - "/static/components/header/mobile-menu.css"
+hydrate:
+  python: "apps.atelier.compose.hydrators.header_mobile"
+  defaults:
+    login_url: "/login/"
+    register_url: "/register/"
+    contact:
+      phone_tel: "+212808544450"
+      phone_display: "+212 8085-44450"
+      email: "partenariat@lumiereacademy.com"
+      address_url: "https://maps.app.goo.gl/mmFtjAtAiujXCutw6"
+      address_text: "N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc"
+    socials:
+      - { icon: "flaticon-instagram", url: "https://www.instagram.com/lumieresrabat/", new_tab: true }
+    menu:
+      - { label: "Accueil", url_name: "pages:home" }
+      - label: "Nos Formations"
+        children:
+          - { label: "Formation en ligne", url: "/courses/" }
+      - { label: "Nos Cours", url_name: "catalog:list" }
+      - { label: "Q&A", url: "#" }
+      - { label: "Contact", url: "#" }
+contract:
+  optional:
+    contact: dict
+    socials: list
+    menu: list
+    login_url: str
+    register_url: str
+render:
+  cacheable: true

@@ -1,0 +1,13 @@
+{# components/chatbot/consent_gate/component.html #}
+<div class="chatbot-messages" data-chatbot-messages hidden></div>
+
+<div class="chat-consent-card" data-chatbot-consent>
+  <h3 class="chat-consent-title">{{ title }}</h3>
+  <p class="chat-consent-body">{{ body }}</p>
+  <div class="chat-consent-actions">
+    <button type="button" class="chat-consent-accept" data-chatbot-consent-accept>{{ cta_label }}</button>
+  </div>
+  <p class="chat-consent-legal">
+    <a href="{{ privacy_url }}" target="_blank" rel="noopener">En savoir plus</a>
+  </p>
+</div>

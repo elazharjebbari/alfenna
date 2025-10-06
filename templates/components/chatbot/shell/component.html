@@ -1,0 +1,23 @@
+{# components/chatbot/shell/component.html #}
+<div
+  class="chatbot-shell"
+  data-chatbot
+  data-chatbot-enabled="{{ enabled|yesno:'true,false' }}"
+>
+  <button
+    class="chatbot-shell__trigger"
+    type="button"
+    data-chatbot-trigger
+    aria-label="{{ trigger_aria }}"
+    aria-expanded="false"
+    aria-haspopup="dialog"
+  >
+    <span class="chatbot-shell__trigger-label">{{ trigger_label }}</span>
+    <span class="chatbot-shell__badge" data-chatbot-badge hidden>0</span>
+  </button>
+  <div class="chatbot-shell__panel" data-chatbot-panel aria-hidden="true">
+    {% if children and children.panel %}
+      {{ children.panel|safe }}
+    {% endif %}
+  </div>
+</div>

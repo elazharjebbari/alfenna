@@ -1,0 +1,47 @@
+{% load static %}
+
+<section class="eco-section section"
+         style="--eco-bg: {{ style.bg_color|default:'#e7f8ee' }};
+                --eco-accent: {{ style.accent|default:'#309255' }};
+                --eco-radius: {{ style.radius|default:20 }}px;">
+  <div class="container">
+    {% if title %}<h3 class="section-title h4 mb-2">{{ title }}</h3>{% endif %}
+    {% if subtitle %}<p class="text-muted mb-4">{{ subtitle|safe }}</p>{% endif %}
+
+    <div id="{{ id }}" class="eco" data-ev-view="eco_view" data-ev-open="eco_item_open">
+      <div class="eco-grid">
+        {# Image / packshot #}
+        <figure class="eco-visual mb-0">
+          <img src="{% static image %}" alt="{{ image_alt|default:'Visuel écologique' }}" loading="lazy">
+        </figure>
+
+        {# Badges + détails #}
+        <ul class="eco-list list-unstyled m-0" role="list">
+          {% for it in items %}
+          <li class="eco-item" data-index="{{ forloop.counter0 }}">
+            <button class="eco-badge" type="button" aria-expanded="false">
+              <span class="eco-ico"><i class="{{ it.icon|default:'fa fa-leaf' }}"></i></span>
+              <span class="eco-label">{{ it.label }}</span>
+              <span class="eco-caret" aria-hidden="true"></span>
+            </button>
+            {% if it.desc %}
+            <div class="eco-desc" hidden>
+              <p class="mb-0 small text-muted">{{ it.desc }}</p>
+            </div>
+            {% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      {% if cta %}
+      <div class="text-center mt-3">
+        <a href="{{ cta.url|default:'#' }}" class="btn btn-primary btn-hover-dark px-4 py-2 eco-cta"
+           data-ev="eco_cta_click">
+          <i class="fa fa-leaf me-2"></i>{{ cta.label|default:"Découvrir" }}
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

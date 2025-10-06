@@ -1,0 +1,197 @@
+alias: pricing/packs
+template: "components/core/pricing/packs.html"
+
+assets:
+  head: []
+  css:
+    - "static/components/pricing/pricing.css"
+    - "static/components/pricing/pricing-value-stack.css"
+    - "static/components/pricing/pricing-bonus.css"      # ✓ bon fichier pour les bonus
+    - "static/components/pricing/pricing-sticky.css"     # ✓ sticky compact mobile
+  js:
+    - "static/components/pricing/pricing-bonus.js"       # ✓ progressive enhancement si rendu client
+    - "static/components/pricing/pricing-sticky.js"      # ✓ pilotage du sticky mobile
+  vendors: []
+
+params:
+  heading_html: "Et tout ça pour seulement…"
+
+  value_stack:
+    enabled: true
+    show_for: "highlight_only"
+    visible_rows: 4
+    more_label: "Voir tous les bonus"
+    belt_enabled: true
+    sticky_mobile:
+      enabled: true
+      target_slug: "complet"
+      appear_after_px: 420
+      hide_near_footer_px: 320
+      min_width_px: 320
+      cta_label: "Je me lance"
+
+  highlight_plan_slug: "complet"
+
+  bonus_icons:
+    enabled: true
+    plan_slug: "starter"
+    title: "Bonus inclus"
+    subtitle: "En plus de la formation"
+    visible_count: 4
+
+  small_word_near_price: "Seulement"
+  price_presenter:
+    show_currency_symbol: true
+    currency_symbol_gap: true
+    currency_symbol_scale: 0.75
+    decimals_show: true
+    show_daily_approx: true
+    daily_approx_divisor: 365
+    daily_approx_prefix: "≈"
+    daily_approx_suffix: "/jour"
+    show_amount_saved: "auto"
+    amount_saved_threshold_cents: 10000
+    show_installments: true
+    installments_count: 3
+    installments_round: "nice"
+
+  layout:
+    mobile_price_align: "left"
+    valuebox_mode: "visible"
+
+  show_old_price: true
+
+  cta_default:
+    label: "Je me lance"
+    url: "#cta-buy"
+    aria: "Je me lance — Accès immédiat"
+    sublabel: "Paiement sécurisé • Accès immédiat"
+
+  proof:
+    left_usps:
+      - "Paiement sécurisé"
+      - "Accès immédiat"
+      - "Garantie 14 jours"
+    right_ratings:
+      enabled: true
+      avg: 4.8
+      count_text: "50+ avis"
+
+  badges:
+    featured_label: "Le plus choisi"
+    limited_offer:
+      enabled: false
+      deadline_ts: ""
+      text: ""
+
+fallback_plans:
+  - slug: "premium-pro"
+    title: "Premium Pro"
+    price_cents: 44900
+    currency: "€"
+    features:
+      - "Modules de formation"
+      - "Bonus & templates"
+      - "Accès à vie"
+      - "Support par e-mail"
+
+  - slug: "complet"
+    title: "Complet"
+    price_cents: 24995
+    old_price_cents: 39900
+    currency: "€"
+    ribbon_label: "Le plus choisi"
+    value_breakdown:
+      - { label: "Bonus templates", amount_cents: 9400 }
+      - { label: "Communauté & support", amount_cents: 21800 }
+    features:
+      - "Modules de formation"
+      - "Bonus & templates"
+      - "Accès à vie"
+      - "Support par e-mail"
+
+  - slug: "essentiel"
+    title: "Essentiel"
+    price_cents: 14995
+    currency: "€"
+    features:
+      - "Modules de formation"
+      - "Bonus & templates"
+      - "Accès à vie"
+      - "Support par e-mail"
+
+contract:
+  required:
+    heading_html: "str"
+
+  optional:
+    highlight_plan_slug: "str"
+    show_old_price: "bool"
+    small_word_near_price: "str"
+
+    value_stack?:
+      enabled: "bool"
+      show_for: "str"
+      visible_rows: "int"
+      more_label: "str"
+      belt_enabled: "bool"
+      sticky_mobile:
+        enabled: "bool"
+        "target_slug?": "str"
+        "appear_after_px?": "int"
+        "hide_near_footer_px?": "int"
+        "min_width_px?": "int"
+        "cta_label?": "str"
+
+    bonus_icons?:
+      enabled: "bool"
+      plan_slug: "str"
+      "title?": "str"
+      "subtitle?": "str"
+      visible_count: "int"
+
+    price_presenter:
+      show_currency_symbol: "bool"
+      currency_symbol_gap: "bool"
+      currency_symbol_scale: "number"
+      decimals_show: "bool"
+      show_daily_approx: "bool"
+      daily_approx_divisor: "int"
+      daily_approx_prefix: "str"
+      daily_approx_suffix: "str"
+      show_amount_saved: "str"
+      amount_saved_threshold_cents: "int"
+      show_installments: "bool"
+      installments_count: "int"
+      installments_round: "str"
+
+    layout:
+      mobile_price_align: "str"
+      valuebox_mode: "str"
+
+    cta_default:
+      label: "str"
+      url: "str"
+      "aria?": "str"
+      "sublabel?": "str"
+
+    proof:
+      "left_usps?": [ "str" ]
+      "right_ratings?":
+        enabled: "bool"
+        "avg?": "number"
+        "count_text?": "str"
+
+    badges:
+      "featured_label?": "str"
+      "limited_offer?":
+        enabled: "bool"
+        "deadline_ts?": "str"
+        "text?": "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.pricing.hydrators"
+  func: "pricing_packs"
+
+render:
+  cacheable: false

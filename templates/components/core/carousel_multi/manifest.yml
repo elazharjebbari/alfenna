@@ -1,0 +1,73 @@
+alias: carousel_multi/multimedia
+aliases:
+  - carousel_multi/swiper
+template: "components/core/carousel_multi/multimedia.html"
+
+assets:
+  head: [ ]
+  css:
+    - "static/components/carousel_multi/mc-carousel.css"
+    - "https://unpkg.com/driver.js@0.9.8/dist/driver.min.css"
+    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+  js:
+    - "static/components/carousel_multi/mc-carousel.js"
+  vendors:
+    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"
+    - "https://unpkg.com/driver.js@0.9.8/dist/driver.min.js"
+
+params:
+  variant: "social_proof"
+  section_key: "temoignages"
+  show_header: true
+  title: "Elles en parlent le mieux"
+  subtitle: "★ 4,8/5 • 500+ avis"
+  persona_filters:
+    - { key: "learn",  label: "Apprendre" }
+    - { key: "sell",   label: "Vendre" }
+    - { key: "gift",   label: "Offrir" }
+  onboarding:
+    enabled: true
+    scope: "session"
+    step_title: "Parcourir les avis"
+    step_desc: "Faites défiler horizontalement pour voir les témoignages et la vidéo."
+  options:
+    items_desktop: 3
+    items_tablet: 2
+    items_mobile: 1
+    gap_px: 16
+  slides:
+    # (inchangé)
+    - type: "quote"
+      persona: "learn"
+      avatar_src: "https://placehold.co/96x96"
+      quote: "Je crée ma première bougie en 2h — zéro raté."
+      author: "Nadia"
+      role: "Débutante"
+    - type: "image"
+      persona: "sell"
+      image_src: "https://placehold.co/960x540?text=Atelier"
+      alt: "Bougies réussies"
+      caption: "Stand au marché de Rabat"
+      badges: ["Ventes du week‑end", "+12 ventes"]
+    - type: "video"
+      persona: "learn"
+      poster_src: "https://placehold.co/1280x720?text=T%C3%A9moignage+vid%C3%A9o"
+      video_src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+      caption: "UGC 28s — sous‑titres intégrés"
+    - type: "quote"
+      persona: "gift"
+      avatar_src: "https://placehold.co/96x96"
+      quote: "Les cadeaux zéro déchet ont cartonné à Noël."
+      author: "Lina"
+      role: "Cadeaux"
+
+contract:
+  # (inchangé)
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.carousel_multi.hydrators"
+  func: "mc_carousel"
+  params: {}
+
+render:
+  cacheable: false

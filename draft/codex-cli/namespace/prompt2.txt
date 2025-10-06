@@ -1,0 +1,354 @@
+INSTRUCTIONS — APPROCHE A + CTAs EN COMPOSITION NATIVE + NAMESPACES DE TEMPLATES
+=================================================================================
+Objectifs
+---------
+1) Activer des **versions de site déterministes** par préfixe (`/` → core, `/maroc/` → ma).
+2) **Unifier tous les CTA** en tant que **composants Atelier** (famille `cta/*`) **montés en enfants natifs** des composants parents (pas de `{% include %}`), afin que l’audit/trace du pipeline voie chaque CTA comme un composant à part entière.
+3) **Séparer les templates de composants par namespace** :
+   - `components/core/**` = accessible à tous (défaut/partagé)
+   - `components/<version>/**` = spécifiques à une version (ex. `components/maroc/**`)
+   - Résolution avec priorité **version > core** + **enforcement de scope**
+4) Fournir une **batterie de tests** (unitaires + intégration + runscript) validant : fonctionnement, étanchéité des scopes, modularité, et non-régression.
+
+Rappels & contraintes
+---------------------
+- 100% Django (middleware, loader, pipeline, tests).
+- Aucune valeur métier en dur dans les templates ; images avec fallback `https://placehold.co/` (dimensions adaptées).
+- Conserver les bonnes pratiques existantes (filtres `render_string`, `responsive_picture` avec placeholder en fallback).
+
+───────────────────────────────────────────────────────────
+A) VERSIONS DÉTERMINISTES PAR PRÉFIXE (Approche A, rappel)
+───────────────────────────────────────────────────────────
+0) ENV
+------
+```bash
+export DJANGO_SETTINGS_MODULE=alfenna.settings.test_cli
+```
+Périmètre autorisé : `configs/atelier/**`, `apps/atelier/**`, `apps/pages/**`, `templates/components/**`, `templates/screens/**`, `apps/*/scripts/**`, `apps/*/tests/**`, `alfenna/fixtures/**`.
+
+1) Namespaces de configuration
+------------------------------
+Créer :
+```
+configs/atelier/
+  core/  ← copie de base/
+    pages.yml cache.yml experiments.yml qa.yml
+  ma/
+    pages.yml cache.yml experiments.yml qa.yml
+```
+- Même `page_id` entre versions ; adapter meta/slots dans `ma/pages.yml`.
+
+2) Middleware de version par préfixe
+------------------------------------
+`apps/atelier/middleware/site_version.py` :
+- Map `"/maroc" → "ma"`, sinon `"core"`.
+- Stripper le préfixe (`/maroc`) de `request.path_info` ; poser `request.site_version=slug`.
+- Activer dans `MIDDLEWARE` (après `SecurityMiddleware`).
+
+3) Loader & pipeline sensibles au namespace
+-------------------------------------------
+- `apps/atelier/compose/config_loader.py` : `load_configs(namespace)` lit `configs/atelier/{namespace}/` (LRU par ns, sentinel mtime en dev).
+- `apps/atelier/compose/pipeline.py` :
+  - `build_page_spec(page_id, request, *, namespace=None)` → `ns = namespace or getattr(request,"site_version","core")`
+  - inclure `|v:<ns>` dans la **clé de cache**.
+  - logguer `site_version` à la construction et au rendu de chaque fragment.
+
+4) URLs
+-------
+Project `urls.py` :
+```python
+urlpatterns = [
+  path("", include("apps.pages.urls")),        # core
+  path("maroc/", include("apps.pages.urls")),  # ma (middleware strippe /maroc)
+]
+```
+
+───────────────────────────────────────────────────────────────
+B) NAMESPACES DE **TEMPLATES** + ENFORCEMENT DE **SCOPE**
+───────────────────────────────────────────────────────────────
+1) Arborescence des composants (templates)
+------------------------------------------
+```
+templates/components/
+  core/            # partagé (défaut)
+    cta/
+      button.html  button.yml
+      link.html    link.yml
+      banner.html  banner.yml
+    ... autres composants partagés ...
+  maroc/          # spécifiques à la version "ma"
+    ... (uniquement utilisables quand site_version=ma) ...
+```
+Règles de **résolution de template** (ajouter un petit resolver côté pipeline/renderer) :
+- Si l’alias référence un chemin « nu » (ex. `course_detail/sidebar`) :
+  1) essayer `templates/components/<site_version>/<alias>.html`
+  2) fallback `templates/components/core/<alias>.html`
+- Si l’alias est explicitement namespacé (ex. `maroc/hero/cover`) :
+  - **exiger** `request.site_version == "ma"` (sinon **deny** + fallback vide/log WARN)
+  - charger depuis `templates/components/maroc/hero/cover.html`
+
+2) Enrichir les manifests YAML avec `scope`
+-------------------------------------------
+Chaque manifest supporte :
+```yaml
+alias: course_detail/sidebar
+template: "course_detail/sidebar.html"    # résolu via l'ordre ci-dessus
+scope: ["core","ma"]                      # versions autorisées
+params: {...}
+contract: {...}
+hydrate: "apps.atelier.compose.hydrators.course_detail.hydrators:sidebar"
+render: { cacheable: true, vary_on: ["course_slug"] }
+```
+- **Enforcement** : à la résolution d’un composant, vérifier que `site_version ∈ scope`.
+  - Si non : tenter un **fallback core** (même alias sous `core/`) ; sinon renvoyer un fragment vide + WARN.
+
+───────────────────────────────────────────────────────
+C) CTAs **COMME ENFANTS NATIFS** (pas d’include Django)
+───────────────────────────────────────────────────────
+But : chaque CTA est un **composant Atelier** (famille `cta/*`) qui est **enfant** d’un composant parent via **composition native** du pipeline → visible par l’audit (trace composants), cachable, testable.
+
+1) Famille CTA (composants)
+---------------------------
+- Dossier : `templates/components/core/cta/`
+- Composants :
+  - `cta/button` (bouton)
+  - `cta/link` (lien stylé léger)
+  - `cta/banner` (bloc contenant un bouton CTA interne comme enfant)
+
+Schéma de params communs :
+- `href` (url), `label` (str), `title` (str|null), `target` (`_self|_blank`), `rel` (auto si `_blank`),
+  `size` (`sm|md|lg`), `variant` (`primary|secondary|outline|ghost|success|danger`),
+  `icon_left`/`icon_right` (str|null), `tracking_id` (str|null → `data-analytics-id`),
+  `attrs` (dict[str,str] data-* supplémentaires).
+
+Hydrator CTA (ex. `apps/atelier/compose/hydrators/cta/hydrators.py`) :
+- Normaliser `rel` si `_blank` (`noopener noreferrer nofollow`).
+- Ne renvoyer que des types natifs.
+
+2) Composition **native** (nouvelle section `children` dans les manifests)
+---------------------------------------------------------------------------
+**Extension du schéma de manifest** (à implémenter dans le pipeline) :
+- Un composant peut déclarer des **enfants** :
+```yaml
+alias: course_detail/sidebar
+template: "course_detail/sidebar.html"
+scope: ["core","ma"]
+params:
+  checkout_url: "/checkout/demo-course/"
+  login_url: "/login?next=/checkout/demo-course/"
+  labels:
+    buy_now: "Acheter maintenant"
+    login_more: "Se connecter pour plus d’avantages"
+children:
+  primary_cta:
+    component: "cta/button"
+    params:
+      href: "@ctx.checkout_url"         # binding depuis le contexte parent
+      label: "@ctx.labels.buy_now"
+      variant: "success"
+      size: "md"
+      tracking_id: "sidebar_buy_now"
+  secondary_cta:
+    component: "cta/button"
+    params:
+      href: "@ctx.login_url"
+      label: "@ctx.labels.login_more"
+      variant: "outline"
+      size: "md"
+      tracking_id: "sidebar_login"
+render:
+  cacheable: true
+  vary_on: ["course_slug"]
+```
+
+**Règles de binding** (à coder dans le pipeline) :
+- Toute valeur `str` commençant par `@ctx.` est **résolue** depuis le **contexte parent** (dot-path).
+- Les autres valeurs sont littérales.
+
+**Ordonnancement de rendu** :
+1) Hydrater le parent → `parent_ctx`.
+2) Résoudre et rendre chaque **child** (`component`, `params` bindés).
+3) Injecter dans le **contexte parent** une map `children_html` :
+   - `children_html.primary_cta = <html rendu enfant>`
+   - `children_html.secondary_cta = ...`
+4) Rendre le **template parent** avec `{{ children_html.<key>|default:''|safe }}` aux emplacements voulus.
+
+**Auditabilité (visible en HTML)** :
+- En environnement `test_cli`/`DEBUG`, encapsuler **chaque composant rendu** (parent & enfant) dans un wrapper neutre :
+  ```html
+  <div data-component="{{ alias }}" data-namespace="{{ site_version }}">
+    ... HTML du composant ...
+  </div>
+  ```
+- Cela permet aux scripts d’audit d’identifier précisément les CTAs rendus.
+
+3) Templates parent — **pas d’`include`**
+-----------------------------------------
+- Remplacer les `<a class="btn ...">` bruts par des **emplacements enfants** :
+  ```html
+  <div class="info-btn">
+    {{ children_html.primary_cta|default:''|safe }}
+    {{ children_html.secondary_cta|default:''|safe }}
+  </div>
+  ```
+- Idem pour tout autre composant nécessitant un CTA (listes, hero, bannières, etc.).
+
+────────────────────────────────────────────
+D) NAMESPACES DE CODE & DE COMPOSANTS
+────────────────────────────────────────────
+**But** : permettre des **variantes de composants par environnement** sans fuite entre versions.
+
+1) Emplacements
+---------------
+- Partagé : `templates/components/core/**` (scope par défaut `["core","ma",...]`)
+- Spécifique : `templates/components/maroc/**` (scope `["ma"]`), `templates/components/france/**` (scope `["fr"]`), etc.
+
+2) Alias & résolution
+---------------------
+- Alias **non prefixed** (ex. `hero/cover`) : on tente `<site_version>/hero/cover` puis `core/hero/cover`.
+- Alias **prefixed** (ex. `maroc/hero/cover`) : peine **obligatoire** à `site_version="ma"`.
+
+3) Enforcement
+--------------
+- Double garde : `scope` du manifest **et** chemin namespace.
+- Si violation : fallback core sémantique (si pertinent) sinon fragment vide + WARN (et **jamais** 500).
+
+────────────────────────────────────────────
+E) TESTS — UNITAIRES, INTÉGRATION, RUNSCRIPTS
+────────────────────────────────────────────
+A. Tests unitaires (Django TestCase)
+------------------------------------
+1) Loader namespace : `apps/atelier/tests/test_site_versions_loader.py`
+- `test_load_configs_core_vs_ma` : meta/title différent entre `core` et `ma`.
+
+2) Middleware : `apps/atelier/tests/test_site_versions_middleware.py`
+- `/` → `site_version="core"` ; `/maroc/xxx` → `site_version="ma"` et `path_info="/xxx"`.
+
+3) Pipeline cache key : `apps/atelier/tests/test_pipeline_namespace.py`
+- `cache_key` contient `|v:core` vs `|v:ma`.
+
+4) Scopes : `apps/atelier/tests/test_component_scopes.py`
+- `core` peut rendre `core/*` et **pas** `maroc/*`.
+- `ma` peut rendre `maroc/*` et `core/*`.
+- Fallback core testé si alias nu indisponible en `ma`.
+
+5) Composition enfants : `apps/atelier/tests/test_component_children.py`
+- Manif parent avec `children.primary_cta=cta/button` → `children_html.primary_cta` présent dans rendu.
+- Binding `@ctx.*` résolu correctement (href/label).
+- En DEBUG, wrapper `data-component="cta/button"` présent.
+
+6) CTA contracts : `apps/cta/tests/test_cta_components.py`
+- `target="_blank"` → `rel` auto correct.
+- `attrs` sérialisé en data-attributes.
+- Variants & sizes mappés correctement (classes ou attributs attendus).
+
+7) Détection d’ancrages « btn » bruts (sur composants migrés) :
+`apps/atelier/tests/test_no_raw_btn_in_migrated.py`
+- Scanner `templates/components/**` ciblés (sidebar, training, list, bannières) et **échouer** si `<a class="...btn...">` hors wrapper CTA/enfant.
+
+B. Tests d’intégration (pages)
+------------------------------
+`apps/pages/tests/test_pages_versions_integration.py`
+- `GET /` et `GET /maroc/` → 200 + meta/texte distincts.
+- Chaque route déclarée (home, test, etc.) répond sur les 2 versions.
+- **Isolation** : alias explicitement `maroc/*` injecté en core → non rendu (fallback/empty).
+- **CTAs présents** : vérifier présence de wrappers CTA sur pages clés (sidebar/training).
+
+C. Runscripts ergonomiques (avec `@binary_harness`)
+---------------------------------------------------
+Arbo `apps/pages/scripts/site_versions/` :
+- `run_all.py` (agrégateur)
+- `tests_scripts/test_smoke_core.py` : `GET /` (200)
+- `tests_scripts/test_smoke_ma.py`   : `GET /maroc/` (200)
+- `tests_scripts/test_crawl_pages_both_versions.py` : crawl liste de routes core/ma
+- `tests_scripts/test_cta_audit_wrappers.py` : charger `/test` (ou page témoin), compter les `data-component="cta/button"`
+
+Exemple `test_cta_audit_wrappers.py` :
+```python
+import re, time
+from django.test import Client
+from apps.common.runscript_harness import binary_harness
+CTA_WRAPPER=re.compile(r'data-component="cta/(button|link|banner)"')
+
+@binary_harness
+def run():
+    c=Client(); logs=[]; ok=True
+    for url in ("/test","/maroc/test"):
+        r=c.get(url)
+        hit=len(CTA_WRAPPER.findall(r.content.decode(errors="ignore")))
+        logs.append(f"{url}: {hit} CTA components found")
+        if r.status_code!=200 or hit==0: ok=False
+    return {"ok":ok,"name":"CTA audit wrappers","duration":0.0,"logs":logs}
+```
+
+D. Commandes
+------------
+- **Unitaires & intégration**
+```bash
+python manage.py test \
+  apps.atelier.tests.test_site_versions_loader \
+  apps.atelier.tests.test_site_versions_middleware \
+  apps.atelier.tests.test_pipeline_namespace \
+  apps.atelier.tests.test_component_scopes \
+  apps.atelier.tests.test_component_children \
+  apps.CTA.tests.test_cta_components \
+  apps.atelier.tests.test_no_raw_btn_in_migrated \
+  apps.pages.tests.test_pages_versions_integration -v 2
+```
+
+- **Runscripts**
+```bash
+python manage.py runscript apps.pages.scripts.site_versions.run_all
+```
+
+──────────────────────────────
+F) ACCEPTATION (« Definition of Done »)
+──────────────────────────────
+- `/` (core) et `/maroc/` (ma) **servent les mêmes routes** mais via **configs distinctes** ; cache **isolé** par `|v:ns`.
+- **AUCUN CTA brut** dans les composants migrés ; tous les CTA passent par la **famille `cta/*` montée en enfants**.
+- **Wrappers d’audit** (`data-component="cta/...")` visibles sur les pages de test en `test_cli/DEBUG`.
+- **Scopes étanches** : un composant `maroc/*` est **inaccessible** en core ; les composants `core/*` restent utilisables partout.
+- **Templates namespacés** : résolution `version > core` opérationnelle ; les spécifiques `maroc/` ne « fuient » pas ailleurs.
+- Tous les tests unitaires/intégration **verts** ; le runscript `run_all` affiche un bilan **OK**.
+
+──────────────────────────────
+G) DÉTAILS D’IMPLÉMENTATION CLÉS (pour Codex-CLI)
+──────────────────────────────
+1) **Resolver de template** côté renderer/pipeline
+- Fonction `resolve_template(alias, site_version)` :
+  - si `alias.startswith("<ns>/")`: vérifier `site_version==<ns>` puis chercher dans `templates/components/<ns>/...`
+  - sinon, chercher d’abord dans `templates/components/<site_version>/...`, fallback `templates/components/core/...`
+
+2) **Validation de scope** au registre
+- Charger le manifest YAML → lire `scope` (défaut `["core","ma"]` si omis pour core).
+- Si `site_version` non autorisé → tenter fallback (alias nu → `core/alias`), sinon fragment vide + WARN.
+
+3) **Composition enfants**
+- Étendre le modèle de manifest : champ `children: { <key>: { component, params } }`.
+- Résoudre les bindings `@ctx.` contre `parent_ctx` (dot-path simple).
+- Rendre chaque enfant avec le **même pipeline** (hérite `site_version` courant).
+- Injecter `children_html.<key>` dans le contexte parent.
+- Si `DEBUG/test_cli` : entourer chaque rendu d’un wrapper `<div data-component="...">...</div>`.
+
+4) **CTA family**
+- `templates/components/core/cta/{button,link,banner}.{html,yml}`
+- Hydrators sous `apps/atelier/compose/hydrators/cta/hydrators.py` (normalisation `rel`, `attrs`, classes).
+- Contrats stricts (`choice`, `url`, `dict[str,str]`).
+
+5) **Migration de CTA** dans composants migrés
+- Remplacer boutons bruts par des `children` dans le manifest parent dans le template parent.
+- Garder les textes/URLs dans `params`/hydrators du parent (référencés via `@ctx.*` côté enfant).
+
+6) **Qualité & sécurité**
+- `target="_blank"` → `rel="noopener noreferrer nofollow"`.
+- Accessibilité : `title`/`aria-label` ; icônes décoratives `aria-hidden="true"`.
+- Zéro valeur métier “hard-coded” ; fallback images `placehold.co/600x402`, `960x540`, etc.
+
+──────────────────────────────
+H) NOTES & EXTENSIONS
+──────────────────────────────
+- Ajouter une version `en` : créer `configs/atelier/en/**`, `templates/components/england/**`, étendre `prefix_map` et les URLs.
+- Si duplication excessive de YAML entre versions, prévoir plus tard un mécanisme d’héritage (import/merge YAML) — **hors scope immédiat**.
+- Vous pouvez faire varier la **policy de fallback** (strict deny vs core fallback) via un flag `settings.ATELIER_STRICT_SCOPE` pour les environnements CI.
+
+FIN.

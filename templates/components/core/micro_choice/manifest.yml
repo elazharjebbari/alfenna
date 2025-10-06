@@ -1,0 +1,69 @@
+alias: micro-choice/pills
+template: "components/core/micro_choice/pills.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/micro-choice/pills.css"
+  js:
+    - "/static/components/micro-choice/pills.js"
+  vendors: []
+
+# Valeurs par défaut (modifiables depuis pages.yml / DB)
+params:
+  id: null
+  show_header: false
+  title: "Je veux…"
+  subtitle: null
+  aria_label: "Je veux"
+  choices:
+    - { persona: "APPR",  label: "Apprendre", sublabel: "1ère bougie en 2h", icon: "fa-solid fa-seedling" }
+    - { persona: "VENDRE", label: "Vendre",    sublabel: "Micro-activité rentable", icon: "fa-solid fa-store" }
+    - { persona: "OFFRIR", label: "Offrir",    sublabel: "Cadeaux zéro déchet", icon: "fa-solid fa-gift" }
+  style:
+    accent: "#0D5C4F"
+    pill_bg: "#ffffff"
+    pill_selected: "#E7F8EE"
+    pill_border: "rgba(0,0,0,.10)"
+    radius: 999
+    gap: "8px"
+  options:
+    anchor_next: "#pack-offres"
+    autoselect_from_storage: true
+  events:
+    view: "choice_view"
+    click: "choice_card_click"
+
+# Contrat (whitelist forte)
+contract:
+  required:
+    choices:
+      - persona: "str"
+        label: "str"
+  optional:
+    id: "str"
+    show_header: "bool"
+    title: "str"
+    subtitle: "str"
+    aria_label: "str"
+    style:
+      accent?: "str"
+      pill_bg?: "str"
+      pill_selected?: "str"
+      pill_border?: "str"
+      radius?: "int"
+      gap?: "str"
+    options:
+      anchor_next?: "str"
+      autoselect_from_storage?: "bool"
+    events:
+      view?: "str"
+      click?: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.micro_choice.hydrators"
+  func: "micro_choice_pills"
+  params: {}
+
+render:
+  cacheable: true

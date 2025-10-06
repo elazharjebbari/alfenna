@@ -15,6 +15,8 @@ pages:
       hero:
         component: "hero/cover"
         cache: true
+      form_step:
+        component: "forms/shell"
       learning_card:
         component: "learning/card"
       learning_content:
@@ -74,6 +76,61 @@ pages:
         component: "footer/main"
       pricing_pack:
         component: "pricing/packs"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
+
+  product_detail:
+    meta:
+      title: "Produit"
+      description: "Fiche detaillee d'un produit alfenna."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        component: "header/modes"
+      product_hero:
+        component: "core/product"
+        params:
+          product:
+            id: "demo-product"
+            name: "Sajadat Al-Raha"
+            description: "Tapis de priere a memoire de forme pour un confort maximal."
+            price: 399
+            promo_price: 329
+            currency: "MAD"
+            badges:
+              - { icon: "fas fa-truck", text: "Livraison 48h" }
+              - { icon: "fas fa-money-bill", text: "Paiement a la livraison" }
+            highlights:
+              - "Soulage genoux et dos"
+              - "Mousse memo haute densite"
+              - "Housse antiderapante"
+          media:
+            lightbox: true
+            images:
+              - { src: "/static/carpet/images/cover/cadre-domestique.webp", alt: "Vue principale" }
+              - { src: "/static/carpet/images/cover/genous-coussin.webp", alt: "Zoom coussin" }
+          form:
+            alias: "core/forms/lead_step3"
+            action_url: "leads:collect"
+            fields_map:
+              fullname: "full_name"
+              phone: "phone_number"
+              address: "address"
+              quantity: "quantity"
+              offer: "offer_key"
+              product: "product"
+              promotion: "promotion_selected"
+          tracking:
+            enabled: true
+            events:
+              view: "lp_variant_view"
+              media_switch: "product_media_switch"
+      faq:
+        component: "faq/main"
+      footer:
+        component: "footer/main"
       chatbot:
         component: "chatbot/shell"
         cache: false

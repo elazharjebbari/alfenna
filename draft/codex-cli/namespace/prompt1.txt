@@ -1,0 +1,393 @@
+
+IMPLEMENTATION APPROCHE A — SITE VERSIONS DÉTERMINISTES PAR PRÉFIXE
+===================================================================
+
+Contexte & objectifs
+--------------------
+Nous devons délivrer **plusieurs versions complètes et déterministes du site** accessibles via des
+préfixes d’URL, p.ex. :
+- `/` → version **core** (actuelle, configs « base »)
+- `/maroc/` → version **ma** (Maroc)
+- (éventuellement) `/england/` → version **en**
+
+Chaque version doit être **pilotée par ses propres fichiers YAML** (pages, cache, experiments, qa),
+tout en **réutilisant les mêmes composants** (templates + hydrators). L’approche doit rester 100 %
+Django et s’intégrer naturellement au pipeline Atelier (build_page_spec → render_slot_fragment → cache).
+
+Pourquoi cette approche (A) ?
+-----------------------------
+- **Déterminisme** par design : l’URL choisit l’espace de configuration (pas d’aléa).
+- **Isolation forte** des configs : un incident dans une version n’impacte pas les autres.
+- **Compatibilité** maximale avec l’assembler existant : on ajoute une notion de *namespace*
+  (site_version) au loader et au pipeline, sans refondre l’architecture.
+- **Évolutivité** : ajouter une nouvelle version = ajouter un nouveau dossier YAML + un mapping de préfixe.
+
+
+
+PLAN D’IMPLÉMENTATION (à exécuter par l’agent CLI — Codex)
+==========================================================
+
+0) Pré-requis d’exécution
+-------------------------
+- Exporter l’environnement :
+
+  ```bash
+  export DJANGO_SETTINGS_MODULE=alfenna.settings.test_cli
+  ```
+
+- **Ne jamais modifier** `alfenna/OnlineLearning (excluded)/**` (lecture seule).
+- Périmètre autorisé : `configs/atelier/**`, `apps/atelier/**`, `apps/pages/**`, `templates/screens/**`,
+  `apps/*/scripts/**`, `apps/*/tests/**`.
+
+
+1) Factoriser les configurations en *namespaces* (core vs ma)
+------------------------------------------------------------
+1.1. **Dupliquer** la config `configs/atelier/base/**` pour créer un espace Maroc :
+
+```
+configs/atelier/
+  core/            ← copie 1:1 de base/ (ou renommer base → core si possible)
+    pages.yml
+    cache.yml
+    experiments.yml
+    qa.yml
+  ma/              ← NOUVEAU (dérivé de core, puis ajusté)
+    pages.yml
+    cache.yml
+    experiments.yml
+    qa.yml
+```
+
+- Si `base/` est encore en usage, **créer** `core/` en copiant `base/` puis **pointez** toute la stack vers `core/`.
+- Dans `configs/atelier/ma/pages.yml`, **conservez la même structure de pages/slots**, mais adaptez les valeurs
+  marketing (titres/Descriptions) et éventuellement remplacez certains alias de composants si besoin.
+
+1.2. **Bonnes pratiques** YAML :
+- Garder les mêmes `page_id` (ex. `online_home`, `test`, etc.) pour toutes les versions.
+- Ne **jamais** déposer de credentials ou de secrets dans ces YAML.
+- Si vous factorisez des fragments récurrents, créez un mécanisme d’include (optionnel) *plus tard*.
+
+
+2) Ajouter un *middleware* de version par préfixe
+-------------------------------------------------
+Créer `apps/atelier/middleware/site_version.py` avec un routeur simple **préfixe → version** :
+
+```python
+# apps/atelier/middleware/site_version.py
+from __future__ import annotations
+from typing import Optional
+from django.utils.deprecation import MiddlewareMixin
+
+class PathPrefixSiteVersionMiddleware(MiddlewareMixin):
+    """
+    Mappe des préfixes d'URL vers un slug de version de site (namespace configs).
+    - "/"         → "core"
+    - "/maroc/"   → "ma"
+    (extensible: ex. "/england/" → "en")
+    Réécrit request.path_info en retirant le préfixe versionné, pour que les URLs internes restent identiques.
+    """
+    def __init__(self, get_response=None):
+        super().__init__(get_response)
+        # Ordre important: le préfixe le plus long d'abord si besoin
+        self.prefix_map = {
+            "/maroc": "ma",
+            # "/england": "en",  # futur
+        }
+        self.default_version = "core"
+
+    def process_request(self, request):
+        path: str = request.path_info or "/"
+        for prefix, slug in self.prefix_map.items():
+            # match "/maroc" et "/maroc/..."
+            if path == prefix or path.startswith(prefix + "/"):
+                # Strips "/maroc" uniquement pour le routage interne
+                new_path = path[len(prefix):] or "/"
+                if not new_path.startswith("/"):
+                    new_path = "/" + new_path
+                request.path_info = new_path
+                request.site_version = slug
+                break
+        else:
+            request.site_version = self.default_version
+```
+
+- **Insérer** ce middleware **après** `SecurityMiddleware` et **avant** toute logique qui lit les configs,
+  dans `settings.test_cli` (et `settings/base` si nécessaire).
+
+Exemple :
+
+```python
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    # ...
+    "apps.atelier.middleware.site_version.PathPrefixSiteVersionMiddleware",
+    # ...
+]
+```
+
+
+3) Rendre le loader/pipeline *namespace-aware*
+----------------------------------------------
+3.1. **Adapter** le loader de configs Atelier pour prendre un paramètre `namespace` (slug = `core`/`ma`).
+
+- Créer/éditer `apps/atelier/compose/config_loader.py` (ou le module équivalent existant) :
+  - Ajouter une fonction `load_configs(namespace: str) -> dict` qui lit dans `configs/atelier/{namespace}/`.
+  - Mettre en place un cache en mémoire (LRU ou simple dict) **par namespace**.
+  - Invalider si les fichiers changent (mtime) — optionnel en dev.
+
+Pseudo-code :
+
+```python
+from pathlib import Path
+import yaml, os, time
+from functools import lru_cache
+from django.conf import settings
+
+BASE_DIR = Path(settings.BASE_DIR)
+
+def _config_dir(ns: str) -> Path:
+    return BASE_DIR / "configs" / "atelier" / ns
+
+@lru_cache(maxsize=8)
+def _load_configs_cached(ns: str, sentinel: float):
+    root = _config_dir(ns)
+    def read(p):
+        return yaml.safe_load(p.read_text(encoding="utf-8")) if p.exists() else {}
+    return {
+        "pages": read(root / "pages.yml"),
+        "cache": read(root / "cache.yml"),
+        "experiments": read(root / "experiments.yml"),
+        "qa": read(root / "qa.yml"),
+    }
+
+def load_configs(ns: str = "core") -> dict:
+    root = _config_dir(ns)
+    if not root.exists():
+        ns = "core"  # fallback sécurisé
+        root = _config_dir(ns)
+    # Sentinel = max mtime (dev-friendly). En prod, remplacer par un hash/version.
+    mtimes = []
+    for name in ("pages.yml","cache.yml","experiments.yml","qa.yml"):
+        p = root / name
+        mtimes.append(p.stat().st_mtime if p.exists() else 0.0)
+    sentinel = max(mtimes) if mtimes else 0.0
+    return _load_configs_cached(ns, sentinel)
+```
+
+3.2. **Pipeline** : propager le `namespace` jusqu’aux fonctions clefs.
+
+- Dans `apps/atelier/compose/pipeline.py` (ou équivalent), modifier :
+  - `build_page_spec(page_id, request, *, namespace: str | None = None)`
+  - Si `namespace` est `None`, lire `getattr(request, "site_version", "core")`
+  - Appeler `config_loader.load_configs(namespace)`
+  - **Inclure le `namespace` dans la clé de cache** (dimension supplémentaire), p.ex. `cache_key += f"|v:{namespace}"`.
+
+3.3. **Views** existantes (`apps/pages/views.py`) : l’API actuelle appelle déjà `build_page_spec(page_id, request)`.
+- **Ne pas changer** les vues si le pipeline lit `request.site_version`.
+
+
+4) Ajouter les URLs versionnées
+-------------------------------
+4.1. **Project urls.py** (ou `apps/pages/urls.py` si centralisées) : ajouter un include pointant vers les mêmes vues.
+
+Exemple (project-level `urls.py`) :
+
+```python
+from django.urls import path, include
+
+urlpatterns = [
+    path("", include("apps.pages.urls")),           # core
+    path("maroc/", include("apps.pages.urls")),     # ma (le middleware strippe /maroc)
+]
+```
+
+- Grâce au middleware, les **mêmes patterns** de `apps.pages.urls` servent pour les deux versions.
+
+
+5) Créer la version Maroc (configs/atelier/ma/**)
+-------------------------------------------------
+5.1. **Copier** `configs/atelier/core/pages.yml` → `configs/atelier/ma/pages.yml` puis adapter :
+- Titre/description (meta) spécifiques au Maroc.
+- Slots spécifiques si besoin (ex. remplacer un hero, des labels, ou des composants marketing).
+
+5.2. **Adapter** `configs/atelier/ma/cache.yml` si certaines sections ont des TTL différents.
+
+5.3. **experiments.yml** et `qa.yml` peuvent rester identiques au départ.
+
+
+6) Observabilité & sécurité
+---------------------------
+- **Logs** : logguer `request.site_version` dans le `build_page_spec` et lors de chaque `render_slot_fragment`
+  (niveau INFO en dev).
+- **Cache** : la variation `|v:<slug>` dans la clé garantit l’isolation des caches entre versions.
+- **Fallback** : si un namespace n’existe pas, retomber sur `core` proprement (pas de 500).
+
+---------------------------------------------------------------------------
+BATTERIE DE TESTS (unitaires + intégration + scripts runscript)
+===========================================================================
+
+A) Tests unitaires (Django TestCase)
+------------------------------------
+Créer `apps/atelier/tests/test_site_versions_loader.py` :
+
+- **test_load_configs_core_and_ma** : vérifier que `load_configs("core")` et `load_configs("ma")` lisent des valeurs
+  différentes si vous avez modifié une meta (ex. `meta.title`).
+
+Créer `apps/atelier/tests/test_site_versions_middleware.py` :
+
+- **test_prefix_mapping_core** : requête sur `/` → `request.site_version == "core"` ; chemin conservé.
+- **test_prefix_mapping_ma** : requête sur `/maroc/` → `request.site_version == "ma"` ; `request.path_info == "/"`.
+- **test_prefix_mapping_ma_nested** : `/maroc/test` → `site_version == "ma"` ; `path_info == "/test"`.
+
+Créer `apps/atelier/tests/test_pipeline_namespace.py` :
+
+- **test_cache_key_includes_version** : appeler `build_page_spec("test", req_core)` puis `build_page_spec("test", req_ma)`
+  et vérifier que `page_ctx["cache_key"]` (ou équivalent) diffère par le suffixe version.
+- **test_pages_yaml_respected_per_ns** : vérifier que `meta.title` diffère entre core et ma pour une page donnée.
+
+
+B) Tests d’intégration (pages)
+------------------------------
+Créer `apps/pages/tests/test_pages_versions_integration.py` :
+
+- **setUp** : charger les fixtures nécessaires (ex. `catalog_courses.json`) si vos pages en ont besoin.
+- **test_home_core_ok** : `GET "/"` ⇒ `200` et assert d’un marqueur du YAML **core** (ex. titre FR générique).
+- **test_home_ma_ok** : `GET "/maroc/"` ⇒ `200` et assert d’un marqueur du YAML **ma** (ex. titre spécifique Maroc).
+- **test_all_pages_exist_both_versions** : itérer sur la liste des `page_id` connue (ex. `["online_home", "test"]`),
+  vérifier `GET "/"` + `GET "/maroc/<route>"` retournent `200` pour chacune (adapter les routes si besoin).
+- **test_cache_isolation** : 2 requêtes successives sur core vs ma doivent produire des fragments différents si la meta
+  diffère (ex. `self.assertNotEqual(html_core, html_ma)`).
+
+
+C) Scripts *runscript* ad-hoc (ergonomiques, type `run_all`)
+------------------------------------------------------------
+Créer `apps/pages/scripts/site_versions/tests_scripts/test_smoke_core.py` :
+(utiliser le décorateur `@binary_harness` comme dans vos scripts gating)
+
+```python
+from django.test import Client
+from apps.common.runscript_harness import binary_harness
+
+@binary_harness
+def run():
+    c = Client()
+    r = c.get("/")
+    ok = (r.status_code == 200)
+    logs = [f"Core / status={r.status_code}"]
+    return {"ok": ok, "name": "Smoke Core", "duration": 0.0, "logs": logs}
+```
+
+Créer `apps/pages/scripts/site_versions/tests_scripts/test_smoke_ma.py` :
+
+```python
+from django.test import Client
+from apps.common.runscript_harness import binary_harness
+
+@binary_harness
+def run():
+    c = Client()
+    r = c.get("/maroc/")
+    ok = (r.status_code == 200)
+    logs = [f"MA /maroc/ status={r.status_code}"]
+    return {"ok": ok, "name": "Smoke MA", "duration": 0.0, "logs": logs}
+```
+
+Créer un **crawler de pages** par version : `test_crawl_pages_both_versions.py`
+
+```python
+import time
+from django.test import Client
+from django.conf import settings
+from apps.common.runscript_harness import binary_harness
+
+ANSI = {"G":"\033[92m","R":"\033[91m","Y":"\033[93m","B":"\033[94m","X":"\033[0m"}
+
+PAGES = [
+    ("/", "/maroc/"),   # home core vs ma
+    ("/test", "/maroc/test"),
+    # ajouter ici d'autres routes déclarées dans pages.yml si nécessaire
+]
+
+@binary_harness
+def run():
+    t0 = time.time()
+    c = Client()
+    ok = True
+    logs = []
+    for core_url, ma_url in PAGES:
+        rc = c.get(core_url).status_code
+        rm = c.get(ma_url).status_code
+        logs.append(f"[core:{rc}] {core_url}  —  [ma:{rm}] {ma_url}")
+        if rc != 200 or rm != 200:
+            ok = False
+    return {"ok": ok, "name": "Crawl core/ma", "duration": round(time.time()-t0,2), "logs": logs}
+```
+
+Créer un **agrégateur `run_all.py`** (à la racine du package `apps/pages/scripts/site_versions/`) :
+
+```python
+"""
+Exécution:
+  python manage.py runscript apps.pages.scripts.site_versions.run_all
+"""
+import importlib, pkgutil, time
+ANSI={"G":"\033[92m","R":"\033[91m","B":"\033[94m","X":"\033[0m"}
+
+def run():
+    start=time.time()
+    package=__name__.rsplit(".",1)[0]+".tests_scripts"
+    results=[]
+    for _,modname,_ in pkgutil.iter_modules(importlib.import_module(package).__path__):
+        if not modname.startswith("test_"):
+            continue
+        m=importlib.import_module(f"{package}.{modname}")
+        if hasattr(m,"run"):
+            print(f"→ Running {modname}")
+            res=m.run()
+            if not isinstance(res,dict):
+                res={"ok":bool(res),"name":modname,"duration":0.0,"logs":[]}
+            results.append(res)
+    ok=sum(1 for r in results if r.get("ok"))
+    print(f"Terminé: {ok}/{len(results)} OK en {round(time.time()-start,2)}s")
+    for r in results:
+        status = "OK" if r.get("ok") else "FAIL"
+        print(f" - {status} | {r.get('name')} | {r.get('duration')}s")
+```
+
+D) Commandes d’exécution des tests
+----------------------------------
+1) **Unitaires & intégration Django**
+
+```bash
+python manage.py test apps.atelier.tests.test_site_versions_loader \
+                    apps.atelier.tests.test_site_versions_middleware \
+                    apps.atelier.tests.test_pipeline_namespace \
+                    apps.pages.tests.test_pages_versions_integration -v 2
+```
+
+2) **Scripts runscript (smoke + crawl)**
+
+```bash
+python manage.py runscript apps.pages.scripts.site_versions.run_all
+```
+
+
+Définition de « Done » (acceptation)
+------------------------------------
+- `/` et `/maroc/` **servent les mêmes pages** (routes identiques), mais **branchées sur des YAML distincts**.
+- La **clé de cache** inclut le `namespace` (`v:core`/`v:ma`) ; aucun mélange de fragments entre versions.
+- Tous les tests unitaires et d’intégration sont **verts**.
+- Les scripts runscript affichent un **bilan OK** et détaillent les statuts par route.
+- L’ajout de l’approche A n’a **rien cassé** : les pages existantes (core) répondent 200, et la version Maroc aussi.
+- Les composants et hydrators sont **réutilisés** tels quels (0 duplication de code).
+
+
+Notes de maintenance & évolutions
+---------------------------------
+- Pour ajouter une version **en** : créer `configs/atelier/en/**`, ajouter `"/england": "en"` dans le middleware, et
+  ajouter `path("england/", include("apps.pages.urls"))` aux URLs projet.
+- En production, remplacez le *sentinel mtime* par un **hash de version** (ou un *reload* contrôlé) pour éviter
+  les reloads fréquents et maîtriser l’invalidation.
+- Gardez des **diffs minimaux** entre YAML : si beaucoup d’éléments sont communs, envisagez un système d’héritage
+  YAML (inclure/merge) ultérieur, mais **pas** dans ce delivery (restez simple et robuste).
+- Pensez à **journaliser** `site_version` dans vos logs applicatifs pour tracer les comportements par version.

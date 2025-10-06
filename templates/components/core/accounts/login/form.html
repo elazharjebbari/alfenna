@@ -1,0 +1,86 @@
+{# templates/components/core/accounts/login/form.html #}
+{% load i18n %}
+<section class="auth-wrap auth-slot" data-auth-screen>
+  <header class="auth-header">
+    <h1 class="auth-title">{{ title|default:_("Connexion") }}</h1>
+    <p class="auth-sub">{{ subtitle|default:_("Accède à tes cours en toute sécurité.") }}</p>
+  </header>
+
+  {% if messages %}
+    <div class="auth-alerts" role="status" aria-live="polite">
+      {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="auth-card">
+    {% if non_field_errors %}
+      <div class="alert error" role="alert">{{ non_field_errors_text }}</div>
+    {% endif %}
+
+    <form class="auth-form" method="post" action="{{ action_url }}" novalidate>
+      {% csrf_token %}
+      {% if next_value %}<input type="hidden" name="next" value="{{ next_value }}">{% endif %}
+
+      <div class="field">
+        <label for="login_id_username">{% trans "Email ou nom d’utilisateur" %}</label>
+        {% with error=field_errors_text.username %}
+          <input id="login_id_username"
+                 name="username"
+                 type="text"
+                 autocomplete="username"
+                 required
+                 autofocus
+                 aria-invalid="{{ error|yesno:'true,false' }}"
+                 {% if error %}aria-describedby="login_err_username"{% endif %}
+                 value="{{ values.username|default_if_none:'' }}">
+          {% if error %}
+            <div class="alert error field-error" id="login_err_username">{{ error }}</div>
+          {% endif %}
+        {% endwith %}
+      </div>
+
+      <div class="field">
+        <label for="login_id_password">{% trans "Mot de passe" %}</label>
+        {% with error=field_errors_text.password %}
+          <div class="password-field">
+            <input id="login_id_password"
+                   name="password"
+                   type="password"
+                   autocomplete="current-password"
+                   required
+                   aria-invalid="{{ error|yesno:'true,false' }}"
+                   {% if error %}aria-describedby="login_err_password"{% endif %}>
+            <button type="button"
+                    class="pw-toggle"
+                    aria-controls="login_id_password"
+                    aria-label="{% trans 'Afficher le mot de passe' %}"
+                    data-label-hide="{% trans 'Masquer le mot de passe' %}">👁</button>
+          </div>
+          <small class="caps-hint">{% trans "Verr Maj activée" %}</small>
+          {% if error %}
+            <div class="alert error field-error" id="login_err_password">{{ error }}</div>
+          {% endif %}
+        {% endwith %}
+      </div>
+
+      <div class="field checkbox-field">
+        <label><input type="checkbox" name="remember_me" {% if values.remember_me %}checked{% endif %}> {% trans "Rester connecté" %}</label>
+      </div>
+
+      <div class="auth-actions">
+        <button class="btn-primary" type="submit">{% trans "Se connecter" %}</button>
+      </div>
+
+      <div class="meta-links">
+        <a href="{{ links.forgot }}">{% trans "Mot de passe oublié ?" %}</a>
+        <a href="{{ links.register }}">{% trans "Créer un compte" %}</a>
+      </div>
+    </form>
+  </div>
+
+  <footer class="auth-footer">
+    <small>{% trans "Besoin d’aide ? Contacte le support." %}</small>
+  </footer>
+</section>

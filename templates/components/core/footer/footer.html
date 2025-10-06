@@ -1,0 +1,78 @@
+{% load static atelier_images %}
+<div class="section footer-section">
+  <div class="footer-widget-section">
+    {% responsive_picture slider_image|default:'images/shape/shape-21.png' alt="Shape" %}
+    <div class="container">
+      <div class="row">
+        <!-- Col 1 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <div class="widget-logo">
+              <a href="#">
+                  {% responsive_picture slider_image|default:'images/logo/v1/logo_text_black_200x60' alt="footer-logo" %}
+              </a>
+            </div>
+            <div class="widget-address">
+              <h4 class="footer-widget-title">Lumière Academy</h4>
+              {% if address_url and address_text %}
+                <p><a href="{{ address_url }}" target="_blank" rel="noopener">{{ address_text }}</a></p>
+              {% endif %}
+            </div>
+            <ul class="widget-info">
+              {% if email %}<li><p><i class="flaticon-email"></i> <a href="mailto:{{ email }}">{{ email }}</a></p></li>{% endif %}
+              {% if phone_tel and phone_display %}<li><p><i class="flaticon-phone-call"></i> <a href="tel:{{ phone_tel }}">{{ phone_display }}</a></p></li>{% endif %}
+              {% if opening_hours %}<li><p><i class="flaticon-clock"></i> {{ opening_hours }}</p></li>{% endif %}
+            </ul>
+            {% if socials %}
+            <ul class="widget-social">
+              {% for s in socials %}
+              <li><a href="{{ s.url }}" rel="noopener" {% if s.new_tab %}target="_blank"{% endif %}><i class="{{ s.icon }}"></i></a></li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+        <!-- Col 2 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Activités à Rabat</h4>
+            <ul class="widget-link">
+              {% for l in links_activities %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Col 3 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Formations</h4>
+            <ul class="widget-link">
+              {% for l in links_trainings %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- Col 4 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Quick Links</h4>
+            <ul class="widget-link">
+              {% for l in links_quick %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+      {% responsive_picture slider_image|default:'/images/shape/shape-22.png' alt="Shape" %}
+
+  </div>
+
+  <div class="footer-copyright">
+    <div class="container">
+      <div class="copyright-wrapper">
+        <div class="copyright-link"></div>
+        <div class="copyright-text">
+          <p>&copy; {{ year }} <span>Lumière Academy</span> — Made with <i class="icofont-heart-alt"></i> by <a href="#" rel="noopener">ZONEX</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

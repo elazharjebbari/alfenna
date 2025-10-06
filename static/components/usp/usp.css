@@ -1,0 +1,28 @@
+
+/* USP – styles minimaux, compatibles charte Bootstrap vars */
+.usp-section { background: var(--bs-secondary, #e7f8ee); padding: 36px 0; }
+.usp-title    { font-size: 1rem; font-weight: 700; color: var(--bs-dark, #212832); margin: 0; }
+.usp-text     { font-size: .95rem; color: var(--bs-body-color, #52565b); margin: 2px 0 0; opacity: .95; }
+
+/* pill horizontale */
+.usp-pill { background:#fff; border-radius: 14px; padding:16px; display:flex; gap:12px;
+  align-items:flex-start; box-shadow: 0 10px 24px rgba(0,0,0,.06); }
+.usp-pill .usp-ico { width:42px; height:42px; border-radius:999px; display:grid; place-items:center;
+  background: rgba(var(--bs-success-rgb, 25,135,84), .08); color: var(--bs-success, #198754); }
+
+/* carte verticale */
+.usp-card { background:#fff; border-radius: 16px; padding:18px; text-align:center;
+  box-shadow: 0 10px 24px rgba(0,0,0,.06); height:100%; }
+.usp-card .usp-ico { width:56px; height:56px; margin:6px auto 10px; border-radius:999px; display:grid; place-items:center;
+  background: rgba(var(--bs-success-rgb, 25,135,84), .08); color: var(--bs-success, #198754); }
+
+/* segmented control (personas) */
+.usp-switch { display:inline-flex; gap:8px; background:#fff; border-radius:999px; padding:6px; box-shadow:0 6px 20px rgba(0,0,0,.06); }
+.usp-switch .btn { border-radius:999px; padding:6px 14px; font-weight:700; }
+.usp-switch .btn.active { background: var(--bs-success, #198754); color:#fff; border-color:var(--bs-success, #198754); }
+
+/* rail horizontal (mobile-first) */
+.usp-rail { display:flex; gap:12px; overflow-x:auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+.usp-rail::-webkit-scrollbar { height: 8px; }
+.usp-rail::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 8px; }
+.usp-card-rail { flex: 0 0 auto; min-width: 260px; scroll-snap-align: start; }

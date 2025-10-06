@@ -1,0 +1,47 @@
+{% load i18n static carpet_images %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<section class="ul-comparison-section py-5" style="background-color: #fff;">
+  <div class="container text-center">
+    <h2 class="mb-4 fs-3 fw-bold">
+      {% trans "Pourquoi des centaines de clients choisissent notre tapis ?" %}
+    </h2>
+    <p class="text-muted mb-5">
+      {% trans "Un confort incomparable pour vos genoux, grâce à un coussin intégré en mousse mémoire. Idéal pour prier longtemps sans douleur." %}
+    </p>
+
+    <div class="row justify-content-center align-items-center">
+      <!-- Image 1 : Coussin moelleux -->
+      <div class="col-md-6 mb-4">
+        {% if LANGUAGE_CODE == 'ar' %}
+          {% image_picture 'carpet/images/1050x450/coussin-moelleurx_1050x450_ar.webp' alt=_("Confort moelleux pour les genoux") class="img-fluid rounded shadow-sm" width="1050" height="450" loading="lazy" decoding="async" %}
+        {% else %}
+          {% image_picture 'carpet/images/1050x450/coussin-moelleurx_1050x450.webp' alt=_("Confort moelleux pour les genoux") class="img-fluid rounded shadow-sm" width="1050" height="450" loading="lazy" decoding="async" %}
+        {% endif %}
+
+        <div class="mt-3">
+          <h5 class="fw-semibold">{% trans "Effet mémoire de forme" %}</h5>
+          <p class="text-muted small">
+            {% trans "Le coussin intégré épouse la forme de vos genoux et soulage la pression dès le premier contact." %}
+          </p>
+        </div>
+      </div>
+
+      <!-- Image 2 : Soulagement genoux -->
+      <div class="col-md-6 mb-4">
+        {% if LANGUAGE_CODE == 'ar' %}
+          {% image_picture 'carpet/images/1050x450/effet_genous_1050x450_ar.webp' alt=_("Soulage la douleur aux genoux pendant la prière") class="img-fluid rounded shadow-sm" width="1050" height="450" loading="lazy" decoding="async" %}
+        {% else %}
+          {% image_picture 'carpet/images/1050x450/effet_genous_1050x450.webp' alt=_("Soulage la douleur aux genoux pendant la prière") class="img-fluid rounded shadow-sm" width="1050" height="450" loading="lazy" decoding="async" %}
+        {% endif %}
+
+        <div class="mt-3">
+          <h5 class="fw-semibold">{% trans "Pensé pour votre santé" %}</h5>
+          <p class="text-muted small">
+            {% trans "Conçu pour réduire les douleurs articulaires pendant la prosternation — recommandé pour les personnes âgées ou sensibles." %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,26 @@
+{% load i18n %}
+
+{% if show_payment_request %}
+  <section class="checkout-express card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <p class="text-uppercase text-muted small mb-1">{% trans "Paiement express" %}</p>
+      <div class="d-flex flex-column gap-2">
+        <div>
+          <h3 class="h5 mb-1">{{ headline }}</h3>
+          <p class="text-muted small mb-0">{{ helper }}</p>
+        </div>
+
+        {% if providers %}
+          <ul class="list-unstyled d-flex flex-wrap gap-2 mb-0">
+            {% for provider in providers %}
+              <li class="checkout-express-provider" data-provider="{{ provider.id }}">{{ provider.cta }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <div id="payment-request-button" class="checkout-express-button" aria-live="polite"></div>
+        <p class="text-muted small mb-0">{% trans "Apple Pay, Google Pay ou Link s’activent automatiquement si disponibles sur votre appareil." %}</p>
+      </div>
+    </div>
+  </section>
+{% endif %}

@@ -1,0 +1,137 @@
+{% load static i18n %}
+
+<link rel="stylesheet" href="{% static 'cookies/tarteaucitron.js-1.25.0/css/tarteaucitron.min.css' %}">
+<script src="{% static 'cookies/tarteaucitron.js-1.25.0/tarteaucitron.min.js' %}"></script>
+
+<script>
+/* =======================================================================================
+   Tarteaucitron = UI de consentement (Consent Mode géré côté GTM)
+   - On pousse ll_consent_update dans dataLayer
+   - On synchronise le cookie CONSENT_COOKIE_NAME = "cookie_consent_marketing"
+     => toujours présent, valeur "no" par défaut, "accept" quand l’utilisateur accepte
+   ======================================================================================= */
+
+/* -- 0) i18n TAC -- */
+(function () {
+  var lang = "{{ LANGUAGE_CODE|default:'fr' }}".toLowerCase();
+  window.tarteaucitronForceLanguage = (lang.indexOf('ar') === 0) ? 'ar' : 'fr';
+})();
+
+/* -- 1) Init TAC (googleConsentMode désactivé ici: piloté par GTM) -- */
+tarteaucitron.init({
+  privacyUrl: "/politique-de-confidentialite/",
+  bodyPosition: "top",
+  cookieName: "ll_tac",
+  orientation: "middle",
+  groupServices: true,
+  showDetailsOnClick: true,
+  serviceDefaultState: "wait",
+  showAlertSmall: false,
+  closePopup: true,
+  showIcon: true,
+  iconPosition: "BottomRight",
+  DenyAllCta: true,
+  AcceptAllCta: true,
+  highPrivacy: true,
+  mandatory: true,
+  googleConsentMode: false,
+  bingConsentMode: false,
+  dataLayer: false,
+  partnersList: true
+});
+
+/* -- 2) 4 “services” muets == 4 toggles UI ↔ GCM v2 -- */
+tarteaucitron.services.analytics = {
+  key: "analytics", type: "analytic",
+  name: "Mesure d’audience (analytics_storage)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+tarteaucitron.services.ad_storage = {
+  key: "ad_storage", type: "ads",
+  name: "Stockage publicitaire (ad_storage)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+tarteaucitron.services.ad_user_data = {
+  key: "ad_user_data", type: "google",
+  name: "Données utilisateur Google (ad_user_data)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+tarteaucitron.services.ad_personalization = {
+  key: "ad_personalization", type: "google",
+  name: "Personnalisation annonces (ad_personalization)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+
+(tarteaucitron.job = tarteaucitron.job || []).push("analytics","ad_storage","ad_user_data","ad_personalization");
+
+/* -- 3) dataLayer + synchronisation du cookie marketing ------------------ */
+(function(){
+  var MAX_AGE_DAYS = 395;
+
+  function getConsentCookieName(){
+    var b = document.body || document.documentElement;
+    if (b && b.dataset && b.dataset.llConsentCookie) {
+      return b.dataset.llConsentCookie;
+    }
+    return "cookie_consent_marketing";
+  }
+
+  function cookieAttributes(){
+    var secure = window.location && window.location.protocol === "https:" ? "; Secure" : "";
+    return "; Path=/; SameSite=Lax" + secure;
+  }
+
+  function setCookie(name, value){
+    var expires = "";
+    if (typeof MAX_AGE_DAYS === "number") {
+      var d = new Date();
+      d.setTime(d.getTime() + MAX_AGE_DAYS * 864e5);
+      expires = "; Expires=" + d.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value || "") + expires + cookieAttributes();
+  }
+
+  function tarteConsent(key){
+    return tarteaucitron && tarteaucitron.state && tarteaucitron.state[key] === true ? "granted" : "denied";
+  }
+
+  function currentConsentState(){
+    return {
+      analytics_storage: tarteConsent("analytics"),
+      ad_storage: tarteConsent("ad_storage"),
+      ad_user_data: tarteConsent("ad_user_data"),
+      ad_personalization: tarteConsent("ad_personalization"),
+    };
+  }
+
+  function syncMarketingCookie(reason){
+    var name = getConsentCookieName();
+    var state = currentConsentState();
+    if (state.analytics_storage === "granted") {
+      setCookie(name, "1");
+    } else {
+      setCookie(name, "");
+    }
+    window.dataLayer = window.dataLayer || [];
+    var payload = {
+      event: "ll_consent_update",
+      _src: "tac",
+      _reason: reason || "auto",
+    };
+    for (var key in state) {
+      if (Object.prototype.hasOwnProperty.call(state, key)) {
+        payload[key] = state[key];
+      }
+    }
+    try {
+      window.dataLayer.push(payload);
+    } catch (err) {}
+  }
+
+  window.addEventListener("tac.root_available", function(){ syncMarketingCookie("root_available"); });
+  document.addEventListener("tac.consent_updated", function(){ syncMarketingCookie("updated"); });
+  try {
+    setCookie(getConsentCookieName(), "");
+  } catch (err) {}
+})();
+</script>

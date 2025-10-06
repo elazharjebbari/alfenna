@@ -1,0 +1,49 @@
+{% load i18n static %}
+<style>
+  .flag-icon{width:24px;height:24px}
+  /* Ton premium : fond sobre, typo resserrée, vitesse douce */
+  .ul-header-top{background:#0f0f0f;color:#fff}
+  .ul-header-top .ul-header-top-slider-item{
+    letter-spacing:.2px; opacity:.95;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .splide__list{transition:none!important}
+  }
+</style>
+
+<header class="ul-header">
+  <div class="ul-header-top">
+    <div class="ul-header-top-slider splide" aria-label="{% trans 'Informations principales' %}">
+      <div class="splide__track">
+        <ul class="splide__list">
+
+          <li class="splide__slide">
+            <p class="ul-header-top-slider-item">
+              <i class="fas fa-truck px-2" aria-hidden="true"></i>
+              {% trans "Livraison offerte au Maroc" %}
+              <span>
+                <img src="{% static 'alfenna_hair/assets/img/hair/icon/morocco.svg' %}"
+                     alt="{% trans 'Drapeau du Maroc' %}" class="flag-icon">
+              </span>
+            </p>
+          </li>
+
+          <li class="splide__slide">
+            <p class="ul-header-top-slider-item">
+              <i class="flaticon-shield" aria-hidden="true"></i>
+              {% trans "Paiement à la réception · inspection à la livraison" %}
+            </p>
+          </li>
+
+          <li class="splide__slide">
+            <p class="ul-header-top-slider-item">
+              <i class="flaticon-sparkle" aria-hidden="true"></i>
+              {% trans "Mousse mémoire intégrée · base antiglisse" %}
+            </p>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,4 @@
+alias: contact/phone
+template: "components/core/contact/phone.html"
+render:
+  cacheable: true

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lumierelearning.settings.test_cli")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alfenna.settings.test_cli")
 
 import django
 

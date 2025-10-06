@@ -1,0 +1,53 @@
+{% load atelier_utils %}
+<div class="header-section" data-ab-variant="{{ variant_key|default:'A' }}">
+
+  {% if topbar.enabled %}
+  <div class="header-top d-none d-lg-block">
+    <div class="container" style="padding-top:6px;padding-bottom:6px;">
+      <div class="header-top-wrapper" style="display:flex;align-items:center;gap:16px;">
+        <div class="header-top-left" style="flex:1;">
+          <p class="m-0">
+            {% render_string topbar.text_html %}
+            {% if topbar.deadline_ts %} •
+              <span id="tb-timer" data-deadline="{{ topbar.deadline_ts }}" style="font-weight:700;"></span>
+            {% endif %}
+            {% if topbar.cta %}
+              • <a href="{{ topbar.cta.url }}" style="color:#0a7f46;text-decoration:underline;">{{ topbar.cta.label }}</a>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="header-main">
+    <div class="container">
+      {{ children.header_modes__main|default_if_none:""|safe }}
+    </div>
+  </div>
+</div>
+
+{{ children.header_modes__mobile|default_if_none:""|safe }}
+
+{% if topbar.enabled and topbar.deadline_ts %}
+<script>
+(function(){
+  var el = document.getElementById('tb-timer');
+  if (!el) return;
+  var iso = el.getAttribute('data-deadline'); if (!iso) return;
+  function two(n){return n<10?'0'+n:n;}
+  function tick(){
+    var end=Date.parse(iso), now=Date.now(), diff=end-now;
+    if (isNaN(end)){el.textContent='';return;}
+    if (diff<=0){el.textContent='0j 00:00:00';clearInterval(iv);return;}
+    var d=Math.floor(diff/86400000);
+    var h=Math.floor((diff%86400000)/3600000);
+    var m=Math.floor((diff%3600000)/60000);
+    var s=Math.floor((diff%60000)/1000);
+    el.textContent=(d>0?(d+'j '):'')+two(h)+':'+two(m)+':'+two(s);
+  }
+  var iv=setInterval(tick,1000); tick();
+})();
+</script>
+{% endif %}

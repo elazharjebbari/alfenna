@@ -1,0 +1,11 @@
+Bonjour {{ customer_name|default:"" }},
+
+Nous avons confirmé le remboursement{% if is_full_refund %} total{% else %} partiel{% endif %} lié à votre commande {{ order_reference }}.
+Montant remboursé : {{ refund_amount }} {{ currency }}
+Montant initial : {{ original_amount }} {{ currency }}
+
+Téléchargez votre facture/avoir mise à jour :
+{{ invoice_url }}
+
+À bientôt,
+L'équipe {{ site_name }}

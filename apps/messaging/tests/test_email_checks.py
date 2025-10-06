@@ -5,7 +5,7 @@ from unittest import mock
 
 from django.conf import settings
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lumierelearning.settings.test_cli")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alfenna.settings.test_cli")
 
 import django
 
