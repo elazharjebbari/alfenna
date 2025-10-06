@@ -1,0 +1,299 @@
+{% load i18n %}
+{% url 'leads:collect' as leads_collect_url %}
+{% url 'leads:sign' as leads_sign_url %}
+{% with fullname_key=fields_map.fullname|default:'full_name' phone_key=fields_map.phone|default:'phone' address_key=fields_map.address|default:'address' quantity_key=fields_map.quantity|default:'quantity' offer_key=fields_map.offer|default:'offer_key' product_key=fields_map.product|default:'product' promotion_key=fields_map.promotion|default:'promotion_selected' %}
+{% with action_target=action_url|default:leads_collect_url %}
+
+<form class="c-lead-form c-lead-form--stepper af-form card border-0 shadow-sm"
+      data-ff-root data-steps="4" method="post" action=""
+      data-action-url="{{ action_target }}"
+      data-require-signed="true" data-sign-url="{{ leads_sign_url }}"
+      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","address":"{{ address_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}","email":"email","payment_method":"payment_method"}'
+      data-checkout-url="/api/checkout/sessions/"
+      novalidate>
+    {% csrf_token %}
+
+    <div class="af-shell">
+
+        <!-- ===== En‑tête & stepper ===== -->
+        <header class="af-header text-center">
+            <img src="https://placehold.co/96x76?text=Logo" alt="Logo" class="af-logo">
+            <div class="af-brand">Al Fenna</div>
+            <div class="af-baseline small fw-bold text-uppercase">{% trans "NATUREL • SOIN • CONFIANCE" %}</div>
+
+            <nav class="af-stepper mt-3" aria-label="{% trans 'Progression' %}">
+                <span class="af-pill is-active">{% trans "Contact" %}</span>
+                <div class="af-divider" aria-hidden="true"></div>
+                <span class="af-pill">{% trans "Offres" %}</span>
+                <div class="af-divider" aria-hidden="true"></div>
+                <span class="af-pill">{% trans "Paiement" %}</span>
+                <div class="af-divider" aria-hidden="true"></div>
+                <span class="af-pill">{% trans "Confirmation" %}</span>
+            </nav>
+            <div class="af-progress small" data-ff-progress>{% trans "Étape 1 / 4" %}</div>
+        </header>
+
+        <!-- ======================= ÉTAPE 1 ======================= -->
+        <section data-ff-step="1" data-step="1" class="ff-step">
+            <div class="af-banner mt-2 mb-4">
+                <div class="row g-3 align-items-stretch">
+                    <div class="col-lg-5">
+                        <div class="af-left h-100">
+                            <div class="af-small">{% trans "Seulement" %}</div>
+                            {% if pricing.has_promo %}
+                            <div class="af-price-now">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency }}
+                            </div>
+                            <div class="af-price-old mt-1">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}
+                            </div>
+                            <div class="af-saving mt-2">
+                                {% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency %}
+                                Vous économisez {{ amount }} {{ currency }}
+                                {% endblocktrans %}
+                            </div>
+                            {% elif pricing.price %}
+                            <div class="af-price-now">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <ul class="list-unstyled mb-2 af-bullets">
+                            <li><span class="af-ico"><i class="fa-solid fa-truck-fast"></i></span><strong>{% trans "Livraison 48 h" %}</strong></li>
+                            <li><span class="af-ico"><i class="fa-solid fa-hand-holding-dollar"></i></span><strong>{% trans "Paiement à la livraison" %}</strong></li>
+                            <li><span class="af-ico"><i class="fa-solid fa-leaf"></i></span><strong>{% trans "100% naturel" %}</strong></li>
+                        </ul>
+                        <span class="af-chip"><i class="fa-solid fa-user-group" aria-hidden="true"></i> +&nbsp;500 {% trans "clientes" %}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vstack gap-3">
+                <div>
+                    <label class="af-label" for="ff-fullname">{% trans "Nom complet" %}</label>
+                    <input id="ff-fullname" class="form-control" type="text"
+                           name="{{ fullname_key }}" autocomplete="name" required
+                           placeholder="{% trans 'Ex. Salma Benali' %}">
+                </div>
+                <div>
+                    <label class="af-label" for="ff-phone">{% trans "Numéro de téléphone" %}</label>
+                    <div class="input-group">
+                        <span class="input-group-text">+212 / 06</span>
+                        <input id="ff-phone" type="tel" class="form-control"
+                               name="{{ phone_key }}" inputmode="tel" autocomplete="tel"
+                               minlength="6" maxlength="20" required
+                               placeholder="{% trans 'WhatsApp ou mobile actif' %}">
+                    </div>
+                    <div class="form-text mt-1">{% trans "Format libre. Les caractères non numériques seront nettoyés
+                        automatiquement." %}
+                    </div>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" checked>
+                    <label class="form-check-label" for="ff-wa-optin">
+                        {% trans "OK pour être contacté(e) sur WhatsApp pour confirmer la livraison" %}
+                    </label>
+                </div>
+
+                <div class="d-grid">
+                    <button type="button" class="btn af-cta" data-ff-next>{% trans "Continuer" %} &#8250;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= ÉTAPE 2 ======================= -->
+        <section data-ff-step="2" data-step="2" class="ff-step d-none">
+            <div class="af-savings-pill" role="note">
+                <span class="af-dot" aria-hidden="true"></span>
+                {% trans "VOUS ÉCONOMISEZ LORS DE VOTRE PREMIER ACHAT" %}
+                <i class="fa-solid fa-chevron-right ms-2" aria-hidden="true"></i>
+            </div>
+
+            <!-- Offres -->
+            <div class="row g-3 af-offers" role="group" aria-label="{% trans 'Choix du pack' %}">
+                <div class="col-md-6">
+                    <label class="af-card-radio">
+                        <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="solo" checked>
+                        <div class="af-offer-card">
+                            <h5 class="af-offer-title mb-3">{% trans "Pack Solo" %}</h5>
+                            <div class="af-offer-price"><span class="af-amount">349</span>&nbsp;MAD</div>
+                            <div class="af-offer-choice small text-muted mt-2">
+                                <i class="fa-regular fa-circle me-1"></i> {% trans "Oui" %}
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="af-card-radio is-featured">
+                        <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="duo">
+                        <div class="af-offer-card">
+                            <div class="af-badge-best">{% trans "MEILLEUR CHOIX" %}</div>
+                            <h5 class="af-offer-title mb-3">{% trans "Pack Duo" %}</h5>
+                            <div class="af-offer-price"><span class="af-amount">489</span>&nbsp;MAD</div>
+                            <div class="af-offer-eco small text-muted mt-1">{% trans "Éco 209 MAD" %}</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Cross‑sell compact : juste une case -->
+            <div class="af-bump af-bump--compact mt-3">
+                <img src="https://placehold.co/72x72?text=+" alt="{% trans 'Bougie parfumée' %}"
+                     class="af-bump-thumb rounded-3">
+                <div class="flex-grow-1">
+                    <div class="form-check m-0">
+                        <input class="form-check-input" type="checkbox" id="af-candle-on" name="candle_optin" value="1">
+                        <label class="form-check-label fw-semibold" for="af-candle-on">
+                            {% trans "+ Bougie parfumée en cire de soja" %}
+                            <span class="text-muted">({% trans "150 g" %})</span>
+                            <span class="af-bump-price">— 40&nbsp;MAD</span>
+                        </label>
+                    </div>
+                    <div class="small text-muted mt-1">{% trans "Optionnelle · Parfums variés disponibles" %}</div>
+                </div>
+            </div>
+
+            <!-- Adresse (champ unique) -->
+            {% if address_key %}
+            <div class="mt-3">
+                <label class="af-label" for="ff-address">{% trans "Adresse de livraison" %}</label>
+                <input id="ff-address" class="form-control" type="text"
+                       name="{{ address_key }}" autocomplete="street-address"
+                       placeholder="{% trans 'Rue, quartier, ville (code postal si possible)' %}">
+            </div>
+            {% endif %}
+
+            <!-- Récap -->
+            <div class="af-summary mt-3">
+                <div class="af-summary-row"><span>{% trans "Sous‑total" %}</span><strong id="af-subtotal">XXX
+                    MAD</strong></div>
+                <div class="af-summary-row"><span>{% trans "Remise paiement en ligne" %}</span><strong id="af-discount">XXX
+                    MAD</strong></div>
+                <div class="af-summary-row af-summary-total"><span>{% trans "Total mis à jour" %}</span><strong
+                        id="af-total">XXX MAD</strong></div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center gap-2 mt-3">
+                <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
+                </button>
+                <button type="button" class="btn af-cta" data-ff-next>{% trans "Continuer" %} &#8250;</button>
+            </div>
+        </section>
+
+        {# ——— ÉTAPE 3 ——— #}
+        <section data-ff-step="3" data-step="3" class="ff-step d-none" aria-labelledby="af-pay-title">
+            <h2 id="af-pay-title" class="af-h2 mb-3">{% trans "Paiement" %}</h2>
+
+            <!-- Méthode de paiement -->
+            <fieldset class="af-pay" role="radiogroup" aria-label="{% trans 'Méthode de paiement' %}">
+                <!-- Paiement en ligne -->
+                <label class="af-pay-option is-online">
+                    <input type="radio" name="payment_method" value="online" class="visually-hidden" checked>
+                    <span class="af-pay-check" aria-hidden="true"></span>
+                    <span class="af-pay-label">{% trans "Paiement en ligne" %}</span>
+                    <span class="af-discount" id="af-online-discount">−20&nbsp;MAD {% trans "de réduction" %}</span>
+                </label>
+
+                <!-- Paiement à la livraison -->
+                <label class="af-pay-option">
+                    <input type="radio" name="payment_method" value="cod" class="visually-hidden">
+                    <span class="af-pay-check" aria-hidden="true"></span>
+                    <span class="af-pay-label">{% trans "Paiement à la livraison" %}</span>
+                </label>
+            </fieldset>
+
+            <!-- E-mail de confirmation -->
+            <div class="mt-3">
+                <label class="af-label" for="ff-email">{% trans "Adresse e‑mail" %}</label>
+                <input type="email" id="ff-email" name="email" class="form-control"
+                       placeholder="{% trans 'Ex. salma@example.com' %}" autocomplete="email">
+            </div>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="ff-email-optin" name="email_optin" checked>
+                <label class="form-check-label" for="ff-email-optin">
+                    {% trans "OK pour recevoir la confirmation par e‑mail" %}
+                </label>
+            </div>
+
+            <!-- Récap rapide (reprend le style de l’étape 2) -->
+            <div class="af-summary mt-3">
+                <div class="af-summary-row">
+                    <span>{% trans "Sous‑total" %}</span><strong id="af-step3-subtotal">XXX MAD</strong>
+                </div>
+                <div class="af-summary-row" id="af-step3-discount-row">
+                    <span>{% trans "Remise paiement en ligne" %}</span><strong id="af-step3-discount">−20 MAD</strong>
+                </div>
+                <div class="af-summary-row af-summary-total">
+                    <span>{% trans "Total" %}</span><strong id="af-step3-total">XXX MAD</strong>
+                </div>
+            </div>
+
+            <!-- Sécurité perçue -->
+            <div class="d-flex align-items-center gap-2 small text-muted mt-2">
+                <i class="fa-solid fa-lock"></i> {% trans "Paiement sécurisé • 3D Secure" %}
+            </div>
+
+            <!-- CTA final -->
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn af-cta" data-ff-submit>
+                    {% trans "Confirmer la commande" %}
+                </button>
+            </div>
+
+            <div class="ff-form-msg text-danger small mt-2" aria-live="polite"></div>
+        </section>
+
+        {# Étape 4 — thank you #}
+        <section data-ff-step="4" data-step="4" data-thank-you class="ff-step d-none text-center" aria-live="polite">
+            <div class="af-thanks py-4">
+                <p class="fw-semibold mb-1">{% trans "Merci, votre commande est enregistrée." %}</p>
+                <p class="text-muted mb-0">{% trans "Vous recevrez une confirmation très bientôt." %}</p>
+            </div>
+        </section>
+    </div>
+    <script>
+    (function () {
+        const root = document.querySelector('[data-ff-root]');
+        if (!root) return;
+        const pills = Array.from(document.querySelectorAll('.af-stepper .af-pill'));
+        if (!pills.length) return;
+        function syncPills() {
+            const visibleIndex = Array.from(root.querySelectorAll('[data-ff-step]'))
+                .findIndex((step) => !step.classList.contains('d-none')) + 1;
+            pills.forEach((pill, index) => pill.classList.toggle('is-active', index + 1 === visibleIndex));
+        }
+        syncPills();
+        const observer = new MutationObserver(syncPills);
+        root.querySelectorAll('[data-ff-step]').forEach((step) => observer.observe(step, {
+            attributes: true,
+            attributeFilter: ['class'],
+        }));
+        root.addEventListener('click', (event) => {
+            if (event.target.closest('[data-ff-next],[data-ff-prev]')) {
+                setTimeout(syncPills, 0);
+            }
+        });
+    })();
+    </script>
+</form>
+
+{% if form.flow_config_json %}
+<script type="application/json" data-ff-config>{{
+    form.flow_config_json
+    |
+    safe
+}}</script>
+{% else %}
+<script type="application/json" data-ff-config>
+    {
+        "form_kind": "product_lead",
+        "endpoint_url": "{{ action_target }}",
+        "require_idempotency": true,
+        "require_signed_token": true,
+        "sign_url": "{{ leads_sign_url }}",
+        "context": {}
+    }
+</script>
+{% endif %}
+{% endwith %}
+{% endwith %}
