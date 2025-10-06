@@ -1,0 +1,2633 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-06 01:35-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: apps/accounts/forms.py:9 apps/accounts/templates/accounts/login.html:19
+#: templates/components/core/accounts/login/form.html:27
+msgid "Email ou nom d’utilisateur"
+msgstr ""
+
+#: apps/accounts/forms.py:10 apps/accounts/templates/accounts/login.html:61
+#: apps/atelier/compose/hydrators/modals/hydrators.py:40
+#: templates/components/core/accounts/login/form.html:69
+msgid "Rester connecté"
+msgstr ""
+
+#: apps/accounts/forms_signup.py:19
+#: apps/accounts/templates/accounts/register.html:16
+#: templates/components/core/accounts/register_form/component.html:26
+#: templates/components/core/forms/lead/lead.html:6
+#: templates/components/core/forms/lead_step2/lead_step2.html:7
+#: templates/components/core/forms/lead_step3/lead_step3.html:71
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:26
+msgid "Nom complet"
+msgstr ""
+
+#: apps/accounts/forms_signup.py:20
+#: templates/components/core/checkout/payment_form.html:14
+msgid "Adresse e-mail"
+msgstr ""
+
+#: apps/accounts/forms_signup.py:21
+#: apps/accounts/templates/accounts/login.html:37
+#: apps/accounts/templates/accounts/register.html:50
+#: apps/atelier/compose/hydrators/modals/hydrators.py:39
+#: templates/components/core/accounts/login/form.html:45
+#: templates/components/core/accounts/register_form/component.html:60
+msgid "Mot de passe"
+msgstr ""
+
+#: apps/accounts/forms_signup.py:22
+msgid "Confirmez le mot de passe"
+msgstr ""
+
+#: apps/accounts/forms_signup.py:23
+#: apps/accounts/templates/accounts/register.html:99
+#: templates/components/core/accounts/register_form/component.html:109
+msgid "Recevoir les offres et actualités"
+msgstr ""
+
+#: apps/accounts/forms_signup.py:35 apps/accounts/views.py:329
+msgid "Un compte existe déjà avec cette adresse e-mail."
+msgstr ""
+
+#: apps/accounts/forms_signup.py:43
+msgid "Les mots de passe ne correspondent pas."
+msgstr ""
+
+#: apps/accounts/mixins.py:13
+msgid "Veuillez vérifier votre email avant d’accéder à cette page."
+msgstr ""
+
+#: apps/accounts/templates/accounts/check_email.html:4
+#: apps/accounts/templates/accounts/password_reset_done.html:4
+#: apps/atelier/compose/accounts/password_reset_done/hydrators.py:13
+#: apps/atelier/compose/hydrators/accounts/check_email.py:39
+#: apps/atelier/compose/hydrators/accounts/password_reset_done.py:23
+msgid "Vérifie ta boîte mail"
+msgstr ""
+
+#: apps/accounts/templates/accounts/check_email.html:5
+#: apps/atelier/compose/hydrators/accounts/check_email.py:35
+msgid "Nous venons d’envoyer un lien de confirmation à"
+msgstr ""
+
+#: apps/accounts/templates/accounts/check_email.html:8
+msgid "Clique le lien dans l’e‑mail pour activer ton compte."
+msgstr ""
+
+#: apps/accounts/templates/accounts/check_email.html:12
+#: templates/accounts/verification_error.html:11
+msgid "Renvoyer l’e‑mail"
+msgstr ""
+
+#: apps/accounts/templates/accounts/check_email.html:16
+#: apps/accounts/templates/accounts/password_reset_done.html:14
+#: apps/atelier/compose/hydrators/accounts/check_email.py:49
+#: apps/atelier/compose/hydrators/accounts/password_reset_done.py:20
+#: apps/atelier/compose/hydrators/accounts/verify_error.py:28
+#: templates/accounts/verification_error.html:15
+msgid "Retour à la connexion"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:4
+#: apps/atelier/compose/hydrators/accounts/login.py:55
+#: templates/components/core/accounts/login/form.html:5
+msgid "Connexion"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:5
+#: apps/atelier/compose/hydrators/accounts/login.py:56
+#: templates/components/core/accounts/login/form.html:6
+msgid "Accède à tes cours en toute sécurité."
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:50
+#: apps/accounts/templates/accounts/password_reset_confirm.html:34
+#: apps/accounts/templates/accounts/password_reset_confirm.html:58
+#: apps/accounts/templates/accounts/register.html:63
+#: apps/accounts/templates/accounts/register.html:88
+#: templates/components/core/accounts/login/form.html:58
+#: templates/components/core/accounts/password_reset_confirm/component.html:43
+#: templates/components/core/accounts/password_reset_confirm/component.html:67
+#: templates/components/core/accounts/register_form/component.html:73
+#: templates/components/core/accounts/register_form/component.html:98
+msgid "Afficher le mot de passe"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:51
+#: apps/accounts/templates/accounts/password_reset_confirm.html:35
+#: apps/accounts/templates/accounts/password_reset_confirm.html:59
+#: apps/accounts/templates/accounts/register.html:64
+#: apps/accounts/templates/accounts/register.html:89
+#: templates/components/core/accounts/login/form.html:59
+#: templates/components/core/accounts/password_reset_confirm/component.html:44
+#: templates/components/core/accounts/password_reset_confirm/component.html:68
+#: templates/components/core/accounts/register_form/component.html:74
+#: templates/components/core/accounts/register_form/component.html:99
+msgid "Masquer le mot de passe"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:53
+#: apps/accounts/templates/accounts/password_reset_confirm.html:37
+#: apps/accounts/templates/accounts/password_reset_confirm.html:61
+#: apps/accounts/templates/accounts/register.html:66
+#: apps/accounts/templates/accounts/register.html:91
+#: templates/components/core/accounts/login/form.html:61
+#: templates/components/core/accounts/password_reset_confirm/component.html:46
+#: templates/components/core/accounts/password_reset_confirm/component.html:70
+#: templates/components/core/accounts/register_form/component.html:76
+#: templates/components/core/accounts/register_form/component.html:101
+msgid "Verr Maj activée"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:65
+#: apps/accounts/templates/accounts/password_reset_complete.html:8
+#: apps/accounts/templates/accounts/register.html:107
+#: apps/atelier/compose/accounts/password_reset_complete/hydrators.py:18
+#: apps/atelier/compose/accounts/password_reset_done/hydrators.py:18
+#: apps/atelier/compose/accounts/unsubscribe_success/hydrators.py:18
+#: apps/atelier/compose/accounts/verify_email_success/hydrators.py:18
+#: apps/atelier/compose/hydrators/accounts/password_reset_complete.py:26
+#: apps/atelier/compose/hydrators/accounts/verify_success.py:21
+#: apps/atelier/compose/hydrators/modals/hydrators.py:36
+#: apps/atelier/compose/hydrators/modals/hydrators.py:41
+#: templates/accounts/verification_success.html:8
+#: templates/components/core/accounts/login/form.html:73
+#: templates/components/core/accounts/register_form/component.html:117
+#: templates/components/core/header/auth_links.html:33
+#: templates/components/core/header/modes/main/header_modes_main.html:54
+#: templates/components/core/header/modes/mobile/mobile_menu.html:40
+msgid "Se connecter"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:69
+#: apps/atelier/compose/hydrators/modals/hydrators.py:43
+#: templates/components/core/accounts/login/form.html:77
+msgid "Mot de passe oublié ?"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:70
+#: apps/atelier/compose/accounts/register/hydrators.py:14
+#: apps/atelier/compose/accounts/register/hydrators.py:28
+#: templates/components/core/accounts/login/form.html:78
+msgid "Créer un compte"
+msgstr ""
+
+#: apps/accounts/templates/accounts/login.html:76
+#: apps/accounts/templates/accounts/resend_verification.html:37
+#: templates/components/core/accounts/login/form.html:84
+msgid "Besoin d’aide ? Contacte le support."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_complete.html:4
+#: apps/atelier/compose/accounts/password_reset_complete/hydrators.py:13
+#: apps/atelier/compose/hydrators/accounts/password_reset_complete.py:21
+msgid "Mot de passe mis à jour"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_complete.html:7
+#: apps/atelier/compose/hydrators/accounts/password_reset_complete.py:23
+msgid "Ton nouveau mot de passe est enregistré."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_confirm.html:4
+#: apps/atelier/compose/accounts/password_reset_confirm/hydrators.py:26
+#: apps/atelier/compose/hydrators/accounts/password_reset_confirm.py:27
+#: templates/components/core/accounts/password_reset_confirm/component.html:5
+msgid "Définir un nouveau mot de passe"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_confirm.html:8
+#: templates/components/core/accounts/password_reset_confirm/component.html:18
+msgid "Ce lien de réinitialisation est invalide ou expiré."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_confirm.html:10
+#: templates/components/core/accounts/password_reset_confirm/component.html:20
+msgid "Demander un nouveau lien"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_confirm.html:21
+#: templates/components/core/accounts/password_reset_confirm/component.html:30
+msgid "Nouveau mot de passe"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_confirm.html:45
+#: apps/accounts/templates/accounts/register.html:75
+#: templates/components/core/accounts/password_reset_confirm/component.html:54
+#: templates/components/core/accounts/register_form/component.html:85
+msgid "Confirmer le mot de passe"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_confirm.html:69
+#: templates/components/core/accounts/password_reset_confirm/component.html:78
+msgid "Enregistrer"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_done.html:8
+msgid "Si l’adresse existe, un e‑mail a été envoyé avec les étapes à suivre."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_done.html:63
+msgid "Nouvelle tentative dans"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_done.html:71
+msgid "C’est tout bon ! Si l’adresse existe, l’e-mail vient d’être envoyé."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_done.html:75
+msgid ""
+"Notre fournisseur limite temporairement les envois. Réessaie dans une heure."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_done.html:76
+msgid ""
+"L’envoi a échoué après plusieurs tentatives. Contacte le support si besoin."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_done.html:80
+msgid "Nous réessaierons automatiquement dans quelques minutes."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_done.html:83
+msgid "Nous préparons l’envoi de ton e‑mail sécurisé."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_form.html:6
+#: apps/accounts/templates/accounts/password_reset_request.html:4
+#: apps/atelier/compose/accounts/password_reset/hydrators.py:14
+#: apps/atelier/compose/accounts/password_reset/hydrators.py:30
+#: apps/atelier/compose/hydrators/accounts/password_reset_request.py:33
+#: templates/components/core/accounts/password_reset_form/component.html:5
+msgid "Mot de passe oublié"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_form.html:7
+msgid ""
+"Saisissez votre adresse e-mail et, si elle existe, nous vous enverrons un "
+"lien de réinitialisation."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_form.html:15
+#: apps/accounts/templates/accounts/password_reset_request.html:33
+#: templates/components/core/accounts/password_reset_form/component.html:42
+msgid "Envoyer le lien"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_request.html:5
+msgid "Saisis ton e‑mail pour recevoir un lien."
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_request.html:16
+#: apps/accounts/templates/accounts/register.html:33
+#: templates/components/core/accounts/password_reset_form/component.html:25
+#: templates/components/core/accounts/register_form/component.html:43
+#: templates/components/core/forms/lead_step3/lead_step3.html:207
+msgid "Adresse e‑mail"
+msgstr ""
+
+#: apps/accounts/templates/accounts/password_reset_request.html:37
+#: templates/components/core/accounts/password_reset_form/component.html:46
+#: templates/components/core/forms/lead_step2/lead_step2.html:28
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:68
+msgid "Retour"
+msgstr ""
+
+#: apps/accounts/templates/accounts/register.html:4
+#: apps/accounts/templates/accounts/register.html:103
+#: apps/atelier/compose/hydrators/accounts/register.py:44
+#: templates/components/core/accounts/register_form/component.html:5
+#: templates/components/core/accounts/register_form/component.html:113
+msgid "Créer mon compte"
+msgstr ""
+
+#: apps/accounts/templates/accounts/register.html:5
+#: apps/atelier/compose/hydrators/accounts/register.py:45
+msgid "Rejoins l’académie en 1 minute."
+msgstr ""
+
+#: apps/accounts/templates/accounts/register.html:67
+#: templates/components/core/accounts/register_form/component.html:77
+msgid "8+ caractères. Évite les mots de passe trop communs."
+msgstr ""
+
+#: apps/accounts/templates/accounts/register.html:107
+#: templates/components/core/accounts/register_form/component.html:117
+msgid "Déjà inscrit ?"
+msgstr ""
+
+#: apps/accounts/templates/accounts/resend_verification.html:4
+msgid "Confirme ton adresse email"
+msgstr ""
+
+#: apps/accounts/templates/accounts/resend_verification.html:6
+#, python-format
+msgid "Un lien a été envoyé à %(email)s."
+msgstr ""
+
+#: apps/accounts/templates/accounts/resend_verification.html:11
+msgid ""
+"Clique sur le lien de vérification reçu par email pour activer ton accès."
+msgstr ""
+
+#: apps/accounts/templates/accounts/resend_verification.html:16
+msgid "Nous venons d’envoyer un nouveau lien de vérification."
+msgstr ""
+
+#: apps/accounts/templates/accounts/resend_verification.html:20
+#, python-format
+msgid "Tu pourras renvoyer un lien dans %(seconds)s secondes."
+msgstr ""
+
+#: apps/accounts/templates/accounts/resend_verification.html:27
+msgid "Renvoyer le lien de vérification"
+msgstr ""
+
+#: apps/accounts/templates/accounts/resend_verification.html:32
+msgid "Retour à mon compte"
+msgstr ""
+
+#: apps/accounts/views.py:119 apps/accounts/views.py:128
+#: apps/pages/views/views_login.py:68 apps/pages/views/views_login.py:79
+msgid "Trop de tentatives. Réessayez plus tard."
+msgstr ""
+
+#: apps/accounts/views.py:121 apps/pages/views/views_login.py:71
+msgid "Identifiants invalides."
+msgstr ""
+
+#: apps/accounts/views.py:140 apps/pages/views/views_login.py:88
+msgid "Connexion réussie."
+msgstr ""
+
+#: apps/accounts/views.py:146 apps/pages/views/views_login.py:94
+msgid "Vérifie ton email pour accéder à tout le contenu."
+msgstr ""
+
+#: apps/accounts/views.py:159
+msgid "Vous êtes déconnecté."
+msgstr ""
+
+#: apps/accounts/views.py:180
+msgid "Ton email est déjà vérifié."
+msgstr ""
+
+#: apps/accounts/views.py:206
+#, python-format
+msgid ""
+"Merci de patienter %(seconds)s secondes avant de renvoyer un nouvel email."
+msgstr ""
+
+#: apps/accounts/views.py:213
+msgid "Un lien de vérification vient d’être envoyé."
+msgstr ""
+
+#: apps/accounts/views.py:419
+msgid "Ton compte est déjà activé. Tu peux te connecter."
+msgstr ""
+
+#: apps/accounts/views.py:453
+msgid "Si l'adresse existe, un e-mail vient d'être envoyé."
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset/hydrators.py:16
+msgid ""
+"Renseignez votre adresse e-mail et nous vous enverrons un lien si elle est "
+"connue."
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset/hydrators.py:32
+msgid "Renseignez votre adresse e-mail pour recevoir un lien"
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset_complete/hydrators.py:15
+msgid "Ton nouveau mot de passe est prêt. Tu peux maintenant te connecter."
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset_complete/hydrators.py:19
+#: apps/atelier/compose/accounts/password_reset_done/hydrators.py:19
+#: apps/atelier/compose/accounts/unsubscribe_success/hydrators.py:19
+#: apps/atelier/compose/accounts/verify_email_success/hydrators.py:19
+#: apps/atelier/compose/hydrators/accounts/password_reset_done.py:19
+msgid "Retour à la page précédente"
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset_confirm/hydrators.py:26
+msgid "Lien de réinitialisation invalide"
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset_confirm/hydrators.py:29
+msgid "Saisis ton nouveau mot de passe ci-dessous."
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset_confirm/hydrators.py:31
+msgid ""
+"Ce lien n'est plus valide. Merci de relancer une demande de réinitialisation."
+msgstr ""
+
+#: apps/atelier/compose/accounts/password_reset_done/hydrators.py:15
+msgid ""
+"Si l'adresse est connue, un e-mail avec un lien de réinitialisation vient "
+"d'être envoyé."
+msgstr ""
+
+#: apps/atelier/compose/accounts/register/hydrators.py:15
+#: apps/atelier/compose/accounts/register/hydrators.py:29
+msgid "pour accéder aux formations"
+msgstr ""
+
+#: apps/atelier/compose/accounts/unsubscribe_success/hydrators.py:13
+msgid "Désabonnement confirmé"
+msgstr ""
+
+#: apps/atelier/compose/accounts/unsubscribe_success/hydrators.py:15
+msgid ""
+"Tu ne recevras plus nos e-mails marketing. Tu peux te reconnecter pour "
+"mettre à jour tes préférences."
+msgstr ""
+
+#: apps/atelier/compose/accounts/verify_email_success/hydrators.py:13
+#: apps/atelier/compose/hydrators/accounts/verify_success.py:17
+msgid "Adresse e-mail vérifiée"
+msgstr ""
+
+#: apps/atelier/compose/accounts/verify_email_success/hydrators.py:15
+msgid ""
+"Merci ! Ton adresse e-mail est confirmée. Tu peux maintenant accéder à tous "
+"nos contenus."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/check_email.py:15
+#: apps/atelier/compose/hydrators/accounts/check_email.py:20
+msgid "ton adresse"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/check_email.py:43
+msgid "Clique le lien dans l’e-mail pour activer ton compte."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/check_email.py:45
+#: apps/atelier/compose/hydrators/accounts/verify_error.py:23
+#: templates/components/core/accounts/auth_message/component.html:30
+msgid "Renvoyer l’e-mail"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/password_reset_done.py:25
+msgid "Si l’adresse existe, un e-mail a été envoyé avec les étapes à suivre."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/password_reset_request.py:34
+msgid "Saisis ton e-mail pour recevoir un lien."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/verify_error.py:18
+#: templates/accounts/verification_error.html:4
+msgid "Lien invalide ou expiré"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/verify_error.py:20
+msgid "Ce lien de vérification n’est plus valide. Demande un nouvel e-mail."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/accounts/verify_success.py:18
+#: templates/accounts/verification_success.html:7
+msgid "Ton compte est activé. Tu peux te connecter."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:91
+#, python-brace-format
+msgid "≈{amount} {currency} / jour"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:149
+msgid "★ 4,8/5 — 500+ avis"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:150
+msgid "Garantie satisfaite ou remboursée 14 jours"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:151
+msgid "Voir tout le contenu"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:166
+msgid "Votre offre"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:241
+msgid "Code promo"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:242
+msgid "ENTRERMONCODE"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:244
+#: templates/components/core/checkout/button_checkout.html:19
+msgid "Payer et accéder maintenant"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:275
+#, python-brace-format
+msgid "Payer avec {provider} — accès immédiat"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:283
+msgid "Payer en un tap"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:284
+msgid "Choisissez votre portefeuille préféré et accédez instantanément."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:299
+#, python-format
+msgid "Paiement 100% sécurisé via Stripe (TLS/HTTPS)"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:300
+msgid "Garantie satisfait ou remboursé 14 jours, sans justificatif"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:301
+msgid "Accès immédiat à l’espace d’apprentissage après validation"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:319
+msgid "Et si je n’ai pas de matériel ?"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:320
+msgid ""
+"Pas d’inquiétude : nous listons le nécessaire et les alternatives maison "
+"dans le module 1."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:324
+msgid "Combien de temps ça prend ?"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:325
+msgid ""
+"Comptez 2 heures pour votre première bougie, puis 7 jours pour devenir "
+"autonome."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:329
+msgid "Et si je change d’avis ?"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:330
+msgid ""
+"Vous êtes remboursé·e sous 14 jours sur simple demande depuis votre espace "
+"membre."
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:355
+msgid "Conditions générales de vente"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:356
+msgid "Politique de confidentialité"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:357
+msgid "Politique de remboursement"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:360
+#, python-brace-format
+msgid "Montant TTC — devise : {currency}"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/checkout/hydrators.py:368
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:8
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:8
+msgid "Questions fréquentes"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/modals/hydrators.py:38
+msgid "Email ou nom d'utilisateur"
+msgstr ""
+
+#: apps/atelier/compose/hydrators/modals/hydrators.py:42
+#: templates/components/core/header/auth_links.html:38
+msgid "S'inscrire"
+msgstr ""
+
+#: apps/billing/templates/billing/checkout.html:18
+#: templates/components/core/forms/lead_step3/lead_step3.html:29
+#: templates/components/core/forms/lead_step3/lead_step3.html:185
+msgid "Paiement"
+msgstr ""
+
+#: apps/billing/templates/billing/checkout.html:19
+msgid "Cours"
+msgstr ""
+
+#: apps/billing/templates/billing/checkout.html:20
+msgid "Montant"
+msgstr ""
+
+#: apps/billing/templates/billing/checkout.html:25
+#: apps/billing/templates/billing/checkout.html:58
+msgid "Payer"
+msgstr ""
+
+#: apps/billing/templates/billing/checkout.html:71
+msgid "Paiement en cours de finalisation..."
+msgstr ""
+
+#: apps/catalog/templates/catalog/course_detail.html:8
+#: apps/content/templates/content/lecture_detail.html:8
+msgid "Prévisualisation (non indexée)"
+msgstr ""
+
+#: apps/catalog/templates/catalog/course_detail.html:15
+msgid "Plan du cours"
+msgstr ""
+
+#: apps/catalog/templates/catalog/course_list.html:7
+msgid "Catalogue des cours"
+msgstr ""
+
+#: apps/catalog/templates/catalog/course_list.html:15
+msgid "Aucun cours pour le moment."
+msgstr ""
+
+#: apps/catalog/templates/catalog/course_list.html:22
+msgid "Précédent"
+msgstr ""
+
+#: apps/catalog/templates/catalog/course_list.html:26
+msgid "Suivant"
+msgstr ""
+
+#: apps/checkout/views.py:83
+msgid "payment_method must be 'online'."
+msgstr ""
+
+#: apps/content/mixins.py:120
+msgid "Accès refusé à cette leçon."
+msgstr ""
+
+#: apps/content/mixins.py:124
+msgid "Accès refusé."
+msgstr ""
+
+#: apps/content/models.py:24
+msgid "Vidéo"
+msgstr ""
+
+#: apps/content/models.py:25
+msgid "Article"
+msgstr ""
+
+#: apps/content/models.py:26
+msgid "PDF/Document"
+msgstr ""
+
+#: apps/content/models.py:27
+msgid "Lien externe"
+msgstr ""
+
+#: apps/content/models.py:31
+msgid "Français (France)"
+msgstr ""
+
+#: apps/content/models.py:32
+msgid "Arabe (Maroc)"
+msgstr ""
+
+#: apps/content/templates/content/lecture_detail.html:5
+msgid "Leçon"
+msgstr ""
+
+#: apps/content/templates/content/lecture_detail.html:19
+msgid "Votre navigateur ne supporte pas la balise vidéo."
+msgstr ""
+
+#: apps/content/templates/content/lecture_detail.html:45
+msgid "Commentaires"
+msgstr ""
+
+#: apps/content/templates/content/lecture_detail.html:52
+msgid "Aucun commentaire pour l’instant."
+msgstr ""
+
+#: apps/content/templates/content/lecture_detail.html:58
+msgid "Connectez-vous pour commenter."
+msgstr ""
+
+#: apps/content/views.py:89
+msgid "Cette leçon est réservée. Accédez au cours pour la débloquer."
+msgstr ""
+
+#: apps/leads/api/serializers.py:13
+msgid "Vous devez accepter les conditions."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/base.html:25
+#: draft/template_ref_to_convert/carpet/base_luxe.html:16
+msgid "Tapis de prière confortable | Maroc"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:7
+msgid "Pourquoi des centaines de clients choisissent notre tapis ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:10
+msgid ""
+"Un confort incomparable pour vos genoux, grâce à un coussin intégré en "
+"mousse mémoire. Idéal pour prier longtemps sans douleur."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:17
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:19
+msgid "Confort moelleux pour les genoux"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:23
+msgid "Effet mémoire de forme"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:25
+msgid ""
+"Le coussin intégré épouse la forme de vos genoux et soulage la pression dès "
+"le premier contact."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:33
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:35
+msgid "Soulage la douleur aux genoux pendant la prière"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:39
+msgid "Pensé pour votre santé"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits.html:41
+msgid ""
+"Conçu pour réduire les douleurs articulaires pendant la prosternation — "
+"recommandé pour les personnes âgées ou sensibles."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:7
+msgid "Pourquoi choisir Sihaty ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:10
+msgid ""
+"Nous formulons simplement et proprement. Des ingrédients d’origine "
+"naturelle, sélectionnés pour leur douceur — comme la lavande, le citron et "
+"le clou de girofle. Vous savez exactement ce que vous appliquez."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:20
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:24
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:28
+msgid "Why us"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:33
+msgid "Notre promesse tient au réel"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:35
+msgid ""
+"Le résultat recherché : des ongles visuellement plus nets, un contour "
+"apaisé, une routine agréable au quotidien.."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:46
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:50
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:54
+msgid "Effets"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:59
+msgid "Vos ongles, au mieux de leur forme naturelle"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/benefits/benefits_sihaty.html:61
+msgid ""
+"Notre sérum botanique ravive l’éclat des ongles ternis, hydrate les "
+"cuticules et lisse visuellement les stries pour un fini propre et soigné. "
+"Une routine simple, des actifs végétaux traçables, un rendu rosé et sain – "
+"sans artifices."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:99
+msgid "Confiance, preuves et garanties"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:128
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:150
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:163
+msgid "Note"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:176
+msgid "Pourquoi ça marche"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:198
+msgid "Coupe technique"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:204
+msgid "Mesure interne vs tapis standard"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:211
+msgid "Achat sans risque"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/credibility/credibility-luxe.html:234
+msgid "Commander en toute sérénité"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/cta/sticky_cta.html:82
+msgid "Commande rapide"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/cta/sticky_cta.html:87
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:310
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:314
+#: draft/template_ref_to_convert/carpet/components/product/product.html:153
+#: draft/template_ref_to_convert/carpet/components/product/product.html:157
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:125
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:129
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:144
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:148
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:267
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:271
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:267
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:271
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:267
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:271
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:285
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:289
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:267
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:271
+msgid "MAD"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/cta/sticky_cta.html:89
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:410
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:410
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:121
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:111
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:562
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:705
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:788
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:532
+msgid "Livraison gratuite"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/cta/sticky_cta.html:92
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:42
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:26
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:127
+#: templates/components/core/forms/lead/lead.html:23
+msgid "Commander maintenant"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/cta/sticky_cta.html:99
+#: templates/components/core/forms/lead_step2/lead_step2.html:29
+msgid "Commander"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:76
+msgid "عرض"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:76
+msgid "توفّر"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:78
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:606
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:49
+msgid "Offre"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:78
+msgid "vous économisez"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:86
+#: draft/template_ref_to_convert/carpet/components/timer/timer.html:105
+msgid "ينتهي خلال"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:86
+#: draft/template_ref_to_convert/carpet/components/timer/timer.html:105
+msgid "Reste"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/fab/fab-contact.html:230
+msgid "Ouvrir le menu contact"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/fab/fab-contact.html:231
+msgid "Contactez Nous !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/fab/fab-contact.html:242
+msgid "Chat WhatsApp"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/fab/fab-contact.html:249
+msgid "Appeler Chaplin Crêpes"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:9
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:9
+msgid "Tout ce qu’il faut savoir avant de commander."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:18
+msgid "Ça glisse sur carrelage ou marbre ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:24
+msgid ""
+"Non. La base antiglisse reste en place sur les surfaces lisses (carrelage, "
+"marbre, parquet). Pour de meilleurs résultats : surface propre et sèche."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:26
+msgid "J’achète mon tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:34
+msgid "Quelle épaisseur et quelle densité ? À quoi sert la mousse mémoire ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:40
+msgid ""
+"Un rembourrage confortable qui réduit la pression dès le premier contact, "
+"sans être trop mou. La mémoire de forme épouse le genou et revient en place "
+"après l’appui."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:50
+msgid "Votre tapis convient-il aux prières longues (Taraweeh/Qiyam) ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:56
+msgid ""
+"Oui, il est pensé pour la stabilité et le confort prolongé. Idéal à la "
+"maison pour rester concentré plus longtemps."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:58
+msgid "Voir les avis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:66
+msgid "Le front touche-t-il bien le sol pendant la prosternation ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:72
+msgid ""
+"Oui : la zone du front est plus fine pour permettre le contact avec le sol, "
+"tout en gardant un appui stable pour le corps."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:81
+msgid "Quelles sont les dimensions ? Convient-il aux grands gabarits ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:87
+msgid ""
+"Format confortable pour la majorité des adultes : 170 cm x 72 cm. Reportez-"
+"vous aussi aux photos sur modèle."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:89
+msgid "Voir les dimensions"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:97
+msgid "Comment l’entretenir ? Lavage et séchage ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:103
+msgid "Lavage doux (main/eau froide)."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:104
+msgid "Séchage à l’air, à plat."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:105
+msgid "Couleur noire stable avec un entretien simple."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:114
+msgid ""
+"Quelle différence avec un tapis standard, un tapis de yoga ou un coussin "
+"séparé ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:120
+msgid ""
+"Amorti ciblé + base antiglisse + format adapté à la prière : plus stable et "
+"plus pratique au quotidien."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:129
+msgid "Est-ce un bon cadeau ? Proposez-vous un emballage ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:135
+msgid ""
+"Oui, c’est un cadeau utile et élégant pour la maison. Option emballage et "
+"message disponible."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:137
+msgid "Ajouter l’option cadeau"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:145
+msgid "Livraison au Maroc et paiement à la livraison (COD) ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:151
+msgid "Livraison rapide partout au Maroc. Paiement à la livraison disponible."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:153
+msgid "Vous Faire Livrer à Domicile"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:161
+msgid "Retours et échanges : comment ça marche ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:167
+msgid ""
+"Simple et rapide. Contactez-nous sur WhatsApp, nous vous guidons pas à pas."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq.html:169
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:43
+msgid "Écrire sur WhatsApp"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:18
+msgid "Comment utiliser le sérum ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:24
+msgid ""
+"Déposez 1 à 2 gouttes sur chaque ongle et son contour, deux fois par jour. "
+"Massez doucement jusqu’à absorption. Pour un résultat optimal, poursuivez "
+"l’application pendant 6 à 8 semaines."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:34
+msgid "Quand verrai‑je une amélioration ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:40
+msgid ""
+"Les premiers effets cosmétiques se remarquent généralement après 4 à "
+"6 semaines d’utilisation régulière. La constance est la clé !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:52
+msgid "Convient-il aux mains et aux pieds ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:58
+msgid ""
+"Oui. Notre sérum est formulé pour les ongles des mains et des pieds. Testé "
+"sous contrôle dermatologique, il est doux et sans parabènes ni parfums "
+"synthétiques."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:61
+msgid "Poser une question"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:70
+msgid "Puis-je appliquer du vernis après ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:76
+msgid ""
+"Oui. Attendez quelques minutes que le sérum soit totalement absorbé avant "
+"d’appliquer votre base ou vernis. Il n’altère pas la tenue du vernis."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:85
+msgid "De quoi est composée la formule ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:91
+#, python-format
+msgid ""
+"100 %% d’origine naturelle : huiles essentielles de lavande, citron et clou "
+"de girofle, associées à de la vitamine E. Sans parabènes, silicones ni "
+"parfums artificiels."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:93
+msgid "Voir la composition"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:101
+msgid "Y a‑t‑il des contre‑indications ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:107
+msgid ""
+"Le sérum est bien toléré. Pour les femmes enceintes ou allaitantes, demandez "
+"conseil à votre médecin avant usage. En cas de peau sensible, testez sur une "
+"petite zone 24 heures avant."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:110
+msgid "Contacter le support"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:119
+msgid "Livraison et paiement au Maroc ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:125
+msgid ""
+"Livraison rapide partout au Maroc. Vous pouvez payer à la livraison ou via "
+"carte bancaire selon votre préférence."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:62
+msgid "Questions clés avant d’acheter"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:64
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:541
+msgid "Questions clés"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:70
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:544
+msgid "J’ai mal aux genoux : ça aide vraiment ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:76
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:548
+msgid ""
+"Oui. Le coussin à mémoire de forme placé au centre réduit la pression sur la "
+"rotule et soulage pendant et après la prière."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:86
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:554
+msgid "Quelle est l’épaisseur du coussin ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:92
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:558
+msgid ""
+"Environ 2 cm de mousse mémoire, confort ferme mais accueillant, qui reprend "
+"sa forme après chaque usage."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:102
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:564
+msgid "Comment l’entretenir ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/faq/mini-faq.html:108
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:568
+msgid ""
+"Aspiration douce. Taches : chiffon humide + savon neutre. Pas de javel ni "
+"sèche-linge. Séchage à l’air."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/footer/footer.html:23
+#: draft/template_ref_to_convert/carpet/components/footer/footer_sihaty.html:23
+msgid "Une question ? Passer une commande ? Écrivez-nous sur WhatsApp"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:327
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:327
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:54
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:52
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:471
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:327
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:284
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:284
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:284
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:307
+#: templates/components/core/checkout/order_summary.html:21
+msgid "Vous économisez"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:330
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:330
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:55
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:53
+msgid "Prix spécial aujourd’hui"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:340
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:340
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:87
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:79
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:492
+msgid "Ex : Amine"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:341
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:341
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:493
+msgid "Ex : +212 6X XX XX XX (WhatsApp)"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:342
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:342
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:494
+msgid "Ex : 10 rue Anfa, Résidence Atlas, 3e étage"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:347
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:347
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:92
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:84
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:528
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:743
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:497
+msgid "Votre prénom pour la remise"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:357
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:357
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:99
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:90
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:535
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:751
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:507
+msgid "Téléphone ou WhatsApp"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:362
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:362
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:512
+msgid "WhatsApp accepté. Format : 06 12 34 56 78 ou +212…"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:368
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:368
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:107
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:97
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:543
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:760
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:518
+msgid "Votre adresse de livraison"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:380
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:380
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:111
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:101
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:548
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:523
+msgid "Données protégées (RGPD)"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:390
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:390
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:118
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:108
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:528
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:16
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:100
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:25
+msgid "J'achète mon tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:407
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:407
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:120
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:560
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:703
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:786
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:530
+msgid "Garanties & assistance"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:414
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:414
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:122
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:112
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:565
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:708
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:791
+#: draft/template_ref_to_convert/carpet/components/header/header.html:25
+#: draft/template_ref_to_convert/carpet/components/header/header_sihaty.html:25
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:12
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:32
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:534
+#: templates/components/core/forms/lead_step3/lead_step3.html:61
+#: templates/components/core/forms/lead_step3/lead_step3.html:201
+msgid "Paiement à la livraison"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:418
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:418
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:123
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:113
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:568
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:711
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:794
+msgid "Retour 7 jours"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:422
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:424
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:422
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:424
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:124
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:114
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:572
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:715
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:798
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:536
+msgid "Support WhatsApp"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:430
+#: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:430
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:127
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:117
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:577
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:803
+msgid "+1000 clients satisfaits"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:61
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:59
+msgid "Combien de tapis souhaitez-vous acheter ?"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:62
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:60
+msgid "Options de pack"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:65
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:66
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:61
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:134
+msgid "1 tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:72
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:74
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:63
+msgid "2 tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:73
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:63
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:487
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:679
+msgid "Meilleur choix"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:77
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:131
+msgid "Économisez 47 DHS"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:80
+msgid ""
+"Le Pack Duo est idéal pour offrir à un proche (parents, grands-parents) tout "
+"en économisant."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:88
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:80
+msgid "Ex : 06 12 34 56 78 ou +212 6 12 34 56 78 (WhatsApp)"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:89
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:81
+msgid "Ex : 10 rue Anfa, Résidence Atlas, 3e étage, Casablanca"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/1.html:102
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:93
+msgid "Nous utilisons ce numéro uniquement pour confirmer la livraison."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:71
+msgid ""
+"Astuce : le Pack Duo est parfait pour offrir et vous fait économiser 47 DHS."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/2.html:130
+msgid "2 tapis (Pack Duo)"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:413
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:592
+msgid "Produit indisponible pour le moment. Revenez plus tard."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:416
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:595
+msgid "Indisponible"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:426
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:627
+msgid "Choisissez votre offre"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:428
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:631
+msgid "Options"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:452
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:454
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:464
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:650
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:652
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:660
+msgid "Dhs"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:464
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:660
+msgid "Économisez"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:501
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:693
+msgid "Astuce : parfait pour offrir à un proche tout en économisant."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:507
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:699
+#: templates/components/core/accounts/auth_message/component.html:37
+#: templates/components/core/forms/lead_step2/lead_step2.html:16
+#: templates/components/core/forms/lead_step3/lead_step3.html:98
+#: templates/components/core/forms/lead_step3/lead_step3.html:179
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:35
+msgid "Continuer"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:516
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:727
+msgid "Veuillez choisir une offre"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:518
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:729
+msgid "Modifier l’offre"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:523
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:737
+msgid "Amine"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:524
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:738
+msgid "06 12 34 56 78 ou +212 6 12 34 56 78 (WhatsApp)"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:525
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:739
+msgid "10 rue Anfa, Résidence Atlas, 3e étage, Casablanca"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:539
+msgid "Numéro utilisé uniquement pour confirmer la livraison (pas de spam)."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:557
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:776
+msgid "Confirmer — Paiement à la livraison"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:629
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:869
+msgid "tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:647
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:901
+msgid "Vous avez choisi :"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:647
+msgid "à"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:651
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:905
+msgid "Continuer avec l’offre"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:676
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:1007
+msgid "Choix requis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:677
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:680
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:1008
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:1011
+msgid "Veuillez sélectionner une offre pour continuer."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:708
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:1102
+msgid "Offre manquante"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:709
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:712
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:1103
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:1106
+msgid "Merci de sélectionner une offre avant de confirmer."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:600
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:517
+msgid "Sajadat Al-Raha – Tapis de prière"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:608
+msgid "Livraison"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:610
+msgid "Langue"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:629
+msgid "+1000 clients ont choisi l’offre Duo"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:725
+msgid "Récapitulatif de votre offre"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:732
+msgid "Retour à l’étape 1 sans perdre vos informations."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:734
+msgid "Vos informations de livraison"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:756
+msgid "Numéro utilisé pour confirmer la livraison."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:766
+msgid "Données protégées (RGPD)."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:775
+msgid "Envoi…"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:784
+msgid "Réponse en 5–15 min • Paiement à la livraison"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:901
+msgid "tapis —"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header-luxe.html:16
+msgid "Informations principales"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header-luxe.html:23
+msgid "Livraison offerte au Maroc"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header-luxe.html:26
+msgid "Drapeau du Maroc"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header-luxe.html:34
+msgid "Paiement à la réception · inspection à la livraison"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header-luxe.html:41
+msgid "Mousse mémoire intégrée · base antiglisse"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header.html:19
+#: draft/template_ref_to_convert/carpet/components/header/header_sihaty.html:18
+msgid "Livraison 24h au Maroc"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header.html:30
+#: draft/template_ref_to_convert/carpet/components/header/header_sihaty.html:30
+msgid "Vérifiez avant de payer"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/header.html:36
+#: draft/template_ref_to_convert/carpet/components/header/header_sihaty.html:36
+#, python-format
+msgid "-30%% aujourd’hui"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:9
+msgid "Livraison offerte dès 499 MAD"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:15
+msgid "Service client 7j/7"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:28
+msgid "Aller à l\\"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:36
+msgid "Rechercher un article…"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:47
+msgid "Accueil"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:48
+msgid "Blog"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:54
+msgid "Rechercher"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/main_header.html:58
+msgid "Ouvrir le menu"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/sidebar.html:9
+msgid "Fermer le menu"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/header/sidebar.html:15
+msgid "Suivez-nous"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/logo/logo-luxe.html:159
+msgid "Accueil Al-Raha"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/logo/logo-luxe.html:165
+msgid "Confort signé Al-Raha"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/logo/logo-luxe.html:169
+msgid "Contacter sur WhatsApp"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:24
+msgid "Nouvelle couleur — 48 h"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:26
+msgid "Violet Nuit :"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:26
+msgid "–69 MAD aujourd’hui"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:27
+msgid "Se termine dans"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:27
+msgid "2 jours"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:31
+msgid "Livraison 24–48 h"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:33
+msgid "Échange couleur 7 j"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:34
+msgid "+1000 avis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:40
+msgid "Tapis Violet Nuit - mémoire de forme, antiglisse"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:43
+msgid "Commander le tapis en Violet Nuit"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:44
+msgid "Commander en violet"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:416
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:217
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:55
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:200
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:200
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:200
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:218
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:200
+msgid "Tapis Sajadat Al-Raha — coussin mémoire intégré"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:425
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:224
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:74
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:77
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:219
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:219
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:219
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:237
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:219
+msgid "Image précédente"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:427
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:228
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:77
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:80
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:223
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:223
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:223
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:241
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:223
+#: templates/components/core/product/_media.html:24
+msgid "Image suivante"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:436
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:236
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:88
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:89
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:233
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:233
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:233
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:251
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:233
+msgid "Images du produit"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:469
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:321
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:332
+#: draft/template_ref_to_convert/carpet/components/product/product.html:163
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:135
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:154
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:277
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:277
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:277
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:295
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:277
+msgid "Livraison gratuite partout au Maroc"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:241
+msgid "Vue principale du tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:250
+msgid "Coussin mémoire — gros plan"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:259
+msgid "Texture et toucher du tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:268
+msgid "Vue d’ensemble du tapis"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:281
+msgid "Schéma coussin mémoire intégré"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:337
+#: draft/template_ref_to_convert/carpet/components/product/product.html:167
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:141
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:290
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:290
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:290
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:313
+msgid "Sajadat Al-Raha – Tapis de prière confortable et élégant"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:340
+#: draft/template_ref_to_convert/carpet/components/product/product.html:171
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:145
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:303
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:303
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:303
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:326
+msgid ""
+"Conçu pour allier confort et spiritualité, ce tapis de prière ergonomique "
+"soulage vos genoux et apporte une sérénité nouvelle à vos moments de "
+"recueillement. Idéal pour les adultes, seniors, ou personnes souffrant de "
+"douleurs articulaires."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:346
+#: draft/template_ref_to_convert/carpet/components/product/product.html:178
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:150
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:308
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:308
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:308
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:331
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:308
+msgid "Taille"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product-optimized.html:350
+#: draft/template_ref_to_convert/carpet/components/product/product.html:183
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic.html:154
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/1.html:312
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/2.html:312
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:312
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:335
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:312
+msgid "120 cm x 72 cm"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product.html:95
+#: draft/template_ref_to_convert/carpet/components/product/product.html:98
+#: draft/template_ref_to_convert/carpet/components/product/product.html:101
+msgid "Tapis Sajadat Al-Raha - vue angle 2"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:51
+msgid "Sihaty — Soin naturel des ongles"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:161
+msgid "Sihaty – Sérum naturel ongles & cuticules, lavande-citron-girofle"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:165
+#, python-format
+msgid ""
+"Ce soin cosmétique concentré améliore visiblement l’apparence des ongles "
+"épaissis et jaunis. Sa formule 100 %% naturelle associe la lavande "
+"apaisante, le citron ravive-éclat et le clou de girofle purifiant, pour une "
+"surface plus lisse, un rose translucide et des cuticules hydratées. Déposez "
+"1–2 gouttes sur l’ongle et son contour matin et soir ; massez jusqu’à "
+"absorption et laissez agir. En 6–8 semaines d’utilisation régulière, vos "
+"ongles retrouvent éclat et netteté. Sans parabènes ni parfums synthétiques. "
+"Satisfaction garantie."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:170
+msgid "Contenance"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:171
+msgid "30 ml"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:174
+msgid "Durée d'utilisation"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:175
+msgid "6 à 8 semaines"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:178
+msgid "Résultats visibles dès"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_sihaty.html:179
+msgid "4 semaines"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:301
+msgid "Commander sur WhatsApp (rapide)"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:290
+msgid "À l’odeur de l’oud, avec coussin mémoire intégré"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:303
+msgid ""
+"Soulagez vos genoux, apaisez votre esprit : ce tapis de prière premium "
+"associe un coussin mémoire intégré à une senteur d’oud discrète localisée "
+"sur la zone de prosternation, pour une concentration immédiate et apaisante. "
+"Velours doux et base antidérapante, idéal pour les longues prières (adultes, "
+"seniors, articulations sensibles) — paiement à la livraison."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/quote/quote-luxe.html:3
+msgid "Citation inspirante"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/quote/quote-luxe.html:12
+msgid "La religion est facilité."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/quote/quote-luxe.html:15
+msgid "Ṣaḥīḥ al-Bukhārī — Livre de la Foi"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/quote/quote-luxe.html:17
+msgid "الدين يُسر"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:10
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:11
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:13
+msgid "Ce que disent nos clients"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:11
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:12
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:14
+msgid "Ils ont testé, ils ont adoré !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:15
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:19
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:20
+msgid "Clients"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:22
+msgid "Défiler vers la gauche"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:26
+msgid "Avis clients"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:31
+msgid "Gros plan coussin mémoire — avis Amal Z."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:34
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:43
+msgid "Un confort absolu !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:35
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:44
+msgid "Le coussin intégré est une merveille, doux et relaxant."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:36
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:45
+msgid "Casablanca"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:44
+msgid "Balcon au coucher du soleil — avis Idriss E."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:47
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:60
+msgid "Je recommande vivement !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:48
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:61
+msgid "C'est doux, ça ne glisse pas, parfait pour la prière."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:49
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:62
+msgid "Tanger"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:57
+msgid "Salon — tapis Al-Raha — avis Lina H."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:60
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:77
+msgid "Une expérience unique"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:61
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:78
+msgid "On sent que c'est fait avec soin, la qualité est exceptionnelle."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:62
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:79
+msgid "Agadir"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:70
+msgid "Tapis noir posé au sol — avis Omar N."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:73
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:94
+msgid "Un vrai moment de paix"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:74
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:95
+msgid "Le tapis est doux, ça apaise l'esprit rien qu'en le touchant."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:75
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:96
+msgid "Fès"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:83
+msgid "Tapis et drap — avis Sara K."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:86
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:111
+msgid "Top qualité !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:87
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:112
+msgid "Rien à dire, je l'utilise tous les jours."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:88
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:113
+msgid "Marrakech"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews-luxe.html:93
+msgid "Défiler vers la droite"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:36
+msgid "Avis client — photo 1"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:53
+msgid "Avis client — photo 2"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:70
+msgid "Avis client — photo 3"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:87
+msgid "Avis client — photo 4"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews.html:104
+msgid "Avis client — photo 5"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:24
+msgid "J'achète mon sérum"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:49
+msgid "Lire le témoignage audio"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:87
+msgid "Lire / Pause"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:108
+msgid "Activer / couper le son"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:136
+msgid "Votre navigateur ne prend pas en charge l’audio HTML5."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/reviews/reviews_sihaty.html:143
+msgid "Lire la transcription"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/shared/lang_switch.html:63
+msgid "Choisir la langue"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/timer/timer.html:90
+msgid "موفَّرة"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/components/timer/timer.html:96
+msgid "économisés"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/legal/privacy_policy.html:5
+msgid "Politique de confidentialité | Maroc"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/legal/terms_of_service.html:5
+msgid "Conditions générales | Maroc"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/shop-details-dynamic.html:123
+#: draft/template_ref_to_convert/carpet/screens/shop-details-optimised.html:36
+#: draft/template_ref_to_convert/carpet/screens/shop-details-oud-dynamic.html:69
+#: draft/template_ref_to_convert/carpet/screens/shop-details.html:39
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/1.html:28
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/2.html:28
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/3.html:28
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/3_v2.html:31
+msgid "« La religion est facilité. »"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/shop-details-dynamic.html:125
+#: draft/template_ref_to_convert/carpet/screens/shop-details-optimised.html:38
+#: draft/template_ref_to_convert/carpet/screens/shop-details-oud-dynamic.html:71
+#: draft/template_ref_to_convert/carpet/screens/shop-details.html:41
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/1.html:30
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/2.html:30
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/3.html:30
+#: draft/template_ref_to_convert/carpet/screens/shop_dynamic_upsell/3_v2.html:33
+msgid "Ṣaḥīḥ al-Bukhārī, Kitāb al-Īmān (Foi)"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/shop-details-dynamic.html:146
+msgid "Voyez le coussin mémoire en action"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/shop-details-dynamic.html:147
+msgid "-30s"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/thank_you.html:4
+msgid "Merci !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/thank_you.html:8
+msgid "Merci pour votre commande !"
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/thank_you.html:10
+msgid "Nous avons bien reçu votre demande et reviendrons vers vous sous 24 h."
+msgstr ""
+
+#: draft/template_ref_to_convert/carpet/screens/thank_you.html:17
+msgid "Retour à la boutique"
+msgstr ""
+
+#: templates/accounts/verification_error.html:7
+msgid "Ce lien de vérification n’est plus valide. Demande un nouvel e‑mail."
+msgstr ""
+
+#: templates/accounts/verification_success.html:4
+msgid "Adresse e‑mail vérifiée"
+msgstr ""
+
+#: templates/base.html:96 templates/base_copy.html:37
+msgid "En-tête du site"
+msgstr ""
+
+#: templates/base.html:126 templates/base_copy.html:61
+msgid "Pied de page"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:20
+msgid "Filtres persona"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:23
+msgid "Tous"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:29
+msgid "Filtre"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:43
+msgid "Témoignages"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:78
+msgid "Achat vérifié"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:144
+msgid "Aucun témoignage à afficher pour le moment."
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:155
+msgid "Faites glisser pour parcourir"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:156
+#: templates/components/core/modals/login/login.html:25
+msgid "Fermer"
+msgstr ""
+
+#: templates/components/core/checkout/button_checkout.html:13
+msgid "Paiement en cours…"
+msgstr ""
+
+#: templates/components/core/checkout/express.html:6
+msgid "Paiement express"
+msgstr ""
+
+#: templates/components/core/checkout/express.html:22
+msgid ""
+"Apple Pay, Google Pay ou Link s’activent automatiquement si disponibles sur "
+"votre appareil."
+msgstr ""
+
+#: templates/components/core/checkout/legal_info.html:6
+msgid "Besoin d’un coup d’œil ?"
+msgstr ""
+
+#: templates/components/core/checkout/legal_info.html:18
+msgid "En savoir plus"
+msgstr ""
+
+#: templates/components/core/checkout/legal_info.html:30
+msgid "À retenir"
+msgstr ""
+
+#: templates/components/core/checkout/legal_info.html:47
+msgid "Connexion et paiement sécurisés (TLS + Stripe)"
+msgstr ""
+
+#: templates/components/core/checkout/order_summary.html:43
+msgid "Ce que vous obtenez"
+msgstr ""
+
+#: templates/components/core/checkout/order_summary.html:74
+msgid "Option recommandée"
+msgstr ""
+
+#: templates/components/core/checkout/order_summary.html:92
+msgid "Dont taxes"
+msgstr ""
+
+#: templates/components/core/checkout/order_summary.html:95
+msgid "Pays"
+msgstr ""
+
+#: templates/components/core/checkout/order_summary.html:97
+msgid "Devise"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:7
+#: templates/components/core/checkout/payment_form.html:87
+msgid "Paiement sécurisé"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:8
+msgid "Dernière étape : validez votre accès immédiat."
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:28
+msgid "Confirmez l’e-mail"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:33
+msgid "Re-saisir l’e-mail"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:45
+msgid "Connecté en tant que"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:60
+msgid "J’ai un code promo"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:74
+msgid "Entrez votre code et validez lors du paiement."
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:80
+msgid "Informations de paiement"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:82
+msgid "Carte bancaire, SEPA ou portefeuille selon disponibilité."
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:87
+msgid "Remboursée 14 j"
+msgstr ""
+
+#: templates/components/core/checkout/payment_form.html:87
+msgid "Accès immédiat"
+msgstr ""
+
+#: templates/components/core/checkout/thank_you_message.html:33
+msgid "Accéder au cours"
+msgstr ""
+
+#: templates/components/core/checkout/thank_you_message.html:43
+msgid "Une question ?"
+msgstr ""
+
+#: templates/components/core/checkout/thank_you_message.html:43
+msgid "Contactez-nous à"
+msgstr ""
+
+#: templates/components/core/forms/lead/lead.html:7
+msgid "Ex: Amine Benali"
+msgstr ""
+
+#: templates/components/core/forms/lead/lead.html:10
+#: templates/components/core/forms/lead_step2/lead_step2.html:11
+msgid "Numero de telephone"
+msgstr ""
+
+#: templates/components/core/forms/lead/lead.html:11
+msgid "Ex: 06 12 34 56 78"
+msgstr ""
+
+#: templates/components/core/forms/lead/lead.html:12
+msgid "WhatsApp accepte - Format : 06 12 34 56 78 ou +212"
+msgstr ""
+
+#: templates/components/core/forms/lead/lead.html:16
+#: templates/components/core/forms/lead_step2/lead_step2.html:22
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:58
+msgid "Adresse complete"
+msgstr ""
+
+#: templates/components/core/forms/lead/lead.html:17
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:59
+msgid "Quartier, ville, code postal"
+msgstr ""
+
+#: templates/components/core/forms/lead/lead.html:24
+msgid "Donnees protegees, aucune revente."
+msgstr ""
+
+#: templates/components/core/forms/lead_step2/lead_step2.html:13
+msgid "WhatsApp accepte"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:22
+msgid "NATUREL • SOIN • CONFIANCE"
+msgstr "NATURAL • CARE • TRUST"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:24
+msgid "Progression"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:25
+msgid "Contact"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:27
+msgid "Offres"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:31
+msgid "Confirmation"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:33
+msgid "Étape 1 / 4"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:42
+msgid "Seulement"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:49
+#, python-format
+msgid ""
+"\n"
+"                                Vous économisez %(amount)s %(currency)s\n"
+"                                "
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:60
+msgid "Livraison 48 h"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:62
+#, python-format
+msgid "100%% naturel"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:64
+msgid "clientes"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:74
+msgid "Ex. Salma Benali"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:77
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:30
+msgid "Numéro de téléphone"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:83
+msgid "WhatsApp ou mobile actif"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:93
+msgid "OK pour être contacté(e) sur WhatsApp pour confirmer la livraison"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:107
+msgid "VOUS ÉCONOMISEZ LORS DE VOTRE PREMIER ACHAT"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:112
+msgid "Choix du pack"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:117
+msgid "Pack Solo"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:120
+msgid "Oui"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:130
+msgid "MEILLEUR CHOIX"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:131
+msgid "Pack Duo"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:133
+msgid "Éco 209 MAD"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:141
+msgid "Bougie parfumée"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:147
+msgid "+ Bougie parfumée en cire de soja"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:148
+msgid "150 g"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:152
+msgid "Optionnelle · Parfums variés disponibles"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:159
+msgid "Adresse de livraison"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:162
+msgid "Rue, quartier, ville (code postal si possible)"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:168
+#: templates/components/core/forms/lead_step3/lead_step3.html:221
+msgid "Sous‑total"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:170
+#: templates/components/core/forms/lead_step3/lead_step3.html:224
+msgid "Remise paiement en ligne"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:172
+msgid "Total mis à jour"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:177
+msgid "Étape précédente"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:188
+msgid "Méthode de paiement"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:193
+msgid "Paiement en ligne"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:194
+msgid "de réduction"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:209
+msgid "Ex. salma@example.com"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:214
+msgid "OK pour recevoir la confirmation par e‑mail"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:227
+msgid "Total"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:233
+msgid "Paiement sécurisé • 3D Secure"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:239
+msgid "Confirmer la commande"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:249
+msgid "Merci, votre commande est enregistrée."
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:250
+msgid "Vous recevrez une confirmation très bientôt."
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:20
+msgid "Etape 1 / 3"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:21
+msgid "Votre demande"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:32
+msgid "WhatsApp accepte - format : +212 ou 06"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:41
+msgid "Quantité"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:70
+msgid "Valider"
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:78
+msgid "Merci, votre commande est enregistree."
+msgstr ""
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:79
+msgid "Vous recevrez une confirmation tres bientot."
+msgstr ""
+
+#: templates/components/core/header/auth_links.html:20
+#: templates/components/core/header/modes/main/header_modes_main.html:49
+#: templates/components/core/header/modes/mobile/mobile_menu.html:35
+msgid "Se déconnecter"
+msgstr ""
+
+#: templates/components/core/product/_info.html:17
+#, python-format
+msgid "Vous economisez %(amount)s %(currency)s"
+msgstr ""
+
+#: templates/components/core/product/_media.html:21
+msgid "Image precedente"
+msgstr ""
+
+#: templates/components/core/product/_media.html:28
+msgid "Galerie produit"
+msgstr ""
+
+#: templates/components/core/product/_options.html:6
+msgid "Couleur"
+msgstr ""
+
+#: templates/components/core/product/hero.html:23
+msgid "Ce formulaire necessite une configuration."
+msgstr ""
