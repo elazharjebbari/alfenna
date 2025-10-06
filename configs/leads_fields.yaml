@@ -3,6 +3,8 @@ global:
   require_idempotency_header: true
   client_ts_max_skew_seconds: 7200  # 2h
   signed_token_required: true
+  signing:
+    drop_empty: true
 
 form_kinds:
   email_ebook:
@@ -47,5 +49,11 @@ form_kinds:
       save_customer: { required: false, type: bool }
       accept_terms: { required: true, type: bool }
       invoice_language: { required: false, max_length: 8 }
+  product_lead:
+    fields:
+      full_name: { required: true }
+      phone: { required: true, min_digits: 6 }
+      email: { required: false }
+      address: { required: false }
 
 campaign_overrides: {}
