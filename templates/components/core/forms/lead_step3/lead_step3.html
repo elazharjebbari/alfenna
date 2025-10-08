@@ -112,7 +112,8 @@
                 </div>
 
                 <div class="d-grid">
-                    <button type="button" class="btn af-cta" data-ff-next>{% trans "Continuer" %} &#8250;</button>
+                    <button type="button" class="btn af-cta" data-ff-next
+                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
                 </div>
             </div>
         </section>
@@ -136,7 +137,10 @@
                     {% for offer in offers %}
                         {% with code=offer.code|default:'offer_'|add:forloop.counter %}
                         <div class="col-md-6">
-                            <label class="af-card-radio {% if offer.is_featured %}is-featured{% endif %}">
+                            <label class="af-card-radio {% if offer.is_featured %}is-featured{% endif %}"
+                                   data-ll-click="buybar_select_plan"
+                                   data-id="{{ code|escape }}"
+                                   data-ll-payload='{"offer_code":"{{ code|escapejs }}"}'>
                                 <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="{{ code }}"
                                        {% if offer.is_featured %}checked{% elif forloop.first %}checked{% endif %}>
                                 <div class="af-offer-card">
@@ -167,7 +171,10 @@
                     {% endfor %}
                 {% else %}
                     <div class="col-md-6">
-                        <label class="af-card-radio">
+                        <label class="af-card-radio"
+                               data-ll-click="buybar_select_plan"
+                               data-id="solo"
+                               data-ll-payload='{"offer_code":"solo"}'>
                             <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="solo" checked>
                             <div class="af-offer-card">
                                 <h5 class="af-offer-title mb-3">{% trans "Pack Solo" %}</h5>
@@ -180,7 +187,10 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="af-card-radio is-featured">
+                        <label class="af-card-radio is-featured"
+                               data-ll-click="buybar_select_plan"
+                               data-id="duo"
+                               data-ll-payload='{"offer_code":"duo"}'>
                             <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="duo">
                             <div class="af-offer-card">
                                 <div class="af-badge-best">{% trans "MEILLEUR CHOIX" %}</div>
@@ -262,7 +272,8 @@
             <div class="d-flex justify-content-between align-items-center gap-2 mt-3">
                 <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
                 </button>
-                <button type="button" class="btn af-cta" data-ff-next>{% trans "Continuer" %} &#8250;</button>
+                <button type="button" class="btn af-cta" data-ff-next
+                        data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
             </div>
         </section>
 
@@ -353,7 +364,8 @@
 
             <!-- CTA final -->
             <div class="d-grid mt-3">
-                <button type="submit" class="btn af-cta" data-ff-submit>
+                <button type="submit" class="btn af-cta" data-ff-submit
+                        data-ll-click="hero_cta_primary">
                     {% trans "Confirmer la commande" %}
                 </button>
             </div>

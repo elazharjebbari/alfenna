@@ -10,6 +10,8 @@
         <div class="swiper-wrapper">
           {% for image in media.images %}
           <div class="swiper-slide afg-thumb"
+               data-ll-click="gallery_thumb_click"
+               data-ll-payload='{"thumb_idx": {{ forloop.counter0 }} }'
                role="tab"
                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
                aria-controls="afg-slide-{{ forloop.counter0 }}"

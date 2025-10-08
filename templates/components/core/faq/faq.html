@@ -19,7 +19,10 @@
               <button type="button"
                       class="nav-link {% if forloop.first %}active{% endif %}"
                       data-bs-toggle="tab"
-                      data-bs-target="#{{ t.id }}">
+                      data-bs-target="#{{ t.id }}"
+                      data-ll-click="faq_item_open"
+                      data-id="{{ t.id|default:'faq_tab'|escape }}"
+                      data-ll-payload='{"label": "{{ t.label|default:''|escapejs }}"}'>
                 <i class="{{ t.icon }}" style="margin-right: 5px;"></i>
                 {{ t.label }}
               </button>

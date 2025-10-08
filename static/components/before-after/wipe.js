@@ -25,7 +25,12 @@
         range.value = v;
         range.setAttribute('aria-valuenow', String(v));
       }
-      if (fireDrag) emit(root.getAttribute('data-ev-drag') || 'ba_drag', { percent: v });
+      if (fireDrag) {
+        emit(root.getAttribute('data-ev-drag') || 'ba_drag', { percent: v });
+        if (window.LL && typeof window.LL.click === 'function') {
+          window.LL.click(root, 'ba_drag', { percent: v });
+        }
+      }
     }
 
     if (range) {
@@ -34,6 +39,9 @@
         var v = parseInt(range.value, 10) || 0;
         if (v >= 70) emit(root.getAttribute('data-ev-snap-after') || 'ba_snap_after', { percent: v });
         emit(root.getAttribute('data-ev-drag-end') || 'ba_drag_end', { percent: v });
+        if (window.LL && typeof window.LL.click === 'function') {
+          window.LL.click(root, 'ba_snap', { to: v >= 70 ? 'after' : 'before', percent: v });
+        }
       });
       // clavier
       range.addEventListener('keydown', function (e) {
@@ -53,6 +61,9 @@
         setVal(to, true);
         if (to >= 70) emit(root.getAttribute('data-ev-snap-after') || 'ba_snap_after', { percent: to, via: 'btn' });
         emit(root.getAttribute('data-ev-drag-end') || 'ba_drag_end', { percent: to, via: 'btn' });
+        if (window.LL && typeof window.LL.click === 'function') {
+          window.LL.click(root, 'ba_snap', { to: to >= 70 ? 'after' : 'before', percent: to });
+        }
       });
     });
 

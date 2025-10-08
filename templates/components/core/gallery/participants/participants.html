@@ -26,7 +26,10 @@
         <li class="lp-card" {% if forloop.counter0 >= initial_visible %}hidden{% endif %}>
           <a href="{{ it.href }}"
              data-caption="{{ it.caption }}"
-             aria-label="{{ it.aria_label }}">
+             aria-label="{{ it.aria_label }}"
+             data-ll-click="gallery_thumb_click"
+             data-ll-payload='{"item_idx": {{ forloop.counter0 }} }'
+             {% if it.id %}data-id="{{ it.id|escape }}"{% endif %}>
             <span class="lp-card__badge">{{ it.badge }}</span>
             <picture>
               {% if it.webp %}<source type="image/webp" srcset="{{ it.webp }}">{% endif %}

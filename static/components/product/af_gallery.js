@@ -6,6 +6,12 @@
   }
 
   function initOne(root) {
+    var trackSlide = function (idx) {
+      if (typeof window !== 'undefined' && window.LL && typeof window.LL.click === 'function') {
+        window.LL.click(root, 'gallery_slide_change', { to_idx: idx });
+      }
+    };
+
     // Fallback click-to-swap si Swiper n'est pas présent
     if (typeof window.Swiper === 'undefined') {
       const mainImgs = Array.from(root.querySelectorAll('.gallery-main .swiper-slide'));
@@ -15,6 +21,7 @@
       function show(i) {
         mainImgs.forEach((s, idx) => s.style.display = (idx === i ? 'block' : 'none'));
         thumbs.forEach((t, idx) => t.classList.toggle('swiper-slide-thumb-active', idx === i));
+        trackSlide(i);
       }
       thumbs.forEach((t, i) => t.addEventListener('click', () => show(i)));
       show(0);
@@ -85,6 +92,7 @@
           const prev = sw.slides[sw.previousIndex];
           const imgPrev = prev && prev.querySelector('.gallery-main-img');
           if (imgPrev) imgPrev.classList.remove('is-enter', 'is-enter-active');
+          trackSlide(sw.activeIndex);
         }
       }
     });

@@ -4,7 +4,8 @@ template: "components/core/faq/faq.html"
 assets:
   head: []
   css: []
-  js: []
+  js:
+    - "/static/components/core/faq/faq.js"
   vendors: []
 
 # Valeurs par défaut (aussi whitelist)

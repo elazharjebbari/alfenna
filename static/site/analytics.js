@@ -123,7 +123,20 @@
         return;
       }
       const name = target.getAttribute("data-ll-click") || target.getAttribute("data-ev") || "";
-      LL.click(target, name);
+      let extra = {};
+      const payloadRaw = target.getAttribute("data-ll-payload");
+      if (payloadRaw) {
+        try {
+          extra = JSON.parse(payloadRaw);
+        } catch (err) {
+          extra = {};
+        }
+      }
+      const stableId = target.getAttribute("data-id") || target.getAttribute("data-ll-id");
+      if (stableId) {
+        extra = Object.assign({ id: stableId }, extra);
+      }
+      LL.click(target, name, extra);
     });
   }
 
