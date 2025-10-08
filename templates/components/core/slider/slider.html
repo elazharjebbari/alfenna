@@ -86,6 +86,7 @@
              aria-label="{{ cta.label|default:'Je me lance' }}"
              data-ev="hero_cta_click"
              data-ev-loc="primary"
+             data-ll-click="hero_cta_primary"
              data-ev-price="{{ price.current }}"
              data-ev-currency="{{ price.currency }}"
              data-ab="{{ ab_variant }}">
@@ -100,6 +101,7 @@
              aria-label="{{ cta_secondary.label|default:'Voir le programme' }}"
              data-ev="hero_cta_secondary_click"
              data-ev-loc="secondary"
+             data-ll-click="hero_cta_secondary"
              data-ab="{{ ab_variant }}">
             {{ cta_secondary.label|default:"Voir le programme" }}
           </a>
@@ -229,6 +231,7 @@
          aria-label="Voir l’aperçu vidéo"
          rel="noopener"
          data-ev="hero_video_play"
+         data-ll-click="hero_video_play"
          data-ab="{{ ab_variant }}">
         <i class="flaticon-play" aria-hidden="true"></i>
       </a>
