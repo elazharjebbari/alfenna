@@ -205,6 +205,8 @@ pages:
             events:
               view: "lp_variant_view"
               media_switch: "product_media_switch"
+      sticky_buybar_v2:
+        component: "sticky/buybar_v2"
       faq:
         component: "faq/main"
       footer:

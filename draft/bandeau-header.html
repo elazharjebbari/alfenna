@@ -1,0 +1,198 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bandeau AlFenna — Ticker 100% CSS + motif</title>
+
+
+<link rel="stylesheet" href="{% static 'css/plugins/icofont.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/plugins/flaticon.css' %}">
+
+<style>
+  /* ===============================
+     Thème AlFenna (variables)
+     =============================== */
+  :root{
+    --af-primary: #2c6a57;
+    --af-primary-2: #1f4f42;
+    --af-ink: #203a33;
+    --af-bg: #f6f3eb;
+    --af-white: #ffffff;
+
+    --af-gap: 2.25rem;
+    --af-item-size: clamp(13px, 0.95vw, 16px);
+    --af-pad-y: clamp(6px, 0.6vw, 10px);
+    --af-pad-x: clamp(10px, 1.2vw, 18px);
+    --af-speed: 10s;                /* ↓ = plus rapide */
+    --af-gradient: linear-gradient(90deg, var(--af-primary), var(--af-primary-2));
+
+    /* Motif v1 : tile 120x120, mis à l’échelle + opacité douce */
+    --af-pattern-size: 40px;        /* 32/36/40/48 selon hauteur de bande */
+    --af-pattern-opacity: .16;      /* 0.10–0.25 selon lisibilité */
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    margin:0;
+    font-family:"Montserrat",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:var(--af-bg);
+    color:var(--af-ink);
+  }
+
+  /* ===============================
+     Bandeau Top — AlFenna
+     =============================== */
+  .af-topbar{
+    background: var(--af-gradient);
+    color: var(--af-white);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  /* Motif v1 (pavage) sous le contenu */
+  .af-topbar::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120">\
+  <defs>\
+    <pattern id="alfenna-dots" patternUnits="userSpaceOnUse" width="120" height="120">\
+      <g transform="translate(60,60)" fill="%23ffffff">\
+        <circle cx="0" cy="-28" r="6"/><circle cx="19.8" cy="-19.8" r="6"/>\
+        <circle cx="28" cy="0" r="6"/><circle cx="19.8" cy="19.8" r="6"/>\
+        <circle cx="0" cy="28" r="6"/><circle cx="-19.8" cy="19.8" r="6"/>\
+        <circle cx="-28" cy="0" r="6"/><circle cx="-19.8" cy="-19.8" r="6"/>\
+      </g>\
+    </pattern>\
+  </defs>\
+  <rect width="100%" height="100%" fill="url(%23alfenna-dots)"/>\
+</svg>');
+    background-repeat: repeat;
+    background-size: var(--af-pattern-size) var(--af-pattern-size);
+    background-position: 0 50%;
+    opacity: var(--af-pattern-opacity);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .af-topbar-inner{
+    position:relative; z-index:1;
+    max-width:1280px; margin:0 auto;
+    padding:var(--af-pad-y) var(--af-pad-x);
+    overflow:hidden; /* masque le défilement */
+  }
+
+  /* Rail du ticker */
+  .af-ticker{ --gap: var(--af-gap); display:block; user-select:none; }
+  .af-track{
+    display:flex; gap:var(--gap);
+    will-change:transform;
+    animation:af-marquee var(--af-speed) linear infinite;
+  }
+  .af-topbar:hover .af-track,
+  .af-topbar:focus-within .af-track{ animation-play-state: paused; }
+  html[dir="rtl"] .af-track{ animation-direction: reverse; }
+  @media(prefers-reduced-motion:reduce){ .af-track{ animation:none; } }
+  @keyframes af-marquee{ 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+  /* Items */
+  .af-list{ display:flex; gap:var(--af-gap); padding:0; margin:0; list-style:none; }
+  .af-item{
+    display:inline-flex; align-items:center; gap:.6rem;
+    font-size:var(--af-item-size); font-weight:700;
+    text-transform:uppercase; letter-spacing:.015em; white-space:nowrap;
+  }
+  .af-ico{
+    display:inline-grid; place-items:center;
+    width:1.6em; height:1.6em; border-radius:50%;
+    background:rgba(255,255,255,.18);
+    outline:1px solid rgba(255,255,255,.22);
+  }
+  .af-ico i{ font-size: .95em; line-height: 1; }
+  .af-flag{
+    width:1.15em; height:1.15em; display:inline-block;
+    border-radius:2px; overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,.25) inset;
+  }
+  .af-badge{
+    display:inline-flex; align-items:center;
+    padding:.15rem .5rem; border-radius:999px;
+    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.22);
+    font-size:.9em; font-weight:800; letter-spacing:.02em;
+  }
+</style>
+</head>
+<body>
+
+<header class="af-topbar" aria-label="Messages AlFenna">
+  <div class="af-topbar-inner">
+    <div class="af-ticker" role="marquee" aria-live="polite">
+      <div class="af-track">
+
+        <!-- Liste 1 -->
+        <ul class="af-list">
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-location-pin"></i></span>
+            <span>Livraison Maroc</span>
+            <span class="af-flag" aria-hidden="true">🇲🇦</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-fast-delivery"></i></span>
+            <span>Livraison 24h gratuite</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-sale-discount"></i></span>
+            <span>-30% aujourd’hui le {{ today_str }}</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-verification-check"></i></span>
+            <span>Vérifiez avant de payer</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-money-bag"></i></span>
+            <span>Paiement à la livraison</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-leaf"></i></span>
+            <span>Produit 100% naturel</span>
+          </li>
+        </ul>
+
+        <!-- Liste 2 (dupliquée pour la boucle sans “trou”) -->
+        <ul class="af-list" aria-hidden="true">
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-location-pin"></i></span>
+            <span>Livraison Maroc</span>
+            <span class="af-flag" aria-hidden="true">🇲🇦</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-fast-delivery"></i></span>
+            <span>Livraison 24h gratuite</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-sale-discount"></i></span>
+            <span>-30% aujourd’hui le {{ today_str }}</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-verification-check"></i></span>
+            <span>Vérifiez avant de payer</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-money-bag"></i></span>
+            <span>Paiement à la livraison</span>
+          </li>
+          <li class="af-item">
+            <span class="af-ico"><i class="icofont-leaf"></i></span>
+            <span>Produit 100% naturel</span>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</header>
+
+</body>
+</html>
