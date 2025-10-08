@@ -89,9 +89,9 @@
     return datasetMap;
   }
 
-  function collectFields(root, cfg) {
+  function collectFields(root, cfg, fieldsMap) {
     const out = {};
-    const fieldsMap = parseFieldsMap(root, cfg);
+    fieldsMap = fieldsMap || parseFieldsMap(root, cfg);
     const skipNames = new Set(["csrfmiddlewaretoken"]);
 
     function assign(key, value) {
@@ -132,8 +132,137 @@
     return out;
   }
 
+  function parseFloatSafe(value) {
+    if (value === undefined || value === null || value === "") return null;
+    const normalized = typeof value === "string" ? value.replace(",", ".") : value;
+    const num = parseFloat(normalized);
+    return Number.isFinite(num) ? num : null;
+  }
+
+  function checkoutHintsFromDom(root) {
+    const node = root && root.querySelector && root.querySelector("[data-checkout-hints]");
+    if (!node) return null;
+    const data = node.dataset || {};
+    const unitFromData = parseFloatSafe(data.unitPrice);
+    const promoFromData = parseFloatSafe(data.promoPrice);
+    const baseFromData = parseFloatSafe(data.basePrice);
+    return {
+      unitPrice: unitFromData !== null ? unitFromData : (promoFromData !== null ? promoFromData : baseFromData),
+      promoPrice: promoFromData,
+      basePrice: baseFromData,
+      currency: data.currency || "MAD",
+      onlineDiscount: parseFloatSafe(data.onlineDiscount) || 0,
+      productId: data.productId || "",
+      productSlug: data.productSlug || "",
+      productName: data.productName || "",
+      bumpPrice: parseFloatSafe(data.bumpPrice),
+      bumpCurrency: data.bumpCurrency || "",
+    };
+  }
+
+  function formatAmount(amount, currency) {
+    const cur = currency || "MAD";
+    const safe = Number.isFinite(amount) ? amount : 0;
+    try {
+      const formatted = safe.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `${formatted} ${cur}`;
+    } catch (_) {
+      return `${safe.toFixed(2)} ${cur}`;
+    }
+  }
+
+  function setText(root, selector, text) {
+    const el = root && root.querySelector ? root.querySelector(selector) : null;
+    if (el) el.textContent = text;
+  }
+
+  function toggleVisibility(root, selector, visible) {
+    const el = root && root.querySelector ? root.querySelector(selector) : null;
+    if (!el) return;
+    if (visible) el.classList.remove("d-none"); else el.classList.add("d-none");
+  }
+
+  function updateCheckoutSummary(root, hints, totals) {
+    if (!totals) return;
+    const currency = (hints && hints.currency) || "MAD";
+    const subtotal = totals.subtotal || 0;
+    const discount = totals.discount || 0;
+    const total = totals.total || 0;
+    setText(root, "#af-subtotal", formatAmount(subtotal, currency));
+    setText(root, "#af-discount", discount > 0 ? `-${formatAmount(discount, currency)}` : formatAmount(0, currency));
+    setText(root, "#af-total", formatAmount(total, currency));
+    setText(root, "#af-step3-subtotal", formatAmount(subtotal, currency));
+    setText(root, "#af-step3-discount", discount > 0 ? `-${formatAmount(discount, currency)}` : formatAmount(0, currency));
+    setText(root, "#af-step3-total", formatAmount(total, currency));
+    toggleVisibility(root, "#af-step3-discount-row", discount > 0.0001);
+
+    const onlineSpan = root && root.querySelector ? root.querySelector("#af-online-discount") : null;
+    if (onlineSpan) {
+      const baseDiscount = hints && hints.onlineDiscount ? Number(hints.onlineDiscount) : 0;
+      if (discount > 0) {
+        onlineSpan.textContent = `-${formatAmount(discount, currency)} de réduction`;
+      } else if (baseDiscount > 0) {
+        onlineSpan.textContent = `-${formatAmount(baseDiscount, currency)} de réduction`;
+      }
+    }
+  }
+
+  function enrichCheckout(root, finalBody, fieldsMap, hints) {
+    if (!hints) return null;
+    fieldsMap = fieldsMap || {};
+    const paymentField = fieldsMap.payment_method || fieldsMap.paymentMethod || "payment_method";
+    const quantityField = fieldsMap.quantity || "quantity";
+    const bumpField = fieldsMap.bump || fieldsMap.bump_optin || "bump_optin";
+    const paymentRaw = finalBody[paymentField];
+    const paymentMethod = (paymentRaw || "").toString().toLowerCase() || "cod";
+    const quantityRaw = finalBody[quantityField];
+    let quantity = parseInt(quantityRaw, 10);
+    if (!Number.isFinite(quantity) || quantity <= 0) quantity = 1;
+    const unitPrice = Number.isFinite(hints.unitPrice) ? hints.unitPrice : (Number.isFinite(hints.promoPrice) ? hints.promoPrice : (Number.isFinite(hints.basePrice) ? hints.basePrice : 0));
+    const subtotal = Math.max(unitPrice, 0) * quantity;
+    const bumpSelected = finalBody[bumpField] !== undefined && finalBody[bumpField] !== null && finalBody[bumpField] !== "" && finalBody[bumpField] !== false && finalBody[bumpField] !== "0";
+    const bumpAmount = bumpSelected && Number.isFinite(hints.bumpPrice) ? Math.max(hints.bumpPrice, 0) : 0;
+    let discount = 0;
+    if (paymentMethod === "online" && Number.isFinite(hints.onlineDiscount) && hints.onlineDiscount > 0) {
+      discount = Math.min(hints.onlineDiscount, subtotal);
+    }
+    const total = Math.max(subtotal - discount + bumpAmount, 0);
+    const amountMinor = Math.round(total * 100);
+    finalBody.amount_minor = amountMinor;
+    finalBody.amount_cents = amountMinor;
+    if (!finalBody.currency && hints.currency) {
+      finalBody.currency = hints.currency;
+    }
+    if (!finalBody.product_id && hints.productId) {
+      finalBody.product_id = hints.productId;
+    }
+    if (!finalBody.product_slug && hints.productSlug) {
+      finalBody.product_slug = hints.productSlug;
+    }
+    if (!finalBody.product_name && hints.productName) {
+      finalBody.product_name = hints.productName;
+    }
+    finalBody.online_discount_amount = discount;
+    finalBody.online_discount_minor = Math.round(discount * 100);
+    finalBody.checkout_bump_amount = bumpAmount;
+    finalBody.checkout_bump_minor = Math.round(bumpAmount * 100);
+    finalBody.checkout_subtotal_minor = Math.round(subtotal * 100);
+    finalBody.checkout_total_minor = amountMinor;
+    return {
+      subtotal,
+      discount,
+      bumpAmount,
+      total,
+      quantity,
+      paymentMethod,
+      amountMinor,
+      currency: hints.currency || "MAD",
+    };
+  }
+
   function buildFinalBody(root, cfg) {
-    const payload = collectFields(root, cfg);
+    const fieldsMap = parseFieldsMap(root, cfg);
+    const payload = collectFields(root, cfg, fieldsMap);
     payload.form_kind = cfg.form_kind || "email_ebook";
     payload.client_ts = (cfg.context && cfg.context.client_ts) || nowIso();
     if (payload.honeypot === undefined) payload.honeypot = "";
@@ -149,7 +278,13 @@
       delete finalBody.context;
     }
 
-    return { payload, mergedCtx, finalBody };
+    const hints = checkoutHintsFromDom(root);
+    const checkout = enrichCheckout(root, finalBody, fieldsMap, hints);
+    if (checkout) {
+      updateCheckoutSummary(root, hints, checkout);
+    }
+
+    return { payload, mergedCtx, finalBody, checkout, fieldsMap, hints };
   }
 
   async function signBody(signUrl, finalBody) {
@@ -283,7 +418,7 @@
     const requireSigned = !!(cfg.require_signed_token || cfg.require_signed);
     const signUrl = cfg.sign_url || (cfg.backend_config && cfg.backend_config.sign_url) || "";
 
-    const { payload, mergedCtx, finalBody } = buildFinalBody(root, cfg);
+    const { payload, mergedCtx, finalBody, fieldsMap } = buildFinalBody(root, cfg);
 
     if (window.DEBUG_FF) {
       try {
@@ -310,7 +445,8 @@
         "X-Requested-With": "XMLHttpRequest",
         "X-CSRFToken": getCookie("csrftoken") || "",
       };
-      const paymentMethod = (finalBody.payment_method || "").toString().toLowerCase();
+      const paymentField = (fieldsMap && (fieldsMap.payment_method || fieldsMap.paymentMethod)) || "payment_method";
+      const paymentMethod = (finalBody[paymentField] || "").toString().toLowerCase();
 
       if (paymentMethod === "online") {
         const checkoutUrl = root.getAttribute("data-checkout-url") || cfg.checkout_url || cfg.checkout_endpoint_url || "/api/checkout/sessions/";
@@ -382,7 +518,23 @@
   }
 
   function wireEvents(root) {
-    // Navigation
+    const cfg = jsonFromConfigScript(root) || {};
+
+    const refreshCheckout = () => {
+      try {
+        const fieldsMap = parseFieldsMap(root, cfg);
+        const payload = collectFields(root, cfg, fieldsMap);
+        const finalBody = Object.assign({}, payload);
+        const hints = checkoutHintsFromDom(root);
+        const checkout = enrichCheckout(root, finalBody, fieldsMap, hints);
+        if (checkout) updateCheckoutSummary(root, hints, checkout);
+      } catch (err) {
+        if (window.DEBUG_FF) console.warn("[ff] checkout refresh failed", err);
+      }
+    };
+
+    refreshCheckout();
+
     root.addEventListener("click", (e) => {
       const t = e.target;
       if (!t) return;
@@ -392,22 +544,38 @@
         const max = getMaxStep(root);
         const next = cur < max ? cur + 1 : max;
         showStep(root, next);
+        setTimeout(refreshCheckout, 0);
       }
       if (t.closest("[data-ff-prev]")) {
         e.preventDefault();
         const cur = getCurrentStep(root);
         const prev = cur > 1 ? cur - 1 : 1;
         showStep(root, prev);
+        setTimeout(refreshCheckout, 0);
       }
     });
 
-    // Submit
+    root.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!target) return;
+      if (target.matches("input, select, textarea")) {
+        setTimeout(refreshCheckout, 0);
+      }
+    });
+
+    root.addEventListener("input", (event) => {
+      const target = event.target;
+      if (!target) return;
+      if (target.matches('[data-ff-field="quantity"], [name*="quantity"], input[type="number"], input[data-ff-cast="int"], input[data-ff-cast="float"]')) {
+        setTimeout(refreshCheckout, 0);
+      }
+    });
+
     root.addEventListener("click", async (e) => {
       const btn = e.target && e.target.closest && e.target.closest("[data-ff-submit]");
       if (!btn) return;
       e.preventDefault();
-      const cfg = jsonFromConfigScript(root) || {};
-      await handleSubmit(root, cfg);
+      await handleSubmit(root, Object.assign({}, cfg));
     });
   }
 

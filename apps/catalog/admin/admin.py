@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils import timezone
+
+from apps.catalog.models import Gallery, GalleryItem
 from apps.catalog.models.models import Course, CoursePrice
 from apps.content.models import Section
 
@@ -47,3 +49,23 @@ class CourseAdmin(admin.ModelAdmin):
         queryset.update(is_published=False)
 
     actions = ['publish', 'unpublish']
+
+@admin.register(Gallery)
+class GalleryAdmin(admin.ModelAdmin):
+    list_display = ("slug", "title", "namespace", "is_active", "updated_at")
+    list_filter = ("is_active", "namespace")
+    search_fields = ("slug", "title", "subtitle", "product_code")
+    readonly_fields = ("created_at", "updated_at")
+
+class GalleryItemInline(admin.TabularInline):
+    model = GalleryItem
+    fields = ("sort_order","name","badge","meta","image","webp","href","alt","caption","product_code","is_published")
+    extra = 0
+
+@admin.register(GalleryItem)
+class GalleryItemAdmin(admin.ModelAdmin):
+    list_display = ("name", "gallery", "badge", "is_published", "sort_order", "updated_at")
+    list_filter = ("gallery", "is_published", "badge", "lang_code")
+    search_fields = ("name", "meta", "caption", "image", "product_code")
+    ordering = ("gallery", "sort_order", "id")
+    readonly_fields = ("created_at", "updated_at")

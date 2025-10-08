@@ -9,7 +9,7 @@ global:
 form_kinds:
   email_ebook:
     fields:
-      email: { required: true, max_length: 254, validators: ["email"] }
+      email: { required: false, max_length: 254, validators: ["email"] }
       first_name: { required: false, max_length: 100 }
       ebook_id: { required: false, max_length: 64 }
       newsletter_optin: { required: false, type: bool }
@@ -17,7 +17,7 @@ form_kinds:
     fields:
       first_name: { required: false, max_length: 100 }
       last_name: { required: false, max_length: 100 }
-      email: { required: true, max_length: 254, validators: ["email"] }
+      email: { required: false, max_length: 254, validators: ["email"] }
       phone: { required: false, max_length: 32, validators: ["phone"] }
       address_line1: { required: false, max_length: 200 }
       address_line2: { required: false, max_length: 200 }
@@ -35,7 +35,7 @@ form_kinds:
       full_name: { required: false, max_length: 150 }
       first_name: { required: false, max_length: 100 }
       last_name: { required: false, max_length: 100 }
-      email: { required: true, max_length: 254, validators: ["email"] }
+      email: { required: false, max_length: 254, validators: ["email"] }
       phone: { required: false, max_length: 32, validators: ["phone"] }
       billing_address_line1: { required: false, max_length: 200 }
       billing_address_line2: { required: false, max_length: 200 }
@@ -53,7 +53,7 @@ form_kinds:
     fields:
       full_name: { required: true }
       phone: { required: true, min_digits: 6 }
-      email: { required: false }
+      email: { required: false, validators: ["email"] }
       address: { required: false }
 
 campaign_overrides: {}

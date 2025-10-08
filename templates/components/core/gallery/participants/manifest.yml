@@ -1,0 +1,42 @@
+alias: "gallery"
+aliases:
+  - "gallery/participants"
+template: "components/core/gallery/participants/participants.html"
+
+assets:
+  head: []
+  css:  ["/static/components/core/gallery/participants.css"]
+  js:   ["/static/components/core/gallery/participants.js"]
+  vendors: []
+
+params:
+  gallery_slug: "participants"
+  anchor_id: "galerie"
+  initial_visible: 8
+  reveal_step: 4
+  lightbox: true
+  cta_label: "Voir plus de réalisations"
+  use_placeholder_when_empty: true
+  placeholder_template: "components/core/gallery/participants/_placeholder.html"
+
+contract:
+  optional:
+    gallery_slug: "str"
+    anchor_id: "str"
+    initial_visible: "int"
+    reveal_step: "int"
+    lightbox: "bool"
+    cta_label: "str"
+    title: "str"
+    subtitle: "str"
+    proofs: "list"
+    product_code: "str"
+    use_placeholder_when_empty: "bool"
+    placeholder_template: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.gallery.hydrators"
+  func:   "participants"
+
+render:
+  cacheable: false

@@ -1,0 +1,67 @@
+{% load i18n static %}
+
+
+<div id="af-gallery" class="af-gallery container-fluid px-0" data-af-gallery aria-label="{% trans 'Galerie produit' %}">
+  <div class="row gx-3 align-items-start">
+
+    <!-- Colonne Thumbnails (fixe) -->
+    <aside class="col-auto">
+      <div class="gallery-thumbs swiper" role="tablist" aria-label="{% trans 'Miniatures' %}">
+        <div class="swiper-wrapper">
+          {% for image in media.images %}
+          <div class="swiper-slide afg-thumb"
+               role="tab"
+               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+               aria-controls="afg-slide-{{ forloop.counter0 }}"
+               tabindex="0">
+            <img class="thumb"  src="{{ image.thumb|default:image.src }}"
+                 alt="{% blocktrans with n=forloop.counter %}Miniature {{ n }}{% endblocktrans %}"
+                 width="176" height="132" loading="lazy">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </aside>
+
+    <!-- Colonne Hero (auto) -->
+    <section class="col min-w-0">  {# min-w-0 évite le shrink #}
+      <div class="gallery-main swiper afg-hero"
+           aria-roledescription="carousel"
+           aria-label="{% trans 'Images du produit' %}">
+        <div class="swiper-wrapper">
+          {% for image in media.images %}
+          <div id="afg-slide-{{ forloop.counter0 }}" class="swiper-slide" role="group"
+               aria-label="{% blocktrans with index=forloop.counter total=media.images|length %}Image {{ index }} sur {{ total }}{% endblocktrans %}">
+            <div class="ratio ratio-4x3 afg-hero-frame">
+              <div class="swiper-zoom-container">
+                {% with main_src=image.src|default:'https://placehold.co/960x720?text=Image' main_alt=image.alt|default:product.name %}
+                <img src="{{ main_src }}"
+                     alt="{{ main_alt }}"
+                     class="gallery-main-img d-block w-100 h-100"
+                     width="960" height="720"
+                     loading="lazy" decoding="async">
+                {% endwith %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <button class="swiper-button-prev afg-paddle ms-md-5" type="button" aria-label="{% trans 'Image précédente' %}">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <button class="swiper-button-next afg-paddle me-md-5" type="button" aria-label="{% trans 'Image suivante' %}">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+
+        <div class="swiper-pagination afg-dots" aria-hidden="true"></div>
+
+        <div class="afg-brand my-3" aria-hidden="true">
+<!--          <span class="afg-brand-script">Al Fenna</span>-->
+          <span class="afg-baseline">NATUREL • SOIN • CONFIANCE</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

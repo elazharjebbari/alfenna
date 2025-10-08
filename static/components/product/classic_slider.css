@@ -1,0 +1,5 @@
+.pg-hero .btn { width: 2.25rem; height: 2.25rem; }
+.pg-hero picture, .pg-hero img { display:block; width:100%; height:100%; object-fit:contain; }
+.pg-thumbs button.active { outline: 2px solid var(--bs-primary); outline-offset: 2px; }
+.pg-thumbs img { display:block; width:100%; height:100%; object-fit:cover; }
+#product-gallery .pg-hero { overflow:hidden; }

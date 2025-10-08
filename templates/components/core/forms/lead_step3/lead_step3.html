@@ -1,25 +1,27 @@
-{% load i18n %}
+{% load static i18n %}
 {% url 'leads:collect' as leads_collect_url %}
 {% url 'leads:sign' as leads_sign_url %}
-{% with fullname_key=fields_map.fullname|default:'full_name' phone_key=fields_map.phone|default:'phone' address_key=fields_map.address|default:'address' quantity_key=fields_map.quantity|default:'quantity' offer_key=fields_map.offer|default:'offer_key' product_key=fields_map.product|default:'product' promotion_key=fields_map.promotion|default:'promotion_selected' %}
+{% with fullname_key=fields_map.fullname|default:'full_name' phone_key=fields_map.phone|default:'phone' address_key=fields_map.address|default:'address' quantity_key=fields_map.quantity|default:'quantity' offer_key=fields_map.offer|default:'offer_key' product_key=fields_map.product|default:'product' promotion_key=fields_map.promotion|default:'promotion_selected' email_key=fields_map.email|default:'email' payment_key=fields_map.payment_method|default:'payment_method' bump_key=fields_map.bump|default:'bump_optin' ui_texts=form.ui_texts %}
 {% with action_target=action_url|default:leads_collect_url %}
 
-<form class="c-lead-form c-lead-form--stepper af-form card border-0 shadow-sm"
+<form id="form-stepper" class="c-lead-form c-lead-form--stepper af-form card border-0 shadow-sm"
       data-ff-root data-steps="4" method="post" action=""
       data-action-url="{{ action_target }}"
       data-require-signed="true" data-sign-url="{{ leads_sign_url }}"
-      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","address":"{{ address_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}","email":"email","payment_method":"payment_method"}'
+      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","address":"{{ address_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}","email":"{{ email_key }}","payment_method":"{{ payment_key }}","bump":"{{ bump_key }}"}'
       data-checkout-url="/api/checkout/sessions/"
       novalidate>
     {% csrf_token %}
+    <input type="hidden" name="{{ product_key }}" value="{{ product.id|default:product.slug }}" data-ff-product>
+    <input type="hidden" name="{{ quantity_key }}" value="1" data-ff-quantity-default>
 
     <div class="af-shell">
 
         <!-- ===== En‑tête & stepper ===== -->
         <header class="af-header text-center">
-            <img src="https://placehold.co/96x76?text=Logo" alt="Logo" class="af-logo">
-            <div class="af-brand">Al Fenna</div>
-            <div class="af-baseline small fw-bold text-uppercase">{% trans "NATUREL • SOIN • CONFIANCE" %}</div>
+            <img src="{% static 'images/logo/logo.png' %}" alt="Logo" class="af-logo">
+<!--            <div class="af-brand">Al Fenna</div>-->
+            <div class="af-baseline small fw-bold text-uppercase mt-2">{% trans "NATUREL • SOIN • CONFIANCE" %}</div>
 
             <nav class="af-stepper mt-3" aria-label="{% trans 'Progression' %}">
                 <span class="af-pill is-active">{% trans "Contact" %}</span>
@@ -56,12 +58,26 @@
                         </div>
                     </div>
                     <div class="col-lg-7">
+                        {% with bullets=ui_texts.bullets %}
                         <ul class="list-unstyled mb-2 af-bullets">
-                            <li><span class="af-ico"><i class="fa-solid fa-truck-fast"></i></span><strong>{% trans "Livraison 48 h" %}</strong></li>
-                            <li><span class="af-ico"><i class="fa-solid fa-hand-holding-dollar"></i></span><strong>{% trans "Paiement à la livraison" %}</strong></li>
-                            <li><span class="af-ico"><i class="fa-solid fa-leaf"></i></span><strong>{% trans "100% naturel" %}</strong></li>
+                            {% if bullets %}
+                                {% for bullet in bullets %}
+                                    <li><span class="af-ico"><i class="fa-solid fa-circle-check"></i></span><strong>{{ bullet }}</strong></li>
+                                {% endfor %}
+                            {% else %}
+                                <li><span class="af-ico"><i class="fa-solid fa-truck-fast"></i></span><strong>{% trans "Livraison 48 h" %}</strong></li>
+                                <li><span class="af-ico"><i class="fa-solid fa-hand-holding-dollar"></i></span><strong>{% trans "Paiement à la livraison" %}</strong></li>
+                                <li><span class="af-ico"><i class="fa-solid fa-leaf"></i></span><strong>{% trans "100% naturel" %}</strong></li>
+                            {% endif %}
                         </ul>
-                        <span class="af-chip"><i class="fa-solid fa-user-group" aria-hidden="true"></i> +&nbsp;500 {% trans "clientes" %}</span>
+                        {% endwith %}
+                        {% with social_proof=ui_texts.social_proof %}
+                            {% if social_proof %}
+                                <span class="af-chip"><i class="fa-solid fa-user-group" aria-hidden="true"></i> {{ social_proof }}</span>
+                            {% else %}
+                                <span class="af-chip"><i class="fa-solid fa-user-group" aria-hidden="true"></i> +&nbsp;500 {% trans "clientes" %}</span>
+                            {% endif %}
+                        {% endwith %}
                     </div>
                 </div>
             </div>
@@ -82,9 +98,7 @@
                                minlength="6" maxlength="20" required
                                placeholder="{% trans 'WhatsApp ou mobile actif' %}">
                     </div>
-                    <div class="form-text mt-1">{% trans "Format libre. Les caractères non numériques seront nettoyés
-                        automatiquement." %}
-                    </div>
+                    <div class="form-text mt-1">{% trans "Format libre. Les caractères non numériques seront nettoyés automatiquement." %}</div>
                 </div>
 
                 <div class="form-check">
@@ -109,49 +123,112 @@
             </div>
 
             <!-- Offres -->
+            {% with offers=form.offers %}
+            {% trans "MEILLEUR CHOIX" as default_offer_badge %}
+            {% trans "Offre" as default_offer_title %}
+            {% trans "Ajoutez ce complément ?" as default_bump_label %}
+            {% trans "Produit complémentaire" as default_bump_alt %}
             <div class="row g-3 af-offers" role="group" aria-label="{% trans 'Choix du pack' %}">
-                <div class="col-md-6">
-                    <label class="af-card-radio">
-                        <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="solo" checked>
-                        <div class="af-offer-card">
-                            <h5 class="af-offer-title mb-3">{% trans "Pack Solo" %}</h5>
-                            <div class="af-offer-price"><span class="af-amount">349</span>&nbsp;MAD</div>
-                            <div class="af-offer-choice small text-muted mt-2">
-                                <i class="fa-regular fa-circle me-1"></i> {% trans "Oui" %}
+                {% if offers %}
+                    {% for offer in offers %}
+                        {% with code=offer.code|default:'offer_'|add:forloop.counter %}
+                        <div class="col-md-6">
+                            <label class="af-card-radio {% if offer.is_featured %}is-featured{% endif %}">
+                                <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="{{ code }}"
+                                       {% if offer.is_featured %}checked{% elif forloop.first %}checked{% endif %}>
+                                <div class="af-offer-card">
+                                    {% if offer.is_featured %}
+                                        <div class="af-badge-best">{{ offer.badge_label|default:default_offer_badge }}</div>
+                                    {% endif %}
+                                    <h5 class="af-offer-title mb-3">{{ offer.title|default:default_offer_title }}</h5>
+                                    {% if offer.description %}
+                                        <div class="small text-muted mb-2">{{ offer.description }}</div>
+                                    {% endif %}
+                                    {% if offer.price is not None %}
+                                        <div class="af-offer-price">
+                                            <span class="af-amount">{{ offer.price|floatformat:0 }}</span>{% if pricing.currency %}&nbsp;{{ pricing.currency }}{% endif %}
+                                        </div>
+                                    {% endif %}
+                                    {% if offer.compare_at_price %}
+                                        <div class="af-offer-compare small text-muted text-decoration-line-through">
+                                            {{ offer.compare_at_price|floatformat:0 }}{% if pricing.currency %}&nbsp;{{ pricing.currency }}{% endif %}
+                                        </div>
+                                    {% endif %}
+                                    {% if offer.savings_label %}
+                                        <div class="af-offer-eco small text-muted mt-1">{{ offer.savings_label }}</div>
+                                    {% endif %}
+                                </div>
+                            </label>
+                        </div>
+                        {% endwith %}
+                    {% endfor %}
+                {% else %}
+                    <div class="col-md-6">
+                        <label class="af-card-radio">
+                            <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="solo" checked>
+                            <div class="af-offer-card">
+                                <h5 class="af-offer-title mb-3">{% trans "Pack Solo" %}</h5>
+                                <div class="af-offer-price"><span class="af-amount">349</span>&nbsp;MAD</div>
+                                <div class="af-offer-choice small text-muted mt-2">
+                                    <i class="fa-regular fa-circle me-1"></i> {% trans "Oui" %}
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="af-card-radio is-featured">
-                        <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="duo">
-                        <div class="af-offer-card">
-                            <div class="af-badge-best">{% trans "MEILLEUR CHOIX" %}</div>
-                            <h5 class="af-offer-title mb-3">{% trans "Pack Duo" %}</h5>
-                            <div class="af-offer-price"><span class="af-amount">489</span>&nbsp;MAD</div>
-                            <div class="af-offer-eco small text-muted mt-1">{% trans "Éco 209 MAD" %}</div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Cross‑sell compact : juste une case -->
-            <div class="af-bump af-bump--compact mt-3">
-                <img src="https://placehold.co/72x72?text=+" alt="{% trans 'Bougie parfumée' %}"
-                     class="af-bump-thumb rounded-3">
-                <div class="flex-grow-1">
-                    <div class="form-check m-0">
-                        <input class="form-check-input" type="checkbox" id="af-candle-on" name="candle_optin" value="1">
-                        <label class="form-check-label fw-semibold" for="af-candle-on">
-                            {% trans "+ Bougie parfumée en cire de soja" %}
-                            <span class="text-muted">({% trans "150 g" %})</span>
-                            <span class="af-bump-price">— 40&nbsp;MAD</span>
                         </label>
                     </div>
-                    <div class="small text-muted mt-1">{% trans "Optionnelle · Parfums variés disponibles" %}</div>
-                </div>
+
+                    <div class="col-md-6">
+                        <label class="af-card-radio is-featured">
+                            <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="duo">
+                            <div class="af-offer-card">
+                                <div class="af-badge-best">{% trans "MEILLEUR CHOIX" %}</div>
+                                <h5 class="af-offer-title mb-3">{% trans "Pack Duo" %}</h5>
+                                <div class="af-offer-price"><span class="af-amount">489</span>&nbsp;MAD</div>
+                                <div class="af-offer-eco small text-muted mt-1">{% trans "Éco 209 MAD" %}</div>
+                            </div>
+                        </label>
+                    </div>
+                {% endif %}
             </div>
+            {% endwith %}
+
+            <!-- Cross‑sell compact : juste une case -->
+            {% trans "Ajoutez ce complément ?" as default_bump_label %}
+            {% trans "Produit complémentaire" as default_bump_alt %}
+            {% with bump=form.bump %}
+                {% if bump.enabled %}
+                    <div class="af-bump af-bump--compact mt-3">
+                        {% if bump.image %}
+                            <img src="{{ bump.image }}" alt="{{ bump.alt|default:default_bump_alt }}"
+                                 class="af-bump-thumb rounded-3">
+                        {% else %}
+                            <img src="https://placehold.co/72x72?text=+" alt="{{ default_bump_alt }}"
+                                 class="af-bump-thumb rounded-3">
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <div class="form-check m-0">
+                                <input class="form-check-input" type="checkbox" id="af-bump-optin"
+                                       name="{{ bump_key }}" value="{{ bump.value|default:'1' }}">
+                                <label class="form-check-label fw-semibold" for="af-bump-optin">
+                                    {{ bump.label|default:default_bump_label }}
+                                    {% if bump.sublabel %}
+                                        <span class="text-muted">({{ bump.sublabel }})</span>
+                                    {% endif %}
+                                    {% if bump.price %}
+                                        <span class="af-bump-price">— {{ bump.price }}
+                                            {% if bump.currency %}&nbsp;{{ bump.currency }}
+                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency }}
+                                            {% endif %}
+                                        </span>
+                                    {% endif %}
+                                </label>
+                            </div>
+                            {% if bump.note %}
+                                <div class="small text-muted mt-1">{{ bump.note }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
 
             <!-- Adresse (champ unique) -->
             {% if address_key %}
@@ -164,13 +241,19 @@
             {% endif %}
 
             <!-- Récap -->
+            {% trans "Remise paiement en ligne" as default_summary_discount_label %}
+            {% trans "Total mis à jour" as default_summary_total_label %}
             <div class="af-summary mt-3">
                 <div class="af-summary-row"><span>{% trans "Sous‑total" %}</span><strong id="af-subtotal">XXX
                     MAD</strong></div>
-                <div class="af-summary-row"><span>{% trans "Remise paiement en ligne" %}</span><strong id="af-discount">XXX
-                    MAD</strong></div>
-                <div class="af-summary-row af-summary-total"><span>{% trans "Total mis à jour" %}</span><strong
-                        id="af-total">XXX MAD</strong></div>
+                {% with summary_discount_label=ui_texts.discount_label|default:default_summary_discount_label %}
+                    <div class="af-summary-row"><span>{{ summary_discount_label }}</span><strong id="af-discount">XXX
+                        MAD</strong></div>
+                {% endwith %}
+                {% with summary_total_label=ui_texts.total_label|default:default_summary_total_label %}
+                    <div class="af-summary-row af-summary-total"><span>{{ summary_total_label }}</span><strong
+                            id="af-total">XXX MAD</strong></div>
+                {% endwith %}
             </div>
 
             <div class="d-flex justify-content-between align-items-center gap-2 mt-3">
@@ -185,47 +268,79 @@
             <h2 id="af-pay-title" class="af-h2 mb-3">{% trans "Paiement" %}</h2>
 
             <!-- Méthode de paiement -->
-            <fieldset class="af-pay" role="radiogroup" aria-label="{% trans 'Méthode de paiement' %}">
-                <!-- Paiement en ligne -->
-                <label class="af-pay-option is-online">
-                    <input type="radio" name="payment_method" value="online" class="visually-hidden" checked>
-                    <span class="af-pay-check" aria-hidden="true"></span>
-                    <span class="af-pay-label">{% trans "Paiement en ligne" %}</span>
-                    <span class="af-discount" id="af-online-discount">−20&nbsp;MAD {% trans "de réduction" %}</span>
-                </label>
+            {% with payment_labels=ui_texts.payment_labels %}
+                {% trans "Paiement en ligne" as default_payment_online %}
+                {% trans "Paiement à la livraison" as default_payment_cod %}
+                <fieldset class="af-pay" role="radiogroup" aria-label="{% trans 'Méthode de paiement' %}">
+                    <!-- Paiement en ligne -->
+                    <label class="af-pay-option is-online">
+                        <input type="radio" name="{{ payment_key }}" value="online" class="visually-hidden" checked>
+                        <span class="af-pay-check" aria-hidden="true"></span>
+                        <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>
+                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}
+                            {% if discount_amount %}
+                                <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
+                            {% elif discount_text %}
+                                <span class="af-discount" id="af-online-discount">{{ discount_text }}</span>
+                            {% else %}
+                                <span class="af-discount" id="af-online-discount">−20&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
+                            {% endif %}
+                        {% endwith %}
+                    </label>
 
-                <!-- Paiement à la livraison -->
-                <label class="af-pay-option">
-                    <input type="radio" name="payment_method" value="cod" class="visually-hidden">
-                    <span class="af-pay-check" aria-hidden="true"></span>
-                    <span class="af-pay-label">{% trans "Paiement à la livraison" %}</span>
-                </label>
-            </fieldset>
+                    <!-- Paiement à la livraison -->
+                    <label class="af-pay-option">
+                        <input type="radio" name="{{ payment_key }}" value="cod" class="visually-hidden">
+                        <span class="af-pay-check" aria-hidden="true"></span>
+                        <span class="af-pay-label">{{ payment_labels.cod|default:default_payment_cod }}</span>
+                    </label>
+                </fieldset>
+            {% endwith %}
 
             <!-- E-mail de confirmation -->
+            {% trans "Adresse e‑mail" as default_email_label %}
+            {% trans "Ex. salma@example.com" as default_email_placeholder %}
+            {% trans "OK pour recevoir la confirmation par e‑mail" as default_email_optin %}
             <div class="mt-3">
-                <label class="af-label" for="ff-email">{% trans "Adresse e‑mail" %}</label>
-                <input type="email" id="ff-email" name="email" class="form-control"
-                       placeholder="{% trans 'Ex. salma@example.com' %}" autocomplete="email">
+                <label class="af-label" for="ff-email">{{ ui_texts.email_label|default:default_email_label }}</label>
+                <input type="email" id="ff-email" name="{{ email_key }}" class="form-control"
+                       placeholder="{{ ui_texts.email_placeholder|default:default_email_placeholder }}" autocomplete="email">
             </div>
             <div class="form-check mt-2">
                 <input class="form-check-input" type="checkbox" id="ff-email-optin" name="email_optin" checked>
                 <label class="form-check-label" for="ff-email-optin">
-                    {% trans "OK pour recevoir la confirmation par e‑mail" %}
+                    {{ ui_texts.email_optin_label|default:default_email_optin }}
                 </label>
             </div>
 
             <!-- Récap rapide (reprend le style de l’étape 2) -->
+            {% trans "Remise paiement en ligne" as default_summary_discount_label %}
+            {% trans "Total" as default_payment_total_label %}
             <div class="af-summary mt-3">
                 <div class="af-summary-row">
                     <span>{% trans "Sous‑total" %}</span><strong id="af-step3-subtotal">XXX MAD</strong>
                 </div>
-                <div class="af-summary-row" id="af-step3-discount-row">
-                    <span>{% trans "Remise paiement en ligne" %}</span><strong id="af-step3-discount">−20 MAD</strong>
-                </div>
-                <div class="af-summary-row af-summary-total">
-                    <span>{% trans "Total" %}</span><strong id="af-step3-total">XXX MAD</strong>
-                </div>
+                {% with step3_discount_label=ui_texts.discount_label|default:default_summary_discount_label %}
+                    {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}
+                        <div class="af-summary-row" id="af-step3-discount-row">
+                            <span>{{ step3_discount_label }}</span>
+                            <strong id="af-step3-discount">
+                                {% if discount_amount %}
+                                    −{{ discount_amount }}&nbsp;{{ currency_code }}
+                                {% elif discount_text %}
+                                    {{ discount_text }}
+                                {% else %}
+                                    −20&nbsp;{{ currency_code }}
+                                {% endif %}
+                            </strong>
+                        </div>
+                    {% endwith %}
+                {% endwith %}
+                {% with step3_total_label=ui_texts.payment_total_label|default:default_payment_total_label %}
+                    <div class="af-summary-row af-summary-total">
+                        <span>{{ step3_total_label }}</span><strong id="af-step3-total">XXX MAD</strong>
+                    </div>
+                {% endwith %}
             </div>
 
             <!-- Sécurité perçue -->
@@ -240,14 +355,30 @@
                 </button>
             </div>
 
+            <div id="af-checkout-data"
+                 data-checkout-hints
+                 data-unit-price="{{ checkout_hints.unit_price|default_if_none:0 }}"
+                 data-base-price="{{ checkout_hints.base_price|default_if_none:0 }}"
+                 data-promo-price="{{ checkout_hints.promo_price|default_if_none:0 }}"
+                 data-currency="{{ checkout_hints.currency|default:pricing.currency|default:'MAD' }}"
+                 data-online-discount="{{ checkout_hints.online_discount|default:0 }}"
+                 data-product-id="{{ checkout_hints.product_id|default:product.id|default:'' }}"
+                 data-product-slug="{{ checkout_hints.product_slug|default:product.slug|default:'' }}"
+                 data-product-name="{{ checkout_hints.product_name|default:product.name|default:'' }}"
+                 data-bump-price="{{ form.bump.price|default:'' }}"
+                 data-bump-currency="{{ form.bump.currency|default:pricing.currency|default:'MAD' }}"
+                 hidden></div>
+
             <div class="ff-form-msg text-danger small mt-2" aria-live="polite"></div>
         </section>
 
         {# Étape 4 — thank you #}
         <section data-ff-step="4" data-step="4" data-thank-you class="ff-step d-none text-center" aria-live="polite">
             <div class="af-thanks py-4">
-                <p class="fw-semibold mb-1">{% trans "Merci, votre commande est enregistrée." %}</p>
-                <p class="text-muted mb-0">{% trans "Vous recevrez une confirmation très bientôt." %}</p>
+                {% trans "Merci, votre commande est enregistrée." as default_thanks_title %}
+                {% trans "Vous recevrez une confirmation très bientôt." as default_thanks_subtitle %}
+                <p class="fw-semibold mb-1">{{ ui_texts.thanks_title|default:default_thanks_title }}</p>
+                <p class="text-muted mb-0">{{ ui_texts.thanks_subtitle|default:default_thanks_subtitle }}</p>
             </div>
         </section>
     </div>

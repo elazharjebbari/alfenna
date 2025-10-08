@@ -1,0 +1,159 @@
+@startmindmap
+title Landing Page — Plan 3 (Expérience Premium & Bien-Être) \n+ Buy-Box produit en tête de page
+
+* Landing: Plan 3 (Premium & Wellness)
+** [GLOBAL] Principes & navigation
+*** Structure: one-page scroll avec **navigation sticky** (ancres) et **CTA sticky mobile**.
+*** Ton & style: luxueux, apaisant, sensoriel; visuels “spa”, textures chaudes, lumière douce.
+*** Typo/couleurs: serif/headline élégante + sans-serif lisible; palette neutre (ivoire/vert sauge) + accent CTA contrasté.
+*** KPIs globaux: CTR CTA header, taux ajout panier, % paiement en ligne, uptake bougie, CVR page, leads.
+
+** [0] BUY-BOX (TOP) — Swiper + Descriptif + Prix + Formulaire
+*** Rôle: **Faire acheter tout de suite** (pour les chauds) et poser les codes premium dès le 1er écran.
+*** Pourquoi: tu veux **commencer par le produit**; on “court-circuite” le storytelling pour capter l’intention maintenant.
+*** Message: “Coffret naturel complet antifongique & bien-être — simple, efficace, élégant.”
+*** Objectif: ajout panier / commande; pousser **paiement en ligne (-30 dhs)**; suggérer Duo (590 dhs).
+*** Structure/Contenu:
+**** Swiper (3-6 visuels): pack flatlay, trousse, textures, “before/after” soft, ambiance spa.
+**** Bloc prix: 1 pack 350 dhs (320 dhs carte), Duo 590 dhs (560 dhs carte); économie affichée.
+**** Formulaire achat: {quantité 1/2}; {toggle “Ajouter bougie 90 dhs”}; {mode paiement: “Carte (-30 dhs)” pré-sélectionné / “À la livraison”}; {Nom, Tél}; **CTA “Je commande le coffret”**.
+**** Micro-réassurance: “✓ Satisfait ou remboursé 30 j” “✓ Livraison 24/48h offerte” “✓ Paiement sécurisé”.
+*** Comms/Copy:
+**** Headline courte: “Vos pieds méritent l’excellence naturelle”.
+**** Sub: “Rituel complet antifongique & bien-être. Résultats visibles en 4 semaines.”
+**** Badge: “–30 dhs en payant en ligne”.
+*** UX notes:
+**** **CTA sticky mobile** (“Commander”) + encart prix visible au scroll.
+**** Indication “En stock – expédition aujourd’hui”.
+*** Intégration:
+**** Précédent: (aucun, c’est l’ouverture).
+**** Suivant: [1] Premium Hero (immerger dans l’univers tout en ayant déjà l’option d’acheter).
+
+** [1] Premium HERO immersif (visuel ambiance spa)
+*** Rôle: Ancrer l’**identité premium & bien-être** (émotion, aspiration).
+*** Message: “Transformez une contrainte médicale en un rituel qui fait du bien.”
+*** Objectif: renforcer **valeur perçue**; augmenter confiance/prix perçus; préparer lecture.
+*** Structure:
+**** Image plein écran: scène salle de bain/spa (peignoir, serviette, lumière chaude).
+**** Claim court + bouton secondaire “Découvrir le rituel”.
+*** Comms/Copy: minimaliste, sensorielle, **sans** détails médicaux.
+*** UX notes: **ne pas** masquer le sticky CTA; garder un ratio lecture rapide.
+*** Intégration:
+**** Prev: [0] BUY-BOX (action).
+**** Next: [2] Reframing Problème → désir (confiance/beauté).
+
+** [2] Reframing — Du problème au désir (Confiance & Beauté)
+*** Rôle: Repositionner la mycose en **enjeu de bien-être & confiance** (pas de peur).
+*** Message: “Ne cachez plus vos pieds. Osez les sandales, retrouvez la fierté.”
+*** Objectif: activer **motivation positive**; réduire honte/fuite.
+*** Structure:
+**** 3 bénéfices aspirationnels (douceur, ongles nets, confiance sociale).
+**** Image lifestyle (pieds nus heureux, plage/maison).
+*** Comms/Copy: “Pieds doux, ongles plus clairs, vous souriez à nouveau.”
+*** Intégration:
+**** Prev: HERO (émotion).
+**** Next: [3] Coffret premium (preuve matérielle de la promesse).
+
+** [3] Présentation COFFRET (design & qualité)
+*** Rôle: **Valoriser l’objet** (packaging, trousse, textures, ingrédients nobles).
+*** Message: “Un coffret-soin haut de gamme, pensé pour durer.”
+*** Objectif: augmenter **willingness-to-pay** et désir d’appartenance.
+*** Structure:
+**** Photos macro des textures (crème, sérum), focus trousse, composants visuels.
+**** 3 points forts: parfum subtil, texture non grasse, ingrédients nobles.
+*** Comms/Copy: langage sensoriel; évite jargon médical brut.
+*** Intégration:
+**** Prev: désir.
+**** Next: [4] Bénéfices santé & bien-être (concretiser).
+
+** [4] BÉNÉFICES — Santé & Bien-être
+*** Rôle: Articuler **utile + agréable** (soigne ET fait du bien).
+*** Message: “Soulage, répare, embellit — en douceur, naturellement.”
+*** Objectif: lever doutes (efficacité) sans casser l’atmosphère premium.
+*** Structure:
+**** 4 tuiles: Soulage & Répare / Embellit / Moment détente / Respecte l’équilibre.
+**** Icônes élégantes + micro-preuves (ex. 91% satisfaits).
+*** Comms/Copy: bénéfices concrets, chiffrés **si** disponibles (sans sur-promesse).
+*** Intégration:
+**** Prev: qualité matière.
+**** Next: [5] Témoignages lifestyle (validation sociale).
+
+** [5] TÉMOIGNAGES (orientation expérience)
+*** Rôle: **Preuve sociale** alignée au lifestyle (plaisir d’usage + efficacité).
+*** Message: “J’aime autant le résultat que le moment spa.”
+*** Objectif: rassurer & projeter; traiter objections implicitement.
+*** Structure:
+**** 3 avis courts (mix H/F) + photo stylisée, note ★★★★☆/★★★★★.
+**** Un avis mentionnant Duo/partage en couple.
+*** Comms/Copy: authentique, chaleureux, détails sensoriels (“odeur, texture”).
+*** Intégration:
+**** Prev: bénéfices.
+**** Next: [6] Offre commerciale (recap clair).
+
+** [6] OFFRE (recap) — 1 Pack / Duo + paiement en ligne
+*** Rôle: **Clarifier** les options tarifaires et diriger la décision.
+*** Message: “Choisissez votre coffret — faites-vous plaisir.”
+*** Objectif: maximiser uptake **Duo** et **paiement carte (-30 dhs)**.
+*** Structure:
+**** Tableau: 1 pack 350 (320 carte) | Duo 590 (560 carte) + économie nette.
+**** Label “Le + demandé” sur Duo; badge “–30 dhs en carte”.
+**** CTA vers **[0] BUY-BOX** (scroll smooth) + ancre d’achat.
+*** Comms/Copy: sobriété premium (éviter rouge criard); “investissement bien-être”.
+*** Intégration:
+**** Prev: témoins → action.
+**** Next: [7] Service premium (logistique rassurante).
+
+** [7] SERVICE PREMIUM (logistique & support)
+*** Rôle: **Réassurance** de bout en bout (livraison, emballage, support).
+*** Message: “Service aux petits soins.”
+*** Objectif: lever derniers freins (délais, qualité emballage, contact humain).
+*** Structure:
+**** 4 items: Livraison 24/48h; Emballage soigné; Assistance dédiée; Paiements sécurisés.
+*** Comms/Copy: concret, factuel, sans lourdeur.
+*** Intégration:
+**** Prev: offre.
+**** Next: [8] Cross-sell bougie (compléter le rituel).
+
+** [8] CROSS-SELL — Bougie de massage (compléter le rituel)
+*** Rôle: Augmenter panier **sans** perturber entonnoir; amplifier expérience “spa”.
+*** Message: “Complétez votre rituel — ambiance & massage.”
+*** Objectif: taux d’attache bougie; perception de valeur.
+*** Structure:
+**** Visuel ambiance (bougie allumée, bain de pieds).
+**** Offre: 90 dhs (–25%) si ajout au pack; CTA “+ Ajouter la bougie”.
+**** (Option) Bonus: proposer **après** sélection pack dans le formulaire [0].
+*** Comms/Copy: sensoriel, bénéfice détente (après exfoliation/pierre ponce).
+*** Intégration:
+**** Prev: service (cohérence “premium end-to-end”).
+**** Next: [9] Closing aspiration & CTA final.
+
+** [9] CLOSING — Appel à l’action aspirationnel
+*** Rôle: **Conclusion** positive; enclencher l’action finale.
+*** Message: “Prêt(e) à la renaissance de vos pieds ?”
+*** Objectif: dernier CTA vers achat; alternative lead si hésitation.
+*** Structure:
+**** Headline inspirante + **CTA “Je m’offre ce rituel complet”** (ancre BUY-BOX).
+**** Lien secondaire: “Je veux être rappelé(e)” → [10] Lead.
+*** Comms/Copy: self-care, cadeau à soi.
+*** Intégration:
+**** Prev: bougie (expérience complète).
+**** Next: [10] Lead fallback.
+
+** [10] LEAD fallback — Rappel expert
+*** Rôle: **Sauvetage** des indécis; récupérer coordonnées pour closing téléphonique.
+*** Message: “Un conseiller bien-être vous rappelle sous 24h.”
+*** Objectif: MQLs; qualification.
+*** Structure:
+**** Champ Tél + prénom; consentement; **CTA “Être rappelé(e)”**.
+**** Message réassurance: “Conseil gratuit & bienveillant, sans engagement.”
+*** Comms/Copy: empathique, utile.
+*** Intégration:
+**** Prev: closing.
+**** Next: [11] Footer.
+
+** [11] FOOTER — Confiance & conformité
+*** Rôle: Clore proprement; conformité légale; éléments de confiance.
+*** Contenus: mentions, CGV, politique retours, badges sécurité, contacts, réseaux.
+*** Intégration: fin de page (aucun suivant).
+
+@endmindmap

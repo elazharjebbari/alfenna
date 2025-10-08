@@ -98,7 +98,9 @@ class MediaImage:
 @dataclass
 class ProductMeta:
     id: str = ""
+    slug: str = ""
     name: str = ""
+    subname: str = ""
     description: str = ""
     price: Optional[Decimal] = None
     promo_price: Optional[Decimal] = None
@@ -122,7 +124,9 @@ class ProductMeta:
             highlights = []
         return cls(
             id=str(raw.get("id", "") or ""),
+            slug=str(raw.get("slug", "") or ""),
             name=str(raw.get("name", "") or ""),
+            subname=str(raw.get("subname", "") or ""),
             description=str(raw.get("description", "") or ""),
             price=price,
             promo_price=promo_price,
@@ -134,7 +138,9 @@ class ProductMeta:
     def as_dict(self) -> Dict[str, Any]:
         return {
             "id": self.id,
+            "slug": self.slug,
             "name": self.name,
+            "subname": self.subname,
             "description": self.description,
             "price": self.price,
             "promo_price": self.promo_price,
@@ -157,8 +163,14 @@ class FormConfig:
             "offer": "offer_key",
             "product": "product",
             "promotion": "promotion_selected",
+            "email": "email",
+            "payment_method": "payment_method",
+            "bump": "bump_optin",
         }
     )
+    ui_texts: Dict[str, Any] = field(default_factory=dict)
+    offers: List[Dict[str, Any]] = field(default_factory=list)
+    bump: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
     def from_obj(cls, raw: Any) -> "FormConfig":
@@ -177,6 +189,12 @@ class FormConfig:
                 merged = dict(data.fields_map)
                 merged.update({str(k): str(v) for k, v in fm.items() if v is not None})
                 data.fields_map = merged
+        if raw.get("ui_texts") and isinstance(raw.get("ui_texts"), dict):
+            data.ui_texts = dict(raw.get("ui_texts"))
+        if raw.get("offers") and isinstance(raw.get("offers"), list):
+            data.offers = [dict(item) for item in raw.get("offers") if isinstance(item, dict)]
+        if raw.get("bump") and isinstance(raw.get("bump"), dict):
+            data.bump = dict(raw.get("bump"))
         return data
 
     def as_dict(self) -> Dict[str, Any]:
@@ -184,6 +202,9 @@ class FormConfig:
             "alias": self.alias,
             "action_url": self.action_url,
             "fields_map": self.fields_map,
+            "ui_texts": self.ui_texts,
+            "offers": self.offers,
+            "bump": self.bump,
         }
 
 
@@ -221,6 +242,9 @@ class Tracking:
 
 @dataclass
 class ProductParams:
+    product_slug: str = ""
+    product_id: str = ""
+    lookup: Dict[str, Any] = field(default_factory=dict)
     product: ProductMeta = field(default_factory=ProductMeta)
     media_lightbox: bool = False
     media_images: List[MediaImage] = field(default_factory=list)
@@ -228,11 +252,21 @@ class ProductParams:
     form: FormConfig = field(default_factory=FormConfig)
     tracking: Tracking = field(default_factory=Tracking)
     rtl: str = "auto"
+    ui_texts: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, params: Optional[Dict[str, Any]]) -> "ProductParams":
         params = params or {}
         instance = cls()
+        product_slug = params.get("product_slug")
+        if product_slug:
+            instance.product_slug = str(product_slug)
+        product_id = params.get("product_id")
+        if product_id:
+            instance.product_id = str(product_id)
+        lookup_raw = params.get("lookup")
+        if isinstance(lookup_raw, dict):
+            instance.lookup = dict(lookup_raw)
         if "product" in params:
             instance.product = ProductMeta.from_obj(params.get("product"))
         if "media" in params:
@@ -250,10 +284,15 @@ class ProductParams:
             instance.tracking = Tracking.from_obj(params.get("tracking"))
         if params.get("rtl") in {"auto", "on", "off"}:
             instance.rtl = str(params["rtl"])
+        if params.get("ui_texts") and isinstance(params.get("ui_texts"), dict):
+            instance.ui_texts = dict(params.get("ui_texts"))
         return instance
 
     def as_dict(self) -> Dict[str, Any]:
         return {
+            "product_slug": self.product_slug,
+            "product_id": self.product_id,
+            "lookup": dict(self.lookup),
             "product": self.product.as_dict(),
             "media": {
                 "lightbox": self.media_lightbox,
@@ -263,4 +302,5 @@ class ProductParams:
             "form": self.form.as_dict(),
             "tracking": self.tracking.as_dict(),
             "rtl": self.rtl if self.rtl in {"auto", "on", "off"} else "auto",
+            "ui_texts": self.ui_texts,
         }

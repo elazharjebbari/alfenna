@@ -92,6 +92,8 @@ pages:
       product_hero:
         component: "core/product"
         params:
+          lookup:
+            slug: "{{ url.kwargs.product_slug }}"
           product:
             id: "demo-product"
             name: "Sajadat Al-Raha"
@@ -106,11 +108,11 @@ pages:
               - "Soulage genoux et dos"
               - "Mousse memo haute densite"
               - "Housse antiderapante"
-          media:
-            lightbox: true
-            images:
-              - { src: "/static/carpet/images/cover/cadre-domestique.webp", alt: "Vue principale" }
-              - { src: "/static/carpet/images/cover/genous-coussin.webp", alt: "Zoom coussin" }
+#          media:
+#            lightbox: true
+#            images:
+#              - { src: "/static/carpet/images/cover/cadre-domestique.webp", alt: "Vue principale" }
+#              - { src: "/static/carpet/images/cover/genous-coussin.webp", alt: "Zoom coussin" }
           form:
             alias: "core/forms/lead_step3"
             action_url: "leads:collect"
@@ -134,7 +136,18 @@ pages:
       chatbot:
         component: "chatbot/shell"
         cache: false
-
+      gallery:
+        component: "gallery"
+        params:
+          gallery_slug: "participants"
+          anchor_id: "galerie"
+          initial_visible: 8
+          reveal_step: 4
+          cta_label: "Voir plus de réalisations"
+          # product_code: "atelier-bougies-pro"   # filtre optionnel côté hydrateur
+        cache: true
+      before_after_wipe:
+        component: "before-after/wipe"
   faq:
     meta:
       title: "Lumière Academy — Questions fréquentes"

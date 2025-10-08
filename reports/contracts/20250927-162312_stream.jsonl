@@ -1,0 +1,129 @@
+{"_meta": "contracts_audit", "summary": {"started_at": "2025-09-27T16:23:12Z", "env": "dev", "git_sha": null, "content_rev": null, "total_components": 48, "total_checks": 124, "ok": 110, "warn": 0, "error": 14, "duration_seconds": 0.965}}
+{"alias": "accounts/login/form", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "before-after/wipe", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "carousel_multi/multimedia", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "carousel_multi/swiper", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/consent_gate", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/input", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/messages", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/panel", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "checkout/express", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "checkout/legal_info", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "checkout/order_summary", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "checkout/payment_form", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "checkout/thank_you_message", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "contact/info", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "contact/map", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "contact/phone", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "core/modals/login", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "course_detail/sidebar", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "course_detail/training", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "courses/list", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "eco-proofs/badges", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "faq/main", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "footer/main", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "forms/shell", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/main", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/mobile", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes/main", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes/mobile", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/struct", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "hero/cover", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "hero/slider", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/card", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/content", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/enroll_content", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "course", "message": "champ requis"}
+{"alias": "learning/enroll_content", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "lecture", "message": "champ requis"}
+{"alias": "learning/highlights", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/lecture", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/playlist", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "section_list", "message": "champ requis"}
+{"alias": "learning/playlist", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "total_lectures", "message": "champ requis"}
+{"alias": "learning/video_player", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "lecture", "message": "champ requis"}
+{"alias": "learning/video_player", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "poster_url", "message": "champ requis"}
+{"alias": "learning/video_player", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "is_locked", "message": "champ requis"}
+{"alias": "micro-choice/pills", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "pricing/packs", "page_id": null, "slot_id": null, "severity": "ERROR", "code": "contract.field", "field": "badges.limited_offer.deadline_ts", "message": "type invalide: attendu str"}
+{"alias": "program/roadmap", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "trainer/profile", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "usp/cards", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "usp/pills", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "usp/rail", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": null, "slot_id": null, "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "online_home", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "online_home", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "hero/cover", "page_id": "online_home", "slot_id": "hero", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/card", "page_id": "online_home", "slot_id": "learning_card", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/content", "page_id": "online_home", "slot_id": "learning_content", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "learning/highlights", "page_id": "online_home", "slot_id": "highlights", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "faq/main", "page_id": "online_home", "slot_id": "faq", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "trainer/profile", "page_id": "online_home", "slot_id": "trainer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "footer/main", "page_id": "online_home", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "usp/rail", "page_id": "online_home", "slot_id": "usp_rail", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "usp/pills", "page_id": "online_home", "slot_id": "usp_pills", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "usp/cards", "page_id": "online_home", "slot_id": "usp_cards", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "before-after/wipe", "page_id": "online_home", "slot_id": "before_after_wipe", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "program/roadmap", "page_id": "online_home", "slot_id": "program_roadmap", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "eco-proofs/badges", "page_id": "online_home", "slot_id": "eco_proof_badges", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "carousel_multi/multimedia", "page_id": "online_home", "slot_id": "carousel_swiper", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "micro-choice/pills", "page_id": "online_home", "slot_id": "micro_choice_pills", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "pricing/packs", "page_id": "online_home", "slot_id": "pricing_pack", "severity": "ERROR", "code": "contract.field", "field": "badges.limited_offer.deadline_ts", "message": "type invalide: attendu str"}
+{"alias": "chatbot/shell", "page_id": "online_home", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "packs", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "packs", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "faq/main", "page_id": "packs", "slot_id": "faq", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "footer/main", "page_id": "packs", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "pricing/packs", "page_id": "packs", "slot_id": "pricing_pack", "severity": "ERROR", "code": "contract.field", "field": "badges.limited_offer.deadline_ts", "message": "type invalide: attendu str"}
+{"alias": "chatbot/shell", "page_id": "packs", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "test", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "test", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "core/contact/info", "page_id": "test", "slot_id": "contact_info", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/contact/info' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "contact/map", "page_id": "test", "slot_id": "contact_map", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "courses/list", "page_id": "test", "slot_id": "course_list", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "course_detail/training", "page_id": "test", "slot_id": "training_block", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "course_detail/sidebar", "page_id": "test", "slot_id": "sidebar_block", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "test", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "contact", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "contact", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "core/contact/info", "page_id": "contact", "slot_id": "contact_info", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/contact/info' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "footer/main", "page_id": "contact", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "contact", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "courses", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "courses", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "courses/list", "page_id": "courses", "slot_id": "course_list", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "faq/main", "page_id": "courses", "slot_id": "faq", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "footer/main", "page_id": "courses", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "courses", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "lecture", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "lecture", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "core/learning/lecture", "page_id": "lecture", "slot_id": "main", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/learning/lecture' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "footer/main", "page_id": "lecture", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "lecture", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "demo", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "demo", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "core/learning/lecture", "page_id": "demo", "slot_id": "main", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/learning/lecture' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "footer/main", "page_id": "demo", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "demo", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "course_detail", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "course_detail", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "course_detail/training", "page_id": "course_detail", "slot_id": "training_block", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "course_detail/sidebar", "page_id": "course_detail", "slot_id": "sidebar_block", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "course_detail", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "login", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "login", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "accounts/login/form", "page_id": "login", "slot_id": "login_form", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "footer/main", "page_id": "login", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "login", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "checkout", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "checkout", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "core/checkout/order_summary", "page_id": "checkout", "slot_id": "order_summary", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/checkout/order_summary' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "core/checkout/payment_form", "page_id": "checkout", "slot_id": "payment_form", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/checkout/payment_form' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "core/checkout/express", "page_id": "checkout", "slot_id": "express", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/checkout/express' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "core/checkout/legal_info", "page_id": "checkout", "slot_id": "legal", "severity": "ERROR", "code": "hydrate.exception", "field": null, "message": "Component 'core/checkout/legal_info' missing for namespace 'core' (and fallback 'core')."}
+{"alias": "footer/main", "page_id": "checkout", "slot_id": "footer", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "checkout", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "vendors/core", "page_id": "thank_you", "slot_id": "vendors", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "header/modes", "page_id": "thank_you", "slot_id": "header", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "checkout/thank_you_message", "page_id": "thank_you", "slot_id": "thank_you_message", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}
+{"alias": "chatbot/shell", "page_id": "thank_you", "slot_id": "chatbot", "severity": "OK", "code": "contract.ok", "field": null, "message": "OK"}

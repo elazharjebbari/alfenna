@@ -1,0 +1,1670 @@
+<head>
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" href="/static/favicon.32148409d886.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.3fa14c00588c.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.f456793c85b4.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.5df660878235.png">
+
+
+      <meta charset="utf-8">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+
+
+
+<title>lumiereacademy</title>
+
+
+
+
+<link rel="canonical" href="http://127.0.0.1:8003/fr/produits/pack-cosmetique-naturel/">
+<meta name="robots" content="noindex,nofollow">
+
+
+<meta property="og:site_name" content="lumiereacademy">
+
+<meta property="og:title" content="lumiereacademy">
+
+
+
+<meta property="og:url" content="http://127.0.0.1:8003/fr/produits/pack-cosmetique-naturel/">
+
+
+<meta property="og:type" content="website">
+
+
+
+
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="twitter:title" content="lumiereacademy">
+
+
+
+
+
+
+
+    <link rel="alternate" hreflang="fr" href="http://127.0.0.1:8003/fr/produits/pack-cosmetique-naturel/">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/static/cookies/tarteaucitron.js-1.25.0/css/tarteaucitron.min.62ce22dad2b5.css">
+<script src="/static/cookies/tarteaucitron.js-1.25.0/tarteaucitron.min.d78c4e1ae197.js"></script>
+
+<script>
+/* =======================================================================================
+   Tarteaucitron = UI de consentement (Consent Mode géré côté GTM)
+   - On pousse ll_consent_update dans dataLayer
+   - On synchronise le cookie CONSENT_COOKIE_NAME = "cookie_consent_marketing"
+     => toujours présent, valeur "no" par défaut, "accept" quand l’utilisateur accepte
+   ======================================================================================= */
+
+/* -- 0) i18n TAC -- */
+(function () {
+  var lang = "fr".toLowerCase();
+  window.tarteaucitronForceLanguage = (lang.indexOf('ar') === 0) ? 'ar' : 'fr';
+})();
+
+/* -- 1) Init TAC (googleConsentMode désactivé ici: piloté par GTM) -- */
+tarteaucitron.init({
+  privacyUrl: "/politique-de-confidentialite/",
+  bodyPosition: "top",
+  cookieName: "ll_tac",
+  orientation: "middle",
+  groupServices: true,
+  showDetailsOnClick: true,
+  serviceDefaultState: "wait",
+  showAlertSmall: false,
+  closePopup: true,
+  showIcon: true,
+  iconPosition: "BottomRight",
+  DenyAllCta: true,
+  AcceptAllCta: true,
+  highPrivacy: true,
+  mandatory: true,
+  googleConsentMode: false,
+  bingConsentMode: false,
+  dataLayer: false,
+  partnersList: true
+});
+
+/* -- 2) 4 “services” muets == 4 toggles UI ↔ GCM v2 -- */
+tarteaucitron.services.analytics = {
+  key: "analytics", type: "analytic",
+  name: "Mesure d’audience (analytics_storage)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+tarteaucitron.services.ad_storage = {
+  key: "ad_storage", type: "ads",
+  name: "Stockage publicitaire (ad_storage)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+tarteaucitron.services.ad_user_data = {
+  key: "ad_user_data", type: "google",
+  name: "Données utilisateur Google (ad_user_data)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+tarteaucitron.services.ad_personalization = {
+  key: "ad_personalization", type: "google",
+  name: "Personnalisation annonces (ad_personalization)", needConsent: true,
+  cookies: [], js: function(){}, fallback: function(){}
+};
+
+(tarteaucitron.job = tarteaucitron.job || []).push("analytics","ad_storage","ad_user_data","ad_personalization");
+
+/* -- 3) dataLayer + synchronisation du cookie marketing ------------------ */
+(function(){
+  var MAX_AGE_DAYS = 395;
+
+  function getConsentCookieName(){
+    var b = document.body || document.documentElement;
+    if (b && b.dataset && b.dataset.llConsentCookie) {
+      return b.dataset.llConsentCookie;
+    }
+    return "cookie_consent_marketing";
+  }
+
+  function cookieAttributes(){
+    var secure = window.location && window.location.protocol === "https:" ? "; Secure" : "";
+    return "; Path=/; SameSite=Lax" + secure;
+  }
+
+  function setCookie(name, value){
+    var expires = "";
+    if (typeof MAX_AGE_DAYS === "number") {
+      var d = new Date();
+      d.setTime(d.getTime() + MAX_AGE_DAYS * 864e5);
+      expires = "; Expires=" + d.toUTCString();
+    }
+    document.cookie = name + "=" + encodeURIComponent(value || "") + expires + cookieAttributes();
+  }
+
+  function tarteConsent(key){
+    return tarteaucitron && tarteaucitron.state && tarteaucitron.state[key] === true ? "granted" : "denied";
+  }
+
+  function currentConsentState(){
+    return {
+      analytics_storage: tarteConsent("analytics"),
+      ad_storage: tarteConsent("ad_storage"),
+      ad_user_data: tarteConsent("ad_user_data"),
+      ad_personalization: tarteConsent("ad_personalization"),
+    };
+  }
+
+  function syncMarketingCookie(reason){
+    var name = getConsentCookieName();
+    var state = currentConsentState();
+    if (state.analytics_storage === "granted") {
+      setCookie(name, "1");
+    } else {
+      setCookie(name, "");
+    }
+    window.dataLayer = window.dataLayer || [];
+    var payload = {
+      event: "ll_consent_update",
+      _src: "tac",
+      _reason: reason || "auto",
+    };
+    for (var key in state) {
+      if (Object.prototype.hasOwnProperty.call(state, key)) {
+        payload[key] = state[key];
+      }
+    }
+    try {
+      window.dataLayer.push(payload);
+    } catch (err) {}
+  }
+
+  window.addEventListener("tac.root_available", function(){ syncMarketingCookie("root_available"); });
+  document.addEventListener("tac.consent_updated", function(){ syncMarketingCookie("updated"); });
+  try {
+    setCookie(getConsentCookieName(), "");
+  } catch (err) {}
+})();
+</script>
+
+
+
+
+
+
+
+
+<script>
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({'page_type': 'pages:product-detail-slug', 'path': '/fr/produits/pack-cosmetique-naturel/', 'lang': 'fr'});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/static/CACHE/css/'vendors-css'.2c1d9c01e797.css" type="text/css">
+
+    <link rel="stylesheet" href="/static/CACHE/css/'app-css'.f810fccba21c.css" type="text/css">
+
+
+
+
+        <link rel="stylesheet" href="/static/components/forms/lead_step3.css">
+
+        <link rel="stylesheet" href="/static/components/product/gallery.css">
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8003/static/cookies/tarteaucitron.js-1.25.0/css/tarteaucitron.min.css?v=1.25.0"><script async="" src="http://127.0.0.1:8003/static/cookies/tarteaucitron.js-1.25.0/lang/tarteaucitron.fr.min.js?v=1.25.0"></script><script async="" src="http://127.0.0.1:8003/static/cookies/tarteaucitron.js-1.25.0/tarteaucitron.services.min.js?v=1.25.0"></script><style>.tarteaucitronTitle{display:none}</style></head>
+
+  <body data-ll-consent-cookie="cookie_consent_marketing" data-ll-analytics-enabled="1"><div id="tarteaucitronRoot" class="tarteaucitronSize-middle" data-nosnippet="true" lang="fr" role="region" aria-labelledby="tac_title"><div role="heading" aria-level="2" id="tac_title" class="tac_visually-hidden">Panneau de gestion des cookies</div><div id="tarteaucitronPremium"></div><button type="button" id="tarteaucitronBack" aria-label="Fermer" title="Fermer"></button><div id="tarteaucitron" role="dialog" aria-modal="true" aria-labelledby="dialogTitle" tabindex="-1">   <button type="button" id="tarteaucitronClosePanel" aria-describedby="dialogTitle">       Fermer   </button>   <div id="tarteaucitronServices">      <div class="tarteaucitronLine tarteaucitronMainLine tarteaucitronIsDenied" id="tarteaucitronMainLineOffset">         <span class="tarteaucitronH1" role="heading" aria-level="2" id="dialogTitle">Panneau de gestion des cookies</span>         <div id="tarteaucitronInfo">         <p>En autorisant ces services tiers, vous acceptez le dépôt et la lecture de cookies et l'utilisation de technologies de suivi nécessaires à leur bon fonctionnement.</p>   <br><br>   <button type="button" id="tarteaucitronPrivacyUrlDialog" role="link">       Politique de confidentialité   </button>         </div>         <div class="tarteaucitronName">            <span class="tarteaucitronH2" role="heading" aria-level="3">Préférences pour tous les services</span>         </div>         <div class="tarteaucitronAsk" id="tarteaucitronScrollbarAdjust">            <button aria-label="Cookies : Tout accepter" type="button" id="tarteaucitronAllAllowed" class="tarteaucitronAllow" aria-pressed="false">               <span class="tarteaucitronCheck" aria-hidden="true"></span> Tout accepter            </button>             <button aria-label="Cookies : Tout refuser" type="button" id="tarteaucitronAllDenied" class="tarteaucitronDeny tarteaucitronIsSelected" aria-pressed="true">               <span class="tarteaucitronCross" aria-hidden="true"></span> Tout refuser            </button>         </div>      </div>      <div class="tarteaucitronBorder">         <div class="clear"></div><ul><li id="tarteaucitronServicesTitle_mandatory"><div class="tarteaucitronTitle">   <button type="button" tabindex="-1"><span class="tarteaucitronPlus" aria-hidden="true"></span> Cookies obligatoires</button></div><ul id="tarteaucitronServices_mandatory"><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="4">Ce site utilise des cookies nécessaires à son bon fonctionnement. Ils ne peuvent pas être désactivés.</span>       <span class="tarteaucitronListCookies" aria-hidden="true"></span><br>   </div>   <div class="tarteaucitronAsk">       <button type="button" class="tarteaucitronAllow" tabindex="-1" disabled="">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" class="tarteaucitronDeny" tabindex="-1">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>    </div></li></ul></li>         <li id="tarteaucitronServicesTitle_api" class="tarteaucitronHidden">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailsapi" data-index="0"><span class="tarteaucitronPlus" aria-hidden="true"></span> APIs</button>            </div>            <div id="tarteaucitronDetailsapi" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Les APIs permettent de charger des scripts : géolocalisation, moteurs de recherche, traductions, ...            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">APIs</span>       <span>Les APIs permettent de charger des scripts : géolocalisation, moteurs de recherche, traductions, ...</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-api">Gestion des services <span id="tarteaucitronCounter-api">(0)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-api">       <button type="button" aria-label="Autoriser APIs" class="tarteaucitronAllow" id="tarteaucitron-accept-group-api" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire APIs" class="tarteaucitronDeny" id="tarteaucitron-reject-group-api" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_api" style="display: none;"></ul></li>         <li id="tarteaucitronServicesTitle_other" class="tarteaucitronHidden">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailsother" data-index="1"><span class="tarteaucitronPlus" aria-hidden="true"></span> Autre</button>            </div>            <div id="tarteaucitronDetailsother" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Services visant à afficher du contenu web.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Autre</span>       <span>Services visant à afficher du contenu web.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-other">Gestion des services <span id="tarteaucitronCounter-other">(0)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-other">       <button type="button" aria-label="Autoriser Autre" class="tarteaucitronAllow" id="tarteaucitron-accept-group-other" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Autre" class="tarteaucitronDeny" id="tarteaucitron-reject-group-other" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_other" style="display: none;"></ul></li>         <li id="tarteaucitronServicesTitle_comment" class="tarteaucitronHidden">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailscomment" data-index="2"><span class="tarteaucitronPlus" aria-hidden="true"></span> Commentaires</button>            </div>            <div id="tarteaucitronDetailscomment" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Les gestionnaires de commentaires facilitent le dépôt de vos commentaires et luttent contre le spam.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Commentaires</span>       <span>Les gestionnaires de commentaires facilitent le dépôt de vos commentaires et luttent contre le spam.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-comment">Gestion des services <span id="tarteaucitronCounter-comment">(0)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-comment">       <button type="button" aria-label="Autoriser Commentaires" class="tarteaucitronAllow" id="tarteaucitron-accept-group-comment" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Commentaires" class="tarteaucitronDeny" id="tarteaucitron-reject-group-comment" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_comment" style="display: none;"></ul></li>         <li id="tarteaucitronServicesTitle_google" class="tarteaucitronHidden" style="display: block;">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailsgoogle" data-index="3"><span class="tarteaucitronPlus" aria-hidden="true"></span> Consentement spécifique aux services Google</button>            </div>            <div id="tarteaucitronDetailsgoogle" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Google peut utiliser vos données pour la mesure d'audience, la performance publicitaire ou pour vous proposer des annonces personnalisées.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Consentement spécifique aux services Google</span>       <span>Google peut utiliser vos données pour la mesure d'audience, la performance publicitaire ou pour vous proposer des annonces personnalisées.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-google">Gestion des services <span id="tarteaucitronCounter-google">(2)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-google">       <button type="button" aria-label="Autoriser Consentement spécifique aux services Google" class="tarteaucitronAllow" id="tarteaucitron-accept-group-google" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Consentement spécifique aux services Google" class="tarteaucitronDeny" id="tarteaucitron-reject-group-google" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_google" style="display: none;"><li id="ad_user_dataLine" class="tarteaucitronLine tarteaucitronIsDenied">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="4">Données utilisateur Google (ad_user_data)</span>       <div class="tarteaucitronStatusInfo">          <span class="tacCurrentStatus" id="tacCurrentStatusad_user_data">interdit</span>          <span class="tarteaucitronReadmoreSeparator"> - </span>          <span id="tacCLad_user_data" class="tarteaucitronListCookies">Ce service ne dépose aucun cookie.</span>       </div>       <a href="https://tarteaucitron.io/service/ad_user_data/" target="_blank" rel="noreferrer noopener nofollow" title="En savoir plus : Détail des cookies Données utilisateur Google (ad_user_data) sur notre site (nouvelle fenêtre)" class="tarteaucitronReadmoreInfo">En savoir plus</a>       <span class="tarteaucitronReadmoreSeparator"> - </span>       <a href="undefined" target="_blank" rel="noreferrer noopener" title="Voir le site officiel Données utilisateur Google (ad_user_data) (nouvelle fenêtre)" class="tarteaucitronReadmoreOfficial">Voir le site officiel</a>   </div>   <div class="tarteaucitronAsk">       <button type="button" aria-label="Autoriser Données utilisateur Google (ad_user_data)" id="ad_user_dataAllowed" class="tarteaucitronAllow" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Données utilisateur Google (ad_user_data)" id="ad_user_dataDenied" class="tarteaucitronDeny" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li><li id="ad_personalizationLine" class="tarteaucitronLine tarteaucitronIsDenied">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="4">Personnalisation annonces (ad_personalization)</span>       <div class="tarteaucitronStatusInfo">          <span class="tacCurrentStatus" id="tacCurrentStatusad_personalization">interdit</span>          <span class="tarteaucitronReadmoreSeparator"> - </span>          <span id="tacCLad_personalization" class="tarteaucitronListCookies">Ce service ne dépose aucun cookie.</span>       </div>       <a href="https://tarteaucitron.io/service/ad_personalization/" target="_blank" rel="noreferrer noopener nofollow" title="En savoir plus : Détail des cookies Personnalisation annonces (ad_personalization) sur notre site (nouvelle fenêtre)" class="tarteaucitronReadmoreInfo">En savoir plus</a>       <span class="tarteaucitronReadmoreSeparator"> - </span>       <a href="undefined" target="_blank" rel="noreferrer noopener" title="Voir le site officiel Personnalisation annonces (ad_personalization) (nouvelle fenêtre)" class="tarteaucitronReadmoreOfficial">Voir le site officiel</a>   </div>   <div class="tarteaucitronAsk">       <button type="button" aria-label="Autoriser Personnalisation annonces (ad_personalization)" id="ad_personalizationAllowed" class="tarteaucitronAllow" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Personnalisation annonces (ad_personalization)" id="ad_personalizationDenied" class="tarteaucitronDeny" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul></li>         <li id="tarteaucitronServicesTitle_analytic" class="tarteaucitronHidden" style="display: block;">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailsanalytic" data-index="4"><span class="tarteaucitronPlus" aria-hidden="true"></span> Mesure d'audience</button>            </div>            <div id="tarteaucitronDetailsanalytic" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Les services de mesure d'audience permettent de générer des statistiques de fréquentation utiles à l'amélioration du site.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Mesure d'audience</span>       <span>Les services de mesure d'audience permettent de générer des statistiques de fréquentation utiles à l'amélioration du site.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-analytic">Gestion des services <span id="tarteaucitronCounter-analytic">(1)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-analytic">       <button type="button" aria-label="Autoriser Mesure d'audience" class="tarteaucitronAllow" id="tarteaucitron-accept-group-analytic" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Mesure d'audience" class="tarteaucitronDeny" id="tarteaucitron-reject-group-analytic" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_analytic" style="display: none;"><li id="analyticsLine" class="tarteaucitronLine tarteaucitronIsDenied">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="4">Google Analytics (universal)</span>       <div class="tarteaucitronStatusInfo">          <span class="tacCurrentStatus" id="tacCurrentStatusanalytics">interdit</span>          <span class="tarteaucitronReadmoreSeparator"> - </span>          <span id="tacCLanalytics" class="tarteaucitronListCookies">Ce service n'a déposé aucun cookie.</span>       </div>       <a href="https://tarteaucitron.io/service/analytics/" target="_blank" rel="noreferrer noopener nofollow" title="En savoir plus : Détail des cookies Google Analytics (universal) sur notre site (nouvelle fenêtre)" class="tarteaucitronReadmoreInfo">En savoir plus</a>       <span class="tarteaucitronReadmoreSeparator"> - </span>       <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer noopener" title="Voir le site officiel Google Analytics (universal) (nouvelle fenêtre)" class="tarteaucitronReadmoreOfficial">Voir le site officiel</a>   </div>   <div class="tarteaucitronAsk">       <button type="button" aria-label="Autoriser Google Analytics (universal)" id="analyticsAllowed" class="tarteaucitronAllow" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Google Analytics (universal)" id="analyticsDenied" class="tarteaucitronDeny" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul></li>         <li id="tarteaucitronServicesTitle_ads" class="tarteaucitronHidden" style="display: block;">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailsads" data-index="5"><span class="tarteaucitronPlus" aria-hidden="true"></span> Régies publicitaires</button>            </div>            <div id="tarteaucitronDetailsads" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Les régies publicitaires permettent de générer des revenus en commercialisant les espaces publicitaires du site.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Régies publicitaires</span>       <span>Les régies publicitaires permettent de générer des revenus en commercialisant les espaces publicitaires du site.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-ads">Gestion des services <span id="tarteaucitronCounter-ads">(1)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-ads">       <button type="button" aria-label="Autoriser Régies publicitaires" class="tarteaucitronAllow" id="tarteaucitron-accept-group-ads" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Régies publicitaires" class="tarteaucitronDeny" id="tarteaucitron-reject-group-ads" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_ads" style="display: none;"><li id="ad_storageLine" class="tarteaucitronLine tarteaucitronIsDenied">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="4">Stockage publicitaire (ad_storage)</span>       <div class="tarteaucitronStatusInfo">          <span class="tacCurrentStatus" id="tacCurrentStatusad_storage">interdit</span>          <span class="tarteaucitronReadmoreSeparator"> - </span>          <span id="tacCLad_storage" class="tarteaucitronListCookies">Ce service ne dépose aucun cookie.</span>       </div>       <a href="https://tarteaucitron.io/service/ad_storage/" target="_blank" rel="noreferrer noopener nofollow" title="En savoir plus : Détail des cookies Stockage publicitaire (ad_storage) sur notre site (nouvelle fenêtre)" class="tarteaucitronReadmoreInfo">En savoir plus</a>       <span class="tarteaucitronReadmoreSeparator"> - </span>       <a href="undefined" target="_blank" rel="noreferrer noopener" title="Voir le site officiel Stockage publicitaire (ad_storage) (nouvelle fenêtre)" class="tarteaucitronReadmoreOfficial">Voir le site officiel</a>   </div>   <div class="tarteaucitronAsk">       <button type="button" aria-label="Autoriser Stockage publicitaire (ad_storage)" id="ad_storageAllowed" class="tarteaucitronAllow" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Stockage publicitaire (ad_storage)" id="ad_storageDenied" class="tarteaucitronDeny" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul></li>         <li id="tarteaucitronServicesTitle_social" class="tarteaucitronHidden">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailssocial" data-index="6"><span class="tarteaucitronPlus" aria-hidden="true"></span> Réseaux sociaux</button>            </div>            <div id="tarteaucitronDetailssocial" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Les réseaux sociaux permettent d'améliorer la convivialité du site et aident à sa promotion via les partages.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Réseaux sociaux</span>       <span>Les réseaux sociaux permettent d'améliorer la convivialité du site et aident à sa promotion via les partages.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-social">Gestion des services <span id="tarteaucitronCounter-social">(0)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-social">       <button type="button" aria-label="Autoriser Réseaux sociaux" class="tarteaucitronAllow" id="tarteaucitron-accept-group-social" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Réseaux sociaux" class="tarteaucitronDeny" id="tarteaucitron-reject-group-social" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_social" style="display: none;"></ul></li>         <li id="tarteaucitronServicesTitle_support" class="tarteaucitronHidden">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailssupport" data-index="7"><span class="tarteaucitronPlus" aria-hidden="true"></span> Support</button>            </div>            <div id="tarteaucitronDetailssupport" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Les services de support vous permettent d'entrer en contact avec l'équipe du site et d'aider à son amélioration.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Support</span>       <span>Les services de support vous permettent d'entrer en contact avec l'équipe du site et d'aider à son amélioration.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-support">Gestion des services <span id="tarteaucitronCounter-support">(0)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-support">       <button type="button" aria-label="Autoriser Support" class="tarteaucitronAllow" id="tarteaucitron-accept-group-support" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Support" class="tarteaucitronDeny" id="tarteaucitron-reject-group-support" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_support" style="display: none;"></ul></li>         <li id="tarteaucitronServicesTitle_video" class="tarteaucitronHidden">            <div class="tarteaucitronTitle" role="heading" aria-level="3">               <button type="button" class="catToggleBtn" aria-expanded="false" data-cat="tarteaucitronDetailsvideo" data-index="8"><span class="tarteaucitronPlus" aria-hidden="true"></span> Vidéos</button>            </div>            <div id="tarteaucitronDetailsvideo" class="tarteaucitronDetails tarteaucitronInfoBox" role="paragraph">               Les services de partage de vidéo permettent d'enrichir le site de contenu multimédia et augmentent sa visibilité.            </div>         <ul><li class="tarteaucitronLine">   <div class="tarteaucitronName">       <span class="tarteaucitronH3" role="heading" aria-level="3">Vidéos</span>       <span>Les services de partage de vidéo permettent d'enrichir le site de contenu multimédia et augmentent sa visibilité.</span>   <button type="button" aria-expanded="false" class="tarteaucitron-toggle-group" id="tarteaucitron-toggle-group-video">Gestion des services <span id="tarteaucitronCounter-video">(0)</span></button>   </div>   <div class="tarteaucitronAsk tarteaucitronIsDenied" id="tarteaucitron-group-video">       <button type="button" aria-label="Autoriser Vidéos" class="tarteaucitronAllow" id="tarteaucitron-accept-group-video" aria-pressed="false">           <span class="tarteaucitronCheck" aria-hidden="true"></span> Autoriser       </button>        <button type="button" aria-label="Interdire Vidéos" class="tarteaucitronDeny" id="tarteaucitron-reject-group-video" aria-pressed="true">           <span class="tarteaucitronCross" aria-hidden="true"></span> Interdire       </button>   </div></li></ul><ul id="tarteaucitronServices_video" style="display: none;"></ul></li>             <li id="tarteaucitronNoServicesTitle" class="tarteaucitronLine" style="display: none;">Ce site n'utilise aucun cookie nécessitant votre consentement.</li>         </ul>         <div class="tarteaucitronHidden tarteaucitron-spacer-20" id="tarteaucitronScrollbarChild"></div>     <a class="tarteaucitronSelfLink" href="https://tarteaucitron.io/" rel="nofollow noreferrer noopener" target="_blank" title="tarteaucitron (nouvelle fenêtre)"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHcAAAAeCAYAAAAWwoEYAAADl0lEQVRoge1Y0W3bQAx9CjKARlC+9GVUmqDJBHEmiDyB6wkcTxBngtgTxJ0gzgQW4C/9aYOmE6g4lTQo+k6y3Rb94QOERNQd+cjj8XiGwWAwGAwGg8FgMBgMBoPB8F8RNRXe+whEKe7c36ZCAeCRxC9Rig2PUd8kPgAsoxSfQ3YAzAA8D/HwYYCb05kBKKO0teFkmbC1jlKsAnq/Abjn+QBqAIsoRS30ttwG/HNz1wH/XIxWTicLdvtW7xTAGEAMtP685CNsBTe2d/BLydfXAG57SEnMAST0zgYZSUCPk02bCvkJduIzuJzDLfPolbY+tLKmar+/8+IRePy4qdpE03qHuH8fipFb4N2+XdA3AJ/0vaQxt7s9FvkIS2XvtqnwM0rxpOQfbnE5G2LhTCmUO2fHIngOmcv+KG3HafDchB6ntwjYqenR2PqC7sOZ3E7FXHB0vqxoFyUyLh7OEH7LOGouvhhN3eIBeKXv0n5MsufdHqXcwYR5U2EbpV35lSspVPJmQj4TcgRK7jTg5IzmPUhhwM5a2WHUFCx+NgiDucmgh7idikLovHFlL0pxQ9xzX+IIP9Y6FrJsqhjlQpZRAkFVDCjZfcCHt6bqJDmuh5ylCWx0RVnk3oumaknqTH5sqrY0fBWyULaHUIgAgxb46MxV3DbieAhxOxUxjSuljig9lMQ/Bcfoi9BTEv9aLORSndVxYOH525sUDC6u2gWxcNzBNRxPanyh3ktKinOgy3WoxPbtUM0t6RkbQnzBnFPgi9GCOEubY9UffIryz9iKRe8s/FUfEWosJJGxagp85bpUO3VywQ46lOtAWfNxKwa4JXQ+628+bpxYGXXMzp5rXH401VEyXwIdowXFaKWSMFHvMTVmGnc+P3oXV2QOiBCfgex8QtcQCbcQE/H+eoHzrkFo1KM7zVO4jVVj5s6lRiWF7zyXyfRMc97J3tzj87mYqZ7E2YjzUct9GUi4tjHLR8dVkBLjQcuHFleWvQfRNEhFR7uX7pkctOwvZXsft7sAtyldEUIN2UTeLxnEfxKYswzdi88BdbZ8hifUoSMftQvP+muRwN6+Q3DeqqRExP9QmTtcheiHh0Ot1x2i2km1bP9pbufw5zZdyWsOrh7vQae5OZWbsMv30pi7cd/CKj3coPEVaCP4Zhx4eQWhOZ1Y9MTXGyP8/iGjEyfa1T4fO/4Lea9vBoPBYDAYDAaDwWAwGAwGwz8GgF8siXCCbrSRhgAAAABJRU5ErkJggg==" alt="tarteaucitron.io"></a>       </div>   <div id="tarteaucitronSave"><button class="tarteaucitronAllow" id="tarteaucitronSaveButton">Enregistrer</button></div></div></div><div tabindex="-1" id="tarteaucitronAlertBig" class="tarteaucitronAlertBigTop" role="dialog" aria-modal="true" aria-labelledby="tac_title" style="opacity: 0; display: none;">   <span id="tarteaucitronDisclaimerAlert" role="paragraph">       Ce site utilise des cookies et vous donne le contrôle sur ceux que vous souhaitez activer   <div class="tarteaucitronPartnersList"><b>Nos partenaires <span id="tarteaucitronCounter-all">(4)</span></b> <ul id="tarteaucitronCounter-list"><li>Consentement spécifique aux services Google</li><li>Mesure d'audience</li><li>Régies publicitaires</li></ul></div></span>   <button aria-label="Cookies : Tout accepter" type="button" class="tarteaucitronCTAButton tarteaucitronAllow" id="tarteaucitronPersonalize2" aria-describedby="tarteaucitronDisclaimerAlert">       <span class="tarteaucitronCheck" aria-hidden="true"></span> Tout accepter   </button>   <button type="button" class="tarteaucitronCTAButton tarteaucitronDeny" id="tarteaucitronAllDenied2" aria-describedby="tarteaucitronDisclaimerAlert" aria-label="Cookies : Tout refuser">       <span class="tarteaucitronCross" aria-hidden="true"></span> Tout refuser   </button>   <button type="button" id="tarteaucitronCloseAlert" aria-describedby="tarteaucitronDisclaimerAlert" aria-label="Personnaliser (fenêtre modale)" title="Personnaliser (fenêtre modale)">       Personnaliser   </button>   <button type="button" id="tarteaucitronPrivacyUrl" role="link">       Politique de confidentialité   </button><button id="tarteaucitronCloseCross"><span aria-hidden="true">X</span><span class="tac_visually-hidden">Masquer le bandeau des cookies</span></button></div><div id="tarteaucitronPercentage" style="display: none;"></div><div id="tarteaucitronIcon" class="tarteaucitronIconBottomRight" style="display: block;">   <button type="button" id="tarteaucitronManager" aria-label="Cookies (fenêtre modale)" title="Cookies (fenêtre modale)">       <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAGA0lEQVRoge1a207bWBRdBtJwLYZhKDMVmlSK1LxNkPo+ZH6g8B6p5AuALwC+APoFoVLeoT8whPeRSt+CZKmZVu3AiIsRlEtCktGyjy8xzuXYhvahS0JJHJ/4rLP3XnuffcAPfGdQ7mM6jRLSAF4BxqsbewB2lRS2o35mpEQaJcwCyANIdLi1DGBNSWEzqmdHRqRRwjqAJclhtExOSUEP+/xIiDRKhhUWfL7ShTtBuJnqcw+/z4Ql0xNmMEwSSz4kuNIzSgpjSsqYJP/GeE185wYJroedRyiLNEpGLLzzrHSuk+83SgbxvOcyyRaDziWsRVZkSRDinpzPbwVGWIucuohsKynMS47fAQyls/BMSRmKJo3AFhG5wm2N1wF+Zs3zebbFfR0RxrXcJHQlgH+LMW616pR/WiIMEXfW3mtzXyeEGWsjKot8c4TOI98L+iKaR5PS6IUk88RLAO9F8UjrbYoYMOosNavpfmODIiwRXRR/G3ohaWVo1RU/c30jV8ab2mV8qVGzHWBOLyTLZiWs5Rolg/C3ySOi0tXP/k4aEwOwSBKPJs7Rp16ABJTe+p1xVX0It/owqqdDEMRoqd3RFxqDPh20Ig6VEPVC0i5RSCD+6wl6HlW7GksSlUMV11/GrUs5NasFLusDE9ELSVphXemtJwaT/8JyIRvxNNCfBmIiNdR04LII3DSrbe0yjqvyJF/ppptqVlt+MCLCEh/oOkPPP6N38Mb5cnQBGFsEqmXg5j3QMwoMzwGnr4HYbybBq13gZAOom/FO63zdf2qQArCsZrUN2TlJy69eSDKYV+6Q4MpP75ivHzPA53ngaBW4eGuSOt0A/lsGPmXMz0+3TFJcTfFbPfFbfnwlhON+iQhlWmA82CQ4ocQ7c6KcfL3DHuls0yT6Sx4YnLXJDCQOIRRv5yGIJBgP8Sdisj2qubpc5UGJmo+W49ifVmzL8HcpGhQPvZCUKiCliIhEN0tr2OCqHuSA8gwQ/92MkU7gxEmeVqGrTTgpxPXbUrtGWYus0I9thRIraagRQUIDf7Qn4yZhKRiFQIyhfMfUr3yblokVWSJ6k8xSnc7eNN/RjowfCYiFoDUFer1S3gW6JiJ8Nt30EMbEhU+vzSIztuRYjRLsR8IHLjlf7HZ+MrWWEXxNmbvapt4jGSqZRYSkGUetSNTPzHsui5YMQ2ajJUNks6mw4wT54Ok2ShnzzIPCUGshzawCRKy5FqvrTZe0RWzQGvw79m67XZjKmxJrLsICjtZa55gxXy+6F4sYsEtxTqhXdRTLC8ulSDaWoCLsolfN+8YUhOsJV709H7Cudr0LlVEtzqBcN+shEyThdR941OnAbF8pirKJqXyupTRTtQSReiVmXW1j7oBErB0d9xM2WEd5J9ZKYtuR4WKwwBSoORbpGrJ5ZI9lt71irJmGX1px0JYE26uNErawr2zfIcP4OHEKXm66PA3wjpCNEfpJunI4muifPjKvsFCkGjExTq63yxMJsZNMYF/J4HmDC5A3Yq36jy0ClePHVhwuu/b1HSFlEfHD5ZtD1bEK44Qu1mWys6tbWmZyPWckzlPTGiRw/XHCuk+q4Rek+mVrVL/UppwrdDEGNV2kpyuhccgc5Oxm9vWnn+19vJrVpLor0kTUrGacMplb1CfOFyTD4o9uNrHqr2Z+ZMSp1c2XcVSORnh9Q81q3k599ETgkNnjg0nGzi10K7rX+bZpHbrblPcY5A4Zxk2xcjzCvTpd9027Aa0QtouyyrKFRR6D/04DwkFGvHPXM3Qda/Jb4nPgI7hQLVM1q5HIBt2MzQNa57Z1DiiLAGa5Mi+O4Sz3Mpp6laPHO6InII3ITnX1QtI+EOX+m9ZxleOZ/j9PiuKoLi3aqXPuEoSye/Vhkm+LalbLtHhMS0R6zu7aZ3vP2jOjL7QVv4McxhcDnZIelAQibGIbULOapf3PuE1Vs9qeaOTdkVKr00gCQiw4NlBzDvf1Lxx+uP5r3Dgv5KQZRzWn+GRwz8jmDS8itUg7iB6vLuJCF5Uty4A9mVKkFR6MiJDachST/oHvHgD+B4SoUIitpF05AAAAAElFTkSuQmCC" alt="Cookies (fenêtre modale)" title="Cookies (fenêtre modale)">   </button></div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Modal de Connexion -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" action="/fr/login/">
+            <input type="hidden" name="csrfmiddlewaretoken" value="i6nnrlGfuhGw9WO8y1gSfsRE9toIMjb0ha4ZuBpn3m62nCCNuNpiGfCOHPnKy64M">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Se connecter</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Champs de connexion -->
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">Nom d'utilisateur</label>
+                        <input type="text" class="form-control" id="id_username" name="username" required="">
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control" id="id_password" name="password" required="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                    <button type="button" class="btn btn-link" id="openSignupModal">S'inscrire</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <!-- templates/form_modal_with_hierarchy.html -->
+
+
+
+<!-- Version 2 -->
+<div class="modal fade " id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm modal-width">
+        <div class="modal-content" style="border-radius: 8px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signupModalLabel">Apprenez à fabriquer des bougies en ligne</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-success fw-bold">Accès à la formation aujourd’hui</p>
+
+                <!-- Ajout des textes encadrés en vert -->
+                <div class="alert alert-success text-center" role="alert">
+                    Nous vous contacterons pour finaliser votre inscription.
+                </div>
+
+                <form method="post" id="reservation-form" action="">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="i6nnrlGfuhGw9WO8y1gSfsRE9toIMjb0ha4ZuBpn3m62nCCNuNpiGfCOHPnKy64M">
+
+                    <button id="submit" type="submit" class="btn btn-success w-100">Accédez à la formation</button>
+                </form>
+                <p class="mt-2 text-center text-muted" style="font-size: 12px;">
+                    <i class="fas fa-lock" style="color: #343a40; margin-right: 5px;"></i>
+                    <!-- Icône de cadenas en vert -->
+                    Formulaire sécurisé.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Style personnalisé pour définir une largeur fixe */
+    .modal-width {
+        max-width: 380px; /* Largeur fixe */
+        width: 100%; /* Assure que le modal ne dépasse pas la largeur maximale */
+        margin: auto; /* Centre le modal horizontalement */
+    }
+
+    /* Optionnel : pour des écrans plus petits, ajuster la largeur */
+    @media (max-width: 576px) {
+        .modal-width {
+            max-width: 90%; /* Réduit la largeur sur les petits écrans */
+        }
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+<div class="header-section" data-ab-variant="A">
+
+
+  <div class="header-top d-none d-lg-block">
+    <div class="container" style="padding-top:6px;padding-bottom:6px;">
+      <div class="header-top-wrapper" style="display:flex;align-items:center;gap:16px;">
+        <div class="header-top-left" style="flex:1;">
+          <p class="m-0">
+            Étape 1 : Découvrir ✓ &nbsp;|&nbsp; Étape 2 : Choisir &nbsp;|&nbsp; Étape 3 : Rejoindre
+
+
+              • <a href="#packs" style="color:#0a7f46;text-decoration:underline;">Je me lance</a>
+
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="header-main">
+    <div class="container">
+
+<div class="header-main-wrapper" id="header-main-wrapper" style="display:flex;align-items:center;gap:16px;min-height:72px;">
+
+  <!-- Logo + preuve -->
+  <div class="header-logo" style="display:flex;align-items:center;gap:8px;">
+    <a href="/fr/" style="display:inline-flex;align-items:center;">
+      <picture><source type="image/avif" srcset="/static/images/logo/logo_text_black_200x60.52277ee3cc63/logo_text_black_200x60.52277ee3cc63.0ffe0e894869.avif"><source type="image/webp" srcset="/static/images/logo/logo_text_black_200x60.52277ee3cc63/logo_text_black_200x60.52277ee3cc63.a640254afebf.webp"><img src="/static/images/logo/logo_text_black_200x60.52277ee3cc63/logo_text_black_200x60.52277ee3cc63.02444d2c903d.png" alt="Lumiere" class="img-fluid" decoding="async" loading="auto"></picture>
+    </a>
+
+      <span class="badge-rating d-none d-lg-inline-flex" style="background:#0f5132;color:#fff;border-radius:999px;padding:4px 10px;font-size:12px;line-height:1;white-space:nowrap;">
+        ★ 4,8 / 5 • 500+
+      </span>
+
+  </div>
+
+  <!-- Menu -->
+  <div class="header-menu d-none d-lg-block" style="margin-left:auto;">
+    <ul class="nav-menu" style="display:flex;gap:20px;list-style:none;margin:0;padding:0;">
+
+        <li class="active">
+          <a href="/fr/" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            Accueil
+          </a>
+        </li>
+
+        <li>
+          <a href="/fr/packs" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            Nos Offres
+          </a>
+        </li>
+
+        <li>
+          <a href="/fr/#faq" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            FAQ
+          </a>
+        </li>
+
+        <li class="active">
+          <a href="/fr/login/" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            <i class="fas fa-user me-1"></i>Se connecter
+          </a>
+        </li>
+
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="header-cta d-none d-lg-block" style="margin-left:8px;">
+    <a id="headerCta" href="/fr/packs#packs-offres" aria-label="Je me lance — Accès immédiat" data-ev="header_cta_click" data-ev-loc="desktop" style="display:inline-block;background:#198754;color:#fff;border-radius:12px;padding:10px 14px;text-decoration:none;box-shadow:0 4px 12px rgba(25,135,84,.3);">
+      <span style="font-weight:800;">Je me lance</span>
+      <small style="display:block;font-weight:400;opacity:.9;">Paiement sécurisé • Accès immédiat</small>
+    </a>
+  </div>
+
+  <!-- Zone auth -->
+  <div class="header-auth d-none d-lg-block" style="margin-left:8px;">
+
+      <a class="btn btn-sm btn-outline-secondary" href="/fr/login/">
+        <i class="fas fa-user me-1"></i> Se connecter
+      </a>
+
+  </div>
+
+  <!-- Toggle mobile -->
+  <div class="header-toggle d-lg-none ms-auto pe-2">
+    <a class="menu-toggle" href="javascript:void(0)" id="mobileToggle" aria-label="Ouvrir le menu" style="display:inline-block;">
+      <span></span><span></span><span></span>
+    </a>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="mobile-menu d-lg-none" id="mobileMenu">
+  <a class="menu-close" href="javascript:void(0)" id="mobileMenuClose"><i class="icofont-close-line"></i></a>
+
+  <!-- Coordonnées (optionnel) -->
+  <div class="mobile-top d-flex flex-column align-items-start p-3">
+
+
+
+  </div>
+
+  <!-- Auth -->
+  <div class="mobile-sign-in-up px-3">
+
+      <a class="btn btn-outline-secondary w-100 mb-3" href="/fr/login/">
+        <i class="fas fa-user me-1"></i> Se connecter
+      </a>
+
+  </div>
+
+  <!-- Menu -->
+  <div class="mobile-menu-items px-3">
+    <ul class="nav-menu list-unstyled">
+
+        <li class="mb-2 active"><a href="/fr/">Accueil</a></li>
+
+        <li class="mb-2"><a href="/fr/packs">Nos Offres</a></li>
+
+        <li class="mb-2"><a href="/fr/#faq">FAQ</a></li>
+
+    </ul>
+  </div>
+
+  <!-- Réseaux (optionnel) -->
+
+</div>
+
+<div class="mobile-menu-overlay d-lg-none" id="mobileMenuOverlay"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <main id="content" role="main">
+
+
+
+
+
+<div class="header-section" data-ab-variant="A">
+
+
+  <div class="header-top d-none d-lg-block">
+    <div class="container" style="padding-top:6px;padding-bottom:6px;">
+      <div class="header-top-wrapper" style="display:flex;align-items:center;gap:16px;">
+        <div class="header-top-left" style="flex:1;">
+          <p class="m-0">
+            Étape 1 : Découvrir ✓ &nbsp;|&nbsp; Étape 2 : Choisir &nbsp;|&nbsp; Étape 3 : Rejoindre
+
+
+              • <a href="#packs" style="color:#0a7f46;text-decoration:underline;">Je me lance</a>
+
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="header-main">
+    <div class="container">
+
+<div class="header-main-wrapper" id="header-main-wrapper" style="display:flex;align-items:center;gap:16px;min-height:72px;">
+
+  <!-- Logo + preuve -->
+  <div class="header-logo" style="display:flex;align-items:center;gap:8px;">
+    <a href="/fr/" style="display:inline-flex;align-items:center;">
+      <picture><source type="image/avif" srcset="/static/images/logo/logo_text_black_200x60.52277ee3cc63/logo_text_black_200x60.52277ee3cc63.0ffe0e894869.avif"><source type="image/webp" srcset="/static/images/logo/logo_text_black_200x60.52277ee3cc63/logo_text_black_200x60.52277ee3cc63.a640254afebf.webp"><img src="/static/images/logo/logo_text_black_200x60.52277ee3cc63/logo_text_black_200x60.52277ee3cc63.02444d2c903d.png" alt="Lumiere" class="img-fluid" decoding="async" loading="auto"></picture>
+    </a>
+
+      <span class="badge-rating d-none d-lg-inline-flex" style="background:#0f5132;color:#fff;border-radius:999px;padding:4px 10px;font-size:12px;line-height:1;white-space:nowrap;">
+        ★ 4,8 / 5 • 500+
+      </span>
+
+  </div>
+
+  <!-- Menu -->
+  <div class="header-menu d-none d-lg-block" style="margin-left:auto;">
+    <ul class="nav-menu" style="display:flex;gap:20px;list-style:none;margin:0;padding:0;">
+
+        <li class="active">
+          <a href="/fr/" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            Accueil
+          </a>
+        </li>
+
+        <li>
+          <a href="/fr/packs" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            Nos Offres
+          </a>
+        </li>
+
+        <li>
+          <a href="/fr/#faq" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            FAQ
+          </a>
+        </li>
+
+        <li class="active">
+          <a href="/fr/login/" style="text-decoration:none;color:#1a1a1a;font-weight:600;">
+            <i class="fas fa-user me-1"></i>Se connecter
+          </a>
+        </li>
+
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="header-cta d-none d-lg-block" style="margin-left:8px;">
+    <a id="headerCta" href="/fr/packs#packs-offres" aria-label="Je me lance — Accès immédiat" data-ev="header_cta_click" data-ev-loc="desktop" style="display:inline-block;background:#198754;color:#fff;border-radius:12px;padding:10px 14px;text-decoration:none;box-shadow:0 4px 12px rgba(25,135,84,.3);">
+      <span style="font-weight:800;">Je me lance</span>
+      <small style="display:block;font-weight:400;opacity:.9;">Paiement sécurisé • Accès immédiat</small>
+    </a>
+  </div>
+
+  <!-- Zone auth -->
+  <div class="header-auth d-none d-lg-block" style="margin-left:8px;">
+
+      <a class="btn btn-sm btn-outline-secondary" href="/fr/login/">
+        <i class="fas fa-user me-1"></i> Se connecter
+      </a>
+
+  </div>
+
+  <!-- Toggle mobile -->
+  <div class="header-toggle d-lg-none ms-auto pe-2">
+    <a class="menu-toggle" href="javascript:void(0)" id="mobileToggle" aria-label="Ouvrir le menu" style="display:inline-block;">
+      <span></span><span></span><span></span>
+    </a>
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="mobile-menu d-lg-none" id="mobileMenu">
+  <a class="menu-close" href="javascript:void(0)" id="mobileMenuClose"><i class="icofont-close-line"></i></a>
+
+  <!-- Coordonnées (optionnel) -->
+  <div class="mobile-top d-flex flex-column align-items-start p-3">
+
+
+
+  </div>
+
+  <!-- Auth -->
+  <div class="mobile-sign-in-up px-3">
+
+      <a class="btn btn-outline-secondary w-100 mb-3" href="/fr/login/">
+        <i class="fas fa-user me-1"></i> Se connecter
+      </a>
+
+  </div>
+
+  <!-- Menu -->
+  <div class="mobile-menu-items px-3">
+    <ul class="nav-menu list-unstyled">
+
+        <li class="mb-2 active"><a href="/fr/">Accueil</a></li>
+
+        <li class="mb-2"><a href="/fr/packs">Nos Offres</a></li>
+
+        <li class="mb-2"><a href="/fr/#faq">FAQ</a></li>
+
+    </ul>
+  </div>
+
+  <!-- Réseaux (optionnel) -->
+
+</div>
+
+<div class="mobile-menu-overlay d-lg-none" id="mobileMenuOverlay"></div>
+
+
+
+
+<div class="section-padding"></div>
+<div class="section-padding"></div>
+
+<section class="py-5" data-cmp="product" data-product-id="1001" data-track-enabled="true" data-event-view="lp_variant_view" data-event-media="product_media_switch">
+  <div class="container">
+    <div class="row g-4 align-items-start ">
+      <div class="col-lg-7">
+
+<div id="product-gallery" class="af-gallery" data-af-gallery="" aria-label="Galerie produit">
+  <div class="product-gallery afg-grid">
+
+    <div class="gallery-thumbs swiper swiper-container-initialized swiper-container-vertical swiper-container-pointer-events swiper-container-free-mode swiper-container-thumbs" role="tablist" aria-label="Miniatures">
+      <div class="swiper-wrapper" id="swiper-wrapper-2ec01a1dbbf841010f" aria-live="polite" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
+
+          <button type="button" class="swiper-slide afg-thumb swiper-slide-thumb-active swiper-slide-active" role="tab" aria-selected="true" aria-controls="pg-slide-0" data-index="0" style="height: 90px; margin-bottom: 8px;" aria-label="Miniature 1" tabindex="0">
+            <img class="thumb" src="https://placehold.co/176x132?text=1" alt="Miniature 1">
+          </button>
+
+          <button type="button" class="swiper-slide afg-thumb swiper-slide-next" role="tab" aria-selected="false" aria-controls="pg-slide-1" data-index="1" style="height: 90px; margin-bottom: 8px;" aria-label="Miniature 2" tabindex="0">
+            <img class="thumb" src="https://placehold.co/176x132?text=2" alt="Miniature 2">
+          </button>
+
+          <button type="button" class="swiper-slide afg-thumb" role="tab" aria-selected="false" aria-controls="pg-slide-2" data-index="2" style="height: 90px; margin-bottom: 8px;" aria-label="Miniature 3" tabindex="0">
+            <img class="thumb" src="https://placehold.co/176x132?text=3" alt="Miniature 3">
+          </button>
+
+          <button type="button" class="swiper-slide afg-thumb" role="tab" aria-selected="false" aria-controls="pg-slide-3" data-index="3" style="height: 90px; margin-bottom: 8px;" aria-label="Miniature 4" tabindex="0">
+            <img class="thumb" src="https://placehold.co/176x132?text=Img" alt="Miniature 4" data-fallback="1">
+          </button>
+
+          <button type="button" class="swiper-slide afg-thumb" role="tab" aria-selected="false" aria-controls="pg-slide-4" data-index="4" style="height: 90px; margin-bottom: 8px;" aria-label="Miniature 5" tabindex="0">
+            <img class="thumb" src="http://127.0.0.1:8003/static/carpet/images/cover/genous-coussin.webp" alt="Miniature 5">
+          </button>
+
+      </div>
+    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+
+    <div class="gallery-main swiper afg-hero swiper-container-initialized swiper-container-horizontal swiper-container-pointer-events" aria-roledescription="carousel" aria-label="Images du produit">
+      <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;" id="swiper-wrapper-d746a9efc1bf410be" aria-live="polite">
+
+          <div id="pg-slide-0" class="swiper-slide swiper-slide-active" style="width: 80px; margin-right: 10px;" role="group" aria-label="Image 1 sur 5">
+            <div class="ratio ratio-4x3 afg-hero-frame">
+              <div class="swiper-zoom-container">
+                <picture><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5QYWNrIGNvc23DqXRpcXVlIOKAlCB2aXN1ZWwgMTwvdGV4dD48L3N2Zz4=" alt="Pack cosmétique — visuel 1" class="gallery-main-img is-enter is-enter-active" data-placeholder="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5QYWNrIGNvc23DqXRpcXVlIOKAlCB2aXN1ZWwgMTwvdGV4dD48L3N2Zz4=" data-src="https://placehold.co/960x720?text=Pack+1" decoding="async" formats="webp,jpg" height="720" loading="auto" width="960"></picture>
+              </div>
+            </div>
+          </div>
+
+          <div id="pg-slide-1" class="swiper-slide swiper-slide-next" style="width: 80px; margin-right: 10px;" role="group" aria-label="Image 2 sur 5">
+            <div class="ratio ratio-4x3 afg-hero-frame">
+              <div class="swiper-zoom-container">
+                <picture><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5QYWNrIGNvc23DqXRpcXVlIOKAlCB2aXN1ZWwgMjwvdGV4dD48L3N2Zz4=" alt="Pack cosmétique — visuel 2" class="gallery-main-img is-enter is-enter-active" data-placeholder="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5QYWNrIGNvc23DqXRpcXVlIOKAlCB2aXN1ZWwgMjwvdGV4dD48L3N2Zz4=" data-src="https://placehold.co/960x720?text=Pack+2" decoding="async" formats="webp,jpg" height="720" loading="auto" width="960"></picture>
+              </div>
+            </div>
+          </div>
+
+          <div id="pg-slide-2" class="swiper-slide" style="width: 80px; margin-right: 10px;" role="group" aria-label="Image 3 sur 5">
+            <div class="ratio ratio-4x3 afg-hero-frame">
+              <div class="swiper-zoom-container">
+                <picture><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5QYWNrIGNvc23DqXRpcXVlIOKAlCB2aXN1ZWwgMzwvdGV4dD48L3N2Zz4=" alt="Pack cosmétique — visuel 3" class="gallery-main-img is-enter is-enter-active" data-placeholder="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5QYWNrIGNvc23DqXRpcXVlIOKAlCB2aXN1ZWwgMzwvdGV4dD48L3N2Zz4=" data-src="https://placehold.co/960x720?text=Pack+3" decoding="async" formats="webp,jpg" height="720" loading="auto" width="960"></picture>
+              </div>
+            </div>
+          </div>
+
+          <div id="pg-slide-3" class="swiper-slide" style="width: 80px; margin-right: 10px;" role="group" aria-label="Image 4 sur 5">
+            <div class="ratio ratio-4x3 afg-hero-frame">
+              <div class="swiper-zoom-container">
+                <picture><img src="https://placehold.co/960x720?text=Image" alt="Vue principale" class="gallery-main-img" data-placeholder="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5WdWUgcHJpbmNpcGFsZTwvdGV4dD48L3N2Zz4=" decoding="async" formats="webp,jpg" height="720" loading="auto" width="960" data-fallback="1"></picture>
+              </div>
+            </div>
+          </div>
+
+          <div id="pg-slide-4" class="swiper-slide" style="width: 80px; margin-right: 10px;" role="group" aria-label="Image 5 sur 5">
+            <div class="ratio ratio-4x3 afg-hero-frame">
+              <div class="swiper-zoom-container">
+                <picture><img src="http://127.0.0.1:8003/static/carpet/images/cover/genous-coussin.webp" alt="Zoom coussin" class="gallery-main-img" data-placeholder="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NjAnIGhlaWdodD0nNzIwJyB2aWV3Qm94PScwIDAgOTYwIDcyMCc+PHJlY3Qgd2lkdGg9JzEwMCUnIGhlaWdodD0nMTAwJScgZmlsbD0nI2YxZjVmOScvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBmaWxsPScjOTRhM2I4JyBmb250LWZhbWlseT0nc2Fucy1zZXJpZicgZm9udC1zaXplPScxODAnIHRleHQtYW5jaG9yPSdtaWRkbGUnIGRvbWluYW50LWJhc2VsaW5lPSdjZW50cmFsJz5ab29tIGNvdXNzaW48L3RleHQ+PC9zdmc+" decoding="async" formats="webp,jpg" height="720" loading="auto" width="960"></picture>
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+      <button class="swiper-button-prev afg-paddle swiper-button-disabled" aria-label="Image précédente" tabindex="-1" aria-controls="swiper-wrapper-d746a9efc1bf410be" aria-disabled="true" disabled="">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      <button class="swiper-button-next afg-paddle" aria-label="Image suivante" tabindex="0" aria-controls="swiper-wrapper-d746a9efc1bf410be" aria-disabled="false">
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </button>
+
+      <div class="swiper-pagination afg-dots swiper-pagination-clickable swiper-pagination-bullets" aria-hidden="true"><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 3"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 5"></span></div>
+
+      <div class="afg-brand" aria-hidden="true">
+        <span class="afg-brand-script">Al Fenna</span>
+        <span class="afg-baseline">NATUREL • SOIN • CONFIANCE</span>
+      </div>
+    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span><span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="col-lg-5">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body d-flex flex-column gap-4">
+
+<div class="d-flex flex-column gap-3">
+
+    <h2 class="h4 mb-0">Pack Cosmétique Naturel</h2>
+
+
+  <div>
+
+      <div class="d-flex align-items-baseline gap-2">
+        <span class="fs-3 fw-bold text-danger">299 MAD</span>
+        <span class="text-muted text-decoration-line-through">349 MAD</span>
+      </div>
+
+
+      <small class="text-success">Vous economisez 50 MAD</small>
+
+  </div>
+
+
+    <p class="mb-0 text-muted">Coffret hydratant visage et corps, 100% naturel.</p>
+
+
+
+    <ul class="list-unstyled mb-0">
+
+        <li class="d-flex align-items-start gap-2">
+          <span class="text-success">✓</span>
+          <span>Routine complète en 3 étapes</span>
+        </li>
+
+        <li class="d-flex align-items-start gap-2">
+          <span class="text-success">✓</span>
+          <span>Adapté à tous les types de peau</span>
+        </li>
+
+        <li class="d-flex align-items-start gap-2">
+          <span class="text-success">✓</span>
+          <span>Ingrédients certifiés bio</span>
+        </li>
+
+    </ul>
+
+
+
+    <div class="d-flex flex-wrap gap-2">
+
+        <span class="badge bg-light text-primary border"><i class="fa-solid fa-leaf me-1"></i>100% naturel</span>
+
+        <span class="badge bg-light text-primary border"><i class="fa-solid fa-shield-heart me-1"></i>Sans parabènes</span>
+
+        <span class="badge bg-light text-primary border"><i class="fa-regular fa-heart me-1"></i>Non testé sur les animaux</span>
+
+    </div>
+
+</div>
+
+
+
+
+
+      <div class="border rounded p-3 bg-light">
+        <p class="mb-2 fw-semibold">Couleur</p>
+        <div class="d-flex flex-wrap gap-2">
+
+
+              <label class="btn btn-outline-secondary mb-0">
+                <input type="radio" class="btn-check" name="color-option" value="rose" autocomplete="off" checked="" data-option-value="rose">
+                <span>Rose poudré</span>
+              </label>
+
+
+
+              <label class="btn btn-outline-secondary mb-0">
+                <input type="radio" class="btn-check" name="color-option" value="beige" autocomplete="off" data-option-value="beige">
+                <span>Beige</span>
+              </label>
+
+
+        </div>
+      </div>
+
+
+
+
+            <div data-product-form-container="">
+
+
+
+
+
+
+
+<form class="c-lead-form c-lead-form--stepper af-form card border-0 shadow-sm" data-ff-root="" data-steps="4" method="post" action="" data-action-url="/api/leads/collect/" data-require-signed="true" data-sign-url="/api/leads/sign/" data-fields-map="{&quot;fullname&quot;:&quot;full_name&quot;,&quot;phone&quot;:&quot;phone_number&quot;,&quot;address&quot;:&quot;address&quot;,&quot;quantity&quot;:&quot;quantity&quot;,&quot;offer&quot;:&quot;offer_key&quot;,&quot;product&quot;:&quot;product&quot;,&quot;promotion&quot;:&quot;promotion_selected&quot;,&quot;email&quot;:&quot;email&quot;,&quot;payment_method&quot;:&quot;payment_method&quot;,&quot;bump&quot;:&quot;bump_optin&quot;}" data-checkout-url="/api/checkout/sessions/" novalidate="">
+    <input type="hidden" name="csrfmiddlewaretoken" value="3os40cWUYCEi8QGoLZMkXrXd16rsyv7n2s9G3sF2xH4Omwu3HLVKoeInzsquki09">
+    <input type="hidden" name="product" value="1001" data-ff-product="">
+    <input type="hidden" name="quantity" value="1" data-ff-quantity-default="">
+
+    <div class="af-shell">
+
+        <!-- ===== En‑tête & stepper ===== -->
+        <header class="af-header text-center">
+            <img src="https://placehold.co/96x76?text=Logo" alt="Logo" class="af-logo">
+            <div class="af-brand">Al Fenna</div>
+            <div class="af-baseline small fw-bold text-uppercase">NATUREL • SOIN • CONFIANCE</div>
+
+            <nav class="af-stepper mt-3" aria-label="Progression">
+                <span class="af-pill is-active">Contact</span>
+                <div class="af-divider" aria-hidden="true"></div>
+                <span class="af-pill">Offres</span>
+                <div class="af-divider" aria-hidden="true"></div>
+                <span class="af-pill">Paiement</span>
+                <div class="af-divider" aria-hidden="true"></div>
+                <span class="af-pill">Confirmation</span>
+            </nav>
+            <div class="af-progress small" data-ff-progress="">Étape 1 / 4</div>
+        </header>
+
+        <!-- ======================= ÉTAPE 1 ======================= -->
+        <section data-ff-step="1" data-step="1" class="ff-step">
+            <div class="af-banner mt-2 mb-4">
+                <div class="row g-3 align-items-stretch">
+                    <div class="col-lg-5">
+                        <div class="af-left h-100">
+                            <div class="af-small">Seulement</div>
+
+                            <div class="af-price-now">299 MAD
+                            </div>
+                            <div class="af-price-old mt-1">349 MAD
+                            </div>
+                            <div class="af-saving mt-2">
+
+                                Vous économisez 50 MAD
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+
+                        <ul class="list-unstyled mb-2 af-bullets">
+
+
+                                    <li><span class="af-ico"><i class="fa-solid fa-circle-check"></i></span><strong>Livraison 48 h partout au Maroc</strong></li>
+
+                                    <li><span class="af-ico"><i class="fa-solid fa-circle-check"></i></span><strong>Paiement sécurisé ou à la livraison</strong></li>
+
+                                    <li><span class="af-ico"><i class="fa-solid fa-circle-check"></i></span><strong>Satisfaction garantie</strong></li>
+
+
+                        </ul>
+
+
+
+                                <span class="af-chip"><i class="fa-solid fa-user-group" aria-hidden="true"></i> +&nbsp;500 clientes</span>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="vstack gap-3">
+                <div>
+                    <label class="af-label" for="ff-fullname">Nom complet</label>
+                    <input id="ff-fullname" class="form-control" type="text" name="full_name" autocomplete="name" required="" placeholder="Ex. Salma Benali">
+                </div>
+                <div>
+                    <label class="af-label" for="ff-phone">Numéro de téléphone</label>
+                    <div class="input-group">
+                        <span class="input-group-text">+212 / 06</span>
+                        <input id="ff-phone" type="tel" class="form-control" name="phone_number" inputmode="tel" autocomplete="tel" minlength="6" maxlength="20" required="" placeholder="WhatsApp ou mobile actif">
+                    </div>
+                    <div class="form-text mt-1">Format libre. Les caractères non numériques seront nettoyés automatiquement.</div>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" checked="">
+                    <label class="form-check-label" for="ff-wa-optin">
+                        OK pour être contacté(e) sur WhatsApp pour confirmer la livraison
+                    </label>
+                </div>
+
+                <div class="d-grid">
+                    <button type="button" class="btn af-cta" data-ff-next="">Continuer ›</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= ÉTAPE 2 ======================= -->
+        <section data-ff-step="2" data-step="2" class="ff-step d-none">
+            <div class="af-savings-pill" role="note">
+                <span class="af-dot" aria-hidden="true"></span>
+                VOUS ÉCONOMISEZ LORS DE VOTRE PREMIER ACHAT
+                <i class="fa-solid fa-chevron-right ms-2" aria-hidden="true"></i>
+            </div>
+
+            <!-- Offres -->
+
+
+
+
+
+            <div class="row g-3 af-offers" role="group" aria-label="Choix du pack">
+
+
+
+                        <div class="col-md-6">
+                            <label class="af-card-radio ">
+                                <input type="radio" class="visually-hidden" name="offer_key" value="" checked="">
+                                <div class="af-offer-card">
+
+                                    <h5 class="af-offer-title mb-3">Pack Solo</h5>
+
+
+                                        <div class="af-offer-price">
+                                            <span class="af-amount">299</span>&nbsp;MAD
+                                        </div>
+
+
+                                        <div class="af-offer-compare small text-muted text-decoration-line-through">
+                                            349&nbsp;MAD
+                                        </div>
+
+
+                                        <div class="af-offer-eco small text-muted mt-1">Économie de 50 MAD</div>
+
+                                </div>
+                            </label>
+                        </div>
+
+
+
+                        <div class="col-md-6">
+                            <label class="af-card-radio is-featured">
+                                <input type="radio" class="visually-hidden" name="offer_key" value="" checked="">
+                                <div class="af-offer-card">
+
+                                        <div class="af-badge-best">MEILLEUR CHOIX</div>
+
+                                    <h5 class="af-offer-title mb-3">Pack Duo</h5>
+
+
+                                        <div class="af-offer-price">
+                                            <span class="af-amount">489</span>&nbsp;MAD
+                                        </div>
+
+
+                                        <div class="af-offer-compare small text-muted text-decoration-line-through">
+                                            558&nbsp;MAD
+                                        </div>
+
+
+                                        <div class="af-offer-eco small text-muted mt-1">MEILLEUR CHOIX</div>
+
+                                </div>
+                            </label>
+                        </div>
+
+
+
+            </div>
+
+
+            <!-- Cross‑sell compact : juste une case -->
+
+
+
+
+                    <div class="af-bump af-bump--compact mt-3">
+
+                            <img src="https://placehold.co/96x96?text=B" alt="Bougie de massage hydratante" class="af-bump-thumb rounded-3">
+
+                        <div class="flex-grow-1">
+                            <div class="form-check m-0">
+                                <input class="form-check-input" type="checkbox" id="af-bump-optin" name="bump_optin" value="bougie-massage-hydratante">
+                                <label class="form-check-label fw-semibold" for="af-bump-optin">
+                                    + Bougie de massage hydratante
+
+                                        <span class="text-muted">(Cire de soja, parfum naturel, 150 g)</span>
+
+
+                                        <span class="af-bump-price">— 40.00
+                                            &nbsp;MAD
+
+                                        </span>
+
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+            <!-- Adresse (champ unique) -->
+
+            <div class="mt-3">
+                <label class="af-label" for="ff-address">Adresse de livraison</label>
+                <input id="ff-address" class="form-control" type="text" name="address" autocomplete="street-address" placeholder="Rue, quartier, ville (code postal si possible)">
+            </div>
+
+
+            <!-- Récap -->
+
+
+            <div class="af-summary mt-3">
+                <div class="af-summary-row"><span>Sous‑total</span><strong id="af-subtotal">299,00 MAD</strong></div>
+
+                    <div class="af-summary-row"><span>Remise spéciale paiement en ligne</span><strong id="af-discount">-20,00 MAD</strong></div>
+
+
+                    <div class="af-summary-row af-summary-total"><span>Total à régler</span><strong id="af-total">279,00 MAD</strong></div>
+
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center gap-2 mt-3">
+                <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev="">Étape précédente
+                </button>
+                <button type="button" class="btn af-cta" data-ff-next="">Continuer ›</button>
+            </div>
+        </section>
+
+
+        <section data-ff-step="3" data-step="3" class="ff-step d-none" aria-labelledby="af-pay-title">
+            <h2 id="af-pay-title" class="af-h2 mb-3">Paiement</h2>
+
+            <!-- Méthode de paiement -->
+
+
+
+                <fieldset class="af-pay" role="radiogroup" aria-label="Méthode de paiement">
+                    <!-- Paiement en ligne -->
+                    <label class="af-pay-option is-online">
+                        <input type="radio" name="payment_method" value="online" class="visually-hidden" checked="">
+                        <span class="af-pay-check" aria-hidden="true"></span>
+                        <span class="af-pay-label">Paiement en ligne (promo)</span>
+
+
+                                <span class="af-discount" id="af-online-discount">-20,00 MAD de réduction</span>
+
+
+                    </label>
+
+                    <!-- Paiement à la livraison -->
+                    <label class="af-pay-option">
+                        <input type="radio" name="payment_method" value="cod" class="visually-hidden">
+                        <span class="af-pay-check" aria-hidden="true"></span>
+                        <span class="af-pay-label">Paiement à la livraison</span>
+                    </label>
+                </fieldset>
+
+
+            <!-- E-mail de confirmation -->
+
+
+
+            <div class="mt-3">
+                <label class="af-label" for="ff-email">Adresse e‑mail</label>
+                <input type="email" id="ff-email" name="email" class="form-control" placeholder="Ex. salma@example.com" autocomplete="email">
+            </div>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" id="ff-email-optin" name="email_optin" checked="">
+                <label class="form-check-label" for="ff-email-optin">
+                    OK pour recevoir la confirmation par e‑mail
+                </label>
+            </div>
+
+            <!-- Récap rapide (reprend le style de l’étape 2) -->
+
+
+            <div class="af-summary mt-3">
+                <div class="af-summary-row">
+                    <span>Sous‑total</span><strong id="af-step3-subtotal">299,00 MAD</strong>
+                </div>
+
+
+                        <div class="af-summary-row" id="af-step3-discount-row">
+                            <span>Remise spéciale paiement en ligne</span>
+                            <strong id="af-step3-discount">-20,00 MAD</strong>
+                        </div>
+
+
+
+                    <div class="af-summary-row af-summary-total">
+                        <span>Total</span><strong id="af-step3-total">279,00 MAD</strong>
+                    </div>
+
+            </div>
+
+            <!-- Sécurité perçue -->
+            <div class="d-flex align-items-center gap-2 small text-muted mt-2">
+                <i class="fa-solid fa-lock"></i> Paiement sécurisé • 3D Secure
+            </div>
+
+            <!-- CTA final -->
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn af-cta" data-ff-submit="">
+                    Confirmer la commande
+                </button>
+            </div>
+
+            <div id="af-checkout-data" data-checkout-hints="" data-unit-price="299,0" data-base-price="349,0" data-promo-price="299,0" data-currency="MAD" data-online-discount="20,0" data-product-id="1001" data-product-slug="pack-cosmetique-naturel" data-product-name="Pack Cosmétique Naturel" data-bump-price="40.00" data-bump-currency="MAD" hidden=""></div>
+
+            <div class="ff-form-msg text-danger small mt-2" aria-live="polite"></div>
+        </section>
+
+
+        <section data-ff-step="4" data-step="4" data-thank-you="" class="ff-step d-none text-center" aria-live="polite">
+            <div class="af-thanks py-4">
+
+
+                <p class="fw-semibold mb-1">Merci pour votre confiance !</p>
+                <p class="text-muted mb-0">Notre équipe vous contacte très vite.</p>
+            </div>
+        </section>
+    </div>
+    <script>
+    (function () {
+        const root = document.querySelector('[data-ff-root]');
+        if (!root) return;
+        const pills = Array.from(document.querySelectorAll('.af-stepper .af-pill'));
+        if (!pills.length) return;
+        function syncPills() {
+            const visibleIndex = Array.from(root.querySelectorAll('[data-ff-step]'))
+                .findIndex((step) => !step.classList.contains('d-none')) + 1;
+            pills.forEach((pill, index) => pill.classList.toggle('is-active', index + 1 === visibleIndex));
+        }
+        syncPills();
+        const observer = new MutationObserver(syncPills);
+        root.querySelectorAll('[data-ff-step]').forEach((step) => observer.observe(step, {
+            attributes: true,
+            attributeFilter: ['class'],
+        }));
+        root.addEventListener('click', (event) => {
+            if (event.target.closest('[data-ff-next],[data-ff-prev]')) {
+                setTimeout(syncPills, 0);
+            }
+        });
+    })();
+    </script>
+</form>
+
+
+<script type="application/json" data-ff-config="">{{
+    form.flow_config_json
+    |
+    safe
+}}</script>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<div class="container">
+  <div class="section" id="faq">
+
+    <div class="section-title shape-01 section-padding-02 mb-4">
+      <h2 class="main-title">Questions &amp; <span>Réponses.</span></h2>
+    </div>
+
+    <!-- FAQ Lumière Academy Start -->
+    <div class="section section-padding" style="padding-top: 60px; padding-bottom: 60px;">
+      <div class="container">
+
+        <!-- FAQ Tab Menu Start -->
+        <div class="faq-tab-menu" style="margin-bottom: 40px;">
+          <ul class="nav nav-justified">
+
+            <li class="nav-item">
+              <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#objections">
+                <i class="fa fa-check-circle" style="margin-right: 5px;"></i>
+                Objections (Sniper)
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="nav-link " data-bs-toggle="tab" data-bs-target="#formateurs">
+                <i class="fa fa-chalkboard-teacher" style="margin-right: 5px;"></i>
+                Formateurs
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="nav-link " data-bs-toggle="tab" data-bs-target="#formation">
+                <i class="fa fa-graduation-cap" style="margin-right: 5px;"></i>
+                Formation &amp; Certificat
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="nav-link " data-bs-toggle="tab" data-bs-target="#partenaires">
+                <i class="fa fa-handshake" style="margin-right: 5px;"></i>
+                Partenaires
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="nav-link " data-bs-toggle="tab" data-bs-target="#paiement">
+                <i class="fa fa-credit-card" style="margin-right: 5px;"></i>
+                Paiement &amp; Matériel
+              </button>
+            </li>
+
+            <li class="nav-item">
+              <button type="button" class="nav-link " data-bs-toggle="tab" data-bs-target="#assistance">
+                <i class="fa fa-life-ring" style="margin-right: 5px;"></i>
+                Assistance
+              </button>
+            </li>
+
+          </ul>
+        </div>
+        <!-- FAQ Tab Menu End -->
+
+        <!-- FAQ Tab Content -->
+        <div class="tab-content">
+
+          <div class="tab-pane fade show active" id="objections">
+
+            <div class="faq-wrapper">
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Et si je n’ai <strong>aucun matériel</strong> ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"></p><p><strong>Tu peux commencer sans achat.</strong></p><ul><li>3 recettes « zéro matos » (verres récupérés, bain‑marie, cuillère).</li><li>Check‑list fournie avec fournisseurs (local &amp; en ligne).</li><li>Ta 1<sup>ère</sup> bougie en <strong>2&nbsp;heures</strong>.</li></ul><p><a href="#programme">Voir la check‑list</a></p><p></p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Je débute totalement, <strong>c’est trop technique</strong> ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"></p><p><strong>Tu suis 5 étapes guidées, pas à pas.</strong></p><ul><li>Vidéos courtes (10–12&nbsp;min) et claires.</li><li>Erreurs fréquentes évitées &amp; corrigées.</li><li>Support questions/réponses quand tu bloques.</li></ul><p><a href="#programme">Voir le programme</a></p><p></p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Les <strong>parfums</strong> et <strong>cires</strong> sont‑ils sûrs à la maison ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"></p><p><strong>Oui, conformes IFRA et 0% paraffine.</strong></p><ul><li>Dosages testés pour l’usage domestique.</li><li>Mèches coton &amp; cires végétales.</li><li>Bonnes pratiques d’aération et de sécurité.</li></ul><p><a href="#parfums">Parfums &amp; sécurité</a></p><p></p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong><strong>Combien de temps</strong> ça prend vraiment ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"></p><p><strong>2&nbsp;heures pour ta 1<sup>ère</sup> bougie, autonome en 7&nbsp;jours.</strong></p><ul><li>Playlist courte et progression simple.</li><li>Rythme flexible, quand tu veux.</li><li>Accès à vie 24/7.</li></ul><p><a href="#packs">Je commence aujourd’hui</a></p><p></p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Et si je veux <strong>vendre</strong>, c’est réaliste ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"></p><p><strong>Oui, en micro‑activité simple.</strong></p><ul><li>Fichiers étiquettes + pricing conseillé.</li><li>Exemple réel&nbsp;: <strong>12 ventes / week‑end</strong>.</li><li>Checklist stand &amp; conseils pratiques.</li></ul><p><a href="#module-vente">Voir le module Vente</a></p><p></p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Et si je <strong>change d’avis</strong> ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"></p><p><strong>Remboursement 14&nbsp;jours, en 2&nbsp;clics.</strong></p><ul><li>Accès immédiat pour essayer sereinement.</li><li>Process simple via le support.</li><li>Pas de piège, pas de petites lignes.</li></ul><p><a href="#packs">Je me lance</a></p><p></p>
+              </div>
+
+            </div>
+
+
+          </div>
+
+          <div class="tab-pane fade " id="formateurs">
+
+            <div class="faq-wrapper">
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Qui sont les formateurs de Lumière Academy ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"><em>Souheila Jebbari</em> (<u>biologiste</u> et experte en <strong>cosmétique naturelle</strong> et <strong>bougies écologiques</strong>), <em>Naila Baiga</em> (spécialiste bougies) et <em>Taib Jebbari</em> (expert marketing digital).</p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Quelle est l'expertise de Souheila Jebbari ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"><em>Biologiste passionnée</em> par l'artisanat, spécialisée en <strong>fabrication de bougies naturelles</strong> et en <strong>produits cosmétiques écologiques</strong>, auteure du <u>Guide des Bougies Marocaines</u>.</p>
+              </div>
+
+            </div>
+
+
+          </div>
+
+          <div class="tab-pane fade " id="formation">
+
+            <div class="faq-wrapper">
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>En quoi consiste précisément la formation ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">Formation complète en ligne avec <em>30 vidéos</em> réparties en <u>4 modules</u>, incluant des séances de <em>questions-réponses interactives</em> et des ressources pédagogiques variées.</p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Quel certificat est délivré à la fin de la formation ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">Un <strong>certificat officiel</strong> vous est délivré, récupérable à Lumière Academy ou envoyé par voie postale.</p>
+              </div>
+
+            </div>
+
+
+          </div>
+
+          <div class="tab-pane fade " id="partenaires">
+
+            <div class="faq-wrapper">
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Quels sont nos partenaires institutionnels ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">Nous collaborons avec <strong>Safran</strong>, <strong>Sofitel Spa</strong>, <strong>AMAPPE</strong>, <strong>COFICAB</strong>, <strong>AMIDEAST</strong>, <strong>Eclipse Event</strong> et d'autres institutions reconnues.</p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Quels établissements éducatifs collaborent avec Lumière Academy ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">Nos partenaires incluent <strong>Grand Univers</strong>, <strong>École Riad Al Andalus</strong>, <strong>AMIDEAST</strong> et <strong>AMAPPE</strong>.</p>
+              </div>
+
+            </div>
+
+
+          </div>
+
+          <div class="tab-pane fade " id="paiement">
+
+            <div class="faq-wrapper">
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Comment effectuer le paiement en ligne ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;"><strong>Étape 1 :</strong> Sélectionnez votre formation et cliquez sur <em>S’inscrire</em>.<br><strong>Étape 2 :</strong> Remplissez le formulaire d’inscription.<br><strong>Étape 3 :</strong> Choisissez votre mode de paiement (carte bancaire ou méthode alternative sécurisée).<br><strong>Étape 4 :</strong> Validez votre paiement pour obtenir immédiatement votre accès à la formation.</p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Quel matériel dois-je prévoir pour suivre la formation ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">Un <strong>matériel simple</strong> suffit (moules, mèches, cire, huiles parfumées). Une <u>liste détaillée des fournisseurs recommandés</u> est fournie lors de l'inscription.</p>
+              </div>
+
+            </div>
+
+
+          </div>
+
+          <div class="tab-pane fade " id="assistance">
+
+            <div class="faq-wrapper">
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Quel support aurai-je durant la formation ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">Vous bénéficierez d'un groupe privé WhatsApp et de <em>sessions par chat</em> avec nos formateurs pour un accompagnement personnalisé.</p>
+              </div>
+
+              <div class="single-faq-item" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                <h4 class="title" style="font-size: 20px; margin-bottom: 10px;">
+                  <i class="fa fa-question-circle text-primary" style="margin-right: 8px;"></i>
+                  <strong>Puis-je accéder au livre « Guide des Bougies Marocaines » ?</strong>
+                </h4>
+                <p style="font-size: 16px; line-height: 1.6;">Oui, vous recevrez un accès complet en format PDF du livre inclus dans votre formation.</p>
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+    <!-- FAQ Lumière Academy End -->
+
+  </div>
+</div>
+
+
+<div class="section footer-section">
+  <div class="footer-widget-section">
+    <picture><source type="image/avif" srcset="/static/images/shape/shape-21.830790d4c146/shape-21.830790d4c146.d63c7713da4e.avif"><source type="image/webp" srcset="/static/images/shape/shape-21.830790d4c146/shape-21.830790d4c146.63ac5f63026a.webp"><img src="/static/images/shape/shape-21.830790d4c146/shape-21.830790d4c146.e18d8a5fdf23.png" alt="Shape" decoding="async" loading="auto"></picture>
+    <div class="container">
+      <div class="row">
+        <!-- Col 1 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <div class="widget-logo">
+              <a href="#">
+                  <picture><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0OCcgaGVpZ2h0PSczNicgdmlld0JveD0nMCAwIDQ4IDM2Jz48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPScjZjFmNWY5Jy8+PHRleHQgeD0nNTAlJyB5PSc1MCUnIGZpbGw9JyM5NGEzYjgnIGZvbnQtZmFtaWx5PSdzYW5zLXNlcmlmJyBmb250LXNpemU9JzEyJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBkb21pbmFudC1iYXNlbGluZT0nY2VudHJhbCc+Zm9vdGVyLWxvZ288L3RleHQ+PC9zdmc+" alt="footer-logo" data-placeholder="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0OCcgaGVpZ2h0PSczNicgdmlld0JveD0nMCAwIDQ4IDM2Jz48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPScjZjFmNWY5Jy8+PHRleHQgeD0nNTAlJyB5PSc1MCUnIGZpbGw9JyM5NGEzYjgnIGZvbnQtZmFtaWx5PSdzYW5zLXNlcmlmJyBmb250LXNpemU9JzEyJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBkb21pbmFudC1iYXNlbGluZT0nY2VudHJhbCc+Zm9vdGVyLWxvZ288L3RleHQ+PC9zdmc+" decoding="async" loading="auto"></picture>
+              </a>
+            </div>
+            <div class="widget-address">
+              <h4 class="footer-widget-title">Lumière Academy</h4>
+
+                <p><a href="https://www.google.com/maps/place//data=!4m2!3m1!1s0xda76b62d7669bc3:0xeedf82994aca610?sa=X" target="_blank" rel="noopener">N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc</a></p>
+
+            </div>
+            <ul class="widget-info">
+              <li><p><i class="flaticon-email"></i> <a href="mailto:partenariat@lumiereacademy.com">partenariat@lumiereacademy.com</a></p></li>
+              <li><p><i class="flaticon-phone-call"></i> <a href="tel:+212808544450">+212 8085-44450</a></p></li>
+              <li><p><i class="flaticon-clock"></i> Lun. - Dim. 10:00 - 18:00</p></li>
+            </ul>
+
+            <ul class="widget-social">
+
+              <li><a href="https://www.instagram.com/lumieresrabat/" rel="noopener" target="_blank"><i class="flaticon-instagram"></i></a></li>
+
+            </ul>
+
+          </div>
+        </div>
+        <!-- Col 2 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Activités à Rabat</h4>
+            <ul class="widget-link">
+              <li><a href="https://lumiereacademy.com/workshop/workshop_product/">Atelier Divertissement à Rabat</a></li><li><a href="https://lumiereacademy.com/e-learning-v3">Formation en Atelier Rabat</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Col 3 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Formations</h4>
+            <ul class="widget-link">
+              <li><a href="https://lumiereacademy.com/e-learning-v3">Formation en Atelier Rabat</a></li><li><a href="https://lumiereacademy.com/training-casablanca">Formation en Atelier Casablanca</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Col 4 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Quick Links</h4>
+            <ul class="widget-link">
+              <li><a href="#">FAQ</a></li><li><a href="#">Termes et conditions</a></li><li><a href="#">Données privées</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+      <picture><source type="image/avif" srcset="/static/images/shape/shape-22.15fe244375ac/shape-22.15fe244375ac.30b8c7491aad.avif"><source type="image/webp" srcset="/static/images/shape/shape-22.15fe244375ac/shape-22.15fe244375ac.6f82a2bf1816.webp"><img src="/static/images/shape/shape-22.15fe244375ac/shape-22.15fe244375ac.45ff9ef4ddee.png" alt="Shape" decoding="async" loading="auto"></picture>
+
+  </div>
+
+  <div class="footer-copyright">
+    <div class="container">
+      <div class="copyright-wrapper">
+        <div class="copyright-link"></div>
+        <div class="copyright-text">
+          <p>© 2025 <span>Lumière Academy</span> — Made with <i class="icofont-heart-alt"></i> by <a href="#" rel="noopener">ZONEX</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    </main>
+
+
+
+
+
+
+
+<div class="section footer-section">
+  <div class="footer-widget-section">
+    <picture><source type="image/avif" srcset="/static/images/shape/shape-21.830790d4c146/shape-21.830790d4c146.d63c7713da4e.avif"><source type="image/webp" srcset="/static/images/shape/shape-21.830790d4c146/shape-21.830790d4c146.63ac5f63026a.webp"><img src="/static/images/shape/shape-21.830790d4c146/shape-21.830790d4c146.e18d8a5fdf23.png" alt="Shape" decoding="async" loading="auto"></picture>
+    <div class="container">
+      <div class="row">
+        <!-- Col 1 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <div class="widget-logo">
+              <a href="#">
+                  <picture><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0OCcgaGVpZ2h0PSczNicgdmlld0JveD0nMCAwIDQ4IDM2Jz48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPScjZjFmNWY5Jy8+PHRleHQgeD0nNTAlJyB5PSc1MCUnIGZpbGw9JyM5NGEzYjgnIGZvbnQtZmFtaWx5PSdzYW5zLXNlcmlmJyBmb250LXNpemU9JzEyJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBkb21pbmFudC1iYXNlbGluZT0nY2VudHJhbCc+Zm9vdGVyLWxvZ288L3RleHQ+PC9zdmc+" alt="footer-logo" data-placeholder="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0OCcgaGVpZ2h0PSczNicgdmlld0JveD0nMCAwIDQ4IDM2Jz48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWxsPScjZjFmNWY5Jy8+PHRleHQgeD0nNTAlJyB5PSc1MCUnIGZpbGw9JyM5NGEzYjgnIGZvbnQtZmFtaWx5PSdzYW5zLXNlcmlmJyBmb250LXNpemU9JzEyJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBkb21pbmFudC1iYXNlbGluZT0nY2VudHJhbCc+Zm9vdGVyLWxvZ288L3RleHQ+PC9zdmc+" decoding="async" loading="auto"></picture>
+              </a>
+            </div>
+            <div class="widget-address">
+              <h4 class="footer-widget-title">Lumière Academy</h4>
+
+                <p><a href="https://www.google.com/maps/place//data=!4m2!3m1!1s0xda76b62d7669bc3:0xeedf82994aca610?sa=X" target="_blank" rel="noopener">N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc</a></p>
+
+            </div>
+            <ul class="widget-info">
+              <li><p><i class="flaticon-email"></i> <a href="mailto:partenariat@lumiereacademy.com">partenariat@lumiereacademy.com</a></p></li>
+              <li><p><i class="flaticon-phone-call"></i> <a href="tel:+212808544450">+212 8085-44450</a></p></li>
+              <li><p><i class="flaticon-clock"></i> Lun. - Dim. 10:00 - 18:00</p></li>
+            </ul>
+
+            <ul class="widget-social">
+
+              <li><a href="https://www.instagram.com/lumieresrabat/" rel="noopener" target="_blank"><i class="flaticon-instagram"></i></a></li>
+
+            </ul>
+
+          </div>
+        </div>
+        <!-- Col 2 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Activités à Rabat</h4>
+            <ul class="widget-link">
+              <li><a href="https://lumiereacademy.com/workshop/workshop_product/">Atelier Divertissement à Rabat</a></li><li><a href="https://lumiereacademy.com/e-learning-v3">Formation en Atelier Rabat</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Col 3 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Formations</h4>
+            <ul class="widget-link">
+              <li><a href="https://lumiereacademy.com/e-learning-v3">Formation en Atelier Rabat</a></li><li><a href="https://lumiereacademy.com/training-casablanca">Formation en Atelier Casablanca</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- Col 4 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <h4 class="footer-widget-title">Quick Links</h4>
+            <ul class="widget-link">
+              <li><a href="#">FAQ</a></li><li><a href="#">Termes et conditions</a></li><li><a href="#">Données privées</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+      <picture><source type="image/avif" srcset="/static/images/shape/shape-22.15fe244375ac/shape-22.15fe244375ac.30b8c7491aad.avif"><source type="image/webp" srcset="/static/images/shape/shape-22.15fe244375ac/shape-22.15fe244375ac.6f82a2bf1816.webp"><img src="/static/images/shape/shape-22.15fe244375ac/shape-22.15fe244375ac.45ff9ef4ddee.png" alt="Shape" decoding="async" loading="auto"></picture>
+
+  </div>
+
+  <div class="footer-copyright">
+    <div class="container">
+      <div class="copyright-wrapper">
+        <div class="copyright-link"></div>
+        <div class="copyright-text">
+          <p>© 2025 <span>Lumière Academy</span> — Made with <i class="icofont-heart-alt"></i> by <a href="#" rel="noopener">ZONEX</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+    <script src="/static/CACHE/js/'vendors-js'.1e32146b032f.js" defer=""></script>
+
+    <script src="/static/CACHE/js/'app-js'.c1f1c9f05b23.js" defer=""></script>
+
+
+
+
+        <script src="" defer=""></script>
+
+        <script src="/static/components/product/gallery.js" defer=""></script>
+
+        <script src="/static/js/flowforms.runtime.js" defer=""></script>
+
+        <script src="/static/js/plugins/swiper-bundle.min.js" defer=""></script>
+
+
+
+
+      <script src="/static/site/analytics_bootstrap.fda9d32b37af.js" defer=""></script>
+
+
+
+
+
+
+</body>

@@ -1,0 +1,142 @@
+/* ---- Galerie Produit (Swiper) ---- */
+#product-gallery,
+#product-gallery * {
+  box-sizing: border-box;
+}
+
+#product-gallery::before,
+#product-gallery::after,
+#product-gallery .swiper::before,
+#product-gallery .swiper::after {
+  content: none !important;
+}
+
+#product-gallery .swiper {
+  overflow: hidden;
+}
+
+.product-gallery {
+  --thumb-size: 86px;
+  --thumb-gap: 0.5rem;
+  display: grid;
+  gap: var(--thumb-gap);
+}
+
+/* Mobile: image principale en premier, vignettes en dessous */
+.product-gallery .gallery-main {
+  order: 1;
+  border-radius: var(--bs-border-radius-lg);
+}
+
+.product-gallery .gallery-thumbs {
+  order: 2;
+}
+
+.gallery-main .swiper-zoom-container {
+  border-radius: var(--bs-border-radius-lg);
+  background: var(--bs-gray-100);
+  overflow: hidden;
+}
+
+.gallery-main .swiper-zoom-container picture,
+.gallery-main .swiper-zoom-container picture > * {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gallery-main-img {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  background: var(--bs-gray-100);
+}
+
+.gallery-thumbs .swiper-slide {
+  width: var(--thumb-size);
+  height: var(--thumb-size);
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-thumbs .thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--bs-border-radius);
+  border: 1px solid var(--bs-border-color);
+  background: var(--bs-light);
+}
+
+.gallery-thumbs .swiper-slide-thumb-active .thumb {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.gallery-thumbs .swiper-slide:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.gallery-main .swiper-button-prev,
+.gallery-main .swiper-button-next {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--bs-border-radius-pill);
+  background: rgba(var(--bs-dark-rgb), 0.6);
+}
+
+.gallery-main .swiper-button-prev::after,
+.gallery-main .swiper-button-next::after {
+  font-size: 16px;
+}
+
+.gallery-main .swiper-pagination {
+  bottom: 0.25rem;
+}
+
+.gallery-main .swiper-pagination-bullet {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(var(--bs-dark-rgb), 0.35);
+}
+
+.gallery-main .swiper-pagination-bullet-active {
+  background: var(--bs-primary);
+}
+
+@media (min-width: 992px) {
+  .product-gallery {
+    grid-template-columns: calc(var(--thumb-size) + 4px) 1fr;
+    align-items: start;
+  }
+
+  .product-gallery .gallery-thumbs {
+    height: calc(var(--thumb-size) * 5 + var(--thumb-gap) * 4);
+  }
+
+  .gallery-thumbs .swiper-wrapper {
+    flex-direction: column;
+  }
+
+  .gallery-main .ratio {
+    max-height: min(70vh, 720px);
+  }
+}
+
+/* Stepper (lead) – sticky uniquement sur mobile */
+.af-form .af-header {
+  position: static;
+  box-shadow: none;
+}
+
+@media (max-width: 575.98px) {
+  .af-form .af-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+}
+
+

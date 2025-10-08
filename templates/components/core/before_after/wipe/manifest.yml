@@ -13,21 +13,21 @@ params:
   title: "Avant / Après — Stop-scroll"
   subtitle: "Erreurs fréquentes vs. résultat après formation"
   before:
-    image: "images/components/wipe/bougies-avant"
-    alt: "Bougies ratées (cire fissurée, suie, parfum trop fort)"
+    image: "images/landing-page/before_after/avant.jpg"
+    alt: "Avant / Après — pieds & ongles enfin sains"
     label: "Avant / Apres"
     pills:
-      - { icon: "fa-solid fa-circle-exclamation", text: "Cire fissurée" }
-      - { icon: "fa-solid fa-smog",               text: "Suie noire" }
-      - { icon: "fa-solid fa-wind",               text: "Parfum trop fort" }
+      - { icon: "fa-solid fa-bacteria", text: "Mycose persistante" }
+      - { icon: "fa-solid fa-wind",               text: "Odeur gênante" }
+      - { icon: "fa-solid fa-burst",               text: "Fissures & démangeaisons" }
   after:
-    image: "images/components/wipe/bougies-apres"
-    alt: "Bougies réussies (rendu lisse, mèche coton, parfum sans phtalates)"
+    image: "images/landing-page/before_after/apres.png"
+    alt: "Avant / Après — la différence se voit"
     label: "Après"
     pills:
-      - { icon: "fa-solid fa-ban",        text: "0% paraffine" }
-      - { icon: "fa-solid fa-clock",      text: "x3 tenue du parfum" }
-      - { icon: "fa-solid fa-stopwatch",  text: "1ère bougie en 2h" }
+      - { icon: "fa-solid fa-face-frown",        text: "Gêne & honte" }
+      - { icon: "fa-solid fa-person-walking-with-cane",      text: "Inconfort à la marche" }
+      - { icon: "fa-solid fa-square-minus",  text: "Ongle abîmé" }
   cta: { label: "Je me lance", url: "#program" }
   style:
     bg_color: "#e7f8ee"
@@ -35,7 +35,7 @@ params:
     radius: 20
     shadow: true
   options:
-    default_value: 50
+    default_value: 30
     snap_points: [ 0, 50, 100 ]
 
 contract:

@@ -12,5 +12,8 @@ contract:
   optional:
     action_url: "str"
     fields_map: "dict"
+    ui_texts: "dict"
+    offers: "list[dict]"
+    bump: "dict"
 render:
   cacheable: false

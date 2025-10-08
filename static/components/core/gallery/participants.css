@@ -1,0 +1,54 @@
+/* =========================================================
+   Galeries - Réalisations & Participantes (Lumière Academy)
+   ========================================================= */
+.lp-gallery { background: var(--neutral-100); }
+.lp-gallery__header { text-align:center; margin-block: 2rem 1.25rem; }
+.lp-gallery__title { font-weight: 800; color: var(--neutral-900); line-height:1.2; margin:0; }
+.lp-gallery__title .yellow-bg{ position:relative; display:inline-block; padding: .1rem .25rem; background: var(--accent-yellow); }
+.lp-gallery__subtitle{ color: var(--neutral-700); margin:.5rem 0 0; font-size:.95rem; }
+.lp-gallery__proofs{ display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:.75rem; color:var(--neutral-700); font-size:.9rem; }
+.lp-gallery__proofs i{ color: var(--accent-orange); margin-inline-end:.35rem; }
+
+/* Grid */
+.lp-gallery__grid{ --gap:.85rem; display:grid; gap:var(--gap); grid-template-columns: repeat(2, 1fr); margin: 1rem auto 0; max-width: 1200px; padding: 0 .75rem; }
+@media (min-width:768px){ .lp-gallery__grid{ grid-template-columns: repeat(3, 1fr); } }
+@media (min-width:1200px){ .lp-gallery__grid{ grid-template-columns: repeat(4, 1fr); } }
+
+.lp-card{ position:relative; border-radius:.75rem; overflow:hidden; background:var(--white); box-shadow: 0 1px 0 rgba(0,0,0,.03); aspect-ratio: 3 / 4; content-visibility: auto; contain-intrinsic-size: 400px 300px; }
+.lp-card a{ display:block; height:100%; }
+.lp-card picture, .lp-card img{ width:100%; height:100%; display:block; object-fit:cover; }
+.lp-card img{ filter: saturate(1.02); transition: transform .35s ease, filter .35s ease, opacity .35s ease; opacity:.0; }
+.lp-card.is-visible img{ opacity:1; }
+.lp-card:hover img{ transform: scale(1.015); filter: saturate(1.06); }
+
+/* Badge coin */
+.lp-card__badge{ position:absolute; top:.5rem; left:.5rem; z-index:2; background: rgba(255,255,255,.92); color: var(--neutral-900); border: 1px solid var(--neutral-200); border-radius:.5rem; padding:.15rem .45rem; font-size:.75rem; font-weight:700; }
+[dir="rtl"] .lp-card__badge{ left:auto; right:.5rem; }
+
+/* Légende overlay */
+.lp-card__caption{ position:absolute; inset:auto 0 0 0; z-index:2; padding:.6rem .7rem .7rem; color: var(--white); background: linear-gradient(180deg, transparent, rgba(0,0,0,.45) 32%, rgba(0,0,0,.65)); font-size:.9rem; }
+.lp-card__name{ font-weight:700; letter-spacing:.1px; }
+.lp-card__meta{ opacity:.9; font-size:.8rem; }
+
+/* Bouton Voir plus */
+.lp-gallery__more{ display:flex; justify-content:center; margin: 1.25rem 0 2.25rem; }
+.lp-gallery__btn{ appearance:none; border:1px solid var(--neutral-300); background:var(--white); color:var(--neutral-900); font-weight:700; border-radius:.6rem; padding:.55rem .9rem; cursor:pointer; transition: box-shadow .2s ease, transform .05s ease, border-color .2s ease; }
+.lp-gallery__btn:hover{ border-color:var(--neutral-600); box-shadow: 0 1px 0 rgba(0,0,0,.04); }
+.lp-gallery__btn:active{ transform:translateY(1px); }
+
+/* Lightbox (vanilla, accessible) */
+.lb{ position:fixed; inset:0; background:rgba(14,17,51,.9); display:none; align-items:center; justify-content:center; z-index:1050; }
+.lb[aria-hidden="false"]{ display:flex; }
+.lb__imgwrap{ position:relative; max-width:min(92vw,1000px); max-height:88vh; }
+.lb__img{ max-width:100%; max-height:88vh; display:block; margin:auto; border-radius:.5rem; }
+.lb__caption{ color:#fff; font-size:.9rem; line-height:1.35; margin-top:.5rem; text-align:center; }
+.lb__controls{ position:absolute; inset:0; display:flex; align-items:center; justify-content:space-between; pointer-events:none; }
+.lb__btn{ pointer-events:auto; appearance:none; border:none; background: rgba(0,0,0,.35); color:#fff; border-radius:999px; width:40px; height:40px; display:grid; place-items:center; transition: background .2s ease; cursor:pointer; }
+.lb__btn:hover{ background: rgba(0,0,0,.5); }
+.lb__btn--prev{ margin-left:.5rem; }
+.lb__btn--next{ margin-right:.5rem; }
+.lb__btn--close{ position:absolute; top:.6rem; right:.6rem; width:42px; height:42px; }
+@media (max-width:767.98px){ .lb__btn{ width:36px; height:36px; } }
+
+/* Entrées masquées à l'init (progressive reveal) */
+.lp-card[hidden]{ display:none !important; }

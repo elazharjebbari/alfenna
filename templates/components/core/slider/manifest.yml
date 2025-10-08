@@ -9,45 +9,38 @@ assets:
   vendors: []
 
 # Valeurs de référence (documentaires)
+# Valeurs de référence (documentaires)
 params:
-  badge_html: "<span class='badge' style='background:#e7f8ee;color:#309255;border-radius:999px;padding:.35rem .6rem;font-weight:700;'>100% végétal • Zéro paraffine</span>"
-  title_sub: "De débutante à créatrice autonome en 7 jours"
-  title_main: "Fabrique des bougies naturelles, qualitatives et éco-responsables"
-  description: "Crée tes premières bougies dès aujourd’hui, avec des recettes simples, des équipements accessibles et un accompagnement pas-à-pas."
-  proof_text: "500+ apprenantes"
+  badge_html: "<span class='badge' style='background:#fff3e0;color:#c27926;border-radius:999px;padding:.35rem .6rem;font-weight:700;'>100% naturel • Zéro ingrédient synthétique</span>"
+  title_sub: "De passionnée à créatrice de soins naturels en 7 jours"
+  title_main: "Apprends à formuler tes propres cosmétiques sains, efficaces et sensoriels"
+  description: "Découvre comment créer crèmes, baumes et sérums à base d’ingrédients végétaux purs, avec des recettes simples, un accompagnement clair et des fiches testées en laboratoire."
+  proof_text: "700+ apprenantes satisfaites"
   currency: "€"
-  price_current: 25.95
-  price_before: 119.00
-  # Si tu veux un coût/jour exact, fixe la valeur ci-dessous ; sinon il sera calculé sur 365 jours.
-  cost_per_day: 0.50
-  cost_period_days: 365
-  price_label_only: "Seulement"
-
-  cta: { label: "Je me lance", url: "#packs" }
+#    price_current: 2900.95
+#    price_before: 3700.00
+#    cost_per_day: 0.50
+#    cost_period_days: 365
+#    price_label_only: "Seulement"
+  cta: { label: "Je me lance", url: "#cta-buy" }
   cta_secondary: { label: "Voir le programme", url: "#program" }
-
   safety_note: "Paiement sécurisé • Accès immédiat"
   micro_progress_html: "Tu es ici ✓ → Choisir l’accès → Rejoindre"
   timer_deadline_ts: "2025-09-30T23:59:00Z"
-
-  slider_image: "images/slider/slider-default.png"
-  video_url: "https://www.youtube.com/watch?v=Aj75R0ojBa0"
-
-  rating: { value: 4.8, count: 86000 }
-
+  slider_image: "images/slider/slider-cosmetique.png"
+  video_url: "https://www.youtube.com/watch?v=V9xP0m8jCos"  # à remplacer par ta vidéo réelle
+  rating: { value: 4.9, count: 91000 }
   style:
-    price_box_bg: "#309255"
-    layout: "circle"                  # "circle" | "ribbon"
-    mobile_price_mode: "strip"        # "strip" | "circle"
+    price_box_bg: "#c27926"
+    layout: "circle"
+    mobile_price_mode: "strip"
     show_rating_bubble_desktop: true
     show_shapes_desktop: true
     show_shapes_mobile: false
-
   trust_badges:
     - { icon: "fas fa-shield-alt", text: "Paiement 100% sécurisé" }
     - { icon: "fas fa-undo",       text: "Satisfait ou remboursé 7 jours" }
-    - { icon: "fas fa-infinity",    text: "Accès à vie" }
-
+    - { icon: "fas fa-infinity",   text: "Accès à vie" }
   ab_variant: ""
 
 contract:
@@ -98,28 +91,29 @@ hydrate:
   func: "hero_cover"
 
   # Whitelist + defaults passés à l’hydrateur
+# Whitelist + defaults passés à l’hydrateur
   params:
-    badge_html: "<span class='badge' style='background:#e7f8ee;color:#309255;border-radius:999px;padding:.35rem .6rem;font-weight:700;'>100% végétal • Zéro paraffine</span>"
-    title_sub: "De débutante à créatrice autonome en 7 jours"
-    title_main: "Fabrique des bougies naturelles, qualitatives et éco-responsables"
-    description: "Crée tes premières bougies dès aujourd’hui, avec des recettes simples, des équipements accessibles et un accompagnement pas-à-pas."
-    proof_text: "500+ apprenantes"
+    badge_html: "<span class='badge' style='background:#fff3e0;color:#c27926;border-radius:999px;padding:.35rem .6rem;font-weight:700;'>100% naturel • Zéro ingrédient synthétique</span>"
+    title_sub: "De passionnée à créatrice de soins naturels en 7 jours"
+    title_main: "Apprends à formuler tes propres cosmétiques sains, efficaces et sensoriels"
+    description: "Découvre comment créer crèmes, baumes et sérums à base d’ingrédients végétaux purs, avec des recettes simples, un accompagnement clair et des fiches testées en laboratoire."
+    proof_text: "700+ apprenantes satisfaites"
     currency: "€"
-    price_current: 149.95
-    price_before: 199.00
-    cost_per_day: 0.50
-    cost_period_days: 365
-    price_label_only: "Seulement"
+    price_current: 2900.95
+    price_before: 3700.00
+#    cost_per_day: 0.50
+#    cost_period_days: 365
+#    price_label_only: "Seulement"
     cta: { label: "Je me lance", url: "#cta-buy" }
     cta_secondary: { label: "Voir le programme", url: "#program" }
     safety_note: "Paiement sécurisé • Accès immédiat"
     micro_progress_html: "Tu es ici ✓ → Choisir l’accès → Rejoindre"
     timer_deadline_ts: "2025-09-30T23:59:00Z"
-    slider_image: "images/slider/slider-default.png"
-    video_url: "https://www.youtube.com/watch?v=Aj75R0ojBa0"
-    rating: { value: 4.8, count: 86000 }
+    slider_image: "images/slider/slider-cosmetique.png"
+    video_url: "https://www.youtube.com/watch?v=V9xP0m8jCos"  # à remplacer par ta vidéo réelle
+    rating: { value: 4.9, count: 91000 }
     style:
-      price_box_bg: "#309255"
+      price_box_bg: "#c27926"
       layout: "circle"
       mobile_price_mode: "strip"
       show_rating_bubble_desktop: true
@@ -128,7 +122,7 @@ hydrate:
     trust_badges:
       - { icon: "fas fa-shield-alt", text: "Paiement 100% sécurisé" }
       - { icon: "fas fa-undo",       text: "Satisfait ou remboursé 7 jours" }
-      - { icon: "fas fa-infinity",    text: "Accès à vie" }
+      - { icon: "fas fa-infinity",   text: "Accès à vie" }
     ab_variant: ""
 
 render:

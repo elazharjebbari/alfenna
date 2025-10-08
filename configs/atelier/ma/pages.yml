@@ -193,6 +193,8 @@ pages:
       product_hero:
         component: "core/product"
         params:
+          lookup:
+            slug: "{{ url.kwargs.product_slug }}"
           product:
             id: "demo-product"
             name: "Sajadat Al-Raha"
@@ -207,11 +209,11 @@ pages:
               - "Soulage genoux et dos"
               - "Mousse memo haute densite"
               - "Housse antiderapante"
-          media:
-            lightbox: true
-            images:
-              - { src: "/static/carpet/images/cover/cadre-domestique.webp", alt: "Vue principale" }
-              - { src: "/static/carpet/images/cover/genous-coussin.webp", alt: "Zoom coussin" }
+#          media:
+#            lightbox: true
+#            images:
+#              - { src: "/static/carpet/images/cover/cadre-domestique.webp", alt: "Vue principale" }
+#              - { src: "/static/carpet/images/cover/genous-coussin.webp", alt: "Zoom coussin" }
           form:
             alias: "core/forms/lead_step3"
             action_url: "leads:collect"

@@ -1,0 +1,16 @@
+@startuml
+title Observabilité — Flux de débogage Billing
+
+start
+:Activer logs "billing" en INFO;
+:Vérifier PaymentLog pour order_id;
+if (STRIPE_SECRET_KEY vide ?) then (oui)
+  :Mode fake => client_secret cs_test_*;
+  :Tester runscript "dryrun/idempotency/refund";
+else (non)
+  :Rejouer event via Stripe CLI (local tunnel);
+endif
+:Contrôler Admin Order/Payment/PaymentLog;
+:Inspecter OutboxEmail (namespace=billing/accounts);
+stop
+@enduml

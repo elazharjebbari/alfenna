@@ -1,9 +1,18 @@
 {% load i18n %}
+<style>
+  .pack-line{font-size:15px;line-height:1.5;color:#213325}
+  .pack-line .badge{
+    display:inline-block;border-radius:999px;
+    background:#e9f6ef;color:#216b4a;font-weight:700;font-size:.85em;
+    border:1px solid #cde8d8;margin-right:.5rem;vertical-align:middle
+  }
+  .pack-line .items{opacity:.9}
+</style>
+
 <div class="d-flex flex-column gap-3">
   {% if product.name %}
-    <h2 class="h4 mb-0">{{ product.name }}</h2>
+    <h2 class="h4 mb-0">{{ product.name | safe }}</h2>
   {% endif %}
-
   <div>
     {% if pricing.has_promo %}
       <div class="d-flex align-items-baseline gap-2">
@@ -19,7 +28,7 @@
   </div>
 
   {% if product.description %}
-    <p class="mb-0 text-muted">{{ product.description }}</p>
+    <p class="mb-0 text-muted">{{ product.description |safe}}</p>
   {% endif %}
 
   {% if product.highlights %}
@@ -32,6 +41,10 @@
       {% endfor %}
     </ul>
   {% endif %}
+
+    {% if product.subname %}
+      <p class="text-muted mb-1"><em>{{ product.subname | safe}}</em></p>
+    {% endif %}
 
   {% if product.badges %}
     <div class="d-flex flex-wrap gap-2">

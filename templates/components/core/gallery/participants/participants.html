@@ -1,0 +1,69 @@
+{% load i18n %}
+<section id="{{ anchor_id }}" class="lp-gallery">
+  <div class="lp-gallery__header">
+    <h2 class="lp-gallery__title">
+      {{ title }}
+    </h2>
+    {% if subtitle_gallery %}
+      <p class="lp-gallery__subtitle">{{ subtitle_gallery }}</p>
+    {% endif %}
+    {% if proofs_gallery %}
+      <div class="lp-gallery__proofs" aria-label="{{ aria.proofs }}">
+        {% for p in proofs_gallery %}
+          <span><i class="{{ p.icon }}"></i> {{ p.text }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <ul class="lp-gallery__grid"
+      id="lpGalleryGrid"
+      data-initial-visible="{{ initial_visible }}"
+      data-reveal-step="{{ reveal_step }}"
+      data-lightbox="{{ lightbox|yesno:'1,0' }}">
+    {% if items and items|length > 0 %}
+      {% for it in items %}
+        <li class="lp-card" {% if forloop.counter0 >= initial_visible %}hidden{% endif %}>
+          <a href="{{ it.href }}"
+             data-caption="{{ it.caption }}"
+             aria-label="{{ it.aria_label }}">
+            <span class="lp-card__badge">{{ it.badge }}</span>
+            <picture>
+              {% if it.webp %}<source type="image/webp" srcset="{{ it.webp }}">{% endif %}
+              <img loading="lazy" decoding="async" fetchpriority="low"
+                   src="{{ it.src }}"
+                   alt="{{ it.alt }}">
+            </picture>
+            <figcaption class="lp-card__caption">
+              <div class="lp-card__name">{{ it.name }}</div>
+              {% if it.meta %}<div class="lp-card__meta">{{ it.meta }}</div>{% endif %}
+            </figcaption>
+          </a>
+        </li>
+      {% endfor %}
+    {% elif use_placeholder %}
+      {# Fallback HTML (placeholder) si la DB est vide #}
+      {% include placeholder_tpl %}
+    {% endif %}
+  </ul>
+
+  <div class="lp-gallery__more" {% if not has_more %}style="display:none"{% endif %}>
+    <button class="lp-gallery__btn" id="lpGalleryMoreBtn">{{ cta_label }}</button>
+  </div>
+
+  {% if lightbox %}
+  <div class="lb" id="lb" aria-hidden="true" role="dialog" aria-label="{{ aria.dialog }}">
+    <button class="lb__btn lb__btn--close" id="lbClose" aria-label="{{ aria.close }}">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="lb__imgwrap">
+      <img class="lb__img" id="lbImg" alt="">
+      <div class="lb__controls">
+        <button class="lb__btn lb__btn--prev" id="lbPrev" aria-label="{{ aria.prev }}"><i class="fas fa-chevron-left"></i></button>
+        <button class="lb__btn lb__btn--next" id="lbNext" aria-label="{{ aria.next }}"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      <div class="lb__caption" id="lbCaption"></div>
+    </div>
+  </div>
+  {% endif %}
+</section>

@@ -7,31 +7,40 @@ aliases:
 template: "components/core/product/hero.html"
 
 assets:
-  head: []
+  head:
+    # CSS Swiper — une seule version
+    - <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
   css:
-    - "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    # Thème du formulaire (tu l'utilises déjà)
     - "/static/components/forms/lead_step3.css"
+    # Style de la galerie V4 (notre fichier unique)
+    - "/static/components/product/af_gallery.css"
   js:
-    - "/static/components/product/product.js"
+    # JS Swiper — URL brute, pas une balise <script>
+    - "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"
+    # Init de la galerie V4 (UN SEUL init)
+    - "/static/components/product/af_gallery.js"
+    # Ton runtime de formulaire (ok)
     - "/static/js/flowforms.runtime.js"
-
-  vendors:
-    - "swiper"
+  vendors: []   # PAS de balises HTML ici
 
 params: {}
 
 contract:
   optional:
+    product_slug: "str"
+    product_id: "str"
     product: "dict"
     media: "dict"
     options: "dict"
     form: "dict"
     tracking: "dict"
     rtl: "str"
+    ui_texts: "dict"
 
 hydrate:
   module: "apps.atelier.compose.hydrators.product.product"
   func: "hydrate_product"
 
 render:
-  cacheable: true
+  cacheable: false

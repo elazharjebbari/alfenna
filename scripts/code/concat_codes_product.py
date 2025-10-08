@@ -25,10 +25,10 @@ from typing import List, Tuple, Dict, Any, Iterable
 BASE_DIRS = [
     # Ajoute autant de dossiers que tu veux:
     Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\templates\\components\\core\\product"),
-    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\templates\\components\\core\\forms"),
-    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\apps\\atelier\\compose\\hydrators\\product"),
+    # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\templates\\components\\core\\forms"),
+    # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\apps\\atelier\\compose\\hydrators\\product"),
     Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\static\\components\\product"),
-    Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\static\\components\\forms"),
+    # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\static\\components\\forms"),
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\apps\\messaging"),
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\static\\components\\pricing"),
     # Path("C:\\Users\\Utilisateur\\PycharmProjects\\alfenna\\apps\\content"),

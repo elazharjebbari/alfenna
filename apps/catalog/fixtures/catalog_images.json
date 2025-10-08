@@ -1,0 +1,152 @@
+[
+  {
+    "model": "catalog.gallery",
+    "pk": 2,
+    "fields": {
+      "slug": "participants",
+      "title": "Avis WhatsApp — clients ravis",
+      "subtitle": "Captures réelles publiées avec consentement. Extraits abrégés pour une meilleure lisibilité.",
+      "proofs": [
+        { "icon": "fa-brands fa-whatsapp", "text": "Témoignages vérifiés WhatsApp" },
+        { "icon": "fa-solid fa-star", "text": "Note moyenne 4,8/5" },
+        { "icon": "fa-solid fa-users", "text": "500+ clients satisfaits" }
+      ],
+      "cta_label": "Voir toutes les captures",
+      "lightbox_enabled": true,
+      "anchor_id": "temoignages",
+      "product_code": "pack-cosmetique-naturel",
+      "is_active": true,
+      "namespace": "core",
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 201,
+    "fields": {
+      "gallery": 2, "sort_order": 1,
+      "name": "Noura", "badge": "Cliente vérifiée",
+      "meta": "WhatsApp • Tanger • 02/10/2025",
+      "alt": "Capture WhatsApp — Noura : très satisfaite, livraison gratuite à Tanger.",
+      "caption": "« Trop satisfaite de la qualité — ce ne sera pas ma dernière commande. Livraison gratuite à Tanger. »",
+      "image": "/static/images/landing-page/testimonials/img-1.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 202,
+    "fields": {
+      "gallery": 2, "sort_order": 2,
+      "name": "Fatma", "badge": "Cliente vérifiée",
+      "meta": "WhatsApp • 12:40",
+      "alt": "Capture WhatsApp — Fatma : j’aime trop le pack.",
+      "caption": "« Coup de cœur ❤️ — j’aime trop ! »",
+      "image": "/static/images/landing-page/testimonials/img-2.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 203,
+    "fields": {
+      "gallery": 2, "sort_order": 3,
+      "name": "Aymen", "badge": "Client vérifié",
+      "meta": "WhatsApp • 17:02",
+      "alt": "Capture WhatsApp — Aymen : cadeau à son épouse, service top, livraison gratuite au Maroc.",
+      "caption": "« Offert à mon épouse : elle a adoré. Service top & livraison gratuite partout au Maroc. »",
+      "image": "/static/images/landing-page/testimonials/img-3.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 204,
+    "fields": {
+      "gallery": 2, "sort_order": 4,
+      "name": "Ibtissam", "badge": "Cliente vérifiée",
+      "meta": "WhatsApp • 15:30",
+      "alt": "Capture WhatsApp — Ibtissam : différence visible, à l’aise en sandales.",
+      "caption": "« La différence se voit : je me sens à l’aise en sandales. »",
+      "image": "/static/images/landing-page/testimonials/img-4.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 205,
+    "fields": {
+      "gallery": 2, "sort_order": 5,
+      "name": "Cliente +212 637…564", "badge": "Cliente vérifiée",
+      "meta": "WhatsApp • 11:20",
+      "alt": "Capture WhatsApp — cliente anonyme : pack 8 × 1, j’adore.",
+      "caption": "« Pack 8‑en‑1 : j’adore ! »",
+      "image": "/static/images/landing-page/testimonials/img-5.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 206,
+    "fields": {
+      "gallery": 2, "sort_order": 6,
+      "name": "Asmae", "badge": "Cliente vérifiée",
+      "meta": "WhatsApp • 11:30",
+      "alt": "Capture WhatsApp — Asmae : offert à sa maman, veut commander le sien, très utile 8‑en‑1.",
+      "caption": "« Offert à maman : elle a beaucoup aimé. Je prends le mien — vraiment utile 8‑en‑1. »",
+      "image": "/static/images/landing-page/testimonials/img-6.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 207,
+    "fields": {
+      "gallery": 2, "sort_order": 7,
+      "name": "Asmae", "badge": "Cliente vérifiée",
+      "meta": "WhatsApp",
+      "alt": "Capture WhatsApp — Asmae : livraison rapide, nouvelle commande.",
+      "caption": "« Livraison rapide — je recommande à nouveau. »",
+      "image": "/static/images/landing-page/testimonials/img-7.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  },
+
+  { "model": "catalog.galleryitem",
+    "pk": 208,
+    "fields": {
+      "gallery": 2, "sort_order": 8,
+      "name": "Amina", "badge": "Cliente vérifiée",
+      "meta": "WhatsApp • 15:33",
+      "alt": "Capture WhatsApp — Amina : gel et crème agréables, hydratation profonde, sans effet gras.",
+      "caption": "« Gel & crème agréables, hydratation profonde, peau douce toute la journée, sans effet gras. »",
+      "image": "/static/images/landing-page/testimonials/img-8.png",
+      "product_code": "pack-cosmetique-naturel",
+      "is_published": true,
+      "created_at": "2025-10-02T00:00:00Z",
+      "updated_at": "2025-10-02T00:00:00Z"
+    }
+  }
+]

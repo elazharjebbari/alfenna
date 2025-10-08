@@ -6,6 +6,125 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
+
+class ProductQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+
+class Product(models.Model):
+    class MediaKind(models.TextChoices):
+        HERO = "hero", "Hero"
+        GALLERY = "gallery", "Gallery"
+        LIFESTYLE = "lifestyle", "Lifestyle"
+
+    slug = models.SlugField(max_length=220, unique=True)
+    name = models.CharField(max_length=180)
+    subname = models.CharField(max_length=300, null=True, blank=True)
+    description = models.TextField(blank=True)
+    highlights = models.JSONField(default=list, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    promo_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    currency = models.CharField(max_length=3, default="MAD")
+    is_active = models.BooleanField(default=True)
+    seo_title = models.CharField(max_length=160, blank=True)
+    seo_description = models.CharField(max_length=320, blank=True)
+    extra = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    objects = ProductQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self) -> str:
+        return self.name or self.slug
+
+
+class ProductBadge(models.Model):
+    product = models.ForeignKey("catalog.Product", on_delete=models.CASCADE, related_name="badges")
+    text = models.CharField(max_length=120)
+    icon = models.CharField(max_length=120, blank=True)
+    extra = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["id"]
+
+    def __str__(self) -> str:
+        return f"{self.text} ({self.product.slug})"
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey("catalog.Product", on_delete=models.CASCADE, related_name="images")
+    kind = models.CharField(max_length=16, choices=Product.MediaKind.choices, default=Product.MediaKind.GALLERY)
+    src = models.URLField(max_length=500)
+    alt = models.CharField(max_length=255, blank=True)
+    thumb = models.URLField(max_length=500, blank=True)
+    position = models.PositiveIntegerField(default=0)
+    width = models.PositiveIntegerField(null=True, blank=True)
+    height = models.PositiveIntegerField(null=True, blank=True)
+    metadata = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["position", "id"]
+
+    def __str__(self) -> str:
+        return f"{self.product.slug}#{self.position}"
+
+
+class ProductOption(models.Model):
+    product = models.ForeignKey("catalog.Product", on_delete=models.CASCADE, related_name="options")
+    key = models.SlugField(max_length=50)
+    label = models.CharField(max_length=120)
+    enabled = models.BooleanField(default=True)
+    items = models.JSONField(default=list, blank=True)
+    extra = models.JSONField(default=dict, blank=True)
+    position = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["position", "id"]
+        unique_together = ("product", "key")
+
+    def __str__(self) -> str:
+        return f"{self.product.slug}:{self.key}"
+
+
+class ProductOffer(models.Model):
+    product = models.ForeignKey("catalog.Product", on_delete=models.CASCADE, related_name="offers")
+    code = models.SlugField(max_length=50)
+    title = models.CharField(max_length=160)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    compare_at_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    is_featured = models.BooleanField(default=False)
+    savings_label = models.CharField(max_length=120, blank=True)
+    extra = models.JSONField(default=dict, blank=True)
+    position = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["position", "id"]
+        unique_together = ("product", "code")
+
+    def __str__(self) -> str:
+        return f"{self.product.slug}:{self.code}"
+
+
+class TestimonialMedia(models.Model):
+    product = models.ForeignKey("catalog.Product", on_delete=models.CASCADE, related_name="testimonial_media")
+    author = models.CharField(max_length=160, blank=True)
+    quote = models.TextField(blank=True)
+    image_url = models.URLField(max_length=500, blank=True)
+    video_url = models.URLField(max_length=500, blank=True)
+    position = models.PositiveIntegerField(default=0)
+    extra = models.JSONField(default=dict, blank=True)
+
+    class Meta:
+        ordering = ["position", "id"]
+
+    def __str__(self) -> str:
+        return f"testimonial:{self.product.slug}:{self.position}"
+
+
 class CourseQuerySet(models.QuerySet):
     def published(self):
         return self.filter(is_published=True)
@@ -84,6 +203,7 @@ class CoursePrice(models.Model):
     CURRENCIES = [
         ("EUR", "Euro"),
         ("USD", "US Dollar"),
+        ("MAD", "DHS Marocain"),
     ]
     course = models.ForeignKey("catalog.Course", on_delete=models.CASCADE, related_name="prices")
     currency = models.CharField(max_length=3, choices=CURRENCIES)

@@ -20,6 +20,8 @@ cache:
     courses/list:        { ttl_seconds: 900 }
     course_detail/sidebar:  { ttl_seconds: 1800 }
     course_detail/training: { ttl_seconds: 86400 }
+    gallery: { ttl_seconds: 86400 }
+
   vary_fields:
     - Accept-Language
     - Cookie

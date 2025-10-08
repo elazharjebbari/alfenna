@@ -1,0 +1,118 @@
+/* Al Fenna – Product Gallery v4
+   -------------------------------------------------- */
+.af-gallery { --af-card:#f6f3eb; --af-ink:#203a33; --af-ink-2:#375a51; --af-line:#d9e2dc;
+              --af-accent:#1f4f42; --af-accent-2:#1a4337; --af-radius:26px; color:var(--af-ink); }
+
+/* Grille : rail (gauche) + héro (droite) */
+.af-gallery .afg-grid {
+  display:grid; grid-template-columns:108px 1fr; gap:18px; align-items:start;
+}
+
+/* ------- THUMBS ------- */
+.af-gallery .gallery-thumbs { height:calc(5*90px + 4*10px); padding:4px;
+  /*background:var(--af-card); */
+  border:1px solid var(--af-line); border-radius:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.05); overflow:hidden;
+}
+.af-gallery .gallery-thumbs .swiper-wrapper { flex-direction:column; gap:10px; }
+.af-gallery .afg-thumb { width:100%; height:90px; display:grid; place-items:center;
+  /*background:#f4efe4; */
+  border:2px solid transparent; border-radius:16px;
+  box-shadow:inset 0 0 0 1px var(--af-line);
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  cursor:pointer;
+}
+.af-gallery .afg-thumb:focus-visible { outline:3px solid rgba(52,120,101,.35); outline-offset:2px; }
+.af-gallery .afg-thumb .thumb { width:100%; height:100%; object-fit:cover; border-radius:14px; }
+.af-gallery .swiper-slide-thumb-active.afg-thumb {
+  border-color:var(--af-accent);
+  box-shadow:0 10px 24px rgba(31,79,66,.10), inset 0 0 0 1px var(--af-accent);
+}
+
+/* ------- HERO ------- */
+.af-gallery .afg-hero {
+  position:relative;
+  /*background:var(--af-card); */
+  border-radius:var(--af-radius);
+  padding:14px 14px 56px; box-shadow:0 18px 42px rgba(0,0,0,.06); border:1px solid var(--af-line);
+}
+/*.af-gallery .afg-hero-frame { border-radius:calc(var(--af-radius) - 12px);*/
+/*  background:#efe6d5; box-shadow:inset 0 0 0 2px rgba(110,161,145,.55);*/
+/*}*/
+/*.af-gallery .gallery-main-img { object-fit:contain; width:100%; height:100%;*/
+/*  background:linear-gradient(#f2e9d9,#efe6d5); transition:transform .28s ease, opacity .28s ease;*/
+/*}*/
+/* micro-anim */
+.af-gallery .afg-hero .is-enter { opacity:.0; transform:scale(.995); }
+.af-gallery .afg-hero .is-enter.is-enter-active { opacity:1; transform:none; }
+
+/* Paddles rondes */
+.af-gallery .afg-paddle { --size:64px; width:var(--size); height:var(--size); border-radius:50%;
+  background:var(--af-accent); color:#fff; display:grid; place-items:center; border:none;
+  box-shadow:0 14px 26px rgba(31,79,66,.22);
+  transition:transform .12s ease, filter .12s ease, background .12s;
+}
+.af-gallery .afg-paddle i{ font-size: 16px; } /* icône un peu plus petite -> + d’air */
+.af-gallery .afg-paddle:hover{ filter:brightness(.96); }
+.af-gallery .afg-paddle:focus-visible{ outline:3px solid rgba(31,79,66,.35); outline-offset:2px; }
+.af-gallery .swiper-button-prev.afg-paddle, .af-gallery .swiper-button-next.afg-paddle {
+  top:50%; transform:translateY(-50%);
+}
+.af-gallery .swiper-button-prev.afg-paddle { left:-28px; }
+.af-gallery .swiper-button-next.afg-paddle { right:-28px; }
+.af-gallery .afg-paddle::after{ content:none; } /* masque l’icône par défaut */
+
+/* Dots */
+.af-gallery .afg-dots { bottom:10px; }
+.af-gallery .afg-dots .swiper-pagination-bullet { width:22px; height:3px; border-radius:3px;
+  background:rgba(32,58,51,.25);
+}
+.af-gallery .afg-dots .swiper-pagination-bullet-active { background:var(--af-accent); }
+
+/* Signature */
+.af-gallery .afg-brand { position:absolute; left:0; right:0; bottom:8px; display:grid; place-items:center; gap:4px; }
+.af-gallery .afg-brand-script{ font-family:"Great Vibes",cursive; font-size:clamp(1.8rem,3.6vw,2.4rem); color:var(--af-ink); line-height:1; }
+.af-gallery .afg-baseline{ letter-spacing:.18em; color:var(--af-ink-2); font-weight:800; font-size:.78rem; }
+
+/* Responsif : rail en bas sur mobile */
+@media (max-width: 991.98px){
+  .af-gallery .afg-grid{ grid-template-columns:1fr; gap:12px; }
+  .af-gallery .gallery-thumbs{ height:auto; }
+  .af-gallery .gallery-thumbs .swiper-wrapper{ flex-direction:row; gap:10px; }
+  .af-gallery .afg-thumb{ width:86px; height:86px; }
+  .af-gallery .swiper-button-prev.afg-paddle{ left:15px; }
+  .af-gallery .swiper-button-next.afg-paddle{ right:15px; }
+}
+
+/* Réduction du mouvement */
+@media (prefers-reduced-motion: reduce){
+  .af-gallery .gallery-main-img, .af-gallery .afg-paddle { transition:none; }
+}
+
+/* Empêche le shrink dans les grilles/flex parents (sinon Swiper calcule 80-90 px) */
+.af-gallery, .afg-grid, .afg-hero { min-width: 0; }
+/* Sécurise la largeur interne de Swiper */
+.afg-hero .swiper, .afg-hero .swiper-wrapper { width: 100%; }
+
+/* Empêche le shrink des colonnes Bootstrap à l’intérieur */
+.af-gallery .row > [class*="col"] { min-width: 0; }  /* très important */
+
+/* Assure que Swiper prend bien la largeur */
+.afg-hero .swiper, .afg-hero .swiper-wrapper { width: 100%; }
+
+/* Taille du rail thumbs basée sur le hero, sans figer une hauteur énorme */
+@media (min-width: 992px){
+  .af-gallery .gallery-thumbs {
+    max-height: min(70vh, 720px);
+    height: auto;            /* laisse Swiper calculer */
+  }
+  .af-gallery .gallery-thumbs .swiper-wrapper { flex-direction: column; gap: 10px; }
+}
+
+/* Au mobile, thumbs en bas en ligne */
+@media (max-width: 991.98px){
+  .af-gallery .row { row-gap: 12px; }
+  .af-gallery .gallery-thumbs { max-height: none; }
+  .af-gallery .gallery-thumbs .swiper-wrapper { flex-direction: row; }
+}
+
