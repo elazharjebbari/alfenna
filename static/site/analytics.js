@@ -29,10 +29,12 @@
 
   function ctx(el) {
     const slot = el && el.closest ? el.closest("[data-ll-slot-id]") : null;
+    const slotAlias = slot && slot.getAttribute("data-ll-alias");
+    const elementAlias = el && el.getAttribute ? el.getAttribute("data-ll-alias") : null;
     return {
       page_id: (slot && slot.getAttribute("data-ll-page-id")) || "product_detail",
       slot_id: (slot && slot.getAttribute("data-ll-slot-id")) || "",
-      component_alias: (el && el.getAttribute && el.getAttribute("data-ll-alias")) || "",
+      component_alias: slotAlias || elementAlias || "",
     };
   }
 
