@@ -1,16 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-{{ slots_html.vendors|default_if_none:""|safe }}
-{{ slots_html.header|default_if_none:""|safe }}
+<div data-ll-page-id="product_detail" data-ll-slot-id="vendors">
+    {{ slots_html.vendors|default_if_none:""|safe }}
+</div>
+<div data-ll-page-id="product_detail" data-ll-slot-id="header">
+    {{ slots_html.header|default_if_none:""|safe }}
+</div>
 <div class="d-none d-md-block">
     <div class="section-padding"></div>
 </div>
 <div class="section-padding"></div>
-{{ slots_html.product_hero|default_if_none:""|safe }}
-{{ slots_html.sticky_buybar_v2|default_if_none:""|safe }}
-{{ slots_html.before_after_wipe|default_if_none:""|safe }}
+<div data-ll-page-id="product_detail" data-ll-slot-id="product_hero">
+    {{ slots_html.product_hero|default_if_none:""|safe }}
+</div>
+<div data-ll-page-id="product_detail" data-ll-slot-id="sticky_buybar_v2">
+    {{ slots_html.sticky_buybar_v2|default_if_none:""|safe }}
+</div>
+<div data-ll-page-id="product_detail" data-ll-slot-id="before_after_wipe">
+    {{ slots_html.before_after_wipe|default_if_none:""|safe }}
+</div>
 <div class="section-padding"></div>
-{{ slots_html.gallery|default_if_none:""|safe }}
-{{ slots_html.faq|default_if_none:""|safe }}
+<div data-ll-page-id="product_detail" data-ll-slot-id="gallery">
+    {{ slots_html.gallery|default_if_none:""|safe }}
+</div>
+<div data-ll-page-id="product_detail" data-ll-slot-id="faq">
+    {{ slots_html.faq|default_if_none:""|safe }}
+</div>
 {% endblock %}
