@@ -12,6 +12,11 @@ assets:
 params:
   title: "Avant / Après — Stop-scroll"
   subtitle: "Erreurs fréquentes vs. résultat après formation"
+  hint:
+    enabled: true
+    text: "Faites glisser le bouton vert pour comparer l'avant/après."
+    ok_label: "OK"
+    storage_key: "ba_hint_wipe_v1"
   before:
     image: "images/landing-page/before_after/avant.jpg"
     alt: "Avant / Après — pieds & ongles enfin sains"
@@ -42,6 +47,11 @@ contract:
   optional:
     title: "str"
     subtitle: "str"
+    hint:
+      enabled: "bool"
+      text?: "str"
+      ok_label?: "str"
+      storage_key?: "str"
     before:
       image: "str"
       alt: "str"
@@ -72,7 +82,12 @@ hydrate:
   python: "apps.atelier.compose.hydrators.before_after.hydrators.wipe"
   module: "apps.atelier.compose.hydrators.before_after.hydrators"
   func: "wipe"
-  params: { }
+  params:
+    hint:
+      enabled: true
+      text: "Faites glisser le bouton vert pour comparer l'avant/après."
+      ok_label: "OK"
+      storage_key: "ba_hint_wipe_v1"
 
 render:
   cacheable: false

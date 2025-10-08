@@ -1,0 +1,40 @@
+{% load i18n %}
+<div class="af-buybar af-buybar--pill"
+     data-hero="{{ hero_selector }}"
+     data-form-root="{{ form_root_selector }}"
+     data-input="{{ input_selector }}"
+     data-dismiss-days="{{ dismiss_days }}"
+     id="af-buybar-v2"
+     aria-label="{% trans 'Barre d’achat compacte' %}">
+
+  <div class="af-inner">
+    <button class="af-close" aria-label="{% trans 'Masquer la barre' %}">×</button>
+
+    <div class="af-left" aria-hidden="true">
+      <div class="af-ico">
+        <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path d="M6 7h12l1.2 12.5a2 2 0 0 1-2 2H6.8a2 2 0 0 1-2-2L6 7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+          <path d="M8 7V5a4 4 0 1 1 8 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="af-mid">
+      {% if amount %}
+        <div class="af-price">
+          {{ amount|floatformat:0 }} {{ currency }}
+          {% if original_price and original_price > amount %}
+            <span class="af-price-old">{{ original_price|floatformat:0 }} {{ currency }}</span>
+          {% endif %}
+        </div>
+      {% endif %}
+      {% if discount_label %}
+        <span class="af-badge">{{ discount_label|linebreaksbr }}</span>
+      {% endif %}
+    </div>
+
+    <button class="af-cta" data-af-cta>
+      {{ cta_label }}
+    </button>
+  </div>
+</div>

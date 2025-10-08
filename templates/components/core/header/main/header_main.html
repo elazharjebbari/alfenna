@@ -28,22 +28,22 @@
   </div>
 
   <!-- CTA desktop (conversion first) -->
-  <div class="header-cta d-none d-lg-block" style="margin-left:8px;">
-    <a id="headerCta"
-       href="{{ primary_cta.url|default:'#cta-buy' }}"
-       data-ev="header_cta_click" data-ev-loc="desktop"
-       aria-label="{{ primary_cta.aria|default:'Je me lance — Accès immédiat' }}"
-       style="display:inline-block;background:#198754;color:#fff;border-radius:12px;padding:10px 14px;text-decoration:none;box-shadow:0 4px 12px rgba(25,135,84,.3);">
-      <span style="font-weight:800;">{{ primary_cta.label|default:"Je me lance" }}</span>
-      <small style="display:block;font-weight:400;opacity:.9;">{{ primary_cta.sublabel|default:"Paiement sécurisé • Accès immédiat" }}</small>
-    </a>
-  </div>
+<!--  <div class="header-cta d-none d-lg-block" style="margin-left:8px;">-->
+<!--    <a id="headerCta"-->
+<!--       href="{{ primary_cta.url|default:'#cta-buy' }}"-->
+<!--       data-ev="header_cta_click" data-ev-loc="desktop"-->
+<!--       aria-label="{{ primary_cta.aria|default:'Je me lance — Accès immédiat' }}"-->
+<!--       style="display:inline-block;background:#198754;color:#fff;border-radius:12px;padding:10px 14px;text-decoration:none;box-shadow:0 4px 12px rgba(25,135,84,.3);">-->
+<!--      <span style="font-weight:800;">{{ primary_cta.label|default:"Je me lance" }}</span>-->
+<!--      <small style="display:block;font-weight:400;opacity:.9;">{{ primary_cta.sublabel|default:"Paiement sécurisé • Accès immédiat" }}</small>-->
+<!--    </a>-->
+<!--  </div>-->
 
-  {% if show_auth_links %}
-  <div class="header-sign-in-up d-none d-lg-block" style="margin-left:8px;">
-    {% include 'components/core/header/auth_links.html' %}
-  </div>
-  {% endif %}
+<!--  {% if show_auth_links %}-->
+<!--  <div class="header-sign-in-up d-none d-lg-block" style="margin-left:8px;">-->
+<!--    {% include 'components/core/header/auth_links.html' %}-->
+<!--  </div>-->
+<!--  {% endif %}-->
 
   <div class="header-toggle d-lg-none ms-auto pe-2">
     <a class="menu-toggle" href="javascript:void(0)" id="mobileToggle" aria-label="Ouvrir le menu" style="display:inline-block;">

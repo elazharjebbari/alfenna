@@ -85,9 +85,32 @@
     setVal(start, false);
   }
 
+  function setupHint(node) {
+    if (!node) return;
+    var key = node.getAttribute('data-hint-key');
+    if (key) {
+      try {
+        if (localStorage.getItem(key)) {
+          node.classList.add('is-hidden');
+          return;
+        }
+      } catch (err) {}
+    }
+    var btn = node.querySelector('[data-ba-hint-close]');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        node.classList.add('is-hidden');
+        if (key) {
+          try { localStorage.setItem(key, '1'); } catch (err) {}
+        }
+      });
+    }
+  }
+
   /* ---------- Boot ---------- */
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.ba-wipe').forEach(setupOne);
+    document.querySelectorAll('[data-ba-hint]').forEach(setupHint);
 
     // CTA analytics
     document.querySelectorAll('.ba-cta[data-ev]').forEach(function (a) {

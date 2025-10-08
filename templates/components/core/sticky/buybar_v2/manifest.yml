@@ -1,0 +1,38 @@
+alias: "sticky/buybar_v2"
+template: "components/core/sticky/buybar_v2/buybar_v2.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/core/sticky/buybar_v2.css"
+  js:
+    - "/static/components/core/sticky/buybar_v2.js"
+  vendors: []
+
+params:
+  product_slug: ""
+  cta_label: "Je commande le pack"
+  hero_selector: "#hero"
+  form_root_selector: "[data-ff-root]"
+  input_selector: "#ff-fullname"
+  dismiss_days: 1
+  title_fallback: "Pack 8 pièces — soin antifongique"
+  discount_label: "Sac + 4 articles\n offerts"
+
+contract:
+  optional:
+    product_slug: "str"
+    cta_label: "str"
+    hero_selector: "str"
+    form_root_selector: "str"
+    input_selector: "str"
+    dismiss_days: "int"
+    title_fallback: "str"
+    discount_label: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.sticky.hydrators"
+  func: "buybar_v2"
+
+render:
+  cacheable: false

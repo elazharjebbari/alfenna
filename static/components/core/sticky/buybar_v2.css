@@ -1,0 +1,148 @@
+:root {
+  --af-buybar-teal: #2f4f4d;
+  --af-buybar-ivory: #f3f7f3;
+  --af-buybar-crimson: #c23c54;
+  --af-buybar-badge-bg: #e6f5ea;
+  --af-buybar-badge-fg: #2f7d63;
+  --af-buybar-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.08);
+  --af-buybar-radius: 12px;
+  --af-buybar-z: 2147483000;
+}
+
+@media (min-width: 769px) {
+  #af-buybar-v2 {
+    display: none !important;
+  }
+}
+
+.af-buybar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(env(safe-area-inset-bottom, 0px));
+  z-index: var(--af-buybar-z);
+  transform: translateY(110%);
+  opacity: 0;
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  pointer-events: none;
+}
+
+.af-buybar.is-visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .af-buybar {
+    transition: none;
+  }
+}
+
+.af-buybar--pill {
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+}
+
+.af-buybar--pill .af-inner {
+  margin: 0 auto;
+  max-width: 680px;
+  background: var(--af-buybar-ivory);
+  border-radius: 999px;
+  padding: 0.55rem 0.6rem 0.55rem 0.55rem;
+  box-shadow: var(--af-buybar-shadow);
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  position: relative;
+}
+
+.af-buybar--pill .af-close {
+  position: absolute;
+  right: 0.35rem;
+  top: -0.9rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 0;
+  background: #fff;
+  color: #465857;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: var(--af-buybar-shadow);
+  cursor: pointer;
+}
+
+.af-buybar--pill .af-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.af-buybar--pill .af-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 2px solid var(--af-buybar-teal);
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--af-buybar-teal);
+}
+
+.af-buybar--pill .af-mid {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.af-buybar--pill .af-price {
+  font: 700 17px/1 "Montserrat", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--af-buybar-crimson);
+  letter-spacing: 0.2px;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.af-buybar--pill .af-price-old {
+  font: 500 13px/1 "Montserrat", "Inter", system-ui, sans-serif;
+  color: rgba(23, 50, 54, 0.6);
+  text-decoration: line-through;
+}
+
+.af-buybar--pill .af-badge {
+  background: var(--af-buybar-badge-bg);
+  color: var(--af-buybar-badge-fg);
+  font: 600 12px/1 "Montserrat", system-ui, sans-serif;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.af-buybar--pill .af-badge br {
+  content: "";
+  display: block;
+}
+
+.af-buybar--pill .af-cta {
+  border: 0;
+  border-radius: 12px;
+  background: var(--af-buybar-teal);
+  color: #fff;
+  font: 600 14px/1 "Montserrat", system-ui, sans-serif;
+  padding: 0.55rem 0.95rem;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 4px 10px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+
+.af-buybar--pill .af-cta:active {
+  transform: translateY(1px);
+}
+
+.af-buybar--pill .af-cta:focus-visible,
+.af-buybar--pill .af-close:focus-visible {
+  outline: 2px solid rgba(47, 79, 77, 0.6);
+  outline-offset: 2px;
+}

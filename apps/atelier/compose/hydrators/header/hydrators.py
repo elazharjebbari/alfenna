@@ -1,7 +1,11 @@
 from __future__ import annotations
 from typing import Any, Dict, List
 import logging
+import html
+
 from django.urls import reverse, NoReverseMatch
+from django.utils import timezone
+from django.utils.formats import date_format
 
 logger = logging.getLogger("atelier.header.debug")
 
@@ -64,6 +68,106 @@ def _log(phase: str, payload: Dict[str, Any], anomalies: List[str], params_keys:
     logger.warning("HEADER %s :: payload=%s anomalies=%s keys=%s",
                    phase, _brief(payload), _brief(anomalies), params_keys)
 
+# ---------- Banner helpers ----------
+
+def _norm_icon(raw_icon: Dict[str, Any] | None) -> Dict[str, str] | None:
+    if not isinstance(raw_icon, dict):
+        return None
+    kind = str(raw_icon.get("kind") or "").strip().lower()
+    value = str(raw_icon.get("value") or "").strip()
+    if not kind or not value:
+        return None
+    if kind not in {"icofont", "flaticon", "fa", "svg"}:
+        return None
+    icon: Dict[str, str] = {"kind": kind, "value": value}
+    color = str(raw_icon.get("color") or "").strip()
+    if color:
+        icon["color"] = color
+    bg = str(raw_icon.get("bg") or "").strip()
+    if bg:
+        icon["bg"] = bg
+    outline = str(raw_icon.get("outline") or "").strip()
+    if outline:
+        icon["outline"] = outline
+    return icon
+
+
+def _norm_banner(raw_banner: Dict[str, Any] | None) -> Dict[str, Any]:
+    defaults = {
+        "enabled": False,
+        "colors": {"from": "#2c6a57", "to": "#1f4f42"},
+        "speed_ms": 10000,
+        "pattern": {
+            "url": "images/patterns/alfenna/alfenna_dots_v1.svg",
+            "size": 40,
+            "opacity": "0.16",
+        },
+        "messages": [],
+    }
+    if not isinstance(raw_banner, dict):
+        return defaults
+
+    today_local = timezone.localdate()
+    today_label = date_format(today_local, "l j F", use_l10n=True)
+
+    messages: List[Dict[str, Any]] = []
+    for raw_msg in raw_banner.get("messages", []) or []:
+        if not isinstance(raw_msg, dict):
+            continue
+        text = str(raw_msg.get("text") or "").strip()
+        if not text:
+            continue
+        icon = _norm_icon(raw_msg.get("icon"))
+        badge = str(raw_msg.get("badge") or "").strip() or None
+        text_escaped = html.escape(text)
+        if "[today_human]" in text_escaped:
+            text_escaped = text_escaped.replace("[today_human]", f'<span class="af-date">{html.escape(today_label)}</span>')
+        messages.append({
+            "text": text,
+            "text_html": text_escaped,
+            "icon": icon,
+            "badge": badge,
+        })
+
+    colors_raw = raw_banner.get("colors") or {}
+    pattern_raw = raw_banner.get("pattern") or {}
+
+    try:
+        speed = int(raw_banner.get("speed_ms", defaults["speed_ms"]))
+    except (TypeError, ValueError):
+        speed = defaults["speed_ms"]
+    speed = max(1000, speed)
+
+    try:
+        pattern_size = int(pattern_raw.get("size", defaults["pattern"]["size"]))
+    except (TypeError, ValueError):
+        pattern_size = defaults["pattern"]["size"]
+    pattern_size = max(8, pattern_size)
+
+    try:
+        pattern_opacity = float(pattern_raw.get("opacity", defaults["pattern"]["opacity"]))
+    except (TypeError, ValueError):
+        pattern_opacity = defaults["pattern"]["opacity"]
+    pattern_opacity = max(0.0, min(pattern_opacity, 1.0))
+
+    opacity_str = f"{pattern_opacity:.4f}".rstrip("0").rstrip(".")
+
+    banner = {
+        "enabled": bool(raw_banner.get("enabled", False)) and bool(messages),
+        "colors": {
+            "from": str(colors_raw.get("from") or defaults["colors"]["from"]).strip() or defaults["colors"]["from"],
+            "to": str(colors_raw.get("to") or defaults["colors"]["to"]).strip() or defaults["colors"]["to"],
+        },
+        "speed_ms": speed,
+        "pattern": {
+            "url": str(pattern_raw.get("url") or defaults["pattern"]["url"]).strip() or defaults["pattern"]["url"],
+            "size": pattern_size,
+            "opacity": opacity_str or "0.16",
+        },
+        "messages": messages,
+    }
+    return banner
+
 # ---------- HYDRATORS (normalisation sans inventer de defaults) ----------
 
 def header_struct(request, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -112,6 +216,7 @@ def header_struct(request, params: Dict[str, Any]) -> Dict[str, Any]:
         "topbar": topbar_ctx,
         "contact": contact,
         "socials": socials,
+        "banner": _norm_banner(p.get("banner")),
     }
     _log("NORMALIZED(header_struct)", ctx, anomalies, list(p.keys()))
     return ctx

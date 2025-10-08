@@ -93,6 +93,16 @@ def wipe(request, params: Mapping[str, Any]) -> Dict[str, Any]:
         "shadow": _b(style_raw.get("shadow"), True),
     }
 
+    hint_raw = _as_dict(p.get("hint"))
+    hint = {
+        "enabled": _b(hint_raw.get("enabled"), True),
+        "text": _s(hint_raw.get("text"), "Faites glisser le bouton vert pour comparer l'avant/après."),
+        "ok_label": _s(hint_raw.get("ok_label"), "OK"),
+        "storage_key": _s(hint_raw.get("storage_key"), ""),
+    }
+    if not hint["text"].strip():
+        hint["enabled"] = False
+
     options_raw = _as_dict(p.get("options"))
     default_value = min(100, max(0, _i(options_raw.get("default_value"), 50)))
     snap_points = [v for v in [0, 50, 100] if isinstance(v, int)]
@@ -118,6 +128,7 @@ def wipe(request, params: Mapping[str, Any]) -> Dict[str, Any]:
         "after": after,
         "cta": cta,
         "style": style,
+        "hint": hint,
         "options": {
             "default_value": default_value,
             "snap_points": snap_points,

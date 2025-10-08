@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <defs>
+    <g id="dot" fill="#ffffff">
+      <circle r="6" />
+    </g>
+  </defs>
+  <g transform="translate(60,60)">
+    <g transform="translate(0,-28)"><use href="#dot" /></g>
+    <g transform="rotate(45) translate(0,-28)"><use href="#dot" /></g>
+    <g transform="rotate(90) translate(0,-28)"><use href="#dot" /></g>
+    <g transform="rotate(135) translate(0,-28)"><use href="#dot" /></g>
+    <g transform="rotate(180) translate(0,-28)"><use href="#dot" /></g>
+    <g transform="rotate(225) translate(0,-28)"><use href="#dot" /></g>
+    <g transform="rotate(270) translate(0,-28)"><use href="#dot" /></g>
+    <g transform="rotate(315) translate(0,-28)"><use href="#dot" /></g>
+  </g>
+</svg>

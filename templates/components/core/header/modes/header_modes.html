@@ -22,6 +22,11 @@
   {% endif %}
 
   <div class="header-main">
+    {% if banner.enabled %}
+      {% with colors=banner.colors speed_ms=banner.speed_ms pattern=banner.pattern messages=banner.messages enabled=banner.enabled %}
+        {% include "components/core/header/banner_ticker/banner_ticker.html" %}
+      {% endwith %}
+    {% endif %}
     <div class="container">
       {{ children.header_modes__main|default_if_none:""|safe }}
     </div>

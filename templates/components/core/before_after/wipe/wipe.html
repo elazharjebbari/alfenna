@@ -9,6 +9,15 @@
       {% if title %}<h3 id="{{ id }}-title" class="ba-title sr-only">{{ title }}</h3>{% endif %}
       {% if subtitle %}<p class="ba-subtitle sr-only">{{ subtitle }}</p>{% endif %}
 
+      {% if hint.enabled %}
+      <div class="ba-hint" data-ba-hint{% if hint.storage_key %} data-hint-key="{{ hint.storage_key }}"{% endif %}>
+        <div class="ba-hint-card">
+          <p class="ba-hint-text">{{ hint.text }}</p>
+          <button type="button" class="ba-hint-ok" data-ba-hint-close>{{ hint.ok_label|default:"OK" }}</button>
+        </div>
+      </div>
+      {% endif %}
+
       <div class="ba-wipe"
            id="{{ id }}"
            role="region"
