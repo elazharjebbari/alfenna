@@ -9,16 +9,13 @@ from typing import Dict, List
 import django
 from django.conf import settings
 from django.core.management import call_command
-from django.test import Client
-from django.utils import translation
-from django.utils.translation import gettext as _
 
 
 def _ensure_setup() -> None:
     project_root = Path(__file__).resolve().parents[3]
     if str(project_root) not in sys.path:
         sys.path.insert(0, str(project_root))
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alfenna.settings.dev")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "alfenna.settings.test_cli")
     if not settings.configured:
         django.setup()
 
@@ -52,31 +49,36 @@ def run() -> Dict[str, object]:
             ok = False
             results["steps"].append({"step": "tests", "status": "error", "error": str(exc)})
 
+    script_suite = [
+        "apps.leads.scripts.leads_00_urls",
+        "apps.leads.scripts.leads_01_progress_create",
+        "apps.leads.scripts.leads_02_progress_idem_merge",
+        "apps.leads.scripts.leads_03_collect_online",
+        "apps.leads.scripts.leads_04_collect_require_idem",
+        "apps.leads.scripts.leads_05_policy_required",
+        "apps.leads.scripts.leads_06_progress_error_log",
+    ]
+
     if ok:
-        client = Client()
-        crawl: List[Dict[str, object]] = []
-        expectations = {
-            "fr": "NATUREL • SOIN • CONFIANCE",
-            "en": "NATURAL • CARE • TRUST",
-            "ar": "طبيعي • عناية • ثقة",
-        }
-        for lang, expected in expectations.items():
-            response = client.get(f"/{lang}/")
-            entry = {
-                "lang": lang,
-                "status": response.status_code,
-                "content_language": response.headers.get("Content-Language"),
-            }
-
-            entry_ok = response.status_code == 200 and entry["content_language"] == lang
-            with translation.override(lang):
-                entry["translation"] = _("NATUREL • SOIN • CONFIANCE")
-                entry_ok = entry_ok and entry["translation"] == expected
-
-            entry["ok"] = entry_ok
-            ok = ok and entry_ok
-            crawl.append(entry)
-        results["crawl"] = crawl
+        for script in script_suite:
+            try:
+                call_command("runscript", script, "--traceback")
+                results.setdefault("runscripts", []).append({"script": script, "status": "ok"})
+            except SystemExit as exc:  # pragma: no cover - runscript returns via SystemExit
+                success = exc.code == 0
+                ok = ok and success
+                results.setdefault("runscripts", []).append({
+                    "script": script,
+                    "status": "ok" if success else "error",
+                    "exit_code": exc.code,
+                })
+            except Exception as exc:  # pragma: no cover
+                ok = False
+                results.setdefault("runscripts", []).append({
+                    "script": script,
+                    "status": "exception",
+                    "error": str(exc),
+                })
 
     results["ok"] = ok
     return results

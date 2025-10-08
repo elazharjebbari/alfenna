@@ -9,11 +9,11 @@
           <div class="footer-widget">
             <div class="widget-logo">
               <a href="#">
-                  {% responsive_picture slider_image|default:'images/logo/v1/logo_text_black_200x60' alt="footer-logo" %}
+                  {% responsive_picture slider_image|default:'images/logo/logo_text_black_200x60.png' alt="footer-logo" %}
               </a>
             </div>
             <div class="widget-address">
-              <h4 class="footer-widget-title">Lumière Academy</h4>
+              <h4 class="footer-widget-title">Alfenna</h4>
               {% if address_url and address_text %}
                 <p><a href="{{ address_url }}" target="_blank" rel="noopener">{{ address_text }}</a></p>
               {% endif %}
@@ -35,18 +35,18 @@
         <!-- Col 2 -->
         <div class="col-lg-3 col-md-6">
           <div class="footer-widget">
-            <h4 class="footer-widget-title">Activités à Rabat</h4>
+            <h4 class="footer-widget-title">Boutique</h4>
             <ul class="widget-link">
-              {% for l in links_activities %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
+              {% for l in links_shop %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
             </ul>
           </div>
         </div>
         <!-- Col 3 -->
         <div class="col-lg-3 col-md-6">
           <div class="footer-widget">
-            <h4 class="footer-widget-title">Formations</h4>
+            <h4 class="footer-widget-title">Support</h4>
             <ul class="widget-link">
-              {% for l in links_trainings %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
+              {% for l in links_contact %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
             </ul>
           </div>
         </div>

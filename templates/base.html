@@ -25,7 +25,9 @@
     {#                                      Cookie Manager (tarteaucitron)                                                                      #}
     {# ------------------------------------------------------------------------------------------------------------  #}
 
-    {% include 'analytics/cookies/tarteaucitron.html' %}
+    {% if marketing_config.cookie_banner_enabled %}
+      {% include 'analytics/cookies/tarteaucitron.html' %}
+    {% endif %}
 
     {# ------------------------------------------------------------------------------------------------------------  #}
     {#                                      Tags                                                                       #}

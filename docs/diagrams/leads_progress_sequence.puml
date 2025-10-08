@@ -1,0 +1,34 @@
+@startuml
+title Flow Stepper -> Leads API (Approche A)
+
+actor User
+participant "Front (Stepper)\nFlowForms runtime" as FE
+participant "Leads API\n/progress" as PROG
+participant "Leads API\n/sign" as SIGN
+participant "Leads API\n/collect" as COLLECT
+participant "DB\n(Lead, FlowSession,\nLeadSubmissionLog)" as DB
+participant "Worker\nCelery" as CEL
+
+== Étape 1 : Contact ==
+User -> FE : Nom + Téléphone
+FE -> PROG : POST /api/leads/progress\n(flow_key, session_key, s1, payload S1)
+PROG -> DB : FlowSession.merge + Lead(PENDING) + LeadSubmissionLog
+PROG --> FE : {lead_id, session_key}
+
+== Étape 2 : Offre ==
+User -> FE : Offre/Quantité/Bump + Adresse
+FE -> PROG : POST /api/leads/progress\n(s2, payload S2)
+PROG -> DB : merge snapshot + log
+PROG --> FE : 200 OK
+
+== Étape 3 : Paiement ==
+FE -> SIGN : POST /api/leads/sign\n(payload final sans token)
+SIGN --> FE : {signed_token}
+FE -> COLLECT : POST /api/leads/collect\n(payload final + token, X-Idempotency-Key)
+COLLECT -> DB : validate + create/update Lead
+COLLECT -> CEL : enqueue process_lead
+COLLECT --> FE : 202 Accepted
+
+== Async ==
+CEL -> DB : process_lead (policy, dedup TTL, enrich/score → VALID)
+@enduml

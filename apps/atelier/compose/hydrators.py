@@ -426,14 +426,30 @@ def footer_main(request, params: Dict[str, Any]) -> Dict[str, Any]:
         year = datetime.utcnow().year
 
     def _links(lst):
-        return [it for it in (lst or []) if isinstance(it, dict) and it.get("label") and it.get("url")]
+        out = []
+        for it in (lst or []):
+            if not isinstance(it, dict):
+                continue
+            label = (it.get("label") or "").strip()
+            url = (it.get("url") or "").strip()
+            if not label or not url:
+                continue
+            out.append({"label": label, "url": url})
+        return out
 
     socials = []
     for s in p.get("socials", []):
         if isinstance(s, dict) and s.get("url"):
-            socials.append({"icon": (s.get("icon") or "").strip(),
-                            "url": (s.get("url") or "").strip(),
-                            "new_tab": bool(s.get("new_tab", True))})
+            socials.append({
+                "icon": (s.get("icon") or "").strip(),
+                "url": (s.get("url") or "").strip(),
+                "new_tab": bool(s.get("new_tab", True)),
+            })
+
+    links_contact = _links(p.get("links_contact"))
+    if not links_contact:
+        # compat: certains anciens manifests exposent links_trainings pour la colonne centrale
+        links_contact = _links(p.get("links_trainings"))
 
     return {
         "address_url": (p.get("address_url") or "").strip(),
@@ -445,6 +461,7 @@ def footer_main(request, params: Dict[str, Any]) -> Dict[str, Any]:
         "socials": socials,
         "links_activities": _links(p.get("links_activities")),
         "links_trainings": _links(p.get("links_trainings")),
+        "links_contact": links_contact,
         "links_quick": _links(p.get("links_quick")),
         "year": year,
     }

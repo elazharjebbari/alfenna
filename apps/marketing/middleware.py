@@ -2,6 +2,44 @@ from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 
 
+class AutoConsentCookieMiddleware:
+    """Pose automatiquement le cookie de consentement marketing quand le bannière est désactivée."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.cookie_enabled = bool(getattr(settings, "COOKIE_MANAGER_ENABLED", True))
+        self.cookie_name = getattr(settings, "CONSENT_COOKIE_NAME", "cookie_consent_marketing")
+        self.cookie_value = getattr(settings, "CONSENT_COOKIE_DEFAULT", "true")
+        self.cookie_samesite = getattr(settings, "CONSENT_COOKIE_SAMESITE", "Lax")
+
+    def __call__(self, request):
+        cookie_needed = False
+        if not self.cookie_enabled:
+            try:
+                has_cookie = request.COOKIES.get(self.cookie_name)
+            except Exception:
+                has_cookie = None
+            if not has_cookie:
+                cookie_needed = True
+                try:
+                    request.COOKIES[self.cookie_name] = self.cookie_value
+                except Exception:
+                    pass
+
+        response = self.get_response(request)
+
+        if cookie_needed:
+            response.set_cookie(
+                self.cookie_name,
+                value=self.cookie_value,
+                max_age=31536000,
+                secure=True,
+                httponly=False,
+                samesite=self.cookie_samesite,
+            )
+        return response
+
+
 class SeoGuardMiddleware(MiddlewareMixin):
     """
     Ajoute X-Robots-Tag aux endpoints non indexables.

@@ -51,7 +51,10 @@ def _apply_fields(lead: Lead, snapshot: Dict[str, Any]) -> None:
 
 def _ensure_submission_log(lead: Lead, fs: FlowSession, snapshot: Dict[str, Any]) -> LeadSubmissionLog:
     log, created = LeadSubmissionLog.objects.get_or_create(
-        lead=lead, flow_key=fs.flow_key, session_key=fs.session_key,
+        lead=lead,
+        flow_key=fs.flow_key,
+        session_key=fs.session_key,
+        step="",
         defaults={"status": LeadStatus.PENDING, "payload": snapshot, "attempt_count": 0},
     )
     if not created and not log.payload:

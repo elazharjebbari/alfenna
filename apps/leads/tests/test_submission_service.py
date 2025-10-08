@@ -32,12 +32,22 @@ class LeadSubmissionServiceTests(TestCase):
         self.lead.refresh_from_db()
         self.assertEqual(self.lead.email, "new@example.com")  # normalisé
         self.assertEqual(self.lead.phone, "+212600000000")
-        log = LeadSubmissionLog.objects.get(lead=self.lead, flow_key=self.fs.flow_key, session_key=self.fs.session_key)
+        log = LeadSubmissionLog.objects.get(
+            lead=self.lead,
+            flow_key=self.fs.flow_key,
+            session_key=self.fs.session_key,
+            step="",
+        )
         self.assertEqual(log.status, LeadStatus.VALID)
 
     def test_idempotent_by_session(self):
         submit_lead_from_flowsession(self.fs)
         submit_lead_from_flowsession(self.fs)
-        log = LeadSubmissionLog.objects.get(lead=self.lead, flow_key=self.fs.flow_key, session_key=self.fs.session_key)
+        log = LeadSubmissionLog.objects.get(
+            lead=self.lead,
+            flow_key=self.fs.flow_key,
+            session_key=self.fs.session_key,
+            step="",
+        )
         self.assertEqual(log.attempt_count, 2)
         self.assertEqual(log.status, LeadStatus.VALID)

@@ -69,6 +69,7 @@ def get_global_defaults() -> dict:
                 base["meta_defaults"].update(v)
             else:
                 base[k] = v
+    base.setdefault("cookie_banner_enabled", getattr(settings, "COOKIE_MANAGER_ENABLED", True))
     return base
 
 # def _load_db_config() -> dict | None:

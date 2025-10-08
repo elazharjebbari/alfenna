@@ -19,6 +19,54 @@
     return `${hex.substr(0, 8)}-${hex.substr(8, 4)}-${hex.substr(12, 4)}-${hex.substr(16, 4)}-${hex.substr(20)}`;
   }
 
+  const PROGRESS_DEFAULT_URL = "/api/leads/progress/";
+  const PROGRESS_DEFAULT_FLOW_KEY = "checkout_intent_flow";
+  const PROGRESS_STORAGE_KEY = "ff_session";
+
+  function safeLocalStorage() {
+    try { return window.localStorage; } catch (_) { return null; }
+  }
+
+  function ensureProgressSessionKey(storageKey) {
+    const keyName = storageKey || PROGRESS_STORAGE_KEY;
+    const store = safeLocalStorage();
+    if (!store) {
+      return `ff-${uuid4()}`;
+    }
+    let existing = store.getItem(keyName);
+    if (existing && existing.length) {
+      return existing;
+    }
+    existing = `ff-${uuid4()}`;
+    try { store.setItem(keyName, existing); } catch (_) { /* ignore quota errors */ }
+    return existing;
+  }
+
+  function ensureProgressHiddenFields(root, cfg, sessionKey, flowKey) {
+    if (!root) return;
+    const sessionFieldName = cfg.progress_session_field_name || "ff_session_key";
+    let sessionField = root.querySelector(`input[name="${sessionFieldName}"]`);
+    if (!sessionField) {
+      sessionField = document.createElement("input");
+      sessionField.type = "hidden";
+      sessionField.name = sessionFieldName;
+      sessionField.setAttribute("data-ff-progress-session", "1");
+      root.appendChild(sessionField);
+    }
+    sessionField.value = sessionKey;
+
+    const flowFieldName = cfg.progress_flow_field_name || "ff_flow_key";
+    let flowField = root.querySelector(`input[name="${flowFieldName}"]`);
+    if (!flowField) {
+      flowField = document.createElement("input");
+      flowField.type = "hidden";
+      flowField.name = flowFieldName;
+      flowField.setAttribute("data-ff-progress-flow", "1");
+      root.appendChild(flowField);
+    }
+    flowField.value = flowKey;
+  }
+
   function getCookie(name) {
     const m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
     return m ? m.pop() : "";
@@ -132,6 +180,83 @@
     return out;
   }
 
+  function progressAllowList(cfg, stepKey) {
+    const map = (cfg && (cfg.progress_steps || cfg.progressSteps)) || {};
+    if (map && typeof map === "object" && Array.isArray(map[stepKey])) {
+      return map[stepKey];
+    }
+    return null;
+  }
+
+  async function sendProgressUpdate(root, cfg, stepIndex) {
+    if (!cfg) return { skipped: true };
+    const url = cfg.progress_url || (cfg.backend_config && cfg.backend_config.progress_url) || PROGRESS_DEFAULT_URL;
+    if (!url) return { skipped: true };
+    const stepKey = typeof stepIndex === "number" ? `step${stepIndex}` : String(stepIndex || "");
+    if (!stepKey) return { skipped: true };
+
+    const fieldsMap = parseFieldsMap(root, cfg);
+    const allPayload = collectFields(root, cfg, fieldsMap) || {};
+    const allowList = progressAllowList(cfg, stepKey);
+    const payload = {};
+    if (allowList && allowList.length) {
+      allowList.forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(allPayload, key)) {
+          payload[key] = allPayload[key];
+        }
+      });
+    } else {
+      Object.assign(payload, allPayload);
+    }
+
+    if (cfg.context && typeof cfg.context === "object") {
+      Object.entries(cfg.context).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && !Object.prototype.hasOwnProperty.call(payload, key)) {
+          payload[key] = value;
+        }
+      });
+    }
+
+    if (!Object.keys(payload).length) {
+      return { skipped: true };
+    }
+
+    const flowKey = cfg.flow_key || cfg.progress_flow_key || PROGRESS_DEFAULT_FLOW_KEY;
+    const sessionKey = ensureProgressSessionKey(cfg.progress_session_storage_key);
+    const formKind = cfg.form_kind || cfg.progress_form_kind || "checkout_intent";
+
+    ensureProgressHiddenFields(root, cfg, sessionKey, flowKey);
+
+    const body = {
+      flow_key: flowKey,
+      session_key: sessionKey,
+      form_kind: formKind,
+      step: stepKey,
+      payload,
+    };
+
+    try {
+      const resp = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: JSON.stringify(body),
+        credentials: "same-origin",
+      });
+      if (!resp.ok) {
+        const txt = await resp.text().catch(() => "");
+        console.warn("[FlowForms] progress failed", resp.status, txt);
+        return { ok: false, status: resp.status };
+      }
+      return { ok: true, status: resp.status };
+    } catch (err) {
+      console.warn("[FlowForms] progress error", err);
+      return { ok: false, error: err };
+    }
+  }
+
   function parseFloatSafe(value) {
     if (value === undefined || value === null || value === "") return null;
     const normalized = typeof value === "string" ? value.replace(",", ".") : value;
@@ -242,6 +367,9 @@
     if (!finalBody.product_name && hints.productName) {
       finalBody.product_name = hints.productName;
     }
+    if (!finalBody.course_slug && finalBody.product_slug) {
+      finalBody.course_slug = finalBody.product_slug;
+    }
     finalBody.online_discount_amount = discount;
     finalBody.online_discount_minor = Math.round(discount * 100);
     finalBody.checkout_bump_amount = bumpAmount;
@@ -266,6 +394,14 @@
     payload.form_kind = cfg.form_kind || "email_ebook";
     payload.client_ts = (cfg.context && cfg.context.client_ts) || nowIso();
     if (payload.honeypot === undefined) payload.honeypot = "";
+    if (payload.accept_terms === undefined) payload.accept_terms = true;
+    if (!payload.course_slug) {
+      if (cfg.context && cfg.context.product_slug) {
+        payload.course_slug = cfg.context.product_slug;
+      } else if (cfg.context && cfg.context.product_id) {
+        payload.course_slug = String(cfg.context.product_id);
+      }
+    }
 
     const mergedCtx = Object.assign({}, (cfg.context || {}), pick(qsParams(), [
       "campaign", "source", "utm_source", "utm_medium", "utm_campaign"
@@ -519,6 +655,11 @@
 
   function wireEvents(root) {
     const cfg = jsonFromConfigScript(root) || {};
+    const progressActive = !!(
+      cfg.progress_url ||
+      (cfg.backend_config && cfg.backend_config.progress_url) ||
+      (cfg.progress_steps && Object.keys(cfg.progress_steps).length)
+    );
 
     const refreshCheckout = () => {
       try {
@@ -535,13 +676,21 @@
 
     refreshCheckout();
 
-    root.addEventListener("click", (e) => {
+    root.addEventListener("click", async (e) => {
       const t = e.target;
       if (!t) return;
       if (t.closest("[data-ff-next]")) {
         e.preventDefault();
         const cur = getCurrentStep(root);
         const max = getMaxStep(root);
+        if (progressActive && cur < max) {
+          try {
+            const res = await sendProgressUpdate(root, cfg, cur);
+            if (window.DEBUG_FF) console.debug("[ff] progress", cur, res);
+          } catch (err) {
+            console.warn("[FlowForms] progress threw", err);
+          }
+        }
         const next = cur < max ? cur + 1 : max;
         showStep(root, next);
         setTimeout(refreshCheckout, 0);

@@ -1,18 +1,21 @@
 {% load static i18n %}
 {% url 'leads:collect' as leads_collect_url %}
 {% url 'leads:sign' as leads_sign_url %}
-{% with fullname_key=fields_map.fullname|default:'full_name' phone_key=fields_map.phone|default:'phone' address_key=fields_map.address|default:'address' quantity_key=fields_map.quantity|default:'quantity' offer_key=fields_map.offer|default:'offer_key' product_key=fields_map.product|default:'product' promotion_key=fields_map.promotion|default:'promotion_selected' email_key=fields_map.email|default:'email' payment_key=fields_map.payment_method|default:'payment_method' bump_key=fields_map.bump|default:'bump_optin' ui_texts=form.ui_texts %}
+{% with fullname_key=fields_map.fullname|default:'full_name' phone_key=fields_map.phone|default:'phone' address_key=fields_map.address|default:'address' quantity_key=fields_map.quantity|default:'quantity' offer_key=fields_map.offer|default:'offer_key' product_key=fields_map.product|default:'product' promotion_key=fields_map.promotion|default:'promotion_selected' email_key=fields_map.email|default:'email' payment_key=fields_map.payment_method|default:'payment_method' bump_key=fields_map.bump|default:'bump_optin' wa_key=fields_map.wa_optin|default:'wa_optin' flow_key=form.flow_key|default:'checkout_intent_flow' ui_texts=form.ui_texts %}
 {% with action_target=action_url|default:leads_collect_url %}
 
 <form id="form-stepper" class="c-lead-form c-lead-form--stepper af-form card border-0 shadow-sm"
       data-ff-root data-steps="4" method="post" action=""
       data-action-url="{{ action_target }}"
       data-require-signed="true" data-sign-url="{{ leads_sign_url }}"
-      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","address":"{{ address_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}","email":"{{ email_key }}","payment_method":"{{ payment_key }}","bump":"{{ bump_key }}"}'
+      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","address":"{{ address_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}","email":"{{ email_key }}","payment_method":"{{ payment_key }}","bump":"{{ bump_key }}","wa_optin":"{{ wa_key }}"}'
       data-checkout-url="/api/checkout/sessions/"
       novalidate>
     {% csrf_token %}
     <input type="hidden" name="{{ product_key }}" value="{{ product.id|default:product.slug }}" data-ff-product>
+    <input type="hidden" name="ff_session_key" value="" data-ff-session-key>
+    <input type="hidden" name="ff_flow_key" value="{{ flow_key }}" data-ff-flow-key>
+    <input type="hidden" name="{{ promotion_key }}" value="" data-ff-promo>
     <input type="hidden" name="{{ quantity_key }}" value="1" data-ff-quantity-default>
 
     <div class="af-shell">
@@ -102,7 +105,7 @@
                 </div>
 
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" checked>
+                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ wa_key }}" value="1" checked>
                     <label class="form-check-label" for="ff-wa-optin">
                         {% trans "OK pour être contacté(e) sur WhatsApp pour confirmer la livraison" %}
                     </label>
@@ -409,20 +412,41 @@
 </form>
 
 {% if form.flow_config_json %}
-<script type="application/json" data-ff-config>{{
-    form.flow_config_json
-    |
-    safe
-}}</script>
+<script type="application/json" data-ff-config>
+    {{form.flow_config_json | safe}}
+</script>
 {% else %}
 <script type="application/json" data-ff-config>
     {
-        "form_kind": "product_lead",
+        "form_kind": "checkout_intent",
+        "flow_key": "checkout_intent_flow",
         "endpoint_url": "{{ action_target }}",
         "require_idempotency": true,
         "require_signed_token": true,
         "sign_url": "{{ leads_sign_url }}",
-        "context": {}
+        "progress_url": "/api/leads/progress/",
+        "progress_steps": {
+            "step1": ["{{ fullname_key }}", "{{ phone_key }}", "{{ product_key }}", "{{ wa_key }}"],
+            "step2": ["{{ offer_key }}", "{{ quantity_key }}", "{{ address_key }}", "{{ payment_key }}", "{{ bump_key }}", "{{ promotion_key }}"]
+        },
+        "progress_session_field_name": "ff_session_key",
+        "progress_flow_field_name": "ff_flow_key",
+        "progress_session_storage_key": "ff_session",
+        "progress_form_kind": "checkout_intent",
+        "context": {},
+        "fields_map": {
+            "fullname": "{{ fullname_key }}",
+            "phone": "{{ phone_key }}",
+            "address": "{{ address_key }}",
+            "quantity": "{{ quantity_key }}",
+            "offer": "{{ offer_key }}",
+            "product": "{{ product_key }}",
+            "promotion": "{{ promotion_key }}",
+            "email": "{{ email_key }}",
+            "payment_method": "{{ payment_key }}",
+            "bump": "{{ bump_key }}",
+            "wa_optin": "{{ wa_key }}"
+        }
     }
 </script>
 {% endif %}

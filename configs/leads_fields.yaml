@@ -49,6 +49,14 @@ form_kinds:
       save_customer: { required: false, type: bool }
       accept_terms: { required: true, type: bool }
       invoice_language: { required: false, max_length: 8 }
+      product: { required: false, max_length: 220 }
+      offer_key: { required: false, max_length: 64 }
+      quantity: { required: false }
+      bump_optin: { required: false, type: bool }
+      promotion_selected: { required: false, max_length: 64 }
+      address_raw: { required: false, max_length: 400 }
+      payment_method: { required: false, max_length: 16 }
+      wa_optin: { required: false, type: bool }
   product_lead:
     fields:
       full_name: { required: true }

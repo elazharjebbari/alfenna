@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.test import RequestFactory, TestCase, override_settings
+from django.test import Client, RequestFactory, TestCase, override_settings
 
 from apps.atelier.compose import pipeline
 from apps.atelier.compose.hydrators.pricing.hydrators import pricing_packs
@@ -213,6 +213,18 @@ class AnalyticsConsentTemplateTests(TestCase):
         request = self.factory.get("/")
         html = self._render_base(request)
         self.assertIn('data-ll-consent-cookie="cookie_consent_marketing"', html)
+
+    def test_auto_consent_cookie_middleware_sets_cookie_when_disabled(self) -> None:
+        client = Client()
+        original_flag = getattr(settings, "COOKIE_MANAGER_ENABLED", True)
+        try:
+            settings.COOKIE_MANAGER_ENABLED = False
+            response = client.get("/")
+            consent_name = getattr(settings, "CONSENT_COOKIE_NAME", "cookie_consent_marketing")
+            self.assertIn(consent_name, response.cookies)
+            self.assertEqual(response.cookies[consent_name].value, "true")
+        finally:
+            settings.COOKIE_MANAGER_ENABLED = original_flag
 
 
 class ConsentDebugHeadersMiddlewareTests(TestCase):

@@ -68,8 +68,8 @@ def footer_main(request, params: Mapping[str, Any]) -> Dict[str, Any]:
     opening_hours = _str(p.get("opening_hours"), "")
 
     socials = _norm_socials(p.get("socials"), anomalies)
-    links_activities = _norm_links(p.get("links_activities"), anomalies, "links_activities")
-    links_trainings = _norm_links(p.get("links_trainings"), anomalies, "links_trainings")
+    links_shop = _norm_links(p.get("links_shop"), anomalies, "links_shop")
+    links_contact = _norm_links(p.get("links_contact"), anomalies, "links_contact")
     links_quick = _norm_links(p.get("links_quick"), anomalies, "links_quick")
 
     year_raw = p.get("year")
@@ -88,8 +88,8 @@ def footer_main(request, params: Mapping[str, Any]) -> Dict[str, Any]:
         "phone_display": phone_display,
         "opening_hours": opening_hours,
         "socials": socials,
-        "links_activities": links_activities,
-        "links_trainings": links_trainings,
+        "links_shop": links_shop,
+        "links_contact": links_contact,
         "links_quick": links_quick,
         "year": year,
     }

@@ -17,6 +17,7 @@ from apps.atelier.components.registry import NamespaceComponentMissing, get as g
 from apps.atelier.components.utils import split_alias_namespace
 from apps.atelier.contracts.product import ProductParams
 from apps.catalog.models import Product as CatalogProduct
+from apps.leads.constants import FormKind
 
 logger = logging.getLogger(__name__)
 
@@ -577,14 +578,58 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
             if value:
                 flow_context[key] = value
 
+    form_fields_map = dict(form_cfg.fields_map or {})
+    form_fields_map.setdefault("wa_optin", "wa_optin")
+    default_address_key = form_fields_map.get("address") or "address_raw"
+    form_fields_map.setdefault("address", default_address_key)
+    form_fields_map.setdefault("address_raw", default_address_key)
+    form_fields_map.setdefault("promotion", form_fields_map.get("promotion") or "promotion_selected")
+
+    progress_steps = {
+        "step1": [
+            field
+            for field in [
+                form_fields_map.get("fullname"),
+                form_fields_map.get("phone"),
+                form_fields_map.get("product"),
+                "campaign",
+                "source",
+                "utm_source",
+                "utm_medium",
+                "utm_campaign",
+                form_fields_map.get("wa_optin"),
+            ]
+            if field
+        ],
+        "step2": [
+            field
+            for field in [
+                form_fields_map.get("offer"),
+                form_fields_map.get("quantity"),
+                form_fields_map.get("bump"),
+                form_fields_map.get("promotion"),
+                form_fields_map.get("address"),
+                form_fields_map.get("payment_method"),
+            ]
+            if field
+        ],
+    }
+
     flow_config = {
-        "form_kind": "product_lead",
+        "form_kind": FormKind.CHECKOUT_INTENT,
+        "flow_key": "checkout_intent_flow",
         "endpoint_url": action_url or reverse("leads:collect"),
         "require_idempotency": True,
         "require_signed_token": True,
         "sign_url": sign_url,
+        "progress_url": reverse("leads:progress"),
+        "progress_steps": progress_steps,
+        "progress_session_field_name": "ff_session_key",
+        "progress_flow_field_name": "ff_flow_key",
+        "progress_session_storage_key": "ff_session",
+        "progress_form_kind": FormKind.CHECKOUT_INTENT,
         "context": flow_context,
-        "fields_map": form_cfg.fields_map,
+        "fields_map": form_fields_map,
     }
 
     context_out = {
@@ -595,11 +640,12 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         "form": {
             "alias": form_cfg.alias,
             "action_url": action_url,
-            "fields_map": form_cfg.fields_map,
+            "fields_map": form_fields_map,
             "template": form_template,
             "ui_texts": ui_texts_final,
             "offers": final_offers,
             "bump": bump_final,
+            "flow_key": flow_config["flow_key"],
             "flow_config_json": json.dumps(flow_config, ensure_ascii=False),
         },
         "tracking": cfg.tracking.as_dict(),

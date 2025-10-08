@@ -100,6 +100,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # Feature flags
 # --------------------------------------------------------------------------------------
 CHATBOT_ENABLED = _env_flag("CHATBOT_ENABLED", default=False)
+COOKIE_MANAGER_ENABLED = _env_flag("COOKIE_MANAGER_ENABLED", default=True)
 
 # --------------------------------------------------------------------------------------
 # Middleware
@@ -108,6 +109,7 @@ CHATBOT_ENABLED = _env_flag("CHATBOT_ENABLED", default=False)
 MIDDLEWARE = [
                  "corsheaders.middleware.CorsMiddleware",
                  'django.middleware.security.SecurityMiddleware',
+                 'apps.marketing.middleware.AutoConsentCookieMiddleware',
                  'apps.marketing.middleware.ConsentDebugHeadersMiddleware',
                  'whitenoise.middleware.WhiteNoiseMiddleware',  # <= ici
                  "apps.atelier.middleware.site_version.PathPrefixSiteVersionMiddleware",

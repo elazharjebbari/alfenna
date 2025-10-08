@@ -110,6 +110,7 @@ class LeadSubmissionLog(models.Model):
     lead = models.ForeignKey(Lead, on_delete=models.CASCADE, related_name="submissions")
     flow_key = models.CharField(max_length=64)
     session_key = models.CharField(max_length=64, blank=True, default="")
+    step = models.CharField(max_length=64, blank=True, default="")
     status = models.CharField(max_length=16, choices=LeadStatus.choices, default=LeadStatus.PENDING)
     message = models.CharField(max_length=500, blank=True, default="")
     payload = models.JSONField(default=dict, blank=True)  # snapshot au moment de la soumission
@@ -122,8 +123,9 @@ class LeadSubmissionLog(models.Model):
         indexes = [
             models.Index(fields=["lead", "flow_key", "created_at"]),
             models.Index(fields=["status"]),
+            models.Index(fields=["flow_key", "session_key", "step"]),
         ]
-        unique_together = (("lead", "flow_key", "session_key"),)
+        unique_together = (("lead", "flow_key", "session_key", "step"),)
 
     def __str__(self):
         return f"LeadSubmissionLog(lead={self.lead_id}, flow={self.flow_key}, sess={self.session_key}, status={self.status})"

@@ -17,8 +17,8 @@ class LeadEventAdmin(admin.ModelAdmin):
 
 @admin.register(LeadSubmissionLog)
 class LeadSubmissionLogAdmin(admin.ModelAdmin):
-    list_display = ("lead", "flow_key", "session_key", "status", "attempt_count", "created_at")
-    list_filter = ("flow_key", "status")
-    search_fields = ("lead__id", "flow_key", "session_key", "message")
+    list_display = ("lead", "flow_key", "session_key", "step", "status", "attempt_count", "created_at")
+    list_filter = ("flow_key", "status", "step")
+    search_fields = ("lead__id", "flow_key", "session_key", "step", "message")
     date_hierarchy = "created_at"
     readonly_fields = ("created_at", "updated_at", "payload", "last_error")

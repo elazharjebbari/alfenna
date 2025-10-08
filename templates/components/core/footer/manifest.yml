@@ -10,24 +10,24 @@ assets:
 
 # Valeurs de référence (documentaires)
 params:
-  address_url: "https://www.google.com/maps/place//data=!4m2!3m1!1s0xda76b62d7669bc3:0xeedf82994aca610?sa=X"
-  address_text: "N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc"
-  email: "partenariat@lumiereacademy.com"
-  phone_tel: "+212808544450"
-  phone_display: "+212 8085-44450"
-  opening_hours: "Lun. - Dim. 10:00 - 18:00"
+  address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
+  address_text: "Alfenna — Rabat, Maroc"
+  email: "partenariat@alfenna.com"
+  phone_tel: "+212719646705"
+  phone_display: "+212 719-646-705"
+  opening_hours: "Lun. - Dim. 09:00 - 19:00"
   socials:
-    - { icon: "flaticon-instagram", url: "https://www.instagram.com/lumieresrabat/", new_tab: true }
-  links_activities:
-    - { label: "Atelier Divertissement à Rabat", url: "https://lumiereacademy.com/workshop/workshop_product/" }
-    - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
-  links_trainings:
-    - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
-    - { label: "Formation en Atelier Casablanca", url: "https://lumiereacademy.com/training-casablanca" }
+    - { icon: "flaticon-instagram", url: "https://www.instagram.com/alfennaacademy/", new_tab: true }
+  links_shop:
+    - { label: "Pack complet Alfenna", url: "/produits/pack-cosmetique-naturel/" }
+    - { label: "Formation en Fabrication de produits Cosmétiques Naturels", url: "/" }
+  links_contact:
+    - { label: "Conseils d’utilisation", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "Suivi de commande", url: "https://api.whatsapp.com/send?phone=212719646705" }
   links_quick:
-    - { label: "FAQ", url: "#" }
-    - { label: "Termes et conditions", url: "#" }
-    - { label: "Données privées", url: "#" }
+    - { label: "FAQ", url: "/faq" }
+    - { label: "Livraison & retours", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "Confidentialité & Cookies", url: "/termes-of-services" }
   year: 0   # 0 => hydrateur mettra l'année courante
 
 contract:
@@ -40,8 +40,8 @@ contract:
     phone_display: "Numéro affiché"
     opening_hours: "Horaires"
     socials: "Liste {icon, url, new_tab?}"
-    links_activities: "Liste {label, url}"
-    links_trainings: "Liste {label, url}"
+    links_shop: "Liste {label, url}"
+    links_contact: "Liste {label, url}"
     links_quick: "Liste {label, url}"
     year: "Année d’affichage (int)"
 
@@ -54,25 +54,25 @@ hydrate:
 
   # Whitelist + defaults (manifest-first robuste)
   params:
-    address_url: "https://www.google.com/maps/place//data=!4m2!3m1!1s0xda76b62d7669bc3:0xeedf82994aca610?sa=X"
-    address_text: "N° 18 Rue Patrice Lumumba, Rabat 10000, Maroc"
-    email: "partenariat@lumiereacademy.com"
-    phone_tel: "+212808544450"
-    phone_display: "+212 8085-44450"
-    opening_hours: "Lun. - Dim. 10:00 - 18:00"
+    address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
+    address_text: "Alfenna — Rabat, Maroc"
+    email: "partenariat@alfenna.com"
+    phone_tel: "+212719646705"
+    phone_display: "+212 719-646-705"
+    opening_hours: "Lun. - Sam. 09:30 - 18:00"
     socials:
-      - { icon: "flaticon-instagram", url: "https://www.instagram.com/lumieresrabat/", new_tab: true }
-    links_activities:
-      - { label: "Atelier Divertissement à Rabat", url: "https://lumiereacademy.com/workshop/workshop_product/" }
-      - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
-    links_trainings:
-      - { label: "Formation en Atelier Rabat", url: "https://lumiereacademy.com/e-learning-v3" }
-      - { label: "Formation en Atelier Casablanca", url: "https://lumiereacademy.com/training-casablanca" }
+      - { icon: "flaticon-instagram", url: "https://www.instagram.com/alfennaacademy/", new_tab: true }
+    links_shop:
+      - { label: "Pack complet Alfenna", url: "/produits/pack-cosmetique-naturel/" }
+      - { label: "Formation en Fabrication de produits Cosmétiques Naturels", url: "/" }
+    links_contact:
+      - { label: "Conseils d’utilisation", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "Suivi de commande", url: "https://api.whatsapp.com/send?phone=212719646705" }
     links_quick:
-      - { label: "FAQ", url: "#" }
-      - { label: "Termes et conditions", url: "#" }
-      - { label: "Données privées", url: "#" }
-    year: 0
+      - { label: "FAQ", url: "/faq" }
+      - { label: "Livraison & retours", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "Confidentialité & Cookies", url: "/termes-of-services" }
+    year: 0   # 0 => hydrateur mettra l'année courante
 
 render:
   cacheable: true
