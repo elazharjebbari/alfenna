@@ -30,6 +30,7 @@ form_kinds:
   checkout_intent:
     fields:
       course_slug: { required: true, max_length: 220 }
+      pack_slug: { required: false, max_length: 64 }
       currency: { required: true, max_length: 3 }
       coupon_code: { required: false, max_length: 64 }
       full_name: { required: false, max_length: 150 }
@@ -56,6 +57,7 @@ form_kinds:
       promotion_selected: { required: false, max_length: 64 }
       address_raw: { required: false, max_length: 400 }
       payment_method: { required: false, max_length: 16 }
+      payment_mode: { required: false, max_length: 32 }
       wa_optin: { required: false, type: bool }
   product_lead:
     fields:

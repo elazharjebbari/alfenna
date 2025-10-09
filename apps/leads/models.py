@@ -29,7 +29,9 @@ class Lead(models.Model):
 
     # produit / checkout intent
     course_slug = models.SlugField(max_length=220, blank=True, default="")
+    pack_slug = models.SlugField(max_length=64, blank=True, default="")
     currency = models.CharField(max_length=3, blank=True, default="")
+    payment_mode = models.CharField(max_length=32, blank=True, default="")
     coupon_code = models.CharField(max_length=64, blank=True, default="")
     billing_address_line1 = models.CharField(max_length=200, blank=True, default="")
     billing_address_line2 = models.CharField(max_length=200, blank=True, default="")

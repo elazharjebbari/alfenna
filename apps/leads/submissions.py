@@ -15,7 +15,7 @@ from .tasks import process_lead
 _ALLOWED_LEAD_FIELDS = {
     "email", "first_name", "last_name", "full_name", "phone",
     "address_line1", "address_line2", "city", "state", "postal_code", "country",
-    "course_slug", "currency", "coupon_code",
+    "course_slug", "pack_slug", "currency", "payment_mode", "coupon_code",
     "billing_address_line1", "billing_address_line2", "billing_city", "billing_state",
     "billing_postal_code", "billing_country", "company_name", "tax_id_type", "tax_id",
     "save_customer", "accept_terms", "invoice_language",
