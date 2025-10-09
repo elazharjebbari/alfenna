@@ -12,27 +12,24 @@ assets:
 params:
   topbar:
     enabled: true
-    text_html: "Étape 1 : Découvrir ✓ &nbsp;|&nbsp; Étape 2 : Choisir &nbsp;|&nbsp; Étape 3 : Rejoindre"
+    text_html: "100% Naturel | Sans Parabènes | Formule Douce | Fabriqué au Maroc | Protection & Restauration"
     deadline_ts: ""
-    cta: { label: "Je me lance", url: "#packs" }
+    cta: { label: "J'achete", url: "#form-stepper" }
   banner:
     enabled: true
     colors:
       from: "#2c6a57"
       to: "#1f4f42"
-    speed_ms: 10000
+    speed_ms: 5000
     pattern:
       url: "images/patterns/alfenna/alfenna_dots_v1.svg"
       size: 40
       opacity: 0.16
     messages:
-      - text: "Livraison Maroc"
+      - text: "Livraison Partout au Maroc"
         icon:
-          kind: "icofont"
-          value: "icofont-location-pin"
-          color: "#fef08a"
-          bg: "rgba(254, 240, 138, 0.22)"
-          outline: "rgba(254, 240, 138, 0.4)"
+          kind: "svg"
+          value: "images/icons/morocco.svg"
       - text: "Livraison 24h gratuite"
         icon:
           kind: "icofont"

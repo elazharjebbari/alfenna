@@ -16,7 +16,17 @@ params:
     address_text: ""
   socials: []
   course_slug: "bougies-naturelles"
-
+  menu:
+    - label: "Accueil"
+      url_name: "pages:home"
+    - label: "Nos Formations"
+      url_name: "pages:packs"
+    - label: "Notre Pack"
+      url: "/produits/pack-cosmetique-naturel/"
+    - label: "FAQ"
+      url: "#faq"
+    - label: "Contact"
+      url: "#contact"
 contract:
   optional:
     contact:
@@ -35,6 +45,16 @@ contract:
 hydrate:
   module: "apps.atelier.compose.hydrators.header_modes.hydrators"
   func: "modes_mobile"
-
+  menu:
+    - label: "Accueil"
+      url_name: "pages:home"
+    - label: "Nos Formations"
+      url_name: "pages:packs"
+    - label: "Notre Pack"
+      url: "/produits/pack-cosmetique-naturel/"
+    - label: "FAQ"
+      url: "#faq"
+    - label: "Contact"
+      url: "#contact"
 render:
   cacheable: false

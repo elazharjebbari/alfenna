@@ -1,36 +1,44 @@
-"""Run all product_detail analytics checks."""
-from __future__ import annotations
-
 import importlib
-import pkgutil
 import time
+import traceback
+import pkgutil
 
-from apps.common.runscript_harness import binary_harness
+PKG = "apps.atelier.scripts.analytics.product_detail.tests_scripts"
 
 
-@binary_harness
+def _iter_tests():
+    pkg = importlib.import_module(PKG)
+    for info in pkgutil.iter_modules(pkg.__path__):
+        if info.name.startswith("test_"):
+            yield f"{PKG}.{info.name}"
+
+
 def run():
     started = time.time()
-    package = __name__.rsplit('.', 1)[0] + '.tests_scripts'
-    modules = importlib.import_module(package)
     results = []
-    for _, modname, _ in pkgutil.iter_modules(modules.__path__):
-        if not modname.startswith('test_'):
-            continue
-        module = importlib.import_module(f'{package}.{modname}')
-        if hasattr(module, 'run'):
-            print(f'→ Running {modname}')
-            res = module.run()
-            if not isinstance(res, dict):
-                res = {"ok": bool(res), "name": modname, "duration": 0.0, "logs": []}
+    for dotted in sorted(_iter_tests()):
+        try:
+            mod = importlib.import_module(dotted)
+            res = mod.run()
             results.append(res)
-    ok_tests = sum(1 for res in results if res.get('ok'))
+            status = "OK" if res.get("ok") else "FAIL"
+            print(f"[{status}] {res.get('name')} ({res.get('duration')}s) — {res.get('logs')}")
+        except Exception as exc:  # pragma: no cover — diagnostic path
+            tb = traceback.format_exc(limit=2)
+            print(f"[EXC] {dotted}: {exc}\n{tb}")
+            results.append({
+                "ok": False,
+                "name": dotted,
+                "duration": 0,
+                "logs": str(exc),
+            })
+    ok_count = sum(1 for item in results if item.get("ok"))
     total = len(results)
-    duration = time.time() - started
-    print(f'Terminé: {ok_tests}/{total} OK en {duration:.2f}s')
+    duration = round(time.time() - started, 3)
+    print(f"\nSummary: {ok_count}/{total} OK, total={duration}s")
     return {
-        "ok": ok_tests == total,
-        "name": "pd_run_all",
+        "ok": ok_count == total,
+        "name": "run_all",
         "duration": duration,
-        "logs": [f"{res.get('name')}: {'OK' if res.get('ok') else 'KO'}" for res in results],
+        "logs": "",
     }

@@ -20,7 +20,7 @@ from .models import AnalyticsEventRaw, ComponentStatDaily, HeatmapBucketDaily
 
 log = logging.getLogger("apps.atelier.analytics.tasks")
 
-_EVENT_TYPES = {"view", "click", "scroll", "heatmap"}
+_EVENT_TYPES = {"view", "click", "scroll", "heatmap", "conversion"}
 
 
 def _stable_hash(value: str | None) -> str:

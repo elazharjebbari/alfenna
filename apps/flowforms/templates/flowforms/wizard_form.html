@@ -7,8 +7,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-  <!-- Sentinel pour tests -->
-  <div id="flowforms-sentinel" style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
+  <!-- Sentinel enrichi pour instrumentation -->
+  <div id="flowforms-sentinel"
+       data-flow-key="{{ flow.key|default:'flowforms' }}"
+       data-step-key="{{ step.key|default:step.slug|default:'step' }}"
+       data-step-index="{{ progress.index|default:1 }}"
+       data-step-total="{{ progress.total|default:1 }}"
+       style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
 
   <main class="container" style="max-width:720px;margin:2rem auto;padding:0 1rem;">
     <header style="margin-bottom:1rem;">
@@ -25,5 +30,6 @@
       {% include "flowforms/fragments/_cta_bar.html" with ctas=step.ctas %}
     </form>
   </main>
+  <script src="{% static 'site/flowforms_tracking.js' %}" defer></script>
 </body>
 </html>

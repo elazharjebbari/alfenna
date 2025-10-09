@@ -6,8 +6,13 @@
   <title>FlowForms — {{ flow.key }} — {{ step.title|default:step.key }}</title>
 </head>
 <body>
-  <!-- Sentinel pour tests (non visible) -->
-  <div id="flowforms-sentinel" style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
+  <!-- Sentinel enrichi (non visible) -->
+  <div id="flowforms-sentinel"
+       data-flow-key="{{ flow.key|default:'flowforms' }}"
+       data-step-key="{{ step.key|default:step.slug|default:'step' }}"
+       data-step-index="{{ progress.index|default:1 }}"
+       data-step-total="{{ progress.total|default:1 }}"
+       style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
 
   <main class="container" style="max-width:680px;margin:2rem auto;">
     <h1>{{ step.title|default:step.key }}</h1>
@@ -17,5 +22,6 @@
       {% include "flowforms/fragments/_cta_bar.html" with ctas=step.ctas %}
     </form>
   </main>
+  <script src="{% static 'site/flowforms_tracking.js' %}" defer></script>
 </body>
 </html>

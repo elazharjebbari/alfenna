@@ -1,5 +1,10 @@
 {# templates/components/forms/wizard.html #}
-<div id="flowforms-sentinel" style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
+<div id="flowforms-sentinel"
+     data-flow-key="{{ flow_key|default:'flowforms_demo' }}"
+     data-step-key="{{ schema.steps.0.key|default:'step1' }}"
+     data-step-index="1"
+     data-step-total="{{ schema.steps|length|default:2 }}"
+     style="position:absolute;left:-9999px;top:-9999px;">FlowForms</div>
 
 <div data-ff-root id="ff-root" class="ff-shell">
   <header class="ff-header">
@@ -9,7 +14,7 @@
   </header>
 
   <!-- Étape 1 -->
-  <section data-ff-step="1" class="ff-step">
+  <section data-ff-step="1" data-ff-step-key="{{ schema.steps.0.key|default:'step1' }}" class="ff-step">
     <label class="ff-label">Email</label>
     <input type="email" class="ff-input" data-ff-field="email" placeholder="vous@exemple.com" />
     <div class="ff-actions">
@@ -18,7 +23,7 @@
   </section>
 
   <!-- Étape 2 -->
-  <section data-ff-step="2" class="ff-step d-none">
+  <section data-ff-step="2" data-ff-step-key="{{ schema.steps.1.key|default:'step2' }}" class="ff-step d-none">
     <label class="ff-label">Prénom (optionnel)</label>
     <input type="text" class="ff-input" data-ff-field="first_name" placeholder="Prénom" />
 
@@ -39,7 +44,7 @@
   </section>
 
   <!-- Étape finale normalisée -->
-  <section data-ff-step="done" class="ff-step d-none" aria-live="polite">
+  <section data-ff-step="done" data-ff-step-key="done" class="ff-step d-none" aria-live="polite">
     <h2>Merci !</h2>
     <p>Votre demande a bien été enregistrée.</p>
   </section>

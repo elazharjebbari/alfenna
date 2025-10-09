@@ -86,7 +86,10 @@ def build_shell_context(request, *, flow_key: Optional[str], overrides: Optional
     assets = {
         "head": [],
         "css": [],
-        "js": ["/static/js/flowforms.runtime.js"],
+        "js": [
+            "/static/js/flowforms.runtime.js",
+            "/static/site/flowforms_tracking.js",
+        ],
         "vendors": [],
     }
 

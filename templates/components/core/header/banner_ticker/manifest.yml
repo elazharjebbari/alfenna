@@ -1,0 +1,49 @@
+alias: "core/header/banner_ticker"
+template: "components/core/header/banner_ticker/banner_ticker.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/core/header/banner_ticker.css"
+  js: []
+  vendors: []
+
+params:
+  enabled: true
+  colors:
+    from: "#2c6a57"
+    to: "#1f4f42"
+  speed_ms: 10000
+  pattern:
+    url: "images/patterns/alfenna/alfenna_dots_v1.svg"
+    size: 40
+    opacity: 0.16
+  messages: []
+
+contract:
+  required:
+    enabled: "bool"
+  optional:
+    colors:
+      from?: "str"
+      to?: "str"
+    speed_ms: "int"
+    pattern:
+      url?: "str"
+      size?: "int"
+      opacity?: "float"
+    messages:
+      - text: "str"
+        icon?:
+          kind?: "str"
+          value?: "str"
+          color?: "str"
+          bg?: "str"
+          outline?: "str"
+        badge?: "str"
+
+hydrate:
+  passthrough: true
+
+render:
+  cacheable: false

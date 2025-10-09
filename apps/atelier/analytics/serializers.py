@@ -7,7 +7,7 @@ from django.utils import timezone
 from rest_framework import serializers
 import json
 
-_VALID_EVENT_TYPES = ("view", "click", "scroll", "heatmap")
+_VALID_EVENT_TYPES = ("view", "click", "scroll", "heatmap", "conversion")
 _MAX_PAYLOAD_BYTES = 2048
 _MAX_EVENTS_PER_BATCH = 50
 
@@ -55,6 +55,10 @@ class EventItemSerializer(serializers.Serializer):
                     raise serializers.ValidationError({"payload": f"{coord} must be a number."})
                 if as_float < 0 or as_float > 1:
                     raise serializers.ValidationError({"payload": f"{coord} must be between 0 and 1."})
+        if event_type == "conversion":
+            ev = payload.get("ev")
+            if not ev or not isinstance(ev, str):
+                raise serializers.ValidationError({"payload": "ev is required for conversion events."})
         if not attrs.get("ts"):
             attrs["ts"] = timezone.now()
         return attrs

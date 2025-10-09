@@ -7,6 +7,7 @@ assets:
     - "/static/components/forms/lead_step3.css"
   js:
     - "/static/js/flowforms.runtime.js"  # runtime fourni par le parent → unique dans la page
+    - "/static/site/flowforms_tracking.js"
   vendors: []
 
 params:

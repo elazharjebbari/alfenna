@@ -121,6 +121,45 @@
 
   LL.flush = flush;
 
+  (function () {
+    function mirrorToDataLayer(evt) {
+      try {
+        const dl = window.dataLayer = window.dataLayer || [];
+        const payload = evt.payload || {};
+        const eventNameRaw = evt.event_type === "conversion"
+          ? (payload.ev || payload.event || "")
+          : `ll_${evt.event_type}`;
+        const flat = Object.assign(
+          {
+            event: eventNameRaw || "ll_event",
+            ll_event_type: evt.event_type,
+            ll_page_id: evt.page_id || "",
+            ll_slot_id: evt.slot_id || "",
+            ll_component_alias: evt.component_alias || "",
+          },
+          payload,
+        );
+        dl.push(flat);
+      } catch (err) {}
+    }
+
+    const originalEmit = LL.emit;
+    LL.emit = function emit(type, el, payload) {
+      const result = originalEmit.call(LL, type, el, payload);
+      try {
+        const contextBase = ctx(el || document.body);
+        mirrorToDataLayer({
+          event_type: type,
+          page_id: contextBase.page_id,
+          slot_id: contextBase.slot_id,
+          component_alias: contextBase.component_alias,
+          payload: payload || {},
+        });
+      } catch (err) {}
+      return result;
+    };
+  })();
+
   function bootViews() {
     const targets = document.querySelectorAll("[data-ll-slot-id]");
     if (!("IntersectionObserver" in window)) {
