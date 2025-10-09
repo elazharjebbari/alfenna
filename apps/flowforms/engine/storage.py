@@ -1,13 +1,14 @@
 # apps/flowforms/engine/storage.py
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any, Optional, Tuple, List
 
 from django.db import transaction
 from django.utils import timezone
 
 from apps.leads.models import Lead
 from apps.leads.constants import LeadStatus
+from apps.leads.submissions import _ALLOWED_LEAD_FIELDS as ALLOWED_LEAD_FIELDS
 from apps.flowforms.models import FlowSession, FlowStatus
 
 DEFAULT_LOOKUP_FIELDS = ("email", "phone", "course_slug")
@@ -75,6 +76,66 @@ def get_or_create_session(request, ctx: FlowContext) -> FlowSession:
     return fs
 
 @transaction.atomic
+def _is_empty(value: Any) -> bool:
+    if value is None:
+        return True
+    if isinstance(value, str):
+        return value.strip() == ""
+    if isinstance(value, (list, tuple, set, dict)):
+        return len(value) == 0
+    return False
+
+
+def _merge_lead_progressively(lead: Lead, cleaned_data: Dict[str, Any]) -> None:
+    if not lead:
+        return
+
+    updated_fields: List[str] = []
+
+    for field in ALLOWED_LEAD_FIELDS:
+        if field not in cleaned_data:
+            continue
+        value = cleaned_data[field]
+        if _is_empty(value):
+            continue
+        if isinstance(value, str):
+            value = value.strip()
+        if getattr(lead, field, None) != value:
+            setattr(lead, field, value)
+            updated_fields.append(field)
+
+    if "email" in updated_fields:
+        normalised = (lead.email or "").strip().lower()
+        if lead.email != normalised:
+            lead.email = normalised
+    if "phone" in updated_fields:
+        normalised_phone = (lead.phone or "").strip()
+        if lead.phone != normalised_phone:
+            lead.phone = normalised_phone
+
+    context_payload = dict(lead.context or {})
+    context_changed = False
+    for key, value in cleaned_data.items():
+        if not isinstance(key, str) or not key.startswith("context."):
+            continue
+        sub_key = key.split(".", 1)[1].strip()
+        if not sub_key or _is_empty(value):
+            continue
+        if context_payload.get(sub_key) != value:
+            context_payload[sub_key] = value
+            context_changed = True
+
+    if context_changed:
+        lead.context = context_payload
+        updated_fields.append("context")
+
+    if updated_fields:
+        update_fields = list(dict.fromkeys(updated_fields))
+        if "updated_at" not in update_fields:
+            update_fields.append("updated_at")
+        lead.save(update_fields=update_fields)
+
+
 def persist_step(
     *,
     flowsession: FlowSession,
@@ -117,5 +178,7 @@ def persist_step(
     flowsession.status = FlowStatus.ACTIVE
     flowsession.last_touch_at = timezone.now()
     flowsession.save(update_fields=["current_step", "data_snapshot", "status", "last_touch_at", "updated_at", "lead"])
+
+    _merge_lead_progressively(lead, cleaned_data)
 
     return lead, flowsession
