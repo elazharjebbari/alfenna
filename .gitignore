@@ -1,0 +1,105 @@
+# =======================
+# Django / Python
+# =======================
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+.eggs/
+*.sqlite3
+db.sqlite3
+
+# =======================
+# Virtualenv / Poetry / Pipenv
+# =======================
+.env
+.venv
+venv/
+ENV/
+env/
+pip-log.txt
+pip-delete-this-directory.txt
+poetry.lock
+
+# =======================
+# Django specific
+# =======================
+/migrations/
+/staticfiles/
+/media/
+/collected_static/
+/*.log
+*.pot
+*.py[cod]
+*.mo
+
+# =======================
+# Environnements / secrets
+# =======================
+*.env
+*.local
+*.secret
+*.bak
+
+# =======================
+# IDE / Éditeurs
+# =======================
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# =======================
+# Data
+# =======================
+.xlsx
+.xls
+.csv
+# =======================
+# OS files
+# =======================
+.DS_Store
+Thumbs.db
+
+# =======================
+# Archives / Assets lourds
+# =======================
+*.mp4
+*.mp3
+*.zip
+*.rar
+*.gz
+*.7z
+*.tar
+*.stamp
+*.bak
+
+# =======================
+# Docs
+# =======================
+*.md
+*.rst
+build/
+dist/
+docs/_build/
+
+# =======================
+# Tests / Coverage
+# =======================
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+__pycache__/
+*.py[cod]
+*$py.class
+
+/logs/
+/staticfiles/
+/node_modules
+

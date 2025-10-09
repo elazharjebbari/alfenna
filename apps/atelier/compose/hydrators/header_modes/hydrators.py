@@ -156,6 +156,46 @@ def _build_urls(params: dict) -> Dict[str, str]:
         "cta": cta_url,
     }
 
+
+def _default_menu(urls: Dict[str, str]) -> List[Dict[str, str]]:
+    return [
+        {"label": "Accueil", "url": urls["home"]},
+        {"label": "Nos Formations", "url": urls["packs"]},
+        {"label": "FAQ", "url": urls["faq"]},
+        {"label": "Contact", "url": urls["contact"]},
+    ]
+
+
+def _menu_from_params(raw_menu: Any, urls: Dict[str, str], fallback: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    items: List[Dict[str, str]] = []
+    if isinstance(raw_menu, list):
+        for entry in raw_menu:
+            if not isinstance(entry, dict):
+                continue
+            label = str(entry.get("label") or "").strip()
+            if not label:
+                continue
+            url = str(entry.get("url") or "").strip()
+            if not url:
+                url_name = str(entry.get("url_name") or "").strip()
+                if url_name:
+                    kwargs_raw = entry.get("url_kwargs") if isinstance(entry.get("url_kwargs"), dict) else {}
+                    kwargs_clean = {str(k): v for k, v in (kwargs_raw or {}).items()}
+                    url = _safe_rev(url_name, kwargs=kwargs_clean or None, default="")
+            if not url:
+                key = str(entry.get("key") or "").strip().lower()
+                if key:
+                    url = urls.get(key, "")
+            if not url:
+                continue
+            icon = str(entry.get("icon") or "").strip()
+            item = {"label": label, "url": url}
+            if icon:
+                item["icon"] = icon
+            items.append(item)
+    return items or fallback
+
+
 def _rating_badge_text(params: dict) -> str:
     return (params.get("rating_badge_text") or "★ 4,8 / 5 • 500+").strip()
 
@@ -190,12 +230,8 @@ def modes_main(request: HttpRequest, params: dict) -> Dict[str, Any]:
     urls = _build_urls(params)
 
     # Menus dérivés du mode
-    menu_common = [
-        {"label": "Accueil",         "url": urls["home"]},
-        {"label": "Nos Formations", "url": urls["packs"]},
-        {"label": "FAQ",            "url": urls["faq"]},
-        {"label": "Contact",        "url": urls["contact"]},
-    ]
+    default_menu = _default_menu(urls)
+    menu_common = _menu_from_params(params.get("menu"), urls, default_menu)
 
     username = ""
     user = getattr(request, "user", None)
@@ -226,12 +262,9 @@ def modes_mobile(request: HttpRequest, params: dict) -> Dict[str, Any]:
     contact = params.get("contact") or {}
     socials = [s for s in (params.get("socials") or []) if isinstance(s, dict) and s.get("url")]
 
-    menu_common = [
-        {"label": "Accueil",         "url": urls["home"]},
-        {"label": "Nos Formations", "url": urls["packs"]},
-        {"label": "FAQ",            "url": urls["faq"]},
-        {"label": "Contact",        "url": urls["contact"]},
-    ]
+    default_menu = _default_menu(urls)
+    raw_mobile_menu = params.get("menu_mobile") or params.get("menu")
+    menu_common = _menu_from_params(raw_mobile_menu, urls, default_menu)
 
     username = ""
     user = getattr(request, "user", None)

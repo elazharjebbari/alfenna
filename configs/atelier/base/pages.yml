@@ -219,6 +219,16 @@ pages:
         component: "sticky/buybar_v2"
       faq:
         component: "faq/main"
+      fab_whatsapp:
+        component: "fab/whatsapp"
+        params:
+          label: "Besoin d’aide ?"
+          icon_mode: "vendor"
+          icon_vendor: "icofont-whatsapp"
+          offset_bottom: 18
+          offset_right: 16
+          phone_tel: "+212719646705"
+          prefill_text: "Bonjour, j’ai une question sur le pack Alfenna."
       footer:
         component: "footer/main"
       chatbot:
