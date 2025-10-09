@@ -7,6 +7,10 @@ flows:
       - key: step1
         title: "Vos coordonnées"
         fields:
+          - name: full_name
+            type: text
+            required: true
+            label: "Nom complet"
           - name: email
             type: email
             required: true
@@ -15,16 +19,60 @@ flows:
           - name: phone
             type: phone
             required: false
+          - name: address_line1
+            type: text
+            required: true
+            label: "Adresse de livraison"
+          - name: address_line2
+            type: text
+            required: false
+            label: "Complément d’adresse"
+          - name: city
+            type: text
+            required: true
+            label: "Ville"
+          - name: state
+            type: text
+            required: false
+            label: "Région"
+          - name: postal_code
+            type: text
+            required: true
+            label: "Code postal"
+          - name: country
+            type: select
+            required: true
+            label: "Pays"
+            choices: ["MA", "FR", "ES", "BE", "CH", "CA"]
         ctas:
           - action: next
             label: "Continuer"
       - key: step2
         title: "Infos complémentaires"
         fields:
-          - name: full_name
+          - name: pack_slug
+            type: select
+            required: true
+            label: "Votre pack"
+          - name: context.complementary_slugs
             type: text
             required: false
-            label: "Nom complet"
+            label: "Compléments"
+        ctas:
+          - action: next
+            label: "Continuer"
+      - key: step3
+        title: "Paiement"
+        fields:
+          - name: payment_mode
+            type: select
+            required: true
+            label: "Mode de paiement"
+          - name: email
+            type: email
+            required: false
+            label: "Confirmation e-mail"
+            validators: ["email"]
         ctas:
           - action: submit
             label: "Valider"
