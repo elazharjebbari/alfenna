@@ -372,7 +372,7 @@ CELERY_TASK_ALWAYS_EAGER = False  # True en dev si tu veux exécuter inline
 CELERY_TASK_TIME_LIMIT = 60
 CELERY_TASK_SOFT_TIME_LIMIT = 45
 CELERY_TASK_ACKS_LATE = True
-CELERY_TASK_DEFAULT_QUEUE = "default"
+CELERY_TASK_DEFAULT_QUEUE = "default_alfenna"
 CELERY_TASK_QUEUES = {
     "default": {},
     "leads": {},
