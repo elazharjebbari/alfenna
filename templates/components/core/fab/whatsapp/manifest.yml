@@ -13,7 +13,7 @@ params:
   icon_mode: "vendor"
   icon_vendor: "icofont-whatsapp"
   icon_svg: ""
-    offset_bottom: 130
+  offset_bottom: 130
   offset_right: 16
   phone_tel: "+212719646705"
   prefill_text: "Bonjour, je souhaite commander le pack Alfenna."
