@@ -1,4 +1,4 @@
 sudo certbot certonly --webroot \
   -w /var/www/_acme-challenge \
-  -d lumiereacademy.com -d www.lumiereacademy.com \
-  --agree-tos -m partenariat@lumiereacademy.com --no-eff-email -v
+  -d alfenna.com -d www.alfenna.com \
+  --agree-tos -m partenariat@alfenna.com --no-eff-email -v
