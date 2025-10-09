@@ -4,15 +4,5 @@ window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({{ tracking.datalayer|default:"{}"|safe }});
 </script>
 
-{% if tracking.consent %}
-  {# GTM HEAD #}
-  {% if tracking.GTM_ID %}
-    {% include "analytics/google_tag_manager/head.html" %}
-  {% endif %}
-  {# GA4 head additionnel si besoin (si non géré via GTM) #}
-  {% if tracking.GA4_ID and not tracking.GTM_ID %}
-    {% include "analytics/google_analytics/head.html" %}
-  {% endif %}
-  {# Meta Pixel / TikTok peuvent aussi être injectés ici si pas dans GTM #}
-  {# placeholders : à activer/brancher selon ta politique #}
-{% endif %}
+  {% include "analytics/google_tag_manager/head.html" %}
+
