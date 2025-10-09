@@ -49,7 +49,7 @@ def _int_env(name: str, default: int) -> int:
 SECRET_KEY = os.getenv('SECRET_KEY', 'CHANGE_ME_DEV_ONLY')
 DEBUG = False  # Par défaut: sécurisé. Dev.py le passera à True.
 
-ALLOWED_HOSTS: list[str] = ["alfenna.com", "lumiereacademy.com"]
+ALLOWED_HOSTS: list[str] = ["alfenna.com"]
 CSRF_TRUSTED_ORIGINS = ["https://alfenna.com"]
 # --------------------------------------------------------------------------------------
 # Apps
@@ -348,12 +348,12 @@ ANALYTICS_ENABLED = True
 
 
 # --- Cache Redis (obligatoire pour throttle & idem) ---
-REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/3")
+REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/4")
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/3",
+        "LOCATION": "redis://127.0.0.1:6379/4",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             # "PARSER_CLASS": "redis.connection.HiredisParser",  # ← SUPPRIMER
@@ -366,8 +366,8 @@ CACHES = {
 }
 
 # --- Celery ---
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/3")
-CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/3")
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/4")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/4")
 CELERY_TASK_ALWAYS_EAGER = False  # True en dev si tu veux exécuter inline
 CELERY_TASK_TIME_LIMIT = 60
 CELERY_TASK_SOFT_TIME_LIMIT = 45

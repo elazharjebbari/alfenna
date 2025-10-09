@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [SITE_DOMAIN, "127.0.0.1", 'testserver'] +  ALIASES
 CSRF_TRUSTED_ORIGINS =  (
     [f"https://{SITE_DOMAIN}"] +
     [f"https://{h}" for h in ALIASES] +
-    ["http://localhost:8000", "http://127.0.0.1:8000", "http://127.0.0.1:8003", "http://127.0.0.1:9013"]
+    ["http://localhost:8000"]
 )
 
 # DB: refuse sqlite en prod
@@ -48,9 +48,9 @@ LOGGING['loggers']['django.request']['level'] = 'ERROR'
 
 CORS_ALLOWED_ORIGINS = [
     # ajoute tes domaines front ici
-    "http://localhost:8003",
-    "http://127.0.0.1:8003",
-    "http://127.0.0.1:9013",
+    "http://localhost:8004",
+    "http://127.0.0.1:8004",
+    "http://127.0.0.1:9014",
 ]
 
 CORS_ALLOW_CREDENTIALS = True

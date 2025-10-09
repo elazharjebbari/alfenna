@@ -9,7 +9,7 @@ ALLOWED_HOSTS = ['127.0.0.1',
                  'localhost',
                  'testserver',
                  ".ngrok.io", ".ngrok-free.app",  # ngrok v2/v3
-                 "alfenna.com", "lumiereacademy.com", 'testserver'
+                 "alfenna.com", 'testserver'
                  ]
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1:8000', 'http://localhost:8000',
