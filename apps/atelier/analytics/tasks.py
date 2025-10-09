@@ -109,13 +109,18 @@ def persist_raw(events: List[Dict], meta: Dict | None = None) -> int:
     return len(normalized)
 
 
-def _component_aggregates_queryset(qs):
+def _component_aggregates_queryset(day: date, page_id: str, site_version: str):
+    base_qs = AnalyticsEventRaw.objects.filter(
+        ts__date=day,
+        page_id=page_id,
+        site_version=site_version,
+    )
     scroll_value = Cast(
         KeyTextTransform("scroll_pct", "payload"),
         FloatField(),
     )
 
-    return qs.values("slot_id", "component_alias").annotate(
+    return base_qs.values("slot_id", "component_alias").annotate(
         impressions=Count("id", filter=Q(event_type="view")),
         clicks=Count("id", filter=Q(event_type="click")),
         avg_scroll_pct=Avg(
@@ -128,7 +133,7 @@ def _component_aggregates_queryset(qs):
 
 
 def _update_component_daily(day: date, page_id: str, site_version: str, qs) -> None:
-    aggregates = list(_component_aggregates_queryset(qs))
+    aggregates = list(_component_aggregates_queryset(day, page_id, site_version))
 
     visitor_map: Dict[Tuple[str, str], set[str]] = defaultdict(set)
     visitor_rows = qs.values("slot_id", "component_alias", "ua_hash", "ip_hash")

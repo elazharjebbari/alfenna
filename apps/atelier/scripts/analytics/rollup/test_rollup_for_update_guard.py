@@ -43,12 +43,11 @@ def run():  # pragma: no cover - executed via runscript
     ]
     AnalyticsEventRaw.objects.bulk_create(events, ignore_conflicts=True)
 
-    qs = AnalyticsEventRaw.objects.filter(
-        ts__date=now.date(),
-        page_id=page_id,
-        site_version=SITE_VERSION,
+    sql = str(
+        _component_aggregates_queryset(
+            day=now.date(), page_id=page_id, site_version=SITE_VERSION
+        ).query
     )
-    sql = str(_component_aggregates_queryset(qs).query)
     upper_sql = sql.upper()
     has_group_by = "GROUP BY" in upper_sql
     has_for_update = "FOR UPDATE" in upper_sql
