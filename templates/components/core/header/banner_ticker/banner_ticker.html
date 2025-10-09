@@ -1,0 +1,75 @@
+{% load static i18n %}
+{% if enabled and messages %}
+<div class="af-topbar"
+     style="--af-grad-a: {{ colors.from|default:'#2c6a57' }};
+            --af-grad-b: {{ colors.to|default:'#1f4f42' }};
+            --af-speed: {{ speed_ms|default:10000 }}ms;
+            --af-pattern-url: url('{% static pattern.url|default:"images/patterns/alfenna/alfenna_dots_v1.svg" %}');
+            --af-pattern-size: {{ pattern.size|default:40 }}px;
+            --af-pattern-opacity: {{ pattern.opacity|default:"0.16" }};">
+  <div class="af-topbar-inner">
+    <div class="af-ticker" role="marquee" aria-live="polite">
+      <div class="af-track">
+        <ul class="af-list">
+          {% for m in messages %}
+            {% if m.text %}
+            <li class="af-item">
+              {% with icon=m.icon %}
+                {% if icon %}
+                  {% with bg=icon.bg outline=icon.outline color=icon.color %}
+                    <span class="af-ico"{% if bg or outline or color %} style="{% if bg %}--af-ico-bg: {{ bg }};{% endif %}{% if outline %}--af-ico-outline: {{ outline }};{% endif %}{% if color %}--af-ico-color: {{ color }}; color: {{ color }};{% endif %}"{% endif %}>
+                      {% if icon.kind == 'svg' %}
+                        <img src="{% static icon.value %}" alt="" width="16" height="16" loading="lazy">
+                      {% elif icon.kind == 'fa' %}
+                        <i class="{{ icon.value }}" aria-hidden="true"></i>
+                      {% elif icon.kind == 'icofont' %}
+                        <i class="icofont {{ icon.value }}" aria-hidden="true"></i>
+                      {% elif icon.kind == 'flaticon' %}
+                        <i class="{{ icon.value }}" aria-hidden="true"></i>
+                      {% endif %}
+                    </span>
+                  {% endwith %}
+                {% endif %}
+              {% endwith %}
+              <span class="af-text">{{ m.text_html|default:m.text|safe }}</span>
+              {% if m.badge %}
+              <span class="af-badge">{{ m.badge }}</span>
+              {% endif %}
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <ul class="af-list" aria-hidden="true">
+          {% for m in messages %}
+            {% if m.text %}
+            <li class="af-item">
+              {% with icon=m.icon %}
+                {% if icon %}
+                  {% with bg=icon.bg outline=icon.outline color=icon.color %}
+                    <span class="af-ico"{% if bg or outline or color %} style="{% if bg %}--af-ico-bg: {{ bg }};{% endif %}{% if outline %}--af-ico-outline: {{ outline }};{% endif %}{% if color %}--af-ico-color: {{ color }}; color: {{ color }};{% endif %}"{% endif %}>
+                      {% if icon.kind == 'svg' %}
+                        <img src="{% static icon.value %}" alt="" width="16" height="16" loading="lazy">
+                      {% elif icon.kind == 'fa' %}
+                        <i class="{{ icon.value }}" aria-hidden="true"></i>
+                      {% elif icon.kind == 'icofont' %}
+                        <i class="icofont {{ icon.value }}" aria-hidden="true"></i>
+                      {% elif icon.kind == 'flaticon' %}
+                        <i class="{{ icon.value }}" aria-hidden="true"></i>
+                      {% endif %}
+                    </span>
+                  {% endwith %}
+                {% endif %}
+              {% endwith %}
+              <span class="af-text">{{ m.text_html|default:m.text|safe }}</span>
+              {% if m.badge %}
+              <span class="af-badge">{{ m.badge }}</span>
+              {% endif %}
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

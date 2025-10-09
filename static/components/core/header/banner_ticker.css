@@ -1,0 +1,131 @@
+/* AlFenna header banner ticker */
+.af-topbar {
+  background: linear-gradient(90deg, var(--af-grad-a, #2c6a57), var(--af-grad-b, #1f4f42));
+  color: #fff;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+html[dir='rtl'] .af-topbar {
+  background: linear-gradient(90deg, var(--af-grad-b, #1f4f42), var(--af-grad-a, #2c6a57));
+}
+.af-topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--af-pattern-url, url('/static/images/patterns/alfenna/alfenna_dots_v1.svg'));
+  background-repeat: repeat;
+  background-size: var(--af-pattern-size, 40px) var(--af-pattern-size, 40px);
+  background-position: 0 50%;
+  opacity: clamp(0, var(--af-pattern-opacity, 0.16), 1);
+  pointer-events: none;
+  z-index: 0;
+}
+.af-topbar-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: clamp(6px, 0.6vw, 10px) clamp(10px, 1.2vw, 18px);
+  overflow: hidden;
+}
+.af-ticker {
+  display: block;
+  user-select: none;
+}
+.af-track {
+  display: flex;
+  gap: 2.25rem;
+  will-change: transform;
+  animation: af-marquee var(--af-speed, 10000ms) linear infinite;
+}
+.af-topbar:hover .af-track,
+.af-topbar:focus-within .af-track {
+  animation-play-state: paused;
+}
+html[dir="rtl"] .af-track {
+  animation-direction: reverse;
+}
+@media (prefers-reduced-motion: reduce) {
+  .af-track {
+    animation: none;
+  }
+}
+@keyframes af-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+.af-list {
+  display: flex;
+  gap: 2.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.af-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: clamp(13px, 0.95vw, 16px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+  white-space: nowrap;
+}
+.af-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.af-ico {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: var(--af-ico-bg, rgba(255, 255, 255, 0.18));
+  outline: 1px solid var(--af-ico-outline, rgba(255, 255, 255, 0.22));
+  color: var(--af-ico-color, #ffffff);
+}
+.af-ico i {
+  font-size: 0.95em;
+  line-height: 1;
+  color: inherit;
+}
+.af-ico img {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
+.af-date {
+  position: relative;
+  font-weight: 800;
+  color: inherit;
+  text-transform: none;
+}
+.af-date::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.2em;
+  width: 100%;
+  height: 0.2em;
+  background: currentColor;
+  opacity: 0.4;
+  border-radius: 999px;
+}
+.af-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 0.9em;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
