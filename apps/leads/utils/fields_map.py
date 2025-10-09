@@ -34,7 +34,14 @@ _KEY_ALIASES = {
     "address_raw": "address_line1",
 }
 
-_VALUE_ALIASES = {}
+_VALUE_ALIASES = {
+    "phone_number": "phone",
+    "phoneNumber": "phone",
+    "address": "address_line1",
+    "address_raw": "address_line1",
+    "payment_mode": "payment_method",
+    "paymentMethod": "payment_method",
+}
 
 
 def _normalise_key(key: str) -> str:
