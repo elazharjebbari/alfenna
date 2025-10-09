@@ -1,22 +1,22 @@
 {% load static i18n safeget %}
 {% url 'leads:collect' as leads_collect_url %}
 {% url 'leads:sign' as leads_sign_url %}
-{% with fullname_key=fields_map|safeget:'fullname'|default:'full_name' phone_key=fields_map|safeget:'phone'|default:fields_map|safeget:'phone_number'|default:'phone' email_key=fields_map|safeget:'email'|default:'email' address_line1_key=fields_map|safeget:'address_line1'|default:fields_map|safeget:'address'|default:'address_line1' address_line2_key=fields_map|safeget:'address_line2'|default:'address_line2' city_key=fields_map|safeget:'city'|default:'city' state_key=fields_map|safeget:'state'|default:'state' postal_code_key=fields_map|safeget:'postal_code'|default:'postal_code' country_key=fields_map|safeget:'country'|default:'country' quantity_key=fields_map|safeget:'quantity'|default:'quantity' offer_key=fields_map|safeget:'offer'|default:'offer_key' pack_slug_key=fields_map|safeget:'pack_slug'|default:'pack_slug' product_key=fields_map|safeget:'product'|default:'product' promotion_key=fields_map|safeget:'promotion'|default:'promotion_selected' payment_mode_key=fields_map|safeget:'payment_mode'|default:fields_map|safeget:'payment_method'|default:'payment_method' payment_method_key=fields_map|safeget:'payment_method'|default:fields_map|safeget:'payment_mode'|default:'payment_method' bump_key=fields_map|safeget:'bump'|default:'bump_optin' wa_key=fields_map|safeget:'wa_optin'|default:'wa_optin' flow_key=form.flow_key|default:'checkout_intent_flow' ui_texts=form.ui_texts %}
+{% with fm=fields_map %}
 {% with action_target=action_url|default:leads_collect_url %}
 
 <form id="form-stepper" class="c-lead-form c-lead-form--stepper af-form card border-0 shadow-sm"
       data-ff-root data-steps="4" method="post" action=""
       data-action-url="{{ action_target }}"
       data-require-signed="true" data-sign-url="{{ leads_sign_url }}"
-      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","email":"{{ email_key }}","address_line1":"{{ address_line1_key }}","address_line2":"{{ address_line2_key }}","city":"{{ city_key }}","state":"{{ state_key }}","postal_code":"{{ postal_code_key }}","country":"{{ country_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","pack_slug":"{{ pack_slug_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}","payment_mode":"{{ payment_mode_key }}","payment_method":"{{ payment_method_key }}","bump":"{{ bump_key }}","wa_optin":"{{ wa_key }}","context.complementary_slugs":"context.complementary_slugs"}'
+      data-fields-map='{"fullname":"{{ fm|safeget:'fullname'|default:'full_name' }}","phone":"{{ fm|safeget:'phone'|default:'phone' }}","email":"{{ fm|safeget:'email'|default:'email' }}","address_line1":"{{ fm|safeget:'address_line1'|default:'address_line1' }}","address_line2":"{{ fm|safeget:'address_line2'|default:'address_line2' }}","city":"{{ fm|safeget:'city'|default:'city' }}","state":"{{ fm|safeget:'state'|default:'state' }}","postal_code":"{{ fm|safeget:'postal_code'|default:'postal_code' }}","country":"{{ fm|safeget:'country'|default:'country' }}","quantity":"{{ fm|safeget:'quantity'|default:'quantity' }}","offer":"{{ fm|safeget:'offer'|default:'offer_key' }}","pack_slug":"{{ fm|safeget:'pack_slug'|default:'pack_slug' }}","product":"{{ fm|safeget:'product'|default:'product' }}","promotion":"{{ fm|safeget:'promotion'|default:'promotion_selected' }}","payment_mode":"{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}","payment_method":"{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}","bump":"{{ fm|safeget:'bump'|default:'bump_optin' }}","wa_optin":"{{ fm|safeget:'wa_optin'|default:'wa_optin' }}","context.complementary_slugs":"context.complementary_slugs"}'
       data-checkout-url="/api/checkout/sessions/"
       novalidate>
     {% csrf_token %}
-    <input type="hidden" name="{{ product_key }}" value="{{ product.id|default:product.slug }}" data-ff-product>
+    <input type="hidden" name="{{ fm|safeget:'product'|default:'product' }}" value="{{ product.id|default:product.slug }}" data-ff-product>
     <input type="hidden" name="ff_session_key" value="" data-ff-session-key>
-    <input type="hidden" name="ff_flow_key" value="{{ flow_key }}" data-ff-flow-key>
-    <input type="hidden" name="{{ promotion_key }}" value="" data-ff-promo>
-    <input type="hidden" name="{{ quantity_key }}" value="1" data-ff-quantity-default>
+    <input type="hidden" name="ff_flow_key" value="{{ form.flow_key|default:'checkout_intent_flow' }}" data-ff-flow-key>
+    <input type="hidden" name="{{ fm|safeget:'promotion'|default:'promotion_selected' }}" value="" data-ff-promo>
+    <input type="hidden" name="{{ fm|safeget:'quantity'|default:'quantity' }}" value="1" data-ff-quantity-default>
 
     <div class="af-shell">
 
@@ -89,7 +89,7 @@
                 <div>
                     <label class="af-label" for="ff-fullname">{% trans "Nom complet" %}</label>
                     <input id="ff-fullname" class="form-control" type="text"
-                           name="{{ fullname_key }}" autocomplete="name" required
+                           name="{{ fm|safeget:'fullname'|default:'full_name' }}" autocomplete="name" required
                            placeholder="{% trans 'Ex. Salma Benali' %}">
                 </div>
 
@@ -98,7 +98,7 @@
                     <div class="input-group">
                         <span class="input-group-text">+212 / 06</span>
                         <input id="ff-phone" type="tel" class="form-control"
-                               name="{{ phone_key }}" inputmode="tel" autocomplete="tel"
+                               name="{{ fm|safeget:'phone'|default:'phone' }}" inputmode="tel" autocomplete="tel"
                                minlength="6" maxlength="20" required
                                placeholder="{% trans 'WhatsApp ou mobile actif' %}">
                     </div>
@@ -108,7 +108,7 @@
                 <div>
                     <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>
                     <input id="ff-email-step1" type="email" class="form-control"
-                           name="{{ email_key }}" autocomplete="email" required
+                           name="{{ fm|safeget:'email'|default:'email' }}" autocomplete="email" required
                            data-ff-email-primary
                            placeholder="{% trans 'Ex. salma@example.com' %}">
                 </div>
@@ -116,14 +116,14 @@
                 <div>
                     <label class="af-label" for="ff-address-line1">{% trans "Adresse de livraison" %}</label>
                     <input id="ff-address-line1" class="form-control" type="text"
-                           name="{{ address_line1_key }}" autocomplete="address-line1" required
+                           name="{{ fm|safeget:'address_line1'|default:'address_line1' }}" autocomplete="address-line1" required
                            placeholder="{% trans 'Rue, quartier' %}">
                 </div>
 
                 <div>
                     <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>
                     <input id="ff-address-line2" class="form-control" type="text"
-                           name="{{ address_line2_key }}" autocomplete="address-line2"
+                           name="{{ fm|safeget:'address_line2'|default:'address_line2' }}" autocomplete="address-line2"
                            placeholder="{% trans 'Appartement, étage, référence' %}">
                 </div>
 
@@ -131,13 +131,13 @@
                     <div class="col-md-6">
                         <label class="af-label" for="ff-city">{% trans "Ville" %}</label>
                         <input id="ff-city" class="form-control" type="text"
-                               name="{{ city_key }}" autocomplete="address-level2" required
+                               name="{{ fm|safeget:'city'|default:'city' }}" autocomplete="address-level2" required
                                placeholder="{% trans 'Ex. Casablanca' %}">
                     </div>
                     <div class="col-md-6">
                         <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>
                         <input id="ff-state" class="form-control" type="text"
-                               name="{{ state_key }}" autocomplete="address-level1"
+                               name="{{ fm|safeget:'state'|default:'state' }}" autocomplete="address-level1"
                                placeholder="{% trans 'Ex. Casablanca-Settat' %}">
                     </div>
                 </div>
@@ -146,13 +146,13 @@
                     <div class="col-md-6">
                         <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>
                         <input id="ff-postal" class="form-control" type="text"
-                               name="{{ postal_code_key }}" autocomplete="postal-code" required
+                               name="{{ fm|safeget:'postal_code'|default:'postal_code' }}" autocomplete="postal-code" required
                                placeholder="20000">
                     </div>
                     <div class="col-md-6">
                         <label class="af-label" for="ff-country">{% trans "Pays" %}</label>
                         <select id="ff-country" class="form-select"
-                                name="{{ country_key }}" autocomplete="country" required>
+                                name="{{ fm|safeget:'country'|default:'country' }}" autocomplete="country" required>
                             <option value="">{% trans "Choisissez" %}</option>
                             <option value="MA" selected>Maroc</option>
                             <option value="FR">France</option>
@@ -165,7 +165,7 @@
                 </div>
 
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ wa_key }}" value="1" checked>
+                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ fm|safeget:'wa_optin'|default:'wa_optin' }}" value="1" checked>
                     <label class="form-check-label" for="ff-wa-optin">
                         {% trans "OK pour être contacté(e) sur WhatsApp pour confirmer la livraison" %}
                     </label>
@@ -186,7 +186,7 @@
                 <i class="fa-solid fa-chevron-right ms-2" aria-hidden="true"></i>
             </div>
 
-            <input type="hidden" name="{{ pack_slug_key }}" value="" data-ff-pack-slug>
+            <input type="hidden" name="{{ fm|safeget:'pack_slug'|default:'pack_slug' }}" value="" data-ff-pack-slug>
             <div data-ff-complementary-store class="d-none">
                 <input type="hidden" name="context.complementary_slugs" value="" data-ff-complementary-item>
             </div>
@@ -206,7 +206,7 @@
                                    data-ll-click="buybar_select_plan"
                                    data-id="{{ code|escape }}"
                                    data-ll-payload='{"offer_code":"{{ code|escapejs }}"}'>
-                                <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="{{ code }}"
+                                <input type="radio" class="visually-hidden" name="{{ fm|safeget:'offer'|default:'offer_key' }}" value="{{ code }}"
                                        data-ff-pack-slug="{{ offer.pack_slug|default:code }}"
                                        {% if offer.is_featured %}checked{% elif forloop.first %}checked{% endif %}>
                                 <div class="af-offer-card">
@@ -241,7 +241,7 @@
                                data-ll-click="buybar_select_plan"
                                data-id="solo"
                                data-ll-payload='{"offer_code":"solo"}'>
-                            <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="solo" checked
+                            <input type="radio" class="visually-hidden" name="{{ fm|safeget:'offer'|default:'offer_key' }}" value="solo" checked
                                    data-ff-pack-slug="solo">
                             <div class="af-offer-card">
                                 <h5 class="af-offer-title mb-3">{% trans "Pack Solo" %}</h5>
@@ -258,7 +258,7 @@
                                data-ll-click="buybar_select_plan"
                                data-id="duo"
                                data-ll-payload='{"offer_code":"duo"}'>
-                            <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="duo"
+                            <input type="radio" class="visually-hidden" name="{{ fm|safeget:'offer'|default:'offer_key' }}" value="duo"
                                    data-ff-pack-slug="duo">
                             <div class="af-offer-card">
                                 <div class="af-badge-best">{% trans "MEILLEUR CHOIX" %}</div>
@@ -288,7 +288,7 @@
                         <div class="flex-grow-1">
                             <div class="form-check m-0">
                                 <input class="form-check-input" type="checkbox" id="af-bump-optin"
-                                       name="{{ bump_key }}" value="{{ bump.value|default:'1' }}"
+                                       name="{{ fm|safeget:'bump'|default:'bump_optin' }}" value="{{ bump.value|default:'1' }}"
                                        data-ff-complementary
                                        data-ff-complementary-slug="{{ bump.value|default:''|escape }}"
                                        data-ff-complementary-title="{{ bump.label|default:default_bump_label|escape }}"
@@ -345,7 +345,7 @@
             <h2 id="af-pay-title" class="af-h2 mb-3">{% trans "Paiement" %}</h2>
 
             {% if payment_method_key != payment_mode_key %}
-            <input type="hidden" name="{{ payment_method_key }}" value="" data-ff-payment-legacy>
+            <input type="hidden" name="{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}" value="" data-ff-payment-legacy>
             {% endif %}
 
             <!-- Méthode de paiement -->
@@ -355,7 +355,7 @@
                 <fieldset class="af-pay" role="radiogroup" aria-label="{% trans 'Méthode de paiement' %}">
                     <!-- Paiement en ligne -->
                     <label class="af-pay-option is-online">
-                        <input type="radio" name="{{ payment_mode_key }}" value="online" class="visually-hidden" checked
+                        <input type="radio" name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}" value="online" class="visually-hidden" checked
                                data-ff-payment-option>
                         <span class="af-pay-check" aria-hidden="true"></span>
                         <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>
@@ -372,7 +372,7 @@
 
                     <!-- Paiement à la livraison -->
                     <label class="af-pay-option">
-                        <input type="radio" name="{{ payment_mode_key }}" value="cod" class="visually-hidden"
+                        <input type="radio" name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}" value="cod" class="visually-hidden"
                                data-ff-payment-option>
                         <span class="af-pay-check" aria-hidden="true"></span>
                         <span class="af-pay-label">{{ payment_labels.cod|default:default_payment_cod }}</span>
@@ -386,7 +386,7 @@
             {% trans "OK pour recevoir la confirmation par e‑mail" as default_email_optin %}
             <div class="mt-3">
                 <label class="af-label" for="ff-email">{{ ui_texts.email_label|default:default_email_label }}</label>
-                <input type="email" id="ff-email" name="{{ email_key }}" class="form-control"
+                <input type="email" id="ff-email" name="{{ fm|safeget:'email'|default:'email' }}" class="form-control" required
                        placeholder="{{ ui_texts.email_placeholder|default:default_email_placeholder }}" autocomplete="email"
                        data-ff-email-confirm>
             </div>
@@ -501,7 +501,7 @@
 
         function syncPackSlug() {
             if (!packSlugField) return;
-            const selected = root.querySelector('[name="{{ offer_key }}"]:checked');
+            const selected = root.querySelector('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]:checked');
             if (!selected) return;
             const slug = selected.getAttribute('data-ff-pack-slug') || selected.value || '';
             packSlugField.value = slug;
@@ -509,7 +509,7 @@
 
         function syncPaymentLegacy() {
             if (!paymentLegacyField) return;
-            const selected = root.querySelector('[name="{{ payment_mode_key }}"]:checked');
+            const selected = root.querySelector('[name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}"]:checked');
             paymentLegacyField.value = selected ? selected.value || '' : '';
         }
 
@@ -553,13 +553,13 @@
         root.addEventListener('change', (event) => {
             const target = event.target;
             if (!target) return;
-            if (target.matches('[name="{{ offer_key }}"]')) {
+            if (target.matches('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]')) {
                 syncPackSlug();
             }
             if (target.closest('[data-ff-complementary]')) {
                 syncComplementary();
             }
-            if (target.matches('[name="{{ payment_mode_key }}"]')) {
+            if (target.matches('[name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}"]')) {
                 syncPaymentLegacy();
             }
             if (target === emailPrimary) {
@@ -605,29 +605,22 @@
         "progress_url": "/api/leads/progress/",
         "progress_steps": {
             "step1": [
-                "{{ fullname_key }}",
-                "{{ phone_key }}",
-                "{{ email_key }}",
-                "{{ address_line1_key }}",
-                "{{ address_line2_key }}",
-                "{{ city_key }}",
-                "{{ state_key }}",
-                "{{ postal_code_key }}",
-                "{{ country_key }}",
-                "{{ product_key }}",
-                "{{ wa_key }}"
+                "{{ fm|safeget:'fullname'|default:'full_name' }}",
+                "{{ fm|safeget:'phone'|default:'phone' }}",
+                "{{ fm|safeget:'email'|default:'email' }}",
+                "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
+                "{{ fm|safeget:'city'|default:'city' }}",
+                "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
+                "{{ fm|safeget:'country'|default:'country' }}"
             ],
             "step2": [
-                "{{ pack_slug_key }}",
-                "{{ offer_key }}",
-                "{{ quantity_key }}",
-                "{{ bump_key }}",
-                "{{ promotion_key }}",
-                "context.complementary_slugs"
+                "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
+                "{{ fm|safeget:'offer'|default:'offer_key' }}",
+                "{{ fm|safeget:'quantity'|default:'quantity' }}"
             ],
             "step3": [
-                "{{ payment_mode_key }}",
-                "{{ email_key }}"
+                "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
+                "{{ fm|safeget:'email'|default:'email' }}"
             ]
         },
         "progress_session_field_name": "ff_session_key",
@@ -636,24 +629,24 @@
         "progress_form_kind": "checkout_intent",
         "context": {},
         "fields_map": {
-            "fullname": "{{ fullname_key }}",
-            "phone": "{{ phone_key }}",
-            "email": "{{ email_key }}",
-            "address_line1": "{{ address_line1_key }}",
-            "address_line2": "{{ address_line2_key }}",
-            "city": "{{ city_key }}",
-            "state": "{{ state_key }}",
-            "postal_code": "{{ postal_code_key }}",
-            "country": "{{ country_key }}",
-            "quantity": "{{ quantity_key }}",
-            "offer": "{{ offer_key }}",
-            "pack_slug": "{{ pack_slug_key }}",
-            "product": "{{ product_key }}",
-            "promotion": "{{ promotion_key }}",
-            "payment_mode": "{{ payment_mode_key }}",
-            "payment_method": "{{ payment_method_key }}",
-            "bump": "{{ bump_key }}",
-            "wa_optin": "{{ wa_key }}",
+            "fullname": "{{ fm|safeget:'fullname'|default:'full_name' }}",
+            "phone": "{{ fm|safeget:'phone'|default:'phone' }}",
+            "email": "{{ fm|safeget:'email'|default:'email' }}",
+            "address_line1": "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
+            "address_line2": "{{ fm|safeget:'address_line2'|default:'address_line2' }}",
+            "city": "{{ fm|safeget:'city'|default:'city' }}",
+            "state": "{{ fm|safeget:'state'|default:'state' }}",
+            "postal_code": "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
+            "country": "{{ fm|safeget:'country'|default:'country' }}",
+            "quantity": "{{ fm|safeget:'quantity'|default:'quantity' }}",
+            "offer": "{{ fm|safeget:'offer'|default:'offer_key' }}",
+            "pack_slug": "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
+            "product": "{{ fm|safeget:'product'|default:'product' }}",
+            "promotion": "{{ fm|safeget:'promotion'|default:'promotion_selected' }}",
+            "payment_mode": "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
+            "payment_method": "{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}",
+            "bump": "{{ fm|safeget:'bump'|default:'bump_optin' }}",
+            "wa_optin": "{{ fm|safeget:'wa_optin'|default:'wa_optin' }}",
             "context.complementary_slugs": "context.complementary_slugs"
         }
     }

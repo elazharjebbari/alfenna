@@ -180,6 +180,77 @@
     return out;
   }
 
+  const REQUIRED_MESSAGE = "Ce champ est obligatoire.";
+
+  function cssEscape(value) {
+    if (window.CSS && typeof window.CSS.escape === "function") {
+      return window.CSS.escape(value);
+    }
+    return String(value || '').replace(/["'\\]/g, '\\$&');
+  }
+
+  function ensureFeedback(field) {
+    const group = field.closest('.form-group, .mb-3, .form-floating') || field.parentElement;
+    if (!group) return null;
+    let feedback = group.querySelector('.invalid-feedback');
+    if (!feedback) {
+      feedback = document.createElement('div');
+      feedback.className = 'invalid-feedback';
+      group.appendChild(feedback);
+    }
+    return feedback;
+  }
+
+  function setFieldError(field, message) {
+    field.classList.toggle('is-invalid', Boolean(message));
+    try { field.setCustomValidity(message || ''); } catch (_) { /* ignore */ }
+    const fb = ensureFeedback(field);
+    if (fb) fb.textContent = message || '';
+  }
+
+  function clearFieldError(field) {
+    setFieldError(field, '');
+  }
+
+  function elementHasValue(field) {
+    if (field.disabled) return true;
+    if (field.type === 'checkbox' || field.type === 'radio') {
+      return field.checked;
+    }
+    if (field.type === 'hidden') {
+      return true;
+    }
+    return String(field.value || '').trim().length > 0;
+  }
+
+  function visibleTargets(elements) {
+    return elements.filter((el) => el.type !== 'hidden' && !el.hasAttribute('data-ff-optional'));
+  }
+
+  function validateRequiredStep(root, cfg, stepIndex) {
+    const required = progressAllowList(cfg, `step${stepIndex}`) || [];
+    if (!required.length) return true;
+    const fieldsMap = parseFieldsMap(root, cfg);
+    let ok = true;
+
+    required.forEach((key) => {
+      if (!key) return;
+      const mapped = (fieldsMap && fieldsMap[key]) || key;
+      const selector = `[name="${cssEscape(mapped)}"]`;
+      const nodes = Array.from(root.querySelectorAll(selector));
+      if (!nodes.length) return;
+      const uiNodes = visibleTargets(nodes);
+      if (!uiNodes.length) return;
+      const hasValue = nodes.some((el) => elementHasValue(el));
+      if (!hasValue) {
+        uiNodes.forEach((field) => setFieldError(field, REQUIRED_MESSAGE));
+        ok = false;
+      }
+    });
+
+    return ok;
+  }
+
   function progressAllowList(cfg, stepKey) {
     const map = (cfg && (cfg.progress_steps || cfg.progressSteps)) || {};
     if (map && typeof map === "object" && Array.isArray(map[stepKey])) {
@@ -682,6 +753,9 @@
       if (t.closest("[data-ff-next]")) {
         e.preventDefault();
         const cur = getCurrentStep(root);
+        if (!validateRequiredStep(root, cfg, cur)) {
+          return;
+        }
         const max = getMaxStep(root);
         if (progressActive && cur < max) {
           try {
@@ -708,6 +782,7 @@
       const target = event.target;
       if (!target) return;
       if (target.matches("input, select, textarea")) {
+        clearFieldError(target);
         setTimeout(refreshCheckout, 0);
       }
     });
@@ -715,6 +790,9 @@
     root.addEventListener("input", (event) => {
       const target = event.target;
       if (!target) return;
+      if (target.matches('input, select, textarea')) {
+        clearFieldError(target);
+      }
       if (target.matches('[data-ff-field="quantity"], [name*="quantity"], input[type="number"], input[data-ff-cast="int"], input[data-ff-cast="float"]')) {
         setTimeout(refreshCheckout, 0);
       }
@@ -724,6 +802,10 @@
       const btn = e.target && e.target.closest && e.target.closest("[data-ff-submit]");
       if (!btn) return;
       e.preventDefault();
+      const cur = getCurrentStep(root);
+      if (!validateRequiredStep(root, cfg, cur)) {
+        return;
+      }
       await handleSubmit(root, Object.assign({}, cfg));
     });
   }

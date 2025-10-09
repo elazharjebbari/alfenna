@@ -78,6 +78,7 @@ THIRD_PARTY_APPS = [
                    ]
 
 LOCAL_APPS = [
+    "apps.core",
     "apps.accounts.apps.AccountsConfig",
     "apps.catalog.apps.CatalogConfig",
     "apps.content.apps.ContentConfig",

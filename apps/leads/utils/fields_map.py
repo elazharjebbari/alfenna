@@ -6,7 +6,7 @@ from typing import Dict, Mapping
 
 DEFAULT_FIELDS_MAP: Dict[str, str] = {
     "fullname": "full_name",
-    "phone": "phone_number",
+    "phone": "phone",
     "email": "email",
     "address_line1": "address_line1",
     "address_line2": "address_line2",
@@ -14,8 +14,6 @@ DEFAULT_FIELDS_MAP: Dict[str, str] = {
     "state": "state",
     "postal_code": "postal_code",
     "country": "country",
-    "address": "address",
-    "address_raw": "address",
     "quantity": "quantity",
     "offer": "offer_key",
     "pack_slug": "pack_slug",
@@ -32,12 +30,11 @@ _KEY_ALIASES = {
     "full_name": "fullname",
     "phone_number": "phone",
     "payment": "payment_method",
+    "address": "address_line1",
+    "address_raw": "address_line1",
 }
 
-_VALUE_ALIASES = {
-    "payment_mode": "payment_method",
-    "paymentMethod": "payment_method",
-}
+_VALUE_ALIASES = {}
 
 
 def _normalise_key(key: str) -> str:
@@ -77,10 +74,4 @@ def normalize_fields_map(overrides: Mapping[str, str] | None = None) -> Dict[str
     merged["payment_mode"] = payment_value
 
     # If only a compact address field is provided, mirror it on address_line1
-    if "address" in merged and merged.get("address_line1") == "address_line1":
-        merged["address_line1"] = merged["address"]
-
-    if "address_raw" in merged and merged.get("address_line1") == "address_line1":
-        merged["address_line1"] = merged["address_raw"]
-
     return merged

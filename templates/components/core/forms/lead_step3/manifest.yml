@@ -7,7 +7,6 @@ assets:
   css: []
   js:
     - "/static/js/flowforms.runtime.js"
-    - "/static/js/form-stepper-guard.js"
   vendors: []
 contract:
   optional:
