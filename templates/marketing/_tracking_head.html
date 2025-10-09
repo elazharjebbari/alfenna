@@ -4,5 +4,6 @@ window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({{ tracking.datalayer|default:"{}"|safe }});
 </script>
 
-  {% include "analytics/google_tag_manager/head.html" %}
+{% include "analytics/google_tag_manager/head.html" %}
+{% include "analytics/google_analytics/head.html" %}
 
