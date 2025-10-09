@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from typing import Any, Dict, List, Optional
 
+from apps.leads.utils.fields_map import normalize_fields_map
+
 
 def _to_decimal(value: Any) -> Optional[Decimal]:
     """Best-effort conversion to ``Decimal``.
@@ -154,20 +156,7 @@ class ProductMeta:
 class FormConfig:
     alias: str = "core/forms/lead_step3"
     action_url: str = "leads:collect"
-    fields_map: Dict[str, str] = field(
-        default_factory=lambda: {
-            "fullname": "full_name",
-            "phone": "phone_number",
-            "address": "address",
-            "quantity": "quantity",
-            "offer": "offer_key",
-            "product": "product",
-            "promotion": "promotion_selected",
-            "email": "email",
-            "payment_method": "payment_method",
-            "bump": "bump_optin",
-        }
-    )
+    fields_map: Dict[str, str] = field(default_factory=normalize_fields_map)
     ui_texts: Dict[str, Any] = field(default_factory=dict)
     offers: List[Dict[str, Any]] = field(default_factory=list)
     bump: Dict[str, Any] = field(default_factory=dict)
@@ -186,9 +175,11 @@ class FormConfig:
         if raw.get("fields_map"):
             fm = raw.get("fields_map") or {}
             if isinstance(fm, dict):
-                merged = dict(data.fields_map)
-                merged.update({str(k): str(v) for k, v in fm.items() if v is not None})
-                data.fields_map = merged
+                data.fields_map = normalize_fields_map(fm)
+            else:
+                data.fields_map = normalize_fields_map()
+        else:
+            data.fields_map = normalize_fields_map(data.fields_map)
         if raw.get("ui_texts") and isinstance(raw.get("ui_texts"), dict):
             data.ui_texts = dict(raw.get("ui_texts"))
         if raw.get("offers") and isinstance(raw.get("offers"), list):

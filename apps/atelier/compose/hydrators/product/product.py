@@ -18,6 +18,7 @@ from apps.atelier.components.utils import split_alias_namespace
 from apps.atelier.contracts.product import ProductParams
 from apps.catalog.models import Product as CatalogProduct
 from apps.leads.constants import FormKind
+from apps.leads.utils.fields_map import normalize_fields_map
 
 logger = logging.getLogger(__name__)
 
@@ -597,7 +598,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
             if value:
                 flow_context[key] = value
 
-    form_fields_map = dict(form_cfg.fields_map or {})
+    form_fields_map = normalize_fields_map(form_cfg.fields_map or {})
     form_fields_map.setdefault("wa_optin", "wa_optin")
     default_address_key = form_fields_map.get("address") or "address_raw"
     form_fields_map.setdefault("address", default_address_key)
