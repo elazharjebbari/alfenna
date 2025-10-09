@@ -220,7 +220,12 @@
                         <div class="flex-grow-1">
                             <div class="form-check m-0">
                                 <input class="form-check-input" type="checkbox" id="af-bump-optin"
-                                       name="{{ bump_key }}" value="{{ bump.value|default:'1' }}">
+                                       name="{{ bump_key }}" value="{{ bump.value|default:'1' }}"
+                                       data-ff-complementary
+                                       data-ff-complementary-slug="{{ bump.value|default:''|escape }}"
+                                       data-ff-complementary-title="{{ bump.label|default:default_bump_label|escape }}"
+                                       data-ff-complementary-price="{{ bump.price|default:''|escape }}"
+                                       data-ff-complementary-currency="{{ bump.currency|default:pricing.currency|default:'MAD'|escape }}">
                                 <label class="form-check-label fw-semibold" for="af-bump-optin">
                                     {{ bump.label|default:default_bump_label }}
                                     {% if bump.sublabel %}
