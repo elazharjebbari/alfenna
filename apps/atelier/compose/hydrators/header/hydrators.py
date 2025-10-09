@@ -227,7 +227,6 @@ def header_main(request, params: Dict[str, Any]) -> Dict[str, Any]:
     _log("RAW(header_main)", p, anomalies, list(p.keys()))
 
     menu = _normalize_menu(p.get("menu"), anomalies)
-    show_auth = bool(p.get("show_auth_links", True))
 
     try:
         home_url = p.get("home_url") or reverse("pages:home")
@@ -246,7 +245,6 @@ def header_main(request, params: Dict[str, Any]) -> Dict[str, Any]:
         "logo_src": (p.get("logo_src") or ""),
         "logo_alt": (p.get("logo_alt") or ""),
         "menu": menu,
-        "show_auth_links": show_auth,
         "home_url": home_url,
         "primary_cta": primary_cta,
     }
@@ -280,21 +278,10 @@ def header_mobile(request, params: Dict[str, Any]) -> Dict[str, Any]:
 
     menu = _normalize_menu(p.get("menu"), anomalies)
 
-    def _safe_rev(name: str, default: str) -> str:
-        try:
-            return reverse(name)
-        except Exception:
-            return default
-
-    login_url = p.get("login_url") or _safe_rev("login", "/login/")
-    register_url = p.get("register_url") or _safe_rev("register", "/register/")
-
     ctx = {
         "contact": contact,
         "socials": socials,
         "menu": menu,
-        "login_url": login_url,
-        "register_url": register_url,
     }
     _log("NORMALIZED(header_mobile)", ctx, anomalies, list(p.keys()))
     return ctx

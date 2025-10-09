@@ -13,6 +13,8 @@
   const MAX_BATCH = 20;
   const URL = "/api/analytics/collect/";
   const hasBeacon = typeof navigator !== "undefined" && typeof navigator.sendBeacon === "function";
+  const FLUSH_DELAY_MS = 2000;
+  let flushTimer = null;
 
   const nowISO = () => new Date().toISOString();
   const uuid = () => {
@@ -42,10 +44,13 @@
     queue.push(evt);
     if (queue.length >= MAX_BATCH) {
       flush();
+      return;
     }
+    scheduleFlush();
   }
 
   function flush() {
+    clearFlushTimer();
     if (!queue.length) {
       return;
     }
@@ -65,6 +70,21 @@
     }).catch(() => {
       batch.forEach((evt) => queue.push(evt));
     });
+  }
+
+  function clearFlushTimer() {
+    if (flushTimer !== null) {
+      clearTimeout(flushTimer);
+      flushTimer = null;
+    }
+  }
+
+  function scheduleFlush() {
+    clearFlushTimer();
+    flushTimer = setTimeout(() => {
+      flushTimer = null;
+      flush();
+    }, FLUSH_DELAY_MS);
   }
 
   const LL = window.LL = window.LL || {};

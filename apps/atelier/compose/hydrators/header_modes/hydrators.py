@@ -138,8 +138,6 @@ def _build_urls(params: dict) -> Dict[str, str]:
     home_url    = _safe_rev_any(["pages:home"], default="/")
     packs_url   = _safe_rev_any(["pages:packs"], default="/packs/")
     contact_url = _safe_rev_any(["pages:contact"], default="/contact/")
-    login_url   = _safe_rev_any(["pages:login", "login"], default="/login/")
-    logout_url  = _safe_rev_any(["accounts:logout"], default="/accounts/logout/")
     # Course detail (on tente plusieurs namespaces puis fallback)
     course_url  = _safe_rev_any(
         ["lecture-stream", "pages:lecture-stream"],
@@ -150,9 +148,12 @@ def _build_urls(params: dict) -> Dict[str, str]:
     cta_url = f"{packs_url}#packs-offres"
 
     return {
-        "home": home_url, "packs": packs_url, "contact": contact_url,
-        "login": login_url, "logout": logout_url, "course": course_url,
-        "faq": faq_url, "cta": cta_url,
+        "home": home_url,
+        "packs": packs_url,
+        "contact": contact_url,
+        "course": course_url,
+        "faq": faq_url,
+        "cta": cta_url,
     }
 
 def _rating_badge_text(params: dict) -> str:
@@ -189,17 +190,11 @@ def modes_main(request: HttpRequest, params: dict) -> Dict[str, Any]:
     urls = _build_urls(params)
 
     # Menus dérivés du mode
-    menu_guest = [
-        {"label": "Accueil",        "url": urls["home"]},
-        {"label": "Nos Offres",     "url": urls["packs"]},
+    menu_common = [
+        {"label": "Accueil",         "url": urls["home"]},
+        {"label": "Nos Formations", "url": urls["packs"]},
         {"label": "FAQ",            "url": urls["faq"]},
-        {"label": "Se connecter",   "url": urls["login"], "icon": "fas fa-user"},
-    ]
-    menu_member = [
-        {"label": "Accueil",            "url": urls["home"]},
-        {"label": "Continuer le cours", "url": urls["course"]},
-        {"label": "Packs",              "url": urls["packs"]},
-        {"label": "Contact",            "url": urls["contact"]},
+        {"label": "Contact",        "url": urls["contact"]},
     ]
 
     username = ""
@@ -209,7 +204,7 @@ def modes_main(request: HttpRequest, params: dict) -> Dict[str, Any]:
 
     return {
         "mode": mode,
-        "menu": menu_member if mode == "member" else menu_guest,
+        "menu": menu_common,
         "primary_cta": {
             "label": (params.get("primary_cta_label") or "Je me lance"),
             "sublabel": (params.get("primary_cta_sublabel") or "Paiement sécurisé • Accès immédiat"),
@@ -219,8 +214,6 @@ def modes_main(request: HttpRequest, params: dict) -> Dict[str, Any]:
         "logo_src": (params.get("logo_src") or "images/logo.webp"),
         "logo_alt": (params.get("logo_alt") or "Lumiere"),
         "home_url": urls["home"],
-        "login_url": urls["login"],
-        "logout_url": urls["logout"],
         "show_rating_badge": bool(params.get("show_rating_badge", True)),
         "rating_badge_text": _rating_badge_text(params),
         "username": username,
@@ -233,16 +226,11 @@ def modes_mobile(request: HttpRequest, params: dict) -> Dict[str, Any]:
     contact = params.get("contact") or {}
     socials = [s for s in (params.get("socials") or []) if isinstance(s, dict) and s.get("url")]
 
-    menu_guest = [
-        {"label": "Accueil",        "url": urls["home"]},
-        {"label": "Nos Offres",     "url": urls["packs"]},
+    menu_common = [
+        {"label": "Accueil",         "url": urls["home"]},
+        {"label": "Nos Formations", "url": urls["packs"]},
         {"label": "FAQ",            "url": urls["faq"]},
-    ]
-    menu_member = [
-        {"label": "Accueil",            "url": urls["home"]},
-        {"label": "Continuer le cours", "url": urls["course"]},
-        {"label": "Packs",              "url": urls["packs"]},
-        {"label": "Contact",            "url": urls["contact"]},
+        {"label": "Contact",        "url": urls["contact"]},
     ]
 
     username = ""
@@ -252,9 +240,7 @@ def modes_mobile(request: HttpRequest, params: dict) -> Dict[str, Any]:
 
     return {
         "mode": mode,
-        "menu": menu_member if mode == "member" else menu_guest,
-        "login_url": urls["login"],
-        "logout_url": urls["logout"],
+        "menu": menu_common,
         "username": username,
         "contact": {
             "phone_tel": contact.get("phone_tel", ""),

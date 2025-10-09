@@ -22,22 +22,15 @@ params:
     - icon: "flaticon-linkedin"
       url: "https://www.linkedin.com/company/lumiereacadem"
       new_tab: true
-  # Laisse à null pour laisser l’hydrateur résoudre via reverse('login'/'register')
-  login_url: null
-  register_url: null
   menu:
     - label: "Accueil"
       url_name: "pages:home"
     - label: "Nos Formations"
-      children:
-        - label: "Formation en ligne"
-          url: "#"
-    - label: "Nos Cours"
-      url: "#"
-    - label: "Q&A"
-      url: "#"
+      url_name: "pages:packs"
+    - label: "FAQ"
+      url: "#faq"
     - label: "Contact"
-      url: "#"
+      url: "#contact"
 
 contract:
   required:
@@ -60,8 +53,6 @@ contract:
       - icon: "str"
         url: "str"
         new_tab?: "bool"
-    login_url: "str"
-    register_url: "str"
 
 hydrate:
   module: "apps.atelier.compose.hydrators.header.hydrators"
@@ -81,18 +72,12 @@ hydrate:
       - icon: "flaticon-linkedin"
         url: "https://www.linkedin.com/company/lumiereacadem"
         new_tab: true
-    login_url: null         # => hydrateur fera reverse('login') → "/login/"
-    register_url: null      # => hydrateur fera reverse('register') → "/register/"
     menu:
       - label: "Accueil"
         url_name: "pages:home"
       - label: "Nos Formations"
-        children:
-          - label: "Formation en ligne"
-            url: "#"
-      - label: "Nos Cours"
-        url: "#"
-      - label: "Q&A"
-        url: "#"
+        url_name: "pages:packs"
+      - label: "FAQ"
+        url: "#faq"
       - label: "Contact"
-        url: "#"
+        url: "#contact"

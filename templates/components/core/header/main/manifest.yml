@@ -12,7 +12,6 @@ params:
   logo_src: "images/logo/logo_text_black_200x60.webp"
   logo_alt: "Lumiere"
   home_url: "pages:home"
-  show_auth_links: false   # masquer par défaut (focus conversion)
   primary_cta:
     label: "Je me lance"
     url: "#packs"
@@ -21,12 +20,12 @@ params:
   menu:
     - label: "Accueil"
       url_name: "pages:home"
-    - label: "Se Connecter"
-      url_name: "pages:login"
-    - label: "Nos Offres"
+    - label: "Nos Formations"
       url_name: "pages:packs"
     - label: "FAQ"
       url: "#faq"
+    - label: "Contact"
+      url: "#contact"
 
 contract:
   required:
@@ -39,7 +38,6 @@ contract:
           - label: "str"
             url?: "str"
   optional:
-    show_auth_links: "bool"
     home_url: "str"
     primary_cta:
       label: "str"
@@ -54,12 +52,20 @@ hydrate:
     logo_src: "images/logo.webp"
     logo_alt: "Lumiere"
     home_url: "pages:home"
-    show_auth_links: false
     primary_cta:
       label: "Je me lance"
       url: "#cta-buy"
       sublabel: "Paiement sécurisé • Accès immédiat"
       aria: "Je me lance — Accès immédiat"
+    menu:
+      - label: "Accueil"
+        url_name: "pages:home"
+      - label: "Nos Formations"
+        url_name: "pages:packs"
+      - label: "FAQ"
+        url: "#faq"
+      - label: "Contact"
+        url: "#contact"
 
 render:
   cache: false
