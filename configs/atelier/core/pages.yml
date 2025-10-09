@@ -142,12 +142,6 @@ pages:
         cache: false
       gallery:
         component: "gallery"
-        params:
-          gallery_slug: "participants"
-          anchor_id: "galerie"
-          initial_visible: 8
-          reveal_step: 4
-          cta_label: "Voir plus de réalisations"
           # product_code: "atelier-bougies-pro"   # filtre optionnel côté hydrateur
         cache: true
       before_after_wipe:
