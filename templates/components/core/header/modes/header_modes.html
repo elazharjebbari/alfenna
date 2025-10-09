@@ -12,7 +12,11 @@
               <span id="tb-timer" data-deadline="{{ topbar.deadline_ts }}" style="font-weight:700;"></span>
             {% endif %}
             {% if topbar.cta %}
-              • <a href="{{ topbar.cta.url }}" style="color:#0a7f46;text-decoration:underline;">{{ topbar.cta.label }}</a>
+              • <a href="{{ topbar.cta.url }}"
+                   style="color:#0a7f46;text-decoration:underline;"
+                   data-ll-click="header_cta_click">
+                  {{ topbar.cta.label }}
+                </a>
             {% endif %}
           </p>
         </div>
