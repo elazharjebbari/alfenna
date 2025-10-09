@@ -210,6 +210,25 @@ def _coerce_decimal(value: Any) -> Any:
     return value
 
 
+def _decimal_to_str(value: Any) -> str:
+    if value in (None, "", False):
+        return ""
+    dec: Optional[Decimal]
+    if isinstance(value, Decimal):
+        dec = value
+    else:
+        try:
+            dec = Decimal(str(value))
+        except (InvalidOperation, ValueError):
+            return str(value)
+    if dec is None:
+        return ""
+    try:
+        return format(dec.quantize(Decimal("0.01")), "f")
+    except (InvalidOperation, ValueError):
+        return format(dec, "f")
+
+
 def _sanitize_lookup_value(value: Any) -> str:
     if value in (None, "", False):
         return ""
@@ -584,6 +603,36 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     form_fields_map.setdefault("address", default_address_key)
     form_fields_map.setdefault("address_raw", default_address_key)
     form_fields_map.setdefault("promotion", form_fields_map.get("promotion") or "promotion_selected")
+
+    complementaries_ctx: List[Dict[str, str]] = []
+    for item in cross_sells:
+        slug = str(item.get("slug") or "").strip()
+        if not slug:
+            continue
+        title = item.get("title") or item.get("label") or slug
+        price_value = (
+            item.get("effective_price")
+            or item.get("promo_price")
+            or item.get("price")
+        )
+        currency_value = (
+            item.get("currency")
+            or product_data.get("currency")
+            or ""
+        )
+        complementary_entry: Dict[str, str] = {
+            "slug": slug,
+            "title": str(title),
+            "price": _decimal_to_str(price_value),
+            "currency": str(currency_value or ""),
+        }
+        image_src = item.get("image_src")
+        if image_src:
+            complementary_entry["image_src"] = str(image_src)
+        complementaries_ctx.append(complementary_entry)
+
+    if complementaries_ctx:
+        flow_context["complementaries"] = complementaries_ctx
 
     progress_steps = {
         "step1": [
