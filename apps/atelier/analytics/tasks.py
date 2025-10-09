@@ -109,13 +109,13 @@ def persist_raw(events: List[Dict], meta: Dict | None = None) -> int:
     return len(normalized)
 
 
-def _update_component_daily(day: date, page_id: str, site_version: str, qs) -> None:
+def _component_aggregates_queryset(qs):
     scroll_value = Cast(
         KeyTextTransform("scroll_pct", "payload"),
         FloatField(),
     )
 
-    aggregates = qs.values("slot_id", "component_alias").annotate(
+    return qs.values("slot_id", "component_alias").annotate(
         impressions=Count("id", filter=Q(event_type="view")),
         clicks=Count("id", filter=Q(event_type="click")),
         avg_scroll_pct=Avg(
@@ -125,6 +125,10 @@ def _update_component_daily(day: date, page_id: str, site_version: str, qs) -> N
             & ~Q(payload__scroll_pct=""),
         ),
     )
+
+
+def _update_component_daily(day: date, page_id: str, site_version: str, qs) -> None:
+    aggregates = list(_component_aggregates_queryset(qs))
 
     visitor_map: Dict[Tuple[str, str], set[str]] = defaultdict(set)
     visitor_rows = qs.values("slot_id", "component_alias", "ua_hash", "ip_hash")
@@ -137,6 +141,8 @@ def _update_component_daily(day: date, page_id: str, site_version: str, qs) -> N
         visitor_map[slot].add(f"{ua}:{ip}")
 
     seen_keys: set[Tuple[str, str]] = set()
+    batch_ts = timezone.now()
+    upsert_rows: List[ComponentStatDaily] = []
     for agg in aggregates:
         slot_id = agg.get("slot_id") or ""
         component_alias = agg.get("component_alias") or ""
@@ -148,13 +154,39 @@ def _update_component_daily(day: date, page_id: str, site_version: str, qs) -> N
             "avg_scroll_pct": float(agg.get("avg_scroll_pct") or 0.0),
             "uu_count": len(visitor_map.get(key, set())),
         }
-        ComponentStatDaily.objects.update_or_create(
-            date=day,
-            site_version=site_version,
-            page_id=page_id,
-            slot_id=slot_id,
-            component_alias=component_alias,
-            defaults=defaults,
+        upsert_rows.append(
+            ComponentStatDaily(
+                date=day,
+                site_version=site_version,
+                page_id=page_id,
+                slot_id=slot_id,
+                component_alias=component_alias,
+                impressions=defaults["impressions"],
+                clicks=defaults["clicks"],
+                avg_scroll_pct=defaults["avg_scroll_pct"],
+                uu_count=defaults["uu_count"],
+                updated_at=batch_ts,
+            )
+        )
+
+    if upsert_rows:
+        ComponentStatDaily.objects.bulk_create(
+            upsert_rows,
+            update_conflicts=True,
+            update_fields=[
+                "impressions",
+                "clicks",
+                "avg_scroll_pct",
+                "uu_count",
+                "updated_at",
+            ],
+            unique_fields=[
+                "date",
+                "site_version",
+                "page_id",
+                "slot_id",
+                "component_alias",
+            ],
         )
 
     existing = ComponentStatDaily.objects.filter(
@@ -236,7 +268,7 @@ def _update_heatmap(day: date, page_id: str, site_version: str, qs) -> None:
 def rollup_incremental(date_str: str, page_id: str, site_version: str) -> None:
     day = date.fromisoformat(date_str)
     with transaction.atomic():
-        qs = AnalyticsEventRaw.objects.select_for_update().filter(
+        qs = AnalyticsEventRaw.objects.filter(
             ts__date=day,
             page_id=page_id,
             site_version=site_version,
