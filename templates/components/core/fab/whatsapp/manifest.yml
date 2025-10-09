@@ -1,0 +1,47 @@
+alias: "fab/whatsapp"
+template: "components/core/fab/whatsapp/whatsapp.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/core/fab/whatsapp.css"
+  js: []
+  vendors: []
+
+params:
+  label: "Besoin d’aide ?"
+  icon_mode: "vendor"
+  icon_vendor: "icofont-whatsapp"
+  icon_svg: ""
+  offset_bottom: 50
+  offset_right: 16
+  phone_tel: "+212719646705"
+  prefill_text: "Bonjour, je souhaite commander le pack Alfenna."
+
+contract:
+  optional:
+    label: "Texte du bouton"
+    icon_mode: "Mode d’icône (vendor|svg)"
+    icon_vendor: "Classe de l’icône vendor"
+    icon_svg: "Markup SVG inline"
+    offset_bottom: "Décalage bas (px)"
+    offset_right: "Décalage droite (px)"
+    phone_tel: "Numéro WhatsApp format international"
+    prefill_text: "Message prérempli"
+
+hydrate:
+  python: "apps.atelier.compose.hydrators.fab.hydrators.whatsapp"
+  module: "apps.atelier.compose.hydrators.fab.hydrators"
+  func: "whatsapp"
+  params:
+    label: "Besoin d’aide ?"
+    icon_mode: "vendor"
+    icon_vendor: "icofont-whatsapp"
+    icon_svg: ""
+    offset_bottom: 100
+    offset_right: 16
+    phone_tel: "+212719646705"
+    prefill_text: "Bonjour, je souhaite commander le pack Alfenna."
+
+render:
+  cacheable: true

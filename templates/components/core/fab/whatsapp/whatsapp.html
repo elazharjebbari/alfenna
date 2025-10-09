@@ -1,0 +1,13 @@
+{% load static %}
+<a
+  data-cmp="fab-whatsapp"
+  class="c-wa-fab"
+  href="{{ href }}"
+  target="_blank"
+  rel="noopener"
+  aria-label="{{ aria_label }}"
+  style="bottom: {{ offset_bottom }}px; right: {{ offset_right }}px;"
+>
+  <span class="c-wa-fab__icon">{{ icon_html|safe }}</span>
+  <span class="c-wa-fab__label">{{ label }}</span>
+</a>

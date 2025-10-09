@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Demo WhatsApp – Bubble Classique</title>
+
+<!-- Icône (CDN) – en Django remplace par tes includes {% static %} -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icofont@1.0.1/icofont.min.css">
+<style>
+  :root{
+    --wa-green:#25D366;           /* vert WhatsApp officiel */
+    --wa-dark:#128C7E;            /* vert sombre pour halo */
+    --surface:#f7f8f6;            /* fond de l'écran de démo */
+    --shadow:0 10px 24px rgba(0,0,0,.14),0 6px 12px rgba(0,0,0,.10);
+    --radius:999px;
+    --z-chat:2147483000;
+  }
+  html,body{height:100%;}
+  body{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--surface); color:#234;}
+  .demo-hero{height:54vh;display:grid;place-items:center;color:#2F4F4D;}
+  .demo-long{height:120vh;display:grid;place-items:center;color:#789;}
+  .card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:18px 22px}
+  /* ===== Floating WhatsApp ===== */
+  .wa-fab{
+    position:fixed; right:16px;
+    bottom:calc(16px + env(safe-area-inset-bottom,0px));
+    z-index:var(--z-chat);
+    width:56px;height:56px;border-radius:var(--radius);
+    background:var(--wa-green); color:#fff; display:grid; place-items:center;
+    box-shadow:var(--shadow); text-decoration:none; outline:none;
+    transform:translateY(24px); opacity:0; /* slide-in */
+    transition:transform .22s ease-out, opacity .22s ease-out, box-shadow .15s ease;
+  }
+  .wa-fab:focus-visible{ box-shadow:0 0 0 4px rgba(37,211,102,.25), var(--shadow); }
+  .wa-fab.ready{ transform:translateY(0); opacity:1; }
+  .wa-fab i{ font-size:26px; line-height:1; }
+  /* pulse unique */
+  .wa-fab.pulse::after{
+    content:""; position:absolute; inset:0; border-radius:inherit;
+    box-shadow:0 0 0 0 rgba(18,140,126,.45);
+    animation:waPulse .9s ease-out 1 both;
+  }
+  @keyframes waPulse{
+    0%{box-shadow:0 0 0 0 rgba(18,140,126,.45)}
+    100%{box-shadow:0 0 0 14px rgba(18,140,126,0)}
+  }
+  /* badge (ex: “réponse rapide”) – optionnel */
+  .wa-badge{
+    position:fixed; right:76px;
+    bottom:calc(24px + env(safe-area-inset-bottom,0px));
+    z-index:var(--z-chat); background:#fff; border-radius:12px;
+    padding:.45rem .6rem; box-shadow:var(--shadow); color:#234; font-weight:600;
+    opacity:0; transform:translateY(12px); transition:.22s ease;
+  }
+  .wa-badge.show{opacity:1; transform:translateY(0)}
+  /* Respect de reduced motion */
+  @media (prefers-reduced-motion:reduce){
+    .wa-fab{ transition:none }
+    .wa-fab.pulse::after{ animation:none }
+    .wa-badge{ transition:none }
+  }
+</style>
+</head>
+<body>
+
+<section class="demo-hero"><div class="card">Écran de démo (vide) — scrolle un peu si besoin.</div></section>
+<section class="demo-long"><div class="card">Contenu fictif…</div></section>
+
+<!-- Bulle WhatsApp -->
+<a href="#" class="wa-fab" id="waFab" aria-label="Ouvrir WhatsApp — réponse rapide">
+  <i class="icofont-brand-whatsapp" aria-hidden="true"></i>
+</a>
+<div class="wa-badge" id="waBadge" role="status" aria-live="polite">Besoin d’aide ?</div>
+
+<script>
+(function(){
+  "use strict";
+  const NUMBER_INTL = "212612345678"; // ← à remplacer (sans + ni espaces)
+  const MSG = "Bonjour ! Je visite Alfenna et j’aimerais un conseil sur le pack 8 pièces.";
+
+  const fab = document.getElementById('waFab');
+  const badge = document.getElementById('waBadge');
+
+  function openWA(num, text){
+    if(!num) return;
+    const url = "https://wa.me/" + String(num).replace(/[^\d]/g,'') +
+                (text ? ("?text=" + encodeURIComponent(text)) : "");
+    window.open(url, "_blank", "noopener");
+    try{ window.dataLayer && dataLayer.push({event:"whatsapp_click", location:"fab"}); }catch(_){}
+    console.log("[WA] open", url);
+  }
+
+  // Apparition douce
+  requestAnimationFrame(()=>{ fab.classList.add('ready','pulse'); setTimeout(()=>fab.classList.remove('pulse'), 1100); });
+  // Petit badge d’amorçage (unique)
+  setTimeout(()=>badge.classList.add('show'), 600);
+  setTimeout(()=>badge.classList.remove('show'), 2600);
+
+  fab.addEventListener('click', (e)=>{
+    e.preventDefault();
+    openWA(NUMBER_INTL, MSG);
+  }, {passive:false});
+})();
+</script>
+</body>
+</html>
