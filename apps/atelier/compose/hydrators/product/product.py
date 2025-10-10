@@ -445,6 +445,24 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         elif "highlights" not in product_data:
             product_data["highlights"] = list(overlay_product.get("highlights") or [])
 
+    if isinstance(product_params_raw, dict):
+        if "name" in product_params_raw:
+            product_data["name"] = overlay_product.get("name") or product_data.get("name")
+        if "subname" in product_params_raw:
+            product_data["subname"] = overlay_product.get("subname") or product_data.get("subname")
+        if "description" in product_params_raw:
+            product_data["description"] = overlay_product.get("description") or product_data.get("description")
+        if "price" in product_params_raw:
+            product_data["price"] = overlay_product.get("price")
+        if "promo_price" in product_params_raw:
+            product_data["promo_price"] = overlay_product.get("promo_price")
+        if "currency" in product_params_raw and overlay_product.get("currency"):
+            product_data["currency"] = overlay_product.get("currency")
+        if "badges" in product_params_raw:
+            product_data["badges"] = overlay_product.get("badges") or product_data.get("badges") or []
+        if "highlights" in product_params_raw:
+            product_data["highlights"] = list(overlay_product.get("highlights") or [])
+
     product_data.setdefault("id", cfg.product.id or lookup_id or lookup_slug or "product")
     product_data.setdefault("slug", lookup_slug)
     product_data.setdefault("name", cfg.product.name or "Produit")

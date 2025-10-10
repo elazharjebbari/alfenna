@@ -8,30 +8,30 @@ form_kinds:
   checkout_intent:
     fields:
       # identité / contact
-      email: { required: true, max_length: 254, validators: ["email"] }
-      phone: { required: false, max_length: 32, validators: ["phone"] }
+      email: { required: false, max_length: 254, validators: ["email"] }
+      phone: { required: true, max_length: 32, validators: ["phone"] }
       full_name: { required: false, max_length: 150 }
       first_name: { required: false, max_length: 100 }
       last_name: { required: false, max_length: 100 }
 
       # adresse (les vrais champs utilisés par le stepper)
-      address_line1: { required: true, max_length: 200 }
+      address_line1: { required: false, max_length: 200 }
       address_line2: { required: false, max_length: 200 }
-      city: { required: true, max_length: 100 }
+      city: { required: false, max_length: 100 }
       state: { required: false, max_length: 100 }
-      postal_code: { required: true, max_length: 20, validators: ["postal"] }
-      country: { required: true, max_length: 2 }
+      postal_code: { required: false, max_length: 20, validators: ["postal"] }
+      country: { required: false, max_length: 2 }
 
       # paiement / panier
-      currency: { required: true, max_length: 3 }
-      payment_mode: { required: true, max_length: 16 }
+      currency: { required: false, max_length: 3 }
+      payment_mode: { required: false, max_length: 16 }
       payment_method: { required: false, max_length: 16 }
       promotion_selected: { required: false, max_length: 64 }
 
       # packs / quantités / cross-sell
-      pack_slug: { required: true, max_length: 64 }
+      pack_slug: { required: false, max_length: 64 }
       offer_key: { required: false, max_length: 64 }
-      quantity: { required: true, max_length: 4 }
+      quantity: { required: false, max_length: 4 }
       bump_optin: { required: false, type: bool }
       context.complementary_slugs: { required: false, type: list }
 

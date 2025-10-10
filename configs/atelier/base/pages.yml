@@ -234,6 +234,54 @@ pages:
       chatbot:
         component: "chatbot/shell"
         cache: false
+  product_detail_landing:
+    meta:
+      title: "Produit — Landing V2"
+      description: "Fiche produit optimisée pour la landing courte."
+    slots:
+      vendors:
+        component: "vendors/core"
+      header:
+        component: "header/modes"
+      product_hero:
+        component: "core/product"
+        params:
+          lookup:
+            slug: "{{ url.kwargs.product_slug }}"
+          product:
+            id: "demo-product"
+            name: "Sajadat Al-Raha"
+            description: "Tapis de priere a memoire de forme pour un confort maximal."
+            price: 399
+            promo_price: 329
+            currency: "MAD"
+          form:
+            alias: "core/forms/form_landingpage"
+            action_url: "leads:collect"
+            fields_map:
+              fullname: "full_name"
+              phone: "phone_number"
+              city: "city"
+              email: "email"
+              payment_mode: "payment_mode"
+              pack_slug: "pack_slug"
+              complementary_slugs: "context.complementary_slugs"
+          tracking:
+            enabled: true
+            events:
+              view: "lp_variant_view_v2"
+              media_switch: "product_media_switch"
+      sticky_buybar_v2:
+        component: "sticky/buybar_v2"
+      faq:
+        component: "faq/main"
+      fab_whatsapp:
+        component: "fab/whatsapp"
+      footer:
+        component: "footer/main"
+      chatbot:
+        component: "chatbot/shell"
+        cache: false
   faq:
     meta:
       title: "Lumière Academy — Questions fréquentes"

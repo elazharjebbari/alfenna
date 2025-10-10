@@ -153,3 +153,24 @@ class ProductHydratorTests(TestCase):
         template_path = ctx["form"].get("template")
         self.assertIsNotNone(template_path)
         self.assertTrue(str(template_path).endswith("components/core/forms/lead_step3/lead_step3.html"))
+
+    def test_form_landingpage_alias_resolution(self) -> None:
+        product = self._create_product()
+        params = {
+            "product_slug": product.slug,
+            "form": {
+                "alias": "core/forms/form_landingpage",
+                "fields_map": {
+                    "fullname": "full_name",
+                    "phone": "phone_number",
+                    "city": "city",
+                    "email": "email",
+                    "payment_mode": "payment_mode",
+                    "pack_slug": "pack_slug",
+                },
+            },
+        }
+        ctx = hydrate_product(self._request(f"/produits/{product.slug}/v2/"), params)
+        template_path = ctx["form"].get("template")
+        self.assertIsNotNone(template_path)
+        self.assertTrue(str(template_path).endswith("components/core/forms/form_landingpage/form_landingpage.html"))

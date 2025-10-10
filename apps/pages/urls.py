@@ -1,7 +1,19 @@
 from django.urls import path, reverse
 from django.views.generic import RedirectView
 
-from .views import HomeView, TestView, ContactView, CoursesView, CourseDetailView, LoginViewSafe, PacksView, DemoView, FaqView, ProductDetailView
+from .views import (
+    HomeView,
+    TestView,
+    ContactView,
+    CoursesView,
+    CourseDetailView,
+    LoginViewSafe,
+    PacksView,
+    DemoView,
+    FaqView,
+    ProductDetailLandingView,
+    ProductDetailView,
+)
 from apps.accounts.views import (
     SignupView,
     PasswordResetRequestView,
@@ -53,6 +65,12 @@ urlpatterns = [
                   path("packs", PacksView.as_view(), name="packs"),  # test
                   path("faq/", FaqView.as_view(), name="faq"),
                   path("produits/", ProductDetailView.as_view(), name="product-detail"),
+                  path(
+                      "produits/pack-cosmetique-naturel/v2/",
+                      ProductDetailLandingView.as_view(),
+                      {"product_slug": "pack-cosmetique-naturel"},
+                      name="product-detail-pack-cosmetique-naturel-v2",
+                  ),
                   path("produits/<slug:product_slug>/", ProductDetailView.as_view(), name="product-detail-slug"),
                   path("course-detail/<slug:course_slug>/", CourseDetailView.as_view(), name="course-detail"),
                   path("learn/<int:pk>/", LectureStreamRedirectView.as_view(), name="lecture-stream"),

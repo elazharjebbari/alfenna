@@ -7,8 +7,8 @@ flows:
       - key: step1
         title: "Vos coordonnées"
         fields:
-          - { name: email, type: email, required: true, label: "Votre email", validators: ["email"] }
-          - { name: phone, type: phone, required: false, label: "Téléphone" }
+          - { name: email, type: email, required: false, label: "Votre email", validators: ["email"] }
+          - { name: phone, type: phone, required: true, label: "Téléphone" }
         ctas:
           - { action: next, label: "Continuer" }
 
@@ -22,7 +22,7 @@ flows:
             choices:
               - ["solo", "Pack Solo"]
               - ["duo", "Pack Duo"]
-          - { name: full_name, type: text, required: false, label: "Nom complet" }
+#          - { name: full_name, type: text, required: false, label: "Nom complet" }
         ctas:
           - { action: next, label: "Continuer" }
 
@@ -39,3 +39,34 @@ flows:
           - { name: accept_terms, type: bool, required: true, label: "J’accepte les conditions" }
         ctas:
           - { action: submit, label: "Confirmer" }
+
+  - key: landing_short_flow
+    kind: checkout_intent
+    abandon_ttl_minutes: 30
+    max_reminders: 1
+    steps:
+      - key: step1
+        title: "Vos coordonnées"
+        fields:
+          - { name: full_name, type: text, required: false, label: "Nom complet" }
+          - { name: phone, type: phone, required: true, label: "Téléphone" }
+          - { name: city, type: text, required: false, label: "Ville" }
+        ctas:
+          - { action: next, label: "Continuer" }
+
+      - key: step2
+        title: "Choix du pack"
+        fields:
+          - { name: pack_slug, type: text, required: true, label: "Pack sélectionné" }
+          - { name: complementary_slugs, type: text, required: false, label: "Suppléments" }
+        ctas:
+          - { action: next, label: "Continuer" }
+
+      - key: step3
+        title: "Validation"
+        fields:
+          - { name: email, type: email, required: false, label: "Email" }
+          - { name: accept_terms, type: bool, required: true, label: "J’accepte les conditions" }
+          - { name: payment_mode, type: text, required: true, label: "Mode de paiement" }
+        ctas:
+          - { action: submit, label: "Valider" }

@@ -187,9 +187,10 @@ class ProductDetailView(SeoViewMixin, TemplateView):
     """Fiche produit orchestrée par Atelier."""
 
     template_name = "screens/product-detail.html"
+    page_id = "product_detail"
 
     def get(self, request, *args, **kwargs):
-        page_id = "product_detail"
+        page_id = getattr(self, "page_id", "product_detail")
         request._product_slug = kwargs.get("product_slug")
 
         page_ctx = pipeline.build_page_spec(page_id, request)
@@ -202,6 +203,11 @@ class ProductDetailView(SeoViewMixin, TemplateView):
         assets = pipeline.collect_page_assets(page_ctx)
 
         return response.render_base(page_ctx, fragments, assets, request)
+
+
+class ProductDetailLandingView(ProductDetailView):
+    page_id = "product_detail_landing"
+    template_name = "screens/product_detail_landing.html"
 
 
 class DemoView(SeoViewMixin, TemplateView):
