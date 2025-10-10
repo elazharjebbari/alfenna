@@ -1,13 +1,16 @@
 import logging
 from typing import Dict
 
+from django.db import transaction
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.flowforms.models import FlowSession, FlowStatus
 from apps.leads.constants import FormKind, LeadStatus
-from apps.leads.models import Lead
+from apps.leads.models import Lead, LeadSubmissionLog
 
 
 logger = logging.getLogger("leads.progress")
@@ -131,6 +134,16 @@ class LeadProgressAPIView(APIView):
                 return ""
             return value
 
+        flow_key = (
+            root_payload.get("flow_key")
+            or root_payload.get("ff_flow_key")
+            or root_payload.get("ff_flow")
+            or ""
+        )
+        flow_key = str(flow_key).strip() or "checkout_intent_flow"
+
+        step_key = str(root_payload.get("step") or "").strip() or "progress"
+
         lead = None
         email_raw = _first_val(incoming.get("email")) or ""
         phone_raw = _first_val(incoming.get("phone")) or ""
@@ -157,6 +170,8 @@ class LeadProgressAPIView(APIView):
         ctx = dict(lead.context or {})
         if ff_session_key:
             ctx.setdefault("ff_session_key", ff_session_key)
+        if flow_key:
+            ctx.setdefault("ff_flow_key", flow_key)
         for key, value in incoming.items():
             if str(key).startswith("context."):
                 subkey = key.split(".", 1)[1]
@@ -201,4 +216,84 @@ class LeadProgressAPIView(APIView):
             ]
         )
 
+        progress_payload = dict(incoming)
+        if ff_session_key:
+            progress_payload.setdefault("ff_session_key", ff_session_key)
+        progress_payload.setdefault("form_kind", form_kind)
+        progress_payload.setdefault("step", step_key)
+
+        self._update_flowsession(
+            flow_key=flow_key,
+            session_key=ff_session_key,
+            lead=lead,
+            payload=progress_payload,
+            step=step_key,
+        )
+
         return Response({"ok": True, "lead_id": lead.id}, status=status.HTTP_200_OK)
+
+    @staticmethod
+    def _is_empty(value):
+        if value is None:
+            return True
+        if isinstance(value, str):
+            return value.strip() == ""
+        if isinstance(value, (list, tuple, set, dict)):
+            return len(value) == 0
+        return False
+
+    def _update_flowsession(self, *, flow_key: str, session_key: str | None, lead: Lead, payload: Dict[str, object], step: str) -> None:
+        if not flow_key or not session_key:
+            return
+
+        safe_step = step or "progress"
+        payload_snapshot = dict(payload)
+        payload_snapshot.setdefault("step", safe_step)
+
+        with transaction.atomic():
+            try:
+                flowsession = FlowSession.objects.select_for_update().get(
+                    flow_key=flow_key,
+                    session_key=session_key,
+                )
+            except FlowSession.DoesNotExist:
+                flowsession = FlowSession.objects.create(
+                    flow_key=flow_key,
+                    session_key=session_key,
+                    status=FlowStatus.ACTIVE,
+                    data_snapshot={},
+                )
+
+            snapshot = dict(flowsession.data_snapshot or {})
+            for key, value in payload_snapshot.items():
+                if self._is_empty(value):
+                    continue
+                snapshot[key] = value
+
+            flowsession.data_snapshot = snapshot
+            flowsession.current_step = safe_step
+            flowsession.status = FlowStatus.ACTIVE
+            flowsession.lead = lead
+            flowsession.last_touch_at = timezone.now()
+            flowsession.save(
+                update_fields=[
+                    "data_snapshot",
+                    "current_step",
+                    "status",
+                    "lead",
+                    "last_touch_at",
+                    "updated_at",
+                ]
+            )
+
+            LeadSubmissionLog.objects.update_or_create(
+                lead=lead,
+                flow_key=flow_key,
+                session_key=session_key,
+                step=safe_step,
+                defaults={
+                    "status": LeadStatus.PENDING,
+                    "message": f"progress:{safe_step}",
+                    "payload": payload_snapshot,
+                },
+            )

@@ -472,6 +472,14 @@ class LeadCollectAPIView(APIView):
                     except Lead.DoesNotExist:
                         lead = None
 
+            if not lead:
+                lead = self._lookup_existing_lead(
+                    data.get("form_kind"),
+                    email=lead_values.get("email", ""),
+                    phone=lead_values.get("phone", ""),
+                    session_key=session_key,
+                )
+
             if lead:
                 self._assign_lead_fields(lead, lead_values, present_keys)
             else:
@@ -496,3 +504,39 @@ class LeadCollectAPIView(APIView):
 
     def _audit(self, request, payload, lead_id, reason: str, errors=None):
         log_antispam.info("lead_rejected reason=%s ip=%s ua=%s", reason, request.META.get("REMOTE_ADDR"), request.META.get("HTTP_USER_AGENT"))
+        log_antispam.info("payload=%s", payload)
+        if errors:
+            log_antispam.info("errors=%s", errors)
+
+    @staticmethod
+    def _lookup_existing_lead(
+        form_kind: str | None,
+        *,
+        email: str = "",
+        phone: str = "",
+        session_key: str = "",
+    ) -> Lead | None:
+        if not form_kind:
+            return None
+
+        qs = Lead.objects.select_for_update().filter(form_kind=form_kind)
+
+        if session_key:
+            lead = qs.filter(context__ff_session_key=session_key).first()
+            if lead:
+                return lead
+
+        email_norm = (email or "").strip().lower()
+        if email_norm:
+            lead = qs.filter(email__iexact=email_norm).first()
+            if lead:
+                return lead
+
+        phone_norm = (phone or "").strip()
+        if phone_norm:
+            lead = qs.filter(phone=phone_norm).first()
+            if lead:
+                return lead
+
+        return None
+
