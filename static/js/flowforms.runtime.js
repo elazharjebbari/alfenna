@@ -259,19 +259,39 @@
     return null;
   }
 
-  async function sendProgressUpdate(root, cfg, stepIndex) {
-    if (!cfg) return { skipped: true };
-    const url = cfg.progress_url || (cfg.backend_config && cfg.backend_config.progress_url) || PROGRESS_DEFAULT_URL;
-    if (!url) return { skipped: true };
-    const stepKey = typeof stepIndex === "number" ? `step${stepIndex}` : String(stepIndex || "");
-    if (!stepKey) return { skipped: true };
+  function normalizeBooleanLike(value) {
+    if (value === null || value === undefined) return value;
+    if (typeof value === "boolean") return value;
+    const str = String(value).trim().toLowerCase();
+    if (["1", "true", "on", "yes", "y", "t"].includes(str)) return true;
+    if (["0", "false", "off", "no", "n", "f"].includes(str)) return false;
+    return value;
+  }
 
+  async function postStepProgress(root, cfg, stepKey, fields) {
+    const url = cfg.progress_url || (cfg.backend_config && cfg.backend_config.progress_url) || PROGRESS_DEFAULT_URL;
+    if (!url) return false;
+
+    try {
+      if (typeof window.ffSyncPackFields === "function") window.ffSyncPackFields();
+      if (typeof window.ffSyncComplementary === "function") window.ffSyncComplementary();
+      if (typeof window.ffSyncPaymentField === "function") window.ffSyncPaymentField();
+    } catch (e) {
+      if (window.DEBUG_FF) console.warn("[FlowForms] pre-sync failed", e);
+    }
+
+    const flowKey = cfg.flow_key || cfg.progress_flow_key || PROGRESS_DEFAULT_FLOW_KEY;
+    const sessionKey = ensureProgressSessionKey(cfg.progress_session_storage_key);
+    const formKind = cfg.form_kind || cfg.progress_form_kind || "checkout_intent";
+
+    ensureProgressHiddenFields(root, cfg, sessionKey, flowKey);
     const fieldsMap = parseFieldsMap(root, cfg);
     const allPayload = collectFields(root, cfg, fieldsMap) || {};
-    const allowList = progressAllowList(cfg, stepKey);
+    const fieldList = Array.isArray(fields) && fields.length ? fields : null;
+
     const payload = {};
-    if (allowList && allowList.length) {
-      allowList.forEach((key) => {
+    if (fieldList) {
+      fieldList.forEach((key) => {
         if (Object.prototype.hasOwnProperty.call(allPayload, key)) {
           payload[key] = allPayload[key];
         }
@@ -288,15 +308,35 @@
       });
     }
 
-    if (!Object.keys(payload).length) {
-      return { skipped: true };
+    // Alias / normalisations
+    if (!payload.offer && payload.offer_key) payload.offer = payload.offer_key;
+    if (!payload.offer_key && payload.offer) payload.offer_key = payload.offer;
+    if (!payload.payment_mode && payload.payment_method) payload.payment_mode = payload.payment_method;
+    if (!payload.payment_method && payload.payment_mode) payload.payment_method = payload.payment_mode;
+
+    if (payload.bump_optin !== undefined) {
+      payload.bump_optin = normalizeBooleanLike(payload.bump_optin);
+    }
+    if (payload.accept_terms !== undefined) {
+      payload.accept_terms = normalizeBooleanLike(payload.accept_terms);
     }
 
-    const flowKey = cfg.flow_key || cfg.progress_flow_key || PROGRESS_DEFAULT_FLOW_KEY;
-    const sessionKey = ensureProgressSessionKey(cfg.progress_session_storage_key);
-    const formKind = cfg.form_kind || cfg.progress_form_kind || "checkout_intent";
+    if (payload["context.complementary_slugs"] !== undefined) {
+      try {
+        const comp = payload["context.complementary_slugs"];
+        if (typeof comp === "string" && comp.trim().startsWith("[")) {
+          payload["context.complementary_slugs"] = JSON.parse(comp);
+        } else if (!Array.isArray(comp)) {
+          payload["context.complementary_slugs"] = comp ? [comp] : [];
+        }
+      } catch (_) {
+        payload["context.complementary_slugs"] = [];
+      }
+    }
 
-    ensureProgressHiddenFields(root, cfg, sessionKey, flowKey);
+    const stepNumMatch = /step(\d+)/i.exec(stepKey || "");
+    const stepIdxForKey = stepNumMatch ? stepNumMatch[1] : stepKey;
+    const idemKey = `flow:${flowKey}:${sessionKey}:step:${stepIdxForKey}`;
 
     const body = {
       flow_key: flowKey,
@@ -304,6 +344,7 @@
       form_kind: formKind,
       step: stepKey,
       payload,
+      _idempotency_key: idemKey,
     };
 
     try {
@@ -312,6 +353,7 @@
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
+          "X-Idempotency-Key": idemKey,
         },
         body: JSON.stringify(body),
         credentials: "same-origin",
@@ -319,13 +361,30 @@
       if (!resp.ok) {
         const txt = await resp.text().catch(() => "");
         console.warn("[FlowForms] progress failed", resp.status, txt);
-        return { ok: false, status: resp.status };
+        return false;
       }
-      return { ok: true, status: resp.status };
+      return true;
     } catch (err) {
       console.warn("[FlowForms] progress error", err);
-      return { ok: false, error: err };
+      return false;
     }
+  }
+
+  async function sendProgressUpdate(root, cfg, stepIndex) {
+    if (!cfg) return { skipped: true };
+    const stepKey = typeof stepIndex === "number" ? `step${stepIndex}` : String(stepIndex || "");
+    if (!stepKey) return { skipped: true };
+
+    const allowList = progressAllowList(cfg, stepKey);
+    let fields = allowList;
+    if (!fields || !fields.length) {
+      const fieldsMap = parseFieldsMap(root, cfg);
+      const allPayload = collectFields(root, cfg, fieldsMap) || {};
+      fields = Object.keys(allPayload);
+    }
+
+    const ok = await postStepProgress(root, cfg, stepKey, fields);
+    return ok ? { ok: true } : { ok: false };
   }
 
   function parseFloatSafe(value) {
@@ -462,6 +521,72 @@
   function buildFinalBody(root, cfg) {
     const fieldsMap = parseFieldsMap(root, cfg);
     const payload = collectFields(root, cfg, fieldsMap);
+    const packHidden = root && root.querySelector ? root.querySelector('[data-ff-pack-slug]') : null;
+    if (packHidden) {
+      const packValue = (packHidden.value || "").trim();
+      const packKey = fieldsMap.pack_slug || "pack_slug";
+      const offerKeyName = fieldsMap.offer_key || fieldsMap.offer || "offer_key";
+      let finalPack = packValue;
+          if (!finalPack) {
+            const selectedOffer = root.querySelector(`[name="${offerKeyName}"]:checked`);
+        if (selectedOffer) {
+          const ds = selectedOffer.dataset || {};
+          finalPack = ds.ffPackSlug || selectedOffer.value || "";
+          if (!finalPack) {
+            const titleForSlug = ds.ffPackTitle || selectedOffer.value || "";
+            if (titleForSlug) {
+              finalPack = titleForSlug
+                .toString()
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+            }
+          }
+          payload[offerKeyName] = finalPack;
+          const offerAliasName = fieldsMap.offer || "offer";
+          if (offerAliasName && offerAliasName !== offerKeyName && !payload[offerAliasName]) {
+            payload[offerAliasName] = payload[offerKeyName];
+          }
+          if (ds.ffPackTitle && root.querySelector('[data-ff-pack-field="title"]')) {
+            root.querySelector('[data-ff-pack-field="title"]').value = ds.ffPackTitle || "";
+          }
+          if (ds.ffPackPrice && root.querySelector('[data-ff-pack-field="price"]')) {
+            root.querySelector('[data-ff-pack-field="price"]').value = ds.ffPackPrice || "";
+          }
+          if (ds.ffPackCurrency && root.querySelector('[data-ff-pack-field="currency"]')) {
+            root.querySelector('[data-ff-pack-field="currency"]').value = ds.ffPackCurrency || "";
+          }
+        }
+      }
+      if (finalPack) {
+        payload[packKey] = finalPack;
+        packHidden.value = finalPack;
+        payload[offerKeyName] = finalPack;
+      }
+    }
+
+    const paymentKey = fieldsMap.payment_mode || "payment_mode";
+    const paymentMethodKey = fieldsMap.payment_method || fieldsMap.paymentMethod || "payment_method";
+    const paymentValue = (payload[paymentKey] || payload[paymentMethodKey] || "").toString().trim();
+    if (paymentValue) {
+      payload[paymentKey] = paymentValue;
+      payload[paymentMethodKey] = paymentValue;
+      if (paymentKey !== "payment_mode") payload.payment_mode = paymentValue;
+      payload.payment_method = paymentValue;
+    }
+
+    if (payload.bump_optin !== undefined) {
+      const rawBump = payload.bump_optin;
+      const bumpValue = rawBump === true || rawBump === 1 || rawBump === "1" || rawBump === "true" || rawBump === "on";
+      payload.bump_optin = bumpValue;
+    }
+
+    if (payload.accept_terms !== undefined) {
+      const rawTerms = payload.accept_terms;
+      payload.accept_terms = rawTerms === true || rawTerms === 1 || rawTerms === "1" || rawTerms === "true" || rawTerms === "on";
+    }
+
     payload.form_kind = cfg.form_kind || "email_ebook";
     payload.client_ts = (cfg.context && cfg.context.client_ts) || nowIso();
     if (payload.honeypot === undefined) payload.honeypot = "";
@@ -747,7 +872,7 @@
 
     const syncPackFieldsHook = () => {
       if (typeof window.ffSyncPackFields === 'function') {
-        try { window.ffSyncPackFields(root); } catch (err) { if (window.DEBUG_FF) console.warn('[ff] syncPackFields failed', err); }
+        try { window.ffSyncPackFields(); } catch (err) { if (window.DEBUG_FF) console.warn('[ff] syncPackFields failed', err); }
       }
     };
 

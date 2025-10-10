@@ -188,15 +188,23 @@
                 <i class="fa-solid fa-chevron-right ms-2" aria-hidden="true"></i>
             </div>
 
-            <input type="hidden" name="{{ fm|safeget:'pack_slug'|default:'pack_slug' }}" value="" data-ff-pack-slug>
+            <input type="hidden"
+                   name="{{ fm|safeget:'pack_slug'|default:'pack_slug' }}"
+                   value=""
+                   data-ff-pack-slug
+                   data-ff-field="{{ fm|safeget:'pack_slug'|default:'pack_slug' }}">
             <input type="hidden" name="context.pack.slug" value="" data-ff-pack-field="slug">
             <input type="hidden" name="context.pack.title" value="" data-ff-pack-field="title">
             <input type="hidden" name="context.pack.price" value="" data-ff-pack-field="price">
             <input type="hidden" name="context.pack.currency" value="" data-ff-pack-field="currency">
 
-            <div data-ff-complementary-store class="d-none">
-                <input type="hidden" name="context.complementary_slugs" value="" data-ff-complementary-item>
-            </div>
+            <div data-ff-complementary-store class="d-none"></div>
+
+            <input type="hidden"
+                   name="context.complementary_slugs"
+                   value="[]"
+                   data-ff-field="context.complementary_slugs"
+                   data-ff-complementary-json>
 
             <!-- Offres -->
             {% with offers=form.offers %}
@@ -207,19 +215,22 @@
             <div class="row g-3 af-offers" role="group" aria-label="{% trans 'Choix du pack' %}">
                 {% if offers %}
                     {% for offer in offers %}
-                        {% with slug_candidate=offer.pack_slug|default:offer.slug|default:offer.code|default:'offer_'|add:forloop.counter %}
-                        {% with pack_slug=slug_candidate %}
+                    {% with slug_candidate=offer.code|default:offer.pack_slug|default:offer.slug|default:'offer_'|add:forloop.counter %}
+                    {% with pack_slug=slug_candidate %}
                         <div class="col-md-6">
                             <label class="af-card-radio {% if offer.is_featured %}is-featured{% endif %}"
                                    data-ll-click="buybar_select_plan"
                                    data-id="{{ slug_candidate|escape }}"
                                    data-ll-payload='{"offer_code":"{{ slug_candidate|escapejs }}"}'>
+
                                 <input type="radio" class="visually-hidden" name="{{ fm|safeget:'offer'|default:'offer_key' }}" value="{{ slug_candidate }}"
                                        data-ff-pack-slug="{{ pack_slug }}"
                                        data-ff-pack-title="{{ offer.title|default:''|escape }}"
                                        data-ff-pack-price="{{ offer.price|default:'' }}"
                                        data-ff-pack-currency="{{ offer.currency|default:pricing.currency|default:'MAD' }}"
-                                       {% if offer.is_featured %}checked{% elif forloop.first %}checked{% endif %}>
+                                       {% if offer.is_featured %}checked{% elif forloop.first %}checked{% endif %}
+                                >
+
                                 <div class="af-offer-card">
                                     {% if offer.is_featured %}
                                         <div class="af-badge-best">{{ offer.badge_label|default:default_offer_badge }}</div>
@@ -509,6 +520,7 @@
         const currencyField = root.querySelector('[data-ff-currency-field]');
         const paymentLegacyField = root.querySelector('[data-ff-payment-legacy]');
         const complementaryStore = root.querySelector('[data-ff-complementary-store]');
+        const complementaryJson = root.querySelector('[data-ff-complementary-json]');
         const emailPrimary = root.querySelector('[data-ff-email-primary]');
         const emailConfirm = root.querySelector('[data-ff-email-confirm]');
 
@@ -531,6 +543,23 @@
             syncEmailConfirm();
         }
 
+        function ensureDefaultPack() {
+            const options = root.querySelectorAll('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]');
+            if (!options.length) return;
+            const alreadyChecked = root.querySelector('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]:checked');
+            if (alreadyChecked) return;
+            const duo = root.querySelector('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"][value="duo"]');
+            const target = duo || options[0];
+            if (target) {
+                target.checked = true;
+            }
+        }
+
+        function slugify(text) {
+            return (text || '').toString().trim().toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+
         function syncPackFields() {
             const selected = root.querySelector('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]:checked');
             if (!selected) {
@@ -538,7 +567,12 @@
             }
 
             const dataset = selected.dataset || {};
-            const slug = dataset.ffPackSlug || selected.value || '';
+            let slug = dataset.ffPackSlug || selected.value || slugify(dataset.ffPackTitle || '') || '';
+            if (!slug) {
+                const allOffers = Array.from(root.querySelectorAll('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]'));
+                const index = allOffers.indexOf(selected);
+                if (index >= 0) slug = `offer_${index + 1}`;
+            }
             if (packSlugField) {
                 packSlugField.value = slug;
             }
@@ -572,6 +606,14 @@
             syncCheckoutMeta();
         };
 
+        window.ffSyncComplementary = function () {
+            syncComplementary();
+        };
+
+        window.ffSyncPaymentField = function () {
+            syncPaymentLegacy();
+        };
+
         function syncPaymentLegacy() {
             if (!paymentLegacyField) return;
             const selected = root.querySelector('[name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}"]:checked');
@@ -602,9 +644,17 @@
                 input.setAttribute('data-ff-complementary-item', '1');
                 complementaryStore.appendChild(input);
             });
+            if (complementaryJson) {
+                try {
+                    complementaryJson.value = JSON.stringify(slugs);
+                } catch (err) {
+                    complementaryJson.value = '[]';
+                }
+            }
         }
 
         syncPills();
+        ensureDefaultPack();
         syncPackFields();
         syncCheckoutMeta();
         syncPaymentLegacy();

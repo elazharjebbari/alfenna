@@ -6,6 +6,7 @@ from typing import Any, Iterable
 from django.conf import settings
 from django.db import IntegrityError, transaction
 from django.utils import timezone
+from django.utils.text import slugify
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,6 +26,7 @@ from apps.leads.submissions import merge_context_path
 
 logger = logging.getLogger(__name__)
 DEFAULT_SIGNATURE_IGNORED_KEYS: set[str] = {"context", "consent"}
+LEAD_FIELD_NAMES = {f.name for f in Lead._meta.concrete_fields}
 
 
 def _signature_ignore_keys(extra: Iterable[str] | None = None) -> set[str]:
@@ -266,6 +268,12 @@ class LeadCollectAPIView(APIView):
 
         values["context"] = context_payload
 
+        allowed = set(LEAD_FIELD_NAMES) | {"context"}
+        for key in list(values.keys()):
+            if key not in allowed:
+                values.pop(key, None)
+                present_keys.discard(key)
+
         return values, present_keys
 
     @staticmethod
@@ -359,6 +367,27 @@ class LeadCollectAPIView(APIView):
     def post(self, request, *args, **kwargs):
         payload = dict(request.data or {})
         raw_payload = dict(payload)
+
+        # Alias legacy → champs requis par la politique
+        if payload.get("payment_method") and not payload.get("payment_mode"):
+            payload["payment_mode"] = payload.get("payment_method")
+        if not payload.get("pack_slug"):
+            pack_candidate = (
+                payload.get("offer_key")
+                or payload.get("offer")
+                or payload.get("context.pack.slug")
+            )
+            if not pack_candidate:
+                title = (
+                    payload.get("context.pack.title")
+                    or payload.get("offer_title")
+                    or payload.get("pack_title")
+                )
+                if isinstance(title, str) and title.strip():
+                    pack_candidate = slugify(title)
+            if pack_candidate:
+                payload["pack_slug"] = pack_candidate
+
         flow_key = str(payload.pop("ff_flow_key", payload.pop("ff_flow", "")) or "").strip()
         session_key = str(payload.pop("ff_session_key", payload.pop("flow_session_key", "")) or "").strip()
 

@@ -145,7 +145,8 @@
       "savings_label": "Économie de 50 MAD",
       "position": 0,
       "extra": {
-        "bundle_size": 1
+        "bundle_size": 1,
+        "pack_slug": "solo"
       }
     }
   },
@@ -162,7 +163,8 @@
       "savings_label": "MEILLEUR CHOIX",
       "position": 1,
       "extra": {
-        "bundle_size": 2
+        "bundle_size": 2,
+        "pack_slug": "duo"
       }
     }
   },
