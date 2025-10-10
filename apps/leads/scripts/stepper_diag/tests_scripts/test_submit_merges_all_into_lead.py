@@ -21,12 +21,25 @@ STEP1_DATA = {
 STEP2_DATA = {
     "pack_slug": "pack-confort",
     "offer_key": "offer_confort",
+    "currency": "MAD",
+    "context.pack.slug": "pack-confort",
+    "context.pack.title": "Pack Confort",
+    "context.pack.price": 349,
+    "context.pack.currency": "MAD",
     "context.complementary_slugs": ["gommage-sucre"],
 }
 
 STEP3_DATA = {
     "payment_mode": "cod",
     "email": "submit-final@example.com",
+    "context.payment.method": "cod",
+    "context.checkout.total": 349,
+    "context.checkout.subtotal": 349,
+    "context.checkout.discount": 0,
+    "context.checkout.currency": "MAD",
+    "context.checkout.quantity": 1,
+    "context.checkout.amount_minor": 34900,
+    "accept_terms": True,
 }
 
 

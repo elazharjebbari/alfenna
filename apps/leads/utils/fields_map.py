@@ -24,6 +24,21 @@ DEFAULT_FIELDS_MAP: Dict[str, str] = {
     "bump": "bump_optin",
     "wa_optin": "wa_optin",
     "context.complementary_slugs": "context.complementary_slugs",
+    "context.pack.slug": "context.pack.slug",
+    "context.pack.title": "context.pack.title",
+    "context.pack.price": "context.pack.price",
+    "context.pack.currency": "context.pack.currency",
+    "context.addon.slug": "context.addon.slug",
+    "context.addon.title": "context.addon.title",
+    "context.addon.price": "context.addon.price",
+    "context.addon.currency": "context.addon.currency",
+    "context.payment.method": "context.payment.method",
+    "context.checkout.total": "context.checkout.total",
+    "context.checkout.subtotal": "context.checkout.subtotal",
+    "context.checkout.discount": "context.checkout.discount",
+    "context.checkout.currency": "context.checkout.currency",
+    "context.checkout.quantity": "context.checkout.quantity",
+    "context.checkout.amount_minor": "context.checkout.amount_minor",
 }
 
 _KEY_ALIASES = {

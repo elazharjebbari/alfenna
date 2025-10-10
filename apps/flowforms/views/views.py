@@ -37,7 +37,11 @@ class FlowWizardView(View):
             # Flow inconnu => 404 claire (meilleure DX que 500)
             return HttpResponseBadRequest(f"Flow '{flow_key}' not found in configuration.")
 
-        ctx = FlowContext(flow_key=flow_key, form_kind=flow_cfg["kind"])
+        ctx = FlowContext(
+            flow_key=flow_key,
+            form_kind=flow_cfg["kind"],
+            lookup_fields=("email", "phone"),
+        )
         fs = get_or_create_session(request, ctx)
         router = Router.from_flow(flow_cfg)
         snapshot = fs.data_snapshot or {}
@@ -80,7 +84,11 @@ class FlowWizardView(View):
         except KeyError:
             return HttpResponseBadRequest(f"Flow '{flow_key}' not found in configuration.")
 
-        ctx = FlowContext(flow_key=flow_key, form_kind=flow_cfg["kind"])
+        ctx = FlowContext(
+            flow_key=flow_key,
+            form_kind=flow_cfg["kind"],
+            lookup_fields=("email", "phone"),
+        )
         fs = get_or_create_session(request, ctx)
         router = Router.from_flow(flow_cfg)
 

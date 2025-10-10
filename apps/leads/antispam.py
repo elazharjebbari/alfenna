@@ -41,13 +41,19 @@ def verify_signed_token(token: str | None, payload: str, max_age_s: int = 7200) 
     ).hexdigest()
     return hmac.compare_digest(mac, sig)
 
-def dup_fingerprint(form_kind: str, email: str | None = None, phone: str | None = None,
-                    course_slug: str | None = None) -> str:
+def dup_fingerprint(
+    form_kind: str,
+    email: str | None = None,
+    phone: str | None = None,
+    course_slug: str | None = None,
+    pack_slug: str | None = None,
+) -> str:
     h = hashlib.md5()
     h.update((form_kind or "").encode())
     h.update((normalize_email(email)).encode())
     h.update((phone or "").encode())
     h.update((course_slug or "").encode())
+    h.update((pack_slug or "").encode())
     return h.hexdigest()
 
 def dup_recent(form_kind: str, fp: str, ttl: int) -> bool:

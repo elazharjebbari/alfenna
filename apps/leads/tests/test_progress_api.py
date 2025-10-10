@@ -27,6 +27,11 @@ class ProgressStepperTests(TestCase):
             "payload": {
                 "full_name": "Stepper Demo",
                 "phone": "+212633334444",
+                "email": "stepper@example.com",
+                "address_line1": "10 rue Test",
+                "postal_code": "20000",
+                "country": "MA",
+                "city": "Casablanca",
                 "product": "pack-progress",
                 "wa_optin": True,
             },
@@ -40,10 +45,17 @@ class ProgressStepperTests(TestCase):
             "payload": {
                 "offer_key": "pack-duo",
                 "quantity": 2,
+                "pack_slug": "pack-duo",
                 "address_raw": "10 rue Test, Rabat",
                 "payment_method": "cod",
                 "bump_optin": False,
                 "promotion_selected": "",
+                "context.pack.slug": "pack-duo",
+                "context.pack.title": "Pack Duo",
+                "context.pack.price": 489,
+                "context.pack.currency": "MAD",
+                "context.payment.method": "cod",
+                "context.complementary_slugs": ["bougie-massage"],
             },
         }
 
@@ -55,7 +67,10 @@ class ProgressStepperTests(TestCase):
 
         fs = FlowSession.objects.get(flow_key=flow_key, session_key=session_key)
         self.assertEqual(fs.data_snapshot.get("full_name"), "Stepper Demo")
-        self.assertEqual(fs.data_snapshot.get("offer_key"), "pack-duo")
+        self.assertEqual(fs.data_snapshot.get("postal_code"), "20000")
+        self.assertEqual(fs.data_snapshot.get("pack_slug"), "pack-duo")
+        self.assertEqual(fs.data_snapshot.get("context.pack.slug"), "pack-duo")
+        self.assertEqual(fs.data_snapshot.get("context.complementary_slugs"), ["bougie-massage"])
 
         logs = LeadSubmissionLog.objects.filter(flow_key=flow_key, session_key=session_key).order_by("step")
         self.assertEqual(logs.count(), 2)
@@ -71,10 +86,32 @@ class ProgressStepperTests(TestCase):
             "offer_key": "pack-duo",
             "quantity": 2,
             "address_raw": "10 rue Test, Rabat",
-            "payment_method": "cod",
-            "course_slug": "pack-progress",
+            "payment_mode": "cod",
+            "pack_slug": "pack-duo",
             "currency": "MAD",
             "accept_terms": True,
+            "context.pack.slug": "pack-duo",
+            "context.pack.title": "Pack Duo",
+            "context.pack.price": 489,
+            "context.pack.currency": "MAD",
+            "context.complementary_slugs": ["bougie-massage"],
+            "context.payment.method": "cod",
+            "context.checkout.subtotal": 978,
+            "context.checkout.discount": 0,
+            "context.checkout.total": 978,
+            "context.checkout.currency": "MAD",
+            "context.checkout.quantity": 2,
+            "context.checkout.amount_minor": 97800,
+            "context": {
+                "checkout": {
+                    "total": 978,
+                    "subtotal": 978,
+                    "discount": 0,
+                    "currency": "MAD",
+                    "quantity": 2,
+                    "amount_minor": 97800,
+                }
+            },
             "ff_flow_key": flow_key,
             "ff_session_key": session_key,
         }
@@ -91,6 +128,13 @@ class ProgressStepperTests(TestCase):
         lead = Lead.objects.get(phone="+212633334444")
         self.assertEqual(lead.idempotency_key, idem_key)
         self.assertEqual(lead.status, LeadStatus.VALID)
+        self.assertEqual(lead.pack_slug, "pack-duo")
+        self.assertEqual(lead.payment_mode, "cod")
+        self.assertEqual(lead.context.get("pack", {}).get("slug"), "pack-duo")
+        self.assertEqual(lead.context.get("complementary_slugs"), ["bougie-massage"])
+        checkout_ctx = lead.context.get("checkout", {})
+        self.assertEqual(checkout_ctx.get("total"), 978)
+        self.assertEqual(checkout_ctx.get("currency"), "MAD")
 
         collect_log = LeadSubmissionLog.objects.get(
             lead=lead,

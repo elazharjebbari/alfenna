@@ -35,7 +35,13 @@ def process_lead(lead_id: int):
         # Déduplication fenêtre
         # TTL selon kind
         ttl_map = {"email_ebook": 24 * 3600, "contact_full": 2 * 3600, "checkout_intent": 1800}
-        fp = dup_fingerprint(lead.form_kind, email=lead.email, phone=lead.phone, course_slug=lead.course_slug)
+        fp = dup_fingerprint(
+            lead.form_kind,
+            email=lead.email,
+            phone=lead.phone,
+            course_slug=lead.course_slug,
+            pack_slug=lead.pack_slug,
+        )
         if dup_recent(lead.form_kind, fp, ttl=ttl_map.get(lead.form_kind, 3600)):
             lead.status = LeadStatus.REJECTED
             lead.reject_reason = "DUPLICATE"

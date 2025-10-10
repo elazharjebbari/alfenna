@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Dict
+import json
 
 import logging
 
@@ -12,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.flowforms.models import FlowSession, FlowStatus
+from apps.leads.submissions import merge_context_path
 
 from .antispam import normalize_email
 from .audit import log_api, log_submit
@@ -35,6 +37,7 @@ _LEAD_UPDATABLE_FIELDS: tuple[str, ...] = (
     "state",
     "postal_code",
     "country",
+    "pack_slug",
     "billing_address_line1",
     "billing_address_line2",
     "billing_city",
@@ -47,6 +50,7 @@ _LEAD_UPDATABLE_FIELDS: tuple[str, ...] = (
     "course_slug",
     "currency",
     "coupon_code",
+    "payment_mode",
     "client_ts",
     "locale",
     "ab_variant",
@@ -64,6 +68,24 @@ _CONTEXT_ENRICH_KEYS: tuple[str, ...] = (
     "address_raw",
     "wa_optin",
 )
+
+
+def _normalise_complementary_slugs(value: Any) -> list[str]:
+    if isinstance(value, (list, tuple)):
+        return [str(item) for item in value if str(item).strip()]
+    if isinstance(value, str):
+        candidate = value.strip()
+        if not candidate:
+            return []
+        if candidate.startswith("["):
+            try:
+                parsed = json.loads(candidate)
+                if isinstance(parsed, list):
+                    return [str(item) for item in parsed if str(item).strip()]
+            except json.JSONDecodeError:
+                pass
+        return [candidate]
+    return []
 
 
 def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
@@ -312,7 +334,22 @@ class LeadProgressAPIView(APIView):
         meta: Dict[str, Any],
     ) -> None:
         dirty_fields: list[str] = []
-        context_patch = {}
+        context_payload = dict(lead.context or {})
+        context_changed = False
+
+        if "payment_mode" not in payload and payload.get("payment_method"):
+            payload["payment_mode"] = payload["payment_method"]
+        if "payment_method" not in payload and payload.get("payment_mode"):
+            payload["payment_method"] = payload["payment_mode"]
+        pack_raw = payload.get("pack_slug")
+        pack_value = pack_raw.strip() if isinstance(pack_raw, str) else pack_raw
+        if (not pack_value) and payload.get("context.pack.slug"):
+            payload["pack_slug"] = payload["context.pack.slug"]
+
+        if "context.complementary_slugs" in payload:
+            payload["context.complementary_slugs"] = _normalise_complementary_slugs(
+                payload["context.complementary_slugs"]
+            )
 
         for field in _LEAD_UPDATABLE_FIELDS:
             if field not in payload:
@@ -334,12 +371,22 @@ class LeadProgressAPIView(APIView):
 
         for ctx_field in _CONTEXT_ENRICH_KEYS:
             if ctx_field in payload:
-                context_patch[ctx_field] = payload[ctx_field]
+                value = payload[ctx_field]
+                if context_payload.get(ctx_field) != value:
+                    context_payload[ctx_field] = value
+                    context_changed = True
 
-        if context_patch:
-            context = dict(lead.context or {})
-            context.update(context_patch)
-            lead.context = context
+        for key, value in payload.items():
+            if not isinstance(key, str) or not key.startswith("context."):
+                continue
+            dotted = key.split(".", 1)[1].strip()
+            if not dotted:
+                continue
+            if merge_context_path(context_payload, dotted, value):
+                context_changed = True
+
+        if context_changed:
+            lead.context = context_payload
             dirty_fields.append("context")
 
         # trace meta si disponible (IP/UA sur premier passage typiquement)

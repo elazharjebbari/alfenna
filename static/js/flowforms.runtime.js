@@ -745,6 +745,12 @@
       }
     };
 
+    const syncPackFieldsHook = () => {
+      if (typeof window.ffSyncPackFields === 'function') {
+        try { window.ffSyncPackFields(root); } catch (err) { if (window.DEBUG_FF) console.warn('[ff] syncPackFields failed', err); }
+      }
+    };
+
     refreshCheckout();
 
     root.addEventListener("click", async (e) => {
@@ -756,6 +762,7 @@
         if (!validateRequiredStep(root, cfg, cur)) {
           return;
         }
+        syncPackFieldsHook();
         const max = getMaxStep(root);
         if (progressActive && cur < max) {
           try {
@@ -805,6 +812,14 @@
       const cur = getCurrentStep(root);
       if (!validateRequiredStep(root, cfg, cur)) {
         return;
+      }
+      syncPackFieldsHook();
+      if (progressActive) {
+        try {
+          await sendProgressUpdate(root, cfg, cur);
+        } catch (err) {
+          console.warn("[FlowForms] progress (submit) threw", err);
+        }
       }
       await handleSubmit(root, Object.assign({}, cfg));
     });

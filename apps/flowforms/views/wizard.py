@@ -78,7 +78,11 @@ class FlowFormsWizardView(SessionWizardView):
 
     def _load_runtime(self, request: HttpRequest, *, flow_key: str):
         self.flow_cfg: Dict[str, Any] = get_flow(flow_key)  # dict
-        self.ctx = FlowContext(flow_key=flow_key, form_kind=self.flow_cfg["kind"])
+        self.ctx = FlowContext(
+            flow_key=flow_key,
+            form_kind=self.flow_cfg["kind"],
+            lookup_fields=("email", "phone"),
+        )
         self.fs = get_or_create_session(request, self.ctx)
         self.router = Router.from_flow(self.flow_cfg)
         self.snapshot: Dict[str, Any] = self.fs.data_snapshot or {}
@@ -208,3 +212,4 @@ class FlowFormsWizardView(SessionWizardView):
             self.fs.status = FlowStatus.COMPLETED
             self.fs.save(update_fields=["status", "updated_at"])
         return self._render_done()
+

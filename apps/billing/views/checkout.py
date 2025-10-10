@@ -101,6 +101,19 @@ def cancel_view(request: HttpRequest) -> HttpResponse:
     return _render_checkout_page(request, page_id="billing/cancel")
 
 
+@require_GET
+def sandbox_view(request: HttpRequest) -> HttpResponse:
+    sid = request.GET.get("sid", "")
+    paid = request.GET.get("paid", "")
+    body = (
+        "<html><body><h1>Sandbox Checkout</h1>"
+        f"<p>Session: {sid or 'n/a'}</p>"
+        f"<p>Paid: {paid or '0'}</p>"
+        "</body></html>"
+    )
+    return HttpResponse(body)
+
+
 def _render_checkout_page(request: HttpRequest, *, page_id: str) -> HttpResponse:
     page_ctx = pipeline.build_page_spec(page_id=page_id, request=request, extra={})
     fragments: dict[str, str] = {}

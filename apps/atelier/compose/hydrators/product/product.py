@@ -530,12 +530,18 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     else:
         final_offers = offers_db
 
-    for offer in final_offers:
-        if isinstance(offer, dict):
-            if "price" in offer:
-                offer["price"] = _coerce_decimal(offer.get("price"))
-            if "compare_at_price" in offer:
-                offer["compare_at_price"] = _coerce_decimal(offer.get("compare_at_price"))
+    for idx, offer in enumerate(final_offers):
+        if not isinstance(offer, dict):
+            continue
+        if "price" in offer:
+            offer["price"] = _coerce_decimal(offer.get("price"))
+        if "compare_at_price" in offer:
+            offer["compare_at_price"] = _coerce_decimal(offer.get("compare_at_price"))
+        slug_value = offer.get("pack_slug") or offer.get("slug") or offer.get("code")
+        if not slug_value:
+            slug_value = f"offer_{idx+1}"
+        offer.setdefault("pack_slug", slug_value)
+        offer.setdefault("slug", slug_value)
 
     bump_final: Dict[str, Any] = dict(bump_db)
     if cfg.form.bump:
@@ -635,34 +641,62 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     if complementaries_ctx:
         flow_context["complementaries"] = complementaries_ctx
 
+    def _mapped(*keys: str) -> list[str]:
+        seen: list[str] = []
+        for key in keys:
+            if not key:
+                continue
+            mapped = form_fields_map.get(key) or key
+            mapped = str(mapped).strip()
+            if mapped and mapped not in seen:
+                seen.append(mapped)
+        return seen
+
     progress_steps = {
-        "step1": [
-            field
-            for field in [
-                form_fields_map.get("fullname"),
-                form_fields_map.get("phone"),
-                form_fields_map.get("product"),
-                "campaign",
-                "source",
-                "utm_source",
-                "utm_medium",
-                "utm_campaign",
-                form_fields_map.get("wa_optin"),
-            ]
-            if field
-        ],
-        "step2": [
-            field
-            for field in [
-                form_fields_map.get("offer"),
-                form_fields_map.get("quantity"),
-                form_fields_map.get("bump"),
-                form_fields_map.get("promotion"),
-                form_fields_map.get("address"),
-                form_fields_map.get("payment_method"),
-            ]
-            if field
-        ],
+        "step1": _mapped(
+            "fullname",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "address_line1",
+            "address_line2",
+            "city",
+            "state",
+            "postal_code",
+            "country",
+            "wa_optin",
+            "campaign",
+            "source",
+            "utm_source",
+            "utm_medium",
+            "utm_campaign",
+        ),
+        "step2": _mapped(
+            "pack_slug",
+            "offer",
+            "offer_key",
+            "quantity",
+            "bump",
+            "bump_optin",
+            "promotion",
+            "promotion_selected",
+            "context.pack.slug",
+            "context.pack.title",
+            "context.pack.price",
+            "context.pack.currency",
+            "context.complementary_slugs",
+        ),
+        "step3": _mapped(
+            "coupon_code",
+            "payment_mode",
+            "payment_method",
+            "context.payment.method",
+            "email",
+            "currency",
+            "course_slug",
+            "accept_terms",
+        ),
     }
 
     flow_config = {

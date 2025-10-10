@@ -20,6 +20,7 @@ from .models import Lead, LeadEvent, LeadSubmissionLog
 from .permissions import PublicPOSTOnly
 from .serializers import DynamicLeadSerializer
 from .tasks import process_lead
+from .submissions import merge_context_path
 
 
 logger = logging.getLogger(__name__)
@@ -65,6 +66,24 @@ def _deep_merge_dict(base: dict[str, Any], override: dict[str, Any]) -> dict[str
         else:
             merged[key] = value
     return merged
+
+
+def _normalise_complementary_slugs(value: Any) -> list[str]:
+    if isinstance(value, (list, tuple)):
+        return [str(item) for item in value if str(item).strip()]
+    if isinstance(value, str):
+        candidate = value.strip()
+        if not candidate:
+            return []
+        if candidate.startswith("["):
+            try:
+                parsed = json.loads(candidate)
+                if isinstance(parsed, list):
+                    return [str(item) for item in parsed if str(item).strip()]
+            except json.JSONDecodeError:
+                pass
+        return [candidate]
+    return []
 
 # --- SIGN ENDPOINT (génère un signed_token pour /leads/collect) ---
 import time, hmac, hashlib, json
@@ -130,65 +149,134 @@ class LeadCollectAPIView(APIView):
         request,
         idem_key: str,
         raw_payload: dict[str, Any],
-    ) -> dict[str, Any]:
+    ) -> tuple[dict[str, Any], set[str]]:
         context_payload = cls._build_context(data, request)
-        return {
+        present_keys: set[str] = set()
+        values: dict[str, Any] = {
             "form_kind": data.get("form_kind"),
-            "campaign": data.get("campaign") or "",
-            "source": data.get("source") or "",
-            "utm_source": data.get("utm_source") or "",
-            "utm_medium": data.get("utm_medium") or "",
-            "utm_campaign": data.get("utm_campaign") or "",
             "context": context_payload,
-            "email": normalize_email(data.get("email")),
-            "first_name": data.get("first_name") or "",
-            "last_name": data.get("last_name") or "",
-            "full_name": data.get("full_name") or "",
-            "phone": data.get("phone") or "",
-            "address_line1": data.get("address_line1") or "",
-            "address_line2": data.get("address_line2") or "",
-            "city": data.get("city") or "",
-            "state": data.get("state") or "",
-            "postal_code": data.get("postal_code") or "",
-            "country": data.get("country") or "",
-            "course_slug": data.get("course_slug") or "",
-            "currency": (data.get("currency") or "").upper(),
-            "coupon_code": data.get("coupon_code") or "",
-            "billing_address_line1": data.get("billing_address_line1") or "",
-            "billing_address_line2": data.get("billing_address_line2") or "",
-            "billing_city": data.get("billing_city") or "",
-            "billing_state": data.get("billing_state") or "",
-            "billing_postal_code": data.get("billing_postal_code") or "",
-            "billing_country": (data.get("billing_country") or "").upper(),
-            "company_name": data.get("company_name") or "",
-            "tax_id_type": data.get("tax_id_type") or "",
-            "tax_id": data.get("tax_id") or "",
-            "save_customer": bool(data.get("save_customer") or False),
-            "accept_terms": bool(data.get("accept_terms") or False),
-            "invoice_language": data.get("invoice_language") or "",
-            "ebook_id": data.get("ebook_id") or "",
-            "newsletter_optin": bool(data.get("newsletter_optin") or False),
-            "consent": bool(data.get("consent") or False),
+            "idempotency_key": idem_key or "",
+            "status": LeadStatus.PENDING,
             "consent_ip": request.META.get("REMOTE_ADDR"),
             "consent_user_agent": request.META.get("HTTP_USER_AGENT", "")[:300],
-            "idempotency_key": idem_key or "",
-            "client_ts": data.get("client_ts"),
-            "signed_token_hash": "",
             "honeypot_value": raw_payload.get("honeypot") or "",
-            "status": LeadStatus.PENDING,
             "ip_addr": request.META.get("REMOTE_ADDR"),
             "user_agent": request.META.get("HTTP_USER_AGENT", "")[:300],
             "referer": request.META.get("HTTP_REFERER", "")[:500],
             "page_path": request.META.get("REQUEST_URI", "")[:300],
             "locale": (request.headers.get("Accept-Language") or "")[:16],
             "ab_variant": (raw_payload.get("ab_variant") or "")[:32],
+            "signed_token_hash": "",
         }
+        present_keys.update(values.keys())
+
+        def set_value(key: str, value: Any) -> None:
+            values[key] = value
+            present_keys.add(key)
+
+        def maybe_set(key: str, *, source: str | None = None, transform=None, uppercase: bool = False) -> None:
+            src = source or key
+            if src not in data:
+                return
+            value = data[src]
+            if transform:
+                value = transform(value)
+            if uppercase and isinstance(value, str):
+                value = value.upper()
+            set_value(key, value)
+
+        # marketing context (replay only if fourni)
+        for marketing_key in ("campaign", "source", "utm_source", "utm_medium", "utm_campaign"):
+            if marketing_key in data:
+                set_value(marketing_key, data[marketing_key])
+
+        maybe_set("email", transform=normalize_email)
+        maybe_set("first_name")
+        maybe_set("last_name")
+        maybe_set("full_name")
+        maybe_set("phone")
+        maybe_set("address_line1")
+        maybe_set("address_line2")
+        maybe_set("city")
+        maybe_set("state")
+        maybe_set("postal_code")
+        maybe_set("country", uppercase=True)
+        maybe_set("pack_slug")
+        maybe_set("currency", uppercase=True)
+        maybe_set("coupon_code")
+        maybe_set("billing_address_line1")
+        maybe_set("billing_address_line2")
+        maybe_set("billing_city")
+        maybe_set("billing_state")
+        maybe_set("billing_postal_code")
+        maybe_set("billing_country", uppercase=True)
+        maybe_set("company_name")
+        maybe_set("tax_id_type")
+        maybe_set("tax_id")
+        maybe_set("product")
+        maybe_set("offer_key")
+        maybe_set("quantity")
+        maybe_set("payment_method")
+        maybe_set("payment_mode")
+        maybe_set("wa_optin")
+        maybe_set("bump_optin")
+        maybe_set("promotion_selected")
+        maybe_set("address_raw")
+        maybe_set("ebook_id")
+        maybe_set("client_ts")
+
+        if "save_customer" in data:
+            set_value("save_customer", bool(data.get("save_customer")))
+        if "accept_terms" in data:
+            set_value("accept_terms", bool(data.get("accept_terms")))
+        if "newsletter_optin" in data:
+            set_value("newsletter_optin", bool(data.get("newsletter_optin")))
+        if "consent" in data:
+            set_value("consent", bool(data.get("consent")))
+        if "invoice_language" in data:
+            set_value("invoice_language", data.get("invoice_language") or "")
+
+        # Normaliser les alias payment_mode/payment_method
+        if "payment_mode" not in present_keys and values.get("payment_method"):
+            set_value("payment_mode", values["payment_method"])
+        if "payment_method" not in present_keys and values.get("payment_mode"):
+            set_value("payment_method", values["payment_mode"])
+
+        # Dotted context.* keys → context_payload
+        for key, value in data.items():
+            if isinstance(key, str) and key.startswith("context."):
+                sub_key = key.split(".", 1)[1].strip()
+                if not sub_key:
+                    continue
+                if sub_key == "complementary_slugs":
+                    value = _normalise_complementary_slugs(value)
+                merge_context_path(context_payload, sub_key, value)
+
+        # Contexte direct du payload (dict complet)
+        if isinstance(data.get("context"), dict):
+            for k, v in data["context"].items():
+                if context_payload.get(k) != v:
+                    context_payload[k] = v
+
+        pack_value = (values.get("pack_slug") or "").strip()
+        if not pack_value:
+            pack_ctx = context_payload.get("pack")
+            if isinstance(pack_ctx, dict) and pack_ctx.get("slug"):
+                set_value("pack_slug", pack_ctx.get("slug"))
+
+        values["context"] = context_payload
+
+        return values, present_keys
 
     @staticmethod
-    def _assign_lead_fields(lead: Lead, values: dict[str, Any]) -> None:
+    def _assign_lead_fields(lead: Lead, values: dict[str, Any], present_keys: set[str]) -> None:
         update_fields: list[str] = []
         for field, value in values.items():
             if field == "context":
+                continue
+            if field not in present_keys:
+                continue
+            if not hasattr(lead, field):
                 continue
             if getattr(lead, field) != value:
                 setattr(lead, field, value)
@@ -245,6 +333,15 @@ class LeadCollectAPIView(APIView):
                 "payload": sanitized,
             },
         )
+
+    @staticmethod
+    def _normalise_snapshot(payload: dict[str, Any]) -> dict[str, Any]:
+        normalised = dict(payload)
+        if "context.complementary_slugs" in normalised:
+            normalised["context.complementary_slugs"] = _normalise_complementary_slugs(
+                normalised["context.complementary_slugs"]
+            )
+        return normalised
 
     @staticmethod
     def _json_safe_payload(payload: dict[str, Any]) -> dict[str, Any]:
@@ -317,10 +414,10 @@ class LeadCollectAPIView(APIView):
         if not flow_key and data.get("form_kind") == FormKind.CHECKOUT_INTENT:
             flow_key = "checkout_intent_flow"
 
-        snapshot_payload = self._json_safe_payload(dict(data))
+        snapshot_payload = self._normalise_snapshot(self._json_safe_payload(dict(data)))
         snapshot_payload.pop("signed_token", None)
 
-        lead_values = self._build_lead_values(data, request, idem_key, raw_payload)
+        lead_values, present_keys = self._build_lead_values(data, request, idem_key, raw_payload)
 
         flowsession: FlowSession | None = None
         lead: Lead | None = None
@@ -347,7 +444,7 @@ class LeadCollectAPIView(APIView):
                         lead = None
 
             if lead:
-                self._assign_lead_fields(lead, lead_values)
+                self._assign_lead_fields(lead, lead_values, present_keys)
             else:
                 try:
                     lead = Lead.objects.create(**lead_values)

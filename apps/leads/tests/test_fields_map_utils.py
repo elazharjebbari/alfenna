@@ -23,6 +23,10 @@ class NormalizeFieldsMapTests(SimpleTestCase):
         self.assertEqual(result['payment_method'], 'mode_field')
         self.assertEqual(result['payment_mode'], 'mode_field')
 
+    def test_phone_number_value_normalised(self) -> None:
+        result = normalize_fields_map({'phone': 'phone_number'})
+        self.assertEqual(result['phone'], 'phone')
+
     def test_compact_address_populates_address_line1(self) -> None:
         result = normalize_fields_map({'address': 'shipping_address'})
         self.assertEqual(result['address_line1'], 'shipping_address')
@@ -43,6 +47,8 @@ class DefaultFieldsMapTests(SimpleTestCase):
             'email',
             'payment_method',
             'payment_mode',
+            'context.pack.slug',
+            'context.checkout.total',
         }
         self.assertTrue(expected_keys.issubset(DEFAULT_FIELDS_MAP.keys()))
 

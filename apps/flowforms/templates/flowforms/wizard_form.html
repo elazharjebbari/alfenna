@@ -1,10 +1,22 @@
 {% load static %}
 <!doctype html>
-<html>
+<html lang="fr">
 <head>
   <meta charset="utf-8">
   <title>{{ flow.key }} — {{ step.title|default:step.key }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    .ff-form { display: flex; flex-direction: column; gap: 1rem; }
+    .ff-field { display: flex; flex-direction: column; gap: .35rem; }
+    .ff-label { font-weight: 600; }
+    .ff-help { color: #5f6368; font-size: .85rem; }
+    .ff-error { color: #b00020; font-size: .9rem; }
+    .ff-progress { font-size: .9rem; color: #5f6368; }
+    .ff-cta-bar { display: flex; gap: .75rem; }
+    .btn { padding: .6rem 1rem; border-radius: .5rem; border: 1px solid transparent; cursor: pointer; }
+    .btn-primary { background: #111; color: #fff; }
+    .btn-secondary { background: #f3f4f6; color: #111; }
+  </style>
 </head>
 <body>
   <!-- Sentinel enrichi pour instrumentation -->
@@ -17,15 +29,38 @@
 
   <main class="container" style="max-width:720px;margin:2rem auto;padding:0 1rem;">
     <header style="margin-bottom:1rem;">
-      <div aria-label="progress" class="ff-progress text-sm" style="opacity:.8">
+      <div aria-label="progress" class="ff-progress">
         Étape {{ progress.index }} / {{ progress.total }}
       </div>
       <h1 style="margin:.25rem 0 0 0;">{{ step.title|default:step.key }}</h1>
     </header>
 
-    <form method="post" enctype="multipart/form-data" novalidate>
+    <form method="post" enctype="multipart/form-data" novalidate class="ff-form">
       {% csrf_token %}
-      {{ form.as_p }}
+
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <div class="ff-error">{{ error }}</div>
+        {% endfor %}
+      {% endif %}
+
+      {% for field in form %}
+        <div class="ff-field">
+          <label class="ff-label" for="{{ field.id_for_label }}">
+            {{ field.label }}{% if field.field.required %} *{% endif %}
+          </label>
+
+          {{ field }}
+
+          {% if field.help_text %}
+            <div class="ff-help">{{ field.help_text }}</div>
+          {% endif %}
+
+          {% for error in field.errors %}
+            <div class="ff-error">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
 
       {% include "flowforms/fragments/_cta_bar.html" with ctas=step.ctas %}
     </form>

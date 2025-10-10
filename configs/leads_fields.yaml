@@ -29,7 +29,7 @@ form_kinds:
       preferred_channel: { required: false, max_length: 16 }
   checkout_intent:
     fields:
-      course_slug: { required: true, max_length: 220 }
+      course_slug: { required: false, max_length: 220 }
       pack_slug: { required: false, max_length: 64 }
       currency: { required: true, max_length: 3 }
       coupon_code: { required: false, max_length: 64 }

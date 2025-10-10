@@ -1,4 +1,5 @@
 from __future__ import annotations
+import copy
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
 
@@ -24,6 +25,33 @@ _ALLOWED_LEAD_FIELDS = {
     "client_ts", "locale", "ab_variant",
 }
 
+def merge_context_path(context: Dict[str, Any], dotted_key: str, value: Any) -> bool:
+    """Merge a dotted context key (ex: "pack.slug") into a nested dict."""
+    if not dotted_key:
+        return False
+
+    parts = [segment.strip() for segment in dotted_key.split('.') if segment.strip()]
+    if not parts:
+        return False
+
+    node = context
+    for segment in parts[:-1]:
+        current = node.get(segment)
+        if not isinstance(current, dict):
+            current = {}
+        node[segment] = current
+        node = current
+
+    leaf = parts[-1]
+    changed = node.get(leaf) != value
+    node[leaf] = value
+
+    removed = False
+    if len(parts) > 1:
+        removed = context.pop('.'.join(parts), None) is not None
+
+    return changed or removed
+
 @dataclass
 class SubmitResult:
     ok: bool
@@ -33,11 +61,13 @@ class SubmitResult:
     reason: str = ""
 
 def _merge_context(lead: Lead, snapshot: Dict[str, Any]) -> None:
-    ctx = dict(lead.context or {})
+    ctx = copy.deepcopy(lead.context) if lead.context else {}
     for k, v in snapshot.items():
         if isinstance(k, str) and k.startswith("context."):
-            key = k.split(".", 1)[1]
-            ctx[key] = v
+            key = k.split(".", 1)[1].strip()
+            if not key:
+                continue
+            merge_context_path(ctx, key, v)
     lead.context = ctx
 
 def _apply_fields(lead: Lead, snapshot: Dict[str, Any]) -> None:
