@@ -415,6 +415,13 @@
                 </label>
             </div>
 
+            <div class="form-check mt-3">
+              <input class="form-check-input" type="checkbox" id="ff-terms" name="accept_terms" required>
+              <label for="ff-terms" class="form-check-label">J’accepte les conditions générales</label>
+              <div class="invalid-feedback">Merci d’accepter les conditions.</div>
+            </div>
+
+
             <!-- Récap rapide (reprend le style de l’étape 2) -->
             {% trans "Remise paiement en ligne" as default_summary_discount_label %}
             {% trans "Total" as default_payment_total_label %}
@@ -499,7 +506,6 @@
             price: root.querySelector('[data-ff-pack-field="price"]'),
             currency: root.querySelector('[data-ff-pack-field="currency"]'),
         };
-        const courseSlugField = root.querySelector('[data-ff-course-slug]');
         const currencyField = root.querySelector('[data-ff-currency-field]');
         const paymentLegacyField = root.querySelector('[data-ff-payment-legacy]');
         const complementaryStore = root.querySelector('[data-ff-complementary-store]');
@@ -552,15 +558,6 @@
 
         function syncCheckoutMeta() {
             const meta = (typeof window !== 'undefined' && window.__CHECKOUT__) ? window.__CHECKOUT__ : {};
-            if (courseSlugField) {
-                if (courseSlugField.value && courseSlugField.value.trim()) {
-                    // keep existing value
-                } else if (meta.courseSlug) {
-                    courseSlugField.value = meta.courseSlug;
-                } else if (window.productSlug) {
-                    courseSlugField.value = window.productSlug;
-                }
-            }
             if (currencyField) {
                 if (meta.currency) {
                     currencyField.value = meta.currency;
@@ -661,65 +658,134 @@
 
 {% if form.flow_config_json %}
 <script type="application/json" data-ff-config>
-    {{form.flow_config_json | safe}}
+{
+  "form_kind": "checkout_intent",
+  "flow_key": "checkout_intent_flow",
+  "endpoint_url": "{{ action_target }}",
+  "progress_url": "/api/leads/progress/",
+  "require_idempotency": true,
+  "require_signed_token": true,
+  "sign_url": "{{ leads_sign_url }}",
+
+  "progress_session_field_name": "ff_session_key",
+  "progress_flow_field_name": "ff_flow_key",
+  "progress_session_storage_key": "ff_session",
+
+  "progress_steps": {
+    "step1": [
+      "{{ fm|safeget:'fullname'|default:'full_name' }}",
+      "{{ fm|safeget:'phone'|default:'phone' }}",
+      "{{ fm|safeget:'email'|default:'email' }}",
+      "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
+      "{{ fm|safeget:'city'|default:'city' }}",
+      "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
+      "{{ fm|safeget:'country'|default:'country' }}"
+    ],
+    "step2": [
+      "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
+      "{{ fm|safeget:'offer'|default:'offer_key' }}",
+      "{{ fm|safeget:'quantity'|default:'quantity' }}",
+      "context.complementary_slugs"
+    ],
+    "step3": [
+      "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
+      "{{ fm|safeget:'email'|default:'email' }}",
+      "accept_terms",
+      "{{ fm|safeget:'currency'|default:'currency' }}"
+    ]
+  },
+
+  "fields_map": {
+    "fullname": "{{ fm|safeget:'fullname'|default:'full_name' }}",
+    "phone": "{{ fm|safeget:'phone'|default:'phone' }}",
+    "email": "{{ fm|safeget:'email'|default:'email' }}",
+    "address_line1": "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
+    "address_line2": "{{ fm|safeget:'address_line2'|default:'address_line2' }}",
+    "city": "{{ fm|safeget:'city'|default:'city' }}",
+    "state": "{{ fm|safeget:'state'|default:'state' }}",
+    "postal_code": "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
+    "country": "{{ fm|safeget:'country'|default:'country' }}",
+    "quantity": "{{ fm|safeget:'quantity'|default:'quantity' }}",
+    "offer": "{{ fm|safeget:'offer'|default:'offer_key' }}",
+    "pack_slug": "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
+    "product": "{{ fm|safeget:'product'|default:'product' }}",
+    "promotion": "{{ fm|safeget:'promotion'|default:'promotion_selected' }}",
+    "payment_mode": "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
+    "payment_method": "{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}",
+    "bump": "{{ fm|safeget:'bump'|default:'bump_optin' }}",
+    "wa_optin": "{{ fm|safeget:'wa_optin'|default:'wa_optin' }}",
+    "context.complementary_slugs": "context.complementary_slugs",
+    "currency": "{{ fm|safeget:'currency'|default:'currency' }}"
+  },
+
+  "context": {}
+}
 </script>
+
 {% else %}
 <script type="application/json" data-ff-config>
-    {
-        "form_kind": "checkout_intent",
-        "flow_key": "checkout_intent_flow",
-        "endpoint_url": "{{ action_target }}",
-        "require_idempotency": true,
-        "require_signed_token": true,
-        "sign_url": "{{ leads_sign_url }}",
-        "progress_url": "/api/leads/progress/",
-        "progress_steps": {
-            "step1": [
-                "{{ fm|safeget:'fullname'|default:'full_name' }}",
-                "{{ fm|safeget:'phone'|default:'phone' }}",
-                "{{ fm|safeget:'email'|default:'email' }}",
-                "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
-                "{{ fm|safeget:'city'|default:'city' }}",
-                "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
-                "{{ fm|safeget:'country'|default:'country' }}"
-            ],
-            "step2": [
-                "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
-                "{{ fm|safeget:'offer'|default:'offer_key' }}",
-                "{{ fm|safeget:'quantity'|default:'quantity' }}"
-            ],
-            "step3": [
-                "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
-                "{{ fm|safeget:'email'|default:'email' }}"
-            ]
-        },
-        "progress_session_field_name": "ff_session_key",
-        "progress_flow_field_name": "ff_flow_key",
-        "progress_session_storage_key": "ff_session",
-        "progress_form_kind": "checkout_intent",
-        "context": {},
-        "fields_map": {
-            "fullname": "{{ fm|safeget:'fullname'|default:'full_name' }}",
-            "phone": "{{ fm|safeget:'phone'|default:'phone' }}",
-            "email": "{{ fm|safeget:'email'|default:'email' }}",
-            "address_line1": "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
-            "address_line2": "{{ fm|safeget:'address_line2'|default:'address_line2' }}",
-            "city": "{{ fm|safeget:'city'|default:'city' }}",
-            "state": "{{ fm|safeget:'state'|default:'state' }}",
-            "postal_code": "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
-            "country": "{{ fm|safeget:'country'|default:'country' }}",
-            "quantity": "{{ fm|safeget:'quantity'|default:'quantity' }}",
-            "offer": "{{ fm|safeget:'offer'|default:'offer_key' }}",
-            "pack_slug": "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
-            "product": "{{ fm|safeget:'product'|default:'product' }}",
-            "promotion": "{{ fm|safeget:'promotion'|default:'promotion_selected' }}",
-            "payment_mode": "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
-            "payment_method": "{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}",
-            "bump": "{{ fm|safeget:'bump'|default:'bump_optin' }}",
-            "wa_optin": "{{ fm|safeget:'wa_optin'|default:'wa_optin' }}",
-            "context.complementary_slugs": "context.complementary_slugs"
-        }
-    }
+{
+  "form_kind": "checkout_intent",
+  "flow_key": "checkout_intent_flow",
+  "endpoint_url": "{{ action_target }}",
+  "progress_url": "/api/leads/progress/",
+  "require_idempotency": true,
+  "require_signed_token": true,
+  "sign_url": "{{ leads_sign_url }}",
+
+  "progress_session_field_name": "ff_session_key",
+  "progress_flow_field_name": "ff_flow_key",
+  "progress_session_storage_key": "ff_session",
+
+  "progress_steps": {
+    "step1": [
+      "{{ fm|safeget:'fullname'|default:'full_name' }}",
+      "{{ fm|safeget:'phone'|default:'phone' }}",
+      "{{ fm|safeget:'email'|default:'email' }}",
+      "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
+      "{{ fm|safeget:'city'|default:'city' }}",
+      "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
+      "{{ fm|safeget:'country'|default:'country' }}"
+    ],
+    "step2": [
+      "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
+      "{{ fm|safeget:'offer'|default:'offer_key' }}",
+      "{{ fm|safeget:'quantity'|default:'quantity' }}",
+      "context.complementary_slugs"
+    ],
+    "step3": [
+      "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
+      "{{ fm|safeget:'email'|default:'email' }}",
+      "accept_terms",
+      "{{ fm|safeget:'currency'|default:'currency' }}"
+    ]
+  },
+
+  "fields_map": {
+    "fullname": "{{ fm|safeget:'fullname'|default:'full_name' }}",
+    "phone": "{{ fm|safeget:'phone'|default:'phone' }}",
+    "email": "{{ fm|safeget:'email'|default:'email' }}",
+    "address_line1": "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
+    "address_line2": "{{ fm|safeget:'address_line2'|default:'address_line2' }}",
+    "city": "{{ fm|safeget:'city'|default:'city' }}",
+    "state": "{{ fm|safeget:'state'|default:'state' }}",
+    "postal_code": "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
+    "country": "{{ fm|safeget:'country'|default:'country' }}",
+    "quantity": "{{ fm|safeget:'quantity'|default:'quantity' }}",
+    "offer": "{{ fm|safeget:'offer'|default:'offer_key' }}",
+    "pack_slug": "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
+    "product": "{{ fm|safeget:'product'|default:'product' }}",
+    "promotion": "{{ fm|safeget:'promotion'|default:'promotion_selected' }}",
+    "payment_mode": "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
+    "payment_method": "{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}",
+    "bump": "{{ fm|safeget:'bump'|default:'bump_optin' }}",
+    "wa_optin": "{{ fm|safeget:'wa_optin'|default:'wa_optin' }}",
+    "context.complementary_slugs": "context.complementary_slugs",
+    "currency": "{{ fm|safeget:'currency'|default:'currency' }}"
+  },
+
+  "context": {}
+}
 </script>
 {% endif %}
 {% endwith %}

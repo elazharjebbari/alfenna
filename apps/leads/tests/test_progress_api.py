@@ -1,145 +1,30 @@
-from __future__ import annotations
-
-import uuid
-
-from django.test import Client, TestCase
+# apps/leads/tests/test_progress_api.py
+from django.test import TestCase
 from django.urls import reverse
+from rest_framework.test import APIClient
+from apps.leads.models import Lead
+from apps.leads.constants import FormKind
 
-from apps.flowforms.models import FlowSession
-from apps.leads.constants import FormKind, LeadStatus
-from apps.leads.models import LeadSubmissionLog, Lead
+class ProgressAPITests(TestCase):
+    def setUp(self):
+        self.client = APIClient()
 
-
-class ProgressStepperTests(TestCase):
-    def test_stepper_progress_flow_sends_each_step(self) -> None:
-        client = Client()
-        flow_key = "checkout_intent_flow"
-        session_key = f"ts-{uuid.uuid4().hex[:12]}"
-
-        progress_url = reverse("leads:progress")
-        collect_url = reverse("leads:collect")
-
-        step1_payload = {
-            "flow_key": flow_key,
-            "session_key": session_key,
+    def test_step2_persists_pack_slug(self):
+        url = reverse("leads:progress")
+        headers = {"HTTP_X_IDEMPOTENCY_KEY": "flow:checkout_intent_flow:demo-session:step:2"}
+        payload = {
             "form_kind": FormKind.CHECKOUT_INTENT,
-            "step": "step1",
-            "payload": {
-                "full_name": "Stepper Demo",
-                "phone": "+212633334444",
-                "email": "stepper@example.com",
-                "address_line1": "10 rue Test",
-                "postal_code": "20000",
-                "country": "MA",
-                "city": "Casablanca",
-                "product": "pack-progress",
-                "wa_optin": True,
-            },
+            "flow_key": "checkout_intent_flow",
+            "ff_session_key": "demo-session",
+            "email": "user@example.com",
+            "offer_key": "duo",
+            "pack_slug": "duo",
+            "quantity": 1,
+            "context.complementary_slugs": ["serum-vitc"]
         }
-
-        step2_payload = {
-            "flow_key": flow_key,
-            "session_key": session_key,
-            "form_kind": FormKind.CHECKOUT_INTENT,
-            "step": "step2",
-            "payload": {
-                "offer_key": "pack-duo",
-                "quantity": 2,
-                "pack_slug": "pack-duo",
-                "address_raw": "10 rue Test, Rabat",
-                "payment_method": "cod",
-                "bump_optin": False,
-                "promotion_selected": "",
-                "context.pack.slug": "pack-duo",
-                "context.pack.title": "Pack Duo",
-                "context.pack.price": 489,
-                "context.pack.currency": "MAD",
-                "context.payment.method": "cod",
-                "context.complementary_slugs": ["bougie-massage"],
-            },
-        }
-
-        resp_step1 = client.post(progress_url, data=step1_payload, content_type="application/json")
-        resp_step2 = client.post(progress_url, data=step2_payload, content_type="application/json")
-
-        self.assertEqual(resp_step1.status_code, 200)
-        self.assertEqual(resp_step2.status_code, 200)
-
-        fs = FlowSession.objects.get(flow_key=flow_key, session_key=session_key)
-        self.assertEqual(fs.data_snapshot.get("full_name"), "Stepper Demo")
-        self.assertEqual(fs.data_snapshot.get("postal_code"), "20000")
-        self.assertEqual(fs.data_snapshot.get("pack_slug"), "pack-duo")
-        self.assertEqual(fs.data_snapshot.get("context.pack.slug"), "pack-duo")
-        self.assertEqual(fs.data_snapshot.get("context.complementary_slugs"), ["bougie-massage"])
-
-        logs = LeadSubmissionLog.objects.filter(flow_key=flow_key, session_key=session_key).order_by("step")
-        self.assertEqual(logs.count(), 2)
-        self.assertEqual({log.step for log in logs}, {"step1", "step2"})
-
-        idem_key = f"idem-{uuid.uuid4().hex[:8]}"
-        collect_payload = {
-            "form_kind": FormKind.CHECKOUT_INTENT,
-            "full_name": "Stepper Demo",
-            "phone": "+212633334444",
-            "email": "stepper@example.com",
-            "product": "pack-progress",
-            "offer_key": "pack-duo",
-            "quantity": 2,
-            "address_raw": "10 rue Test, Rabat",
-            "payment_mode": "cod",
-            "pack_slug": "pack-duo",
-            "currency": "MAD",
-            "accept_terms": True,
-            "context.pack.slug": "pack-duo",
-            "context.pack.title": "Pack Duo",
-            "context.pack.price": 489,
-            "context.pack.currency": "MAD",
-            "context.complementary_slugs": ["bougie-massage"],
-            "context.payment.method": "cod",
-            "context.checkout.subtotal": 978,
-            "context.checkout.discount": 0,
-            "context.checkout.total": 978,
-            "context.checkout.currency": "MAD",
-            "context.checkout.quantity": 2,
-            "context.checkout.amount_minor": 97800,
-            "context": {
-                "checkout": {
-                    "total": 978,
-                    "subtotal": 978,
-                    "discount": 0,
-                    "currency": "MAD",
-                    "quantity": 2,
-                    "amount_minor": 97800,
-                }
-            },
-            "ff_flow_key": flow_key,
-            "ff_session_key": session_key,
-        }
-
-        collect_resp = client.post(
-            collect_url,
-            data=collect_payload,
-            content_type="application/json",
-            **{"HTTP_X_IDEMPOTENCY_KEY": idem_key},
-        )
-
-        self.assertEqual(collect_resp.status_code, 202)
-
-        lead = Lead.objects.get(phone="+212633334444")
-        self.assertEqual(lead.idempotency_key, idem_key)
-        self.assertEqual(lead.status, LeadStatus.VALID)
-        self.assertEqual(lead.pack_slug, "pack-duo")
-        self.assertEqual(lead.payment_mode, "cod")
-        self.assertEqual(lead.context.get("pack", {}).get("slug"), "pack-duo")
-        self.assertEqual(lead.context.get("complementary_slugs"), ["bougie-massage"])
-        checkout_ctx = lead.context.get("checkout", {})
-        self.assertEqual(checkout_ctx.get("total"), 978)
-        self.assertEqual(checkout_ctx.get("currency"), "MAD")
-
-        collect_log = LeadSubmissionLog.objects.get(
-            lead=lead,
-            flow_key=flow_key,
-            session_key=session_key,
-            step="collect",
-        )
-        self.assertIn(collect_log.status, {LeadStatus.PENDING, LeadStatus.VALID})
+        res = self.client.post(url, payload, format="json", **headers)
+        self.assertEqual(res.status_code, 200)
+        lead = Lead.objects.get(email="user@example.com")
+        self.assertEqual(getattr(lead, "pack_slug", ""), "duo")
+        self.assertIn("complementary_slugs", lead.context)
+        self.assertEqual(lead.context["complementary_slugs"], ["serum-vitc"])

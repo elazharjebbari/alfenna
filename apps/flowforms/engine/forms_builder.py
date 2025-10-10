@@ -118,12 +118,15 @@ def _make_django_field(spec: FieldSpec) -> forms.Field:
     elif t in ("select", "radio"):
         choices = _coerce_choices(spec.choices)
         if not choices:
-            raise ImproperlyConfigured(f"Le champ '{spec.name}' de type '{t}' requiert des choices[].")
+            raise ValueError(f"{spec.name}: choices required for {t}")
         base = forms.ChoiceField(required=required, choices=choices)
         if t == "radio":
             radio = forms.RadioSelect()
-            radio.choices = choices
+            radio.choices = list(base.choices)
             base.widget = radio
+        else:
+            base.widget = forms.Select(choices=list(base.choices))
+        base.widget.choices = list(base.choices)
         f = base
     elif t == "checkbox":
         # multi-choix
@@ -132,7 +135,9 @@ def _make_django_field(spec: FieldSpec) -> forms.Field:
             # checkbox simple (bool)
             f = forms.BooleanField(required=required)
         else:
-            f = forms.MultipleChoiceField(required=required, choices=choices, widget=forms.CheckboxSelectMultiple)
+            widget = forms.CheckboxSelectMultiple()
+            f = forms.MultipleChoiceField(required=required, choices=choices, widget=widget)
+            f.widget.choices = list(f.choices)
     elif t == "date":
         f = forms.DateField(required=required, widget=forms.DateInput(attrs={"type": "date"}))
     elif t == "datetime":

@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views import LeadCollectAPIView, SignPayloadView
-from .views_progress import LeadProgressAPIView
+from apps.leads.views.views import LeadCollectAPIView, SignPayloadView
+from apps.leads.views.views_progress import LeadProgressAPIView
 
 app_name = "leads"
 urlpatterns = [

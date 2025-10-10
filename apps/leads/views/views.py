@@ -12,15 +12,15 @@ from rest_framework.views import APIView
 
 from apps.flowforms.models import FlowSession, FlowStatus
 
-from .antispam import idempotency_seen, normalize_email, verify_signed_token
-from .audit import log_api, log_antispam
-from .conf import get_global_policy
-from .constants import FormKind, LeadStatus, RejectReason
-from .models import Lead, LeadEvent, LeadSubmissionLog
-from .permissions import PublicPOSTOnly
-from .serializers import DynamicLeadSerializer
-from .tasks import process_lead
-from .submissions import merge_context_path
+from apps.leads.antispam import idempotency_seen, normalize_email, verify_signed_token
+from apps.leads.audit import log_api, log_antispam
+from apps.leads.conf import get_global_policy
+from apps.leads.constants import FormKind, LeadStatus, RejectReason
+from apps.leads.models import Lead, LeadEvent, LeadSubmissionLog
+from apps.leads.permissions import PublicPOSTOnly
+from apps.leads.serializers import DynamicLeadSerializer
+from apps.leads.tasks import process_lead
+from apps.leads.submissions import merge_context_path
 
 
 logger = logging.getLogger(__name__)
@@ -89,7 +89,7 @@ def _normalise_complementary_slugs(value: Any) -> list[str]:
 import time, hmac, hashlib, json
 from django.http import JsonResponse
 from rest_framework.views import APIView
-from .permissions import PublicPOSTOnly
+from apps.leads.permissions import PublicPOSTOnly
 
 class SignPayloadView(APIView):
     """

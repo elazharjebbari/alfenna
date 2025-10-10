@@ -50,7 +50,12 @@
             {{ field.label }}{% if field.field.required %} *{% endif %}
           </label>
 
-          {{ field }}
+          {% if field.errors %}
+            {% with widget=field.as_widget(attrs={'class':'is-invalid'}) %}{{ widget }}{% endwith %}
+            <div class="invalid-feedback" style="display:block;">{{ field.errors|striptags }}</div>
+          {% else %}
+            {{ field }}
+          {% endif %}
 
           {% if field.help_text %}
             <div class="ff-help">{{ field.help_text }}</div>

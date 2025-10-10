@@ -52,14 +52,14 @@ def _lead_lookup(form_kind: str, data: Dict[str, Any], lookup_fields: Tuple[str,
         m = qs.filter(phone=phone).first()
         if m:
             return m
-    if "pack_slug" in lookup_fields and pack_slug:
-        m = qs.filter(pack_slug=pack_slug).first()
-        if m:
-            return m
-    if "course_slug" in lookup_fields and course_slug:
-        m = qs.filter(course_slug=course_slug).first()
-        if m:
-            return m
+    # if "pack_slug" in lookup_fields and pack_slug:
+    #     m = qs.filter(pack_slug=pack_slug).first()
+    #     if m:
+    #         return m
+    # if "course_slug" in lookup_fields and course_slug:
+    #     m = qs.filter(course_slug=course_slug).first()
+    #     if m:
+    #         return m
     return None
 
 def _make_idempotency_key(flow_key: str, session_key: str) -> str:

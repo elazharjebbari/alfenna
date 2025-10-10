@@ -28,6 +28,14 @@ flows:
 
       - key: step3
         title: "Validation"
-        fields: []
+        fields:
+          - name: currency
+            type: select
+            required: true
+            label: "Devise"
+            choices:
+              - ["MAD", "MAD"]
+              - ["EUR", "EUR"]
+          - { name: accept_terms, type: bool, required: true, label: "J’accepte les conditions" }
         ctas:
           - { action: submit, label: "Confirmer" }
