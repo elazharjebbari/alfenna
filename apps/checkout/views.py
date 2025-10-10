@@ -201,7 +201,23 @@ class CheckoutSessionView(APIView):
 
         stripe_url = _create_stripe_session(payload, request)
         if stripe_url:
-            return Response({"redirect_url": stripe_url}, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "redirect_url": stripe_url,
+                    "url": stripe_url,
+                    "amount": int(amount_minor),
+                    "currency": currency,
+                },
+                status=status.HTTP_200_OK,
+            )
 
         mock_url = _build_mock_redirect_url(request)
-        return Response({"redirect_url": mock_url}, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "redirect_url": mock_url,
+                "url": mock_url,
+                "amount": int(amount_minor),
+                "currency": currency,
+            },
+            status=status.HTTP_200_OK,
+        )

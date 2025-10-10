@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block extra_head %}
+  <script defer src="{% static 'js/flowforms.runtime.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<main class="container my-5">
+  <h1 class="h3 mb-3">Form Landing — 3 étapes</h1>
+
+  <form data-ff-root id="ff-root">
+
+    <section data-ff-step="1">
+      <h2 class="h5">Vos coordonnées</h2>
+
+      <div class="mb-3">
+        <label class="form-label">Nom complet (facultatif)</label>
+        <input id="ff-fullname" name="full_name" class="form-control" autocomplete="name">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Téléphone (requis)</label>
+        <input id="ff-phone" name="phone" class="form-control" required autocomplete="tel">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Ville (facultatif)</label>
+        <input id="ff-city" name="city" class="form-control" autocomplete="address-level2">
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-primary" data-ff-next>Continuer</button>
+      </div>
+    </section>
+
+    <section data-ff-step="2" class="d-none">
+      <h2 class="h5">Choisissez votre pack</h2>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <label class="af-card-radio w-100 p-3 border rounded" data-id="duo">
+            <input type="radio" name="offer_key" value="duo" class="d-none">
+            <strong>Pack Duo</strong><br>
+            <small>Excellent choix</small>
+          </label>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="af-card-radio w-100 p-3 border rounded" data-id="solo">
+            <input type="radio" name="offer_key" value="solo" class="d-none">
+            <strong>Pack Solo</strong><br>
+            <small>Basique</small>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-check mt-3">
+        <input class="form-check-input" id="af-bump-optin" name="complementary_slugs" type="checkbox" value="bump_extra">
+        <label class="form-check-label" for="af-bump-optin">
+          Ajouter le supplément utile (+)
+        </label>
+      </div>
+
+      <input type="hidden" data-ff-pack-slug name="pack_slug" value="">
+
+      <div class="d-flex justify-content-between mt-3">
+        <button type="button" class="btn btn-outline-secondary" data-ff-prev>Retour</button>
+        <button type="button" class="btn btn-primary" data-ff-next>Continuer</button>
+      </div>
+    </section>
+
+    <section data-ff-step="3" class="d-none">
+      <h2 class="h5">Validation</h2>
+
+      <div class="mb-3">
+        <label class="form-label">Email (facultatif)</label>
+        <input id="ff-email" name="email" class="form-control" autocomplete="email">
+      </div>
+
+      <div class="mb-3">
+        <div class="d-flex gap-3">
+          <label class="af-pay-option p-2 border rounded" data-mode="cod">
+            <input type="radio" name="payopt" class="d-none">
+            Paiement à la livraison (COD)
+          </label>
+          <label class="af-pay-option p-2 border rounded is-online" data-mode="online">
+            <input type="radio" name="payopt" class="d-none">
+            Paiement en ligne
+          </label>
+        </div>
+        <input type="hidden" name="payment_mode" value="cod">
+      </div>
+
+      <div class="form-check mb-3">
+        <input class="form-check-input" id="ff-terms" name="accept_terms" type="checkbox" checked>
+        <label class="form-check-label" for="ff-terms">
+          J’accepte les conditions générales
+        </label>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" data-ff-prev>Retour</button>
+        <button type="button" class="btn btn-success" data-ff-submit>Valider</button>
+      </div>
+    </section>
+
+    <section data-ff-step="4" data-thank-you class="d-none">
+      <div class="alert alert-success">
+        <strong>Merci !</strong> Votre demande a bien été enregistrée.
+      </div>
+    </section>
+  </form>
+
+  <script type="application/json" data-ff-config>
+  {
+    "flow_key": "landing_short_flow",
+    "form_kind": "checkout_intent",
+    "endpoint_url": "/api/leads/collect/",
+    "progress_path": "/api/leads/progress/",
+    "progress_steps": {
+      "step1": ["full_name", "phone", "city"],
+      "step2": ["pack_slug", "complementary_slugs"],
+      "step3": ["email", "accept_terms", "payment_mode"]
+    },
+    "fields_map": {
+      "full_name": "full_name",
+      "phone": "phone",
+      "city": "city",
+      "email": "email",
+      "accept_terms": "accept_terms",
+      "payment_mode": "payment_mode",
+      "pack_slug": "pack_slug",
+      "complementary_slugs": "complementary_slugs"
+    }
+  }
+  </script>
+
+  <script>
+    (function () {
+      function syncPackFields() {
+        var chosen = document.querySelector('label.af-card-radio input[type="radio"]:checked');
+        var slug = chosen ? chosen.value : "";
+        var hidden = document.querySelector('[data-ff-pack-slug]');
+        if (hidden) {
+          hidden.value = slug || "";
+        }
+      }
+
+      function setPayment(mode) {
+        var hidden = document.querySelector('input[name="payment_mode"]');
+        if (hidden) {
+          hidden.value = mode || "cod";
+        }
+        document.querySelectorAll('.af-pay-option').forEach(function (el) {
+          el.classList.remove('active');
+        });
+        var match = document.querySelector('.af-pay-option[data-mode="' + mode + '"]');
+        if (match) {
+          match.classList.add('active');
+        }
+      }
+
+      window.ffSyncPackFields = syncPackFields;
+      window.ffSetPayment = setPayment;
+
+      document.addEventListener('change', function (event) {
+        if (event.target && event.target.matches('label.af-card-radio input[type="radio"]')) {
+          syncPackFields();
+        }
+        var option = event.target ? event.target.closest('.af-pay-option') : null;
+        if (option) {
+          setPayment(option.getAttribute('data-mode'));
+        }
+      });
+
+      window.addEventListener('DOMContentLoaded', function () {
+        var duo = document.querySelector('label.af-card-radio[data-id="duo"] input[type="radio"]');
+        if (duo) {
+          duo.checked = true;
+          syncPackFields();
+        }
+        setPayment('cod');
+      });
+    })();
+  </script>
+</main>
+{% endblock %}

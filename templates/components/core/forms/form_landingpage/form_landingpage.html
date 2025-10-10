@@ -1,0 +1,196 @@
+{% load static i18n safeget %}
+{% url 'leads:collect' as leads_collect_url %}
+{% url 'leads:sign' as leads_sign_url %}
+{% with fm=fields_map %}
+{% with action_target=action_url|default:leads_collect_url %}
+
+<form class="af-form card border-0 shadow-sm p-4"
+      data-ff-root data-steps="4" novalidate
+      data-action-url="{{ action_target }}"
+      data-require-signed="true"
+      data-sign-url="{{ leads_sign_url }}"
+      data-fields-map='{
+        "full_name": "{{ fm|safeget:'fullname'|default:'full_name' }}",
+        "phone": "{{ fm|safeget:'phone'|default:'phone' }}",
+        "city": "{{ fm|safeget:'city'|default:'city' }}",
+        "email": "{{ fm|safeget:'email'|default:'email' }}",
+        "accept_terms": "accept_terms",
+        "payment_mode": "{{ fm|safeget:'payment_mode'|default:'payment_mode' }}",
+        "pack_slug": "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
+        "complementary_slugs": "context.complementary_slugs"
+      }'
+      data-checkout-url="/api/checkout/sessions/">
+    {% csrf_token %}
+    <input type="hidden" name="{{ fm|safeget:'product'|default:'product' }}" value="{{ product.id|default:product.slug }}" data-ff-product>
+    <input type="hidden" name="{{ fm|safeget:'currency'|default:'currency' }}" value="{{ pricing.currency|default:'MAD' }}">
+    <input type="hidden" name="ff_session_key" value="" data-ff-session-key>
+    <input type="hidden" name="ff_flow_key" value="{{ form.flow_key|default:'checkout_intent_flow' }}" data-ff-flow-key>
+    <input type="hidden" name="{{ fm|safeget:'pack_slug'|default:'pack_slug' }}" value="" data-ff-pack-slug>
+    <input type="hidden" name="context.complementary_slugs" value="[]" data-ff-complementary-json>
+
+    <header class="text-center mb-4">
+        <img src="{% static 'images/logo/logo.png' %}" alt="Logo" class="mb-2" style="height:48px;">
+        <h2 class="h5 mb-1">{% trans "Finalisez votre demande en 3 étapes" %}</h2>
+        <p class="text-muted small mb-0" data-ff-progress>{% trans "Étape 1 / 4" %}</p>
+    </header>
+
+    <section data-ff-step="1" class="ff-step">
+        <div class="mb-3">
+            <label class="form-label" for="ff-fullname">{% trans "Nom complet" %}</label>
+            <input id="ff-fullname" name="{{ fm|safeget:'fullname'|default:'full_name' }}" class="form-control" autocomplete="name" placeholder="{% trans 'Ex. Salma El Idrissi' %}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="ff-phone">{% trans "Téléphone" %}</label>
+            <input id="ff-phone" name="{{ fm|safeget:'phone'|default:'phone' }}" class="form-control" required autocomplete="tel" placeholder="06 12 34 56 78">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="ff-city">{% trans "Ville" %}</label>
+            <input id="ff-city" name="{{ fm|safeget:'city'|default:'city' }}" class="form-control" autocomplete="address-level2" placeholder="{% trans 'Ex. Rabat' %}">
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" data-ff-next>{% trans "Continuer" %}</button>
+        </div>
+    </section>
+
+    <section data-ff-step="2" class="ff-step d-none">
+        <p class="text-muted small mb-3">{% trans "Sélectionnez l'offre qui vous convient" %}</p>
+        <div class="vstack gap-2">
+            {% for offer in form.offers %}
+                {% with slug=offer.pack_slug|default:offer.slug|default:offer.code %}
+                <label class="border rounded p-3 d-flex align-items-center justify-content-between" data-ff-offer="{{ slug }}">
+                    <span>
+                        <input class="form-check-input me-2" type="radio" name="offer_key" value="{{ slug }}" {% if forloop.first %}checked{% endif %}>
+                        <strong>{{ offer.title|default:slug }}</strong>
+                        {% if offer.subtitle %}<br><small class="text-muted">{{ offer.subtitle }}</small>{% endif %}
+                    </span>
+                    {% if offer.price %}
+                        <span class="fw-semibold">{{ offer.price|floatformat:0 }} {{ pricing.currency|default:'MAD' }}</span>
+                    {% endif %}
+                </label>
+                {% endwith %}
+            {% empty %}
+                <div class="alert alert-warning mb-0">{% trans "Aucune offre configurée." %}</div>
+            {% endfor %}
+        </div>
+
+        {% if form.bump.slug %}
+        <div class="form-check mt-3">
+            <input class="form-check-input" id="ff-bump-optin" type="checkbox" value="{{ form.bump.slug }}">
+            <label class="form-check-label" for="ff-bump-optin">
+                {{ form.bump.title|default:_('Ajouter le supplément recommandé') }}
+                {% if form.bump.price %}
+                    <small class="text-muted">(+{{ form.bump.price }} {{ form.bump.currency|default:pricing.currency|default:'MAD' }})</small>
+                {% endif %}
+            </label>
+        </div>
+        {% endif %}
+
+        <div class="d-flex justify-content-between mt-3">
+            <button type="button" class="btn btn-outline-secondary" data-ff-prev>{% trans "Retour" %}</button>
+            <button type="button" class="btn btn-primary" data-ff-next>{% trans "Continuer" %}</button>
+        </div>
+    </section>
+
+    <section data-ff-step="3" class="ff-step d-none">
+        <div class="mb-3">
+            <label class="form-label" for="ff-email">{% trans "Email (facultatif)" %}</label>
+            <input id="ff-email" name="{{ fm|safeget:'email'|default:'email' }}" class="form-control" autocomplete="email" placeholder="salma@example.com">
+        </div>
+
+        <div class="mb-3">
+            <div class="d-flex gap-2">
+                <label class="btn btn-outline-success flex-fill" data-mode="cod">
+                    <input type="radio" class="visually-hidden" name="af-payment-mode" value="cod" checked>
+                    {% trans "Paiement à la livraison" %}
+                </label>
+                <label class="btn btn-outline-secondary flex-fill" data-mode="online">
+                    <input type="radio" class="visually-hidden" name="af-payment-mode" value="online">
+                    {% trans "Paiement en ligne" %}
+                </label>
+            </div>
+            <input type="hidden" name="{{ fm|safeget:'payment_mode'|default:'payment_mode' }}" value="cod" data-ff-payment-hidden>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" id="ff-terms" name="accept_terms" type="checkbox" checked>
+            <label class="form-check-label" for="ff-terms">{% trans "J’accepte les conditions générales" %}</label>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-outline-secondary" data-ff-prev>{% trans "Retour" %}</button>
+            <button type="button" class="btn btn-success" data-ff-submit>{% trans "Valider" %}</button>
+        </div>
+    </section>
+
+    <section data-ff-step="4" class="ff-step d-none text-center" data-thank-you>
+        <div class="alert alert-success mb-0">
+            <strong>{% trans "Merci !" %}</strong> {% trans "Votre demande a bien été enregistrée." %}
+        </div>
+    </section>
+</form>
+
+{% if form.flow_config_json %}
+<script type="application/json" data-ff-config>{{ form.flow_config_json|safe }}</script>
+{% endif %}
+
+<script>
+(function () {
+    const root = document.querySelector('[data-ff-root]');
+    if (!root) return;
+
+    const packField = root.querySelector('[data-ff-pack-slug]');
+    const complementaryJson = root.querySelector('[data-ff-complementary-json]');
+    const paymentHidden = root.querySelector('[data-ff-payment-hidden]');
+
+    function syncPackFromSelection() {
+        const chosen = root.querySelector('input[name="offer_key"]:checked');
+        if (packField) {
+            packField.value = chosen ? chosen.value : '';
+        }
+    }
+
+    function syncComplementary() {
+        if (!complementaryJson) return;
+        const bump = root.querySelector('#ff-bump-optin');
+        const values = [];
+        if (bump && bump.checked && bump.value) {
+            values.push(bump.value);
+        }
+        complementaryJson.value = JSON.stringify(values);
+    }
+
+    function setPaymentMode(mode) {
+        if (!paymentHidden) return;
+        paymentHidden.value = mode || 'cod';
+        root.querySelectorAll('[data-mode]').forEach(function (node) {
+            node.classList.toggle('btn-success', node.getAttribute('data-mode') === paymentHidden.value);
+            node.classList.toggle('btn-outline-success', node.getAttribute('data-mode') !== paymentHidden.value);
+        });
+    }
+
+    root.addEventListener('change', function (event) {
+        if (event.target.matches('input[name="offer_key"]')) {
+            syncPackFromSelection();
+        }
+        if (event.target.id === 'ff-bump-optin') {
+            syncComplementary();
+        }
+        const paymentWrapper = event.target.closest('[data-mode]');
+        if (paymentWrapper) {
+            const input = paymentWrapper.querySelector('input[type="radio"]');
+            if (input) {
+                setPaymentMode(input.value);
+            }
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', function () {
+        syncPackFromSelection();
+        syncComplementary();
+        setPaymentMode(paymentHidden ? paymentHidden.value : 'cod');
+    });
+})();
+</script>
+
+{% endwith %}
+{% endwith %}

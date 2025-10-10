@@ -145,6 +145,17 @@ class ProductDetailRequiredFieldsE2E(StaticLiveServerTestCase):
             rep.log_response(r2.value)
             page.wait_for_selector('[data-ff-step="3"]:not(.d-none)', timeout=5000)
 
+            # Basculer en COD pour valider les champs requis côté collect (et éviter Stripe)
+            try:
+                page.click('section[data-ff-step="3"] label.af-pay-option:not(.is-online)', force=True)
+                page.wait_for_function(
+                    "() => {\n                        const node = document.querySelector('#af-step3-discount');\n                        if (!node) return false;\n                        const raw = (node.textContent || '').replace(/[^0-9-]/g, '');\n                        const val = parseInt(raw || '0', 10);\n                        return Number.isFinite(val) && val === 0;\n                    }",
+                    timeout=4000
+                )
+                rep.note("payment_mode", mode="cod")
+            except Exception:
+                rep.warn("Impossible de forcer le mode COD; poursuite avec le mode courant")
+
             # =================== STEP 3 ===================
             # Demande: accept_terms obligatoire pour soumettre
             # 1) s'assurer que la case est décochée

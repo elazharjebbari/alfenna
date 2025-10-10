@@ -64,6 +64,9 @@ class DynamicLeadSerializer(serializers.Serializer):
                 field = BooleanLikeField(required=req)
             elif ftype in ("json", "object", "dict"):
                 field = serializers.JSONField(required=req)
+            elif ftype in ("list", "array"):
+                child = serializers.CharField(allow_blank=True, required=False)
+                field = serializers.ListField(child=child, required=req, allow_empty=not req)
             else:
                 field = serializers.CharField(required=req, allow_blank=allow_blank,
                                               max_length=max_length, allow_null=False)

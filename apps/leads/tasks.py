@@ -23,14 +23,26 @@ def process_lead(lead_id: int):
         policy = get_form_policy(lead.form_kind, lead.campaign or None)
         fields_pol = (policy.get("fields") or {})
         for fname, spec in fields_pol.items():
-            if spec.get("required") is True:
-                if not getattr(lead, fname, None):
-                    lead.status = LeadStatus.REJECTED
-                    lead.reject_reason = "INVALID"
-                    lead.save(update_fields=["status", "reject_reason", "updated_at"])
-                    LeadEvent.objects.create(lead=lead, event="rejected", payload={"missing": fname})
-                    log_tasks.info("lead_rejected_missing lead=%s field=%s", lead.id, fname)
-                    return
+            hard_required = spec.get("hard_required")
+            if hard_required is None:
+                hard_required = bool(spec.get("required") is True)
+            if not hard_required:
+                continue
+            # les clés contextuelles (ex: context.xxx) sont gérées plus bas
+            if "." in fname:
+                continue
+
+            value = getattr(lead, fname, None)
+            if isinstance(value, str):
+                value = value.strip()
+            is_missing = value in (None, "", [], {})
+            if is_missing:
+                lead.status = LeadStatus.REJECTED
+                lead.reject_reason = "INVALID"
+                lead.save(update_fields=["status", "reject_reason", "updated_at"])
+                LeadEvent.objects.create(lead=lead, event="rejected", payload={"missing": fname})
+                log_tasks.info("lead_rejected_missing lead=%s field=%s", lead.id, fname)
+                return
 
         # Déduplication fenêtre
         # TTL selon kind
