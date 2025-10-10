@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Al Fenna — Étape 1 (v1)</title>
+
+<!-- Fonts: Montserrat (déjà dans ton thème) + Great Vibes pour le mot-signe -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<!-- Font Awesome (déjà utilisé chez toi) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+<style>
+:root{
+  /* Palette inspirée PJ2 */
+  --af-bg: #253a31;          /* fond sombre */
+  --af-card: #f5f2ea;        /* carte crème */
+  --af-ink: #223a33;         /* texte principal */
+  --af-ink-2:#3c5b53;        /* secondaire */
+  --af-line:#d9e2dd;         /* séparateurs */
+  --af-price:#2c6a57;        /* vert prix */
+  --af-accent:#1f4f42;       /* CTA */
+  --af-accent-2:#1b4438;     /* CTA hover */
+  --af-radius: 26px;         /* gros arrondi carte */
+}
+html,body{height:100%;}
+body{
+  background: var(--af-bg);
+  font-family: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--af-ink);
+}
+.af-shell{
+  max-width: 900px;
+  margin: 42px auto;
+  background: var(--af-card);
+  border-radius: var(--af-radius);
+  box-shadow: 0 16px 48px rgba(0,0,0,.35);
+  padding: 38px 36px 28px;
+}
+
+/* Entête marque */
+.af-logo{width:96px;height:76px;object-fit:cover;}
+.af-brand{font-family:"Great Vibes", cursive; font-size: clamp(2.3rem, 5vw, 3.6rem); line-height:1; margin-top:.35rem;}
+.af-baseline{letter-spacing:.16em; color:var(--af-ink-2);}
+
+/* Stepper */
+.af-stepper{display:flex; align-items:center; justify-content:center; gap:28px; margin:18px 0 10px;}
+.af-step{font-weight:800;}
+.af-rule{flex:1; height:4px; background:#cfd9d3; border-radius:4px;}
+.af-step--active{position:relative;}
+.af-step--active::after{content:""; position:absolute; left:0; right:0; bottom:-8px; height:4px; border-radius:4px; background:#335f54;}
+
+/* Bandeau valeur */
+.af-value{
+  background:#fbf8f1;
+  border:1px solid var(--af-line);
+  border-radius:16px;
+  padding:18px 18px;
+}
+.af-left{
+  position:relative;
+  height:100%;
+  border:1px solid var(--af-line);
+  border-radius:14px;
+  padding:16px 16px;
+}
+@media (min-width: 992px){
+  /* diviseur vertical interne comme la réf */
+  .af-left::after{
+    content:"";
+    position:absolute;
+    right:-12px; top:12px;
+    width:1px; height: calc(100% - 24px);
+    background: var(--af-line);
+  }
+}
+.af-small{font-weight:700; color:var(--af-ink-2);}
+.af-price{color:var(--af-price); font-weight:900; font-size: clamp(1.9rem, 3.2vw, 2.4rem);}
+.af-old{color:#8da19a; text-decoration:line-through;}
+.af-save{color:#2f7e66; font-weight:800;}
+.af-bullets{list-style:none; margin:0; padding:0;}
+.af-bullets li{display:flex; align-items:center; gap:.55rem; margin:.35rem 0; color:var(--af-ink);}
+.af-chip{display:inline-flex; align-items:center; gap:.4rem; padding:.35rem .6rem; border-radius:999px; background:#e7f1ec; color:#2d5a50; font-weight:700;}
+
+/* Formulaire */
+.af-label{font-weight:800; margin-bottom:.4rem;}
+.form-control{border-radius:14px; padding:.95rem 1rem;}
+.input-group-text{border-radius:14px 0 0 14px; background:#eaf2ee; font-weight:900; color:var(--af-ink);}
+.input-group .form-control{border-radius:0 14px 14px 0;}
+.form-text{color:#6f7f7b}
+
+/* CTA */
+.af-cta{
+  background: var(--af-accent);
+  color:#fff; border:none; border-radius:16px;
+  padding:1rem 1rem; font-weight:900;
+  box-shadow: 0 12px 26px rgba(31,79,66,.28);
+}
+.af-cta:hover{background:var(--af-accent-2);}
+.af-stage{color:#5a6f69}
+</style>
+</head>
+<body>
+
+<main class="af-shell">
+  <!-- Header -->
+  <div class="text-center">
+    <img class="af-logo mb-1" src="https://placehold.co/96x76?text=Logo" alt="Logo">
+    <div class="af-brand">Al Fenna</div>
+    <div class="af-baseline small fw-bold text-uppercase">NATUREL • SOIN • CONFIANCE</div>
+  </div>
+
+  <!-- Stepper -->
+  <div class="af-stepper">
+    <span class="af-step af-step--active">Contact</span>
+    <div class="af-rule"></div>
+    <span class="af-step">Offres</span>
+    <div class="af-rule"></div>
+    <span class="af-step">Confirmation</span>
+  </div>
+
+  <!-- Bandeau valeur -->
+  <div class="af-value mt-2 mb-4">
+    <div class="row g-3 align-items-stretch">
+      <div class="col-lg-5">
+        <div class="af-left h-100">
+          <div class="af-small">Seulement</div>
+          <div class="af-price">120&nbsp;DH</div>
+          <div class="af-old mt-2">180&nbsp;DH</div>
+          <div class="af-save mt-2">Vous économisez 60&nbsp;DH</div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <ul class="af-bullets mb-2">
+          <li><i class="fa-solid fa-truck"></i> <strong>Livraison 48&nbsp;h</strong></li>
+          <li><i class="fa-solid fa-hand-holding-dollar"></i> <strong>Paiement à la livraison</strong></li>
+          <li><i class="fa-solid fa-leaf"></i> <strong>100&nbsp;% naturel</strong></li>
+        </ul>
+        <span class="af-chip"><i class="fa-solid fa-user-group"></i> +&nbsp;500 clientes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form class="vstack gap-3">
+    <div>
+      <label class="af-label" for="name">Nom complet</label>
+      <input id="name" type="text" class="form-control" placeholder="Ex. Salma Benali" required>
+    </div>
+
+    <div>
+      <label class="af-label" for="tel">Numéro de téléphone</label>
+      <div class="input-group">
+        <span class="input-group-text">+212 / 06</span>
+        <input id="tel" type="tel" class="form-control" placeholder="WhatsApp ou mobile actif" minlength="6" maxlength="20" required>
+      </div>
+      <div class="form-text mt-1">Format libre. Les caractères non numériques seront nettoyés automatiquement.</div>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="wa" checked>
+      <label class="form-check-label" for="wa">OK pour être contacté(e) sur WhatsApp pour confirmer la livraison</label>
+    </div>
+
+    <button type="button" class="btn af-cta w-100">Continuer &#8250;</button>
+    <div class="small af-stage mt-1">Étape 1 / 3</div>
+  </form>
+</main>
+
+</body>
+</html>
