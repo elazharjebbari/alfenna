@@ -181,6 +181,13 @@ class FlowFormsWizardView(SessionWizardView):
         )
         self.snapshot = self.fs.data_snapshot or {}
 
+        if lead:
+            FormClass = form.__class__
+            files = getattr(form, "files", None)
+            save_form = FormClass(data=form.data, files=files, instance=lead)
+            if save_form.is_valid():
+                save_form.save()
+
         next_key = self.router.resolve(
             current_key=current_key, action=action, snapshot=self.snapshot, posted_cta=posted_cta,
         )
@@ -212,4 +219,3 @@ class FlowFormsWizardView(SessionWizardView):
             self.fs.status = FlowStatus.COMPLETED
             self.fs.save(update_fields=["status", "updated_at"])
         return self._render_done()
-

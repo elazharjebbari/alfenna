@@ -121,7 +121,9 @@ def _make_django_field(spec: FieldSpec) -> forms.Field:
             raise ImproperlyConfigured(f"Le champ '{spec.name}' de type '{t}' requiert des choices[].")
         base = forms.ChoiceField(required=required, choices=choices)
         if t == "radio":
-            base.widget = forms.RadioSelect()
+            radio = forms.RadioSelect()
+            radio.choices = choices
+            base.widget = radio
         f = base
     elif t == "checkbox":
         # multi-choix

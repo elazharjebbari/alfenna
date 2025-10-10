@@ -11,7 +11,7 @@ class FieldConfig(BaseModel):
     help_text: Optional[str] = None
     max_length: Optional[int] = None
     validators: List[str] = []
-    choices: Optional[List[str]] = None
+    choices: Optional[List[Any]] = None
     widget: Optional[str] = None
     # attrs optionnel pour styler les widgets (déjà supporté par le builder)
     attrs: Optional[Dict[str, Any]] = None

@@ -7,46 +7,27 @@ flows:
       - key: step1
         title: "Vos coordonnées"
         fields:
-          - { name: full_name, type: text, required: true, label: "Nom complet" }
-          - { name: email, type: email, required: true, label: "Adresse e-mail", validators: ["email"] }
+          - { name: email, type: email, required: true, label: "Votre email", validators: ["email"] }
           - { name: phone, type: phone, required: false, label: "Téléphone" }
-          - { name: address_line1, type: text, required: true, label: "Adresse" }
-          - { name: address_line2, type: text, required: false, label: "Complément" }
-          - { name: city, type: text, required: true, label: "Ville" }
-          - { name: state, type: text, required: false, label: "Région" }
-          - { name: postal_code, type: text, required: true, label: "Code postal" }
-          - { name: country, type: select, required: true, label: "Pays", choices: ["MA", "FR", "ES", "BE", "CH", "CA"] }
-          - { name: wa_optin, type: checkbox, required: false, label: "Contact WhatsApp" }
         ctas:
           - { action: next, label: "Continuer" }
 
       - key: step2
-        title: "Votre offre"
+        title: "Choix du pack"
         fields:
-          - { name: pack_slug, type: text, required: true, label: "Slug du pack" }
-          - { name: offer_key, type: text, required: false, label: "Offre" }
-          - { name: quantity, type: number, required: false, label: "Quantité" }
-          - { name: bump_optin, type: checkbox, required: false, label: "Ajouter le complément" }
-          - { name: promotion_selected, type: text, required: false, label: "Code promotion" }
-          - { name: "context.pack.slug", type: text, required: false, label: "Pack (slug)" }
-          - { name: "context.pack.title", type: text, required: false, label: "Pack (titre)" }
-          - { name: "context.pack.price", type: text, required: false, label: "Pack (prix)" }
-          - { name: "context.pack.currency", type: text, required: false, label: "Pack (devise)" }
-          - { name: "context.complementary_slugs", type: text, required: false, label: "Compléments" }
+          - name: pack_slug
+            type: radio
+            required: true
+            label: "Sélectionnez un pack"
+            choices:
+              - ["solo", "Pack Solo"]
+              - ["duo", "Pack Duo"]
+          - { name: full_name, type: text, required: false, label: "Nom complet" }
         ctas:
-          - { action: prev, label: "Retour" }
           - { action: next, label: "Continuer" }
 
       - key: step3
-        title: "Paiement"
-        fields:
-          - { name: coupon_code, type: text, required: false, label: "Code promo" }
-          - { name: payment_mode, type: select, required: true, label: "Mode de paiement", choices: [["online", "Paiement en ligne"], ["cod", "Paiement à la livraison"]] }
-          - { name: "context.payment.method", type: text, required: true, label: "Mode (contexte)" }
-          - { name: email, type: email, required: true, label: "Confirmation e-mail", validators: ["email"] }
-          - { name: currency, type: text, required: false, label: "Devise" }
-          - { name: course_slug, type: text, required: false, label: "Course slug" }
-          - { name: accept_terms, type: checkbox, required: true, label: "J’accepte les conditions" }
+        title: "Validation"
+        fields: []
         ctas:
-          - { action: prev, label: "Retour" }
-          - { action: submit, label: "Confirmer la demande" }
+          - { action: submit, label: "Confirmer" }
