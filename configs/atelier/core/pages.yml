@@ -94,20 +94,20 @@ pages:
         params:
           lookup:
             slug: "{{ url.kwargs.product_slug }}"
-          product:
-            id: "demo-product"
-            name: "Sajadat Al-Raha"
-            description: "Tapis de priere a memoire de forme pour un confort maximal."
-            price: 399
-            promo_price: 329
-            currency: "MAD"
-            badges:
-              - { icon: "fas fa-truck", text: "Livraison 48h" }
-              - { icon: "fas fa-money-bill", text: "Paiement a la livraison" }
-            highlights:
-              - "Soulage genoux et dos"
-              - "Mousse memo haute densite"
-              - "Housse antiderapante"
+#          product:
+#            id: "demo-product"
+#            name: "Sajadat Al-Raha"
+#            description: "Tapis de priere a memoire de forme pour un confort maximal."
+#            price: 399
+#            promo_price: 329
+#            currency: "MAD"
+#            badges:
+#              - { icon: "fas fa-truck", text: "Livraison 48h" }
+#              - { icon: "fas fa-money-bill", text: "Paiement a la livraison" }
+#            highlights:
+#              - "Soulage genoux et dos"
+#              - "Mousse memo haute densite"
+#              - "Housse antiderapante"
 #          media:
 #            lightbox: true
 #            images:

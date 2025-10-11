@@ -242,14 +242,30 @@ def _sanitize_lookup_value(value: Any) -> str:
     return text
 
 
+def _is_empty_value(value: Any) -> bool:
+    if value is None:
+        return True
+    if isinstance(value, str):
+        return value.strip() == ""
+    if isinstance(value, (list, tuple, set, dict)):
+        return len(value) == 0
+    return False
+
+
 def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str, Any] | None = None) -> Dict[str, Any]:
     """Return the rendering context for the product component."""
     cfg = ProductParams.from_dict(params)
     params = params or {}
 
-    product_params_raw = params.get("product") if isinstance(params.get("product"), dict) else {}
-    media_params_raw = params.get("media") if isinstance(params.get("media"), dict) else {}
-    ui_texts_params_raw = params.get("ui_texts") if isinstance(params.get("ui_texts"), dict) else {}
+    product_params_raw = (
+        dict(params.get("product") or {}) if isinstance(params.get("product"), dict) else {}
+    )
+    media_params_raw = (
+        dict(params.get("media") or {}) if isinstance(params.get("media"), dict) else {}
+    )
+    ui_texts_params_raw = (
+        dict(params.get("ui_texts") or {}) if isinstance(params.get("ui_texts"), dict) else {}
+    )
 
     lookup_params = cfg.lookup if isinstance(getattr(cfg, "lookup", None), dict) else {}
     lookup_slug = _sanitize_lookup_value(lookup_params.get("slug"))
@@ -392,77 +408,49 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
 
     overlay_product = cfg.product.as_dict()
 
-    if not product_obj:
-        if isinstance(product_params_raw, dict) and "id" in product_params_raw:
-            product_data["id"] = overlay_product.get("id") or product_data.get("id")
-        elif "id" not in product_data and overlay_product.get("id"):
-            product_data["id"] = overlay_product.get("id")
+    override_flags = {"__override__", "_override", "override"}
 
-        if isinstance(product_params_raw, dict) and "slug" in product_params_raw:
-            product_data["slug"] = overlay_product.get("slug") or product_data.get("slug")
-        elif "slug" not in product_data:
-            if overlay_product.get("slug"):
-                product_data["slug"] = overlay_product.get("slug")
-            elif lookup_slug:
-                product_data["slug"] = lookup_slug
+    def _flag_enabled(raw_value: Any) -> bool:
+        if isinstance(raw_value, bool):
+            return raw_value
+        if raw_value in (None, "", 0):
+            return False
+        if isinstance(raw_value, str):
+            return raw_value.strip().lower() in {"1", "true", "yes", "on"}
+        return bool(raw_value)
 
-        if isinstance(product_params_raw, dict) and "name" in product_params_raw:
-            product_data["name"] = overlay_product.get("name") or product_data.get("name")
-        elif "name" not in product_data and overlay_product.get("name"):
-            product_data["name"] = overlay_product.get("name")
+    override_mode = any(_flag_enabled(product_params_raw.get(flag)) for flag in override_flags)
+    for flag in override_flags:
+        product_params_raw.pop(flag, None)
 
-        if isinstance(product_params_raw, dict) and "subname" in product_params_raw:
-            product_data["subname"] = overlay_product.get("subname") or product_data.get("subname")
-        elif "subname" not in product_data and overlay_product.get("subname"):
-            product_data["subname"] = overlay_product.get("subname")
+    def _merge_product_overlay() -> None:
+        if not product_params_raw:
+            return
 
-        if isinstance(product_params_raw, dict) and "description" in product_params_raw:
-            product_data["description"] = overlay_product.get("description") or product_data.get("description")
-        elif "description" not in product_data and overlay_product.get("description"):
-            product_data["description"] = overlay_product.get("description")
+        keys = (
+            "id",
+            "slug",
+            "name",
+            "subname",
+            "description",
+            "price",
+            "promo_price",
+            "currency",
+            "badges",
+            "highlights",
+        )
 
-        if isinstance(product_params_raw, dict) and "price" in product_params_raw:
-            product_data["price"] = overlay_product.get("price")
-        elif "price" not in product_data and overlay_product.get("price") is not None:
-            product_data["price"] = overlay_product.get("price")
+        for key in keys:
+            if key not in product_params_raw:
+                continue
+            overlay_value = overlay_product.get(key)
+            if key in {"badges", "highlights"} and overlay_value is None:
+                overlay_value = []
+            if product_obj and not override_mode and not _is_empty_value(product_data.get(key)):
+                continue
+            product_data[key] = overlay_value
 
-        if isinstance(product_params_raw, dict) and "promo_price" in product_params_raw:
-            product_data["promo_price"] = overlay_product.get("promo_price")
-        elif "promo_price" not in product_data and overlay_product.get("promo_price") is not None:
-            product_data["promo_price"] = overlay_product.get("promo_price")
-
-        if isinstance(product_params_raw, dict) and "currency" in product_params_raw:
-            product_data["currency"] = overlay_product.get("currency") or product_data.get("currency")
-        elif "currency" not in product_data and overlay_product.get("currency"):
-            product_data["currency"] = overlay_product.get("currency")
-
-        if isinstance(product_params_raw, dict) and "badges" in product_params_raw:
-            product_data["badges"] = overlay_product.get("badges") or []
-        elif "badges" not in product_data:
-            product_data["badges"] = overlay_product.get("badges") or []
-
-        if isinstance(product_params_raw, dict) and "highlights" in product_params_raw:
-            product_data["highlights"] = list(overlay_product.get("highlights") or [])
-        elif "highlights" not in product_data:
-            product_data["highlights"] = list(overlay_product.get("highlights") or [])
-
-    if isinstance(product_params_raw, dict):
-        if "name" in product_params_raw:
-            product_data["name"] = overlay_product.get("name") or product_data.get("name")
-        if "subname" in product_params_raw:
-            product_data["subname"] = overlay_product.get("subname") or product_data.get("subname")
-        if "description" in product_params_raw:
-            product_data["description"] = overlay_product.get("description") or product_data.get("description")
-        if "price" in product_params_raw:
-            product_data["price"] = overlay_product.get("price")
-        if "promo_price" in product_params_raw:
-            product_data["promo_price"] = overlay_product.get("promo_price")
-        if "currency" in product_params_raw and overlay_product.get("currency"):
-            product_data["currency"] = overlay_product.get("currency")
-        if "badges" in product_params_raw:
-            product_data["badges"] = overlay_product.get("badges") or product_data.get("badges") or []
-        if "highlights" in product_params_raw:
-            product_data["highlights"] = list(overlay_product.get("highlights") or [])
+    _merge_product_overlay()
 
     product_data.setdefault("id", cfg.product.id or lookup_id or lookup_slug or "product")
     product_data.setdefault("slug", lookup_slug)
