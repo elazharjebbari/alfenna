@@ -954,35 +954,55 @@
       const paymentMethod = (finalBody[paymentField] || "").toString().toLowerCase();
 
       if (paymentMethod === "online") {
-        const checkoutUrl = root.getAttribute("data-checkout-url") || cfg.checkout_url || cfg.checkout_endpoint_url || "/api/checkout/sessions/";
-        const checkoutHeaders = Object.assign({}, baseHeaders);
-        if (requireIdem) checkoutHeaders["X-Idempotency-Key"] = "ff-" + uuid4();
+        const paymentHandler = (window.__StepperPayment__ && typeof window.__StepperPayment__.handleOnlineSubmit === "function")
+          ? window.__StepperPayment__.handleOnlineSubmit
+          : null;
 
-        const checkoutRes = await fetch(checkoutUrl, {
-          method: "POST",
-          headers: checkoutHeaders,
-          body: JSON.stringify(finalBodyToSend),
-          credentials: "same-origin",
-        });
-        const checkoutTxt = await checkoutRes.text();
-        if (window.DEBUG_FF) {
-          console.debug("[ff] checkout status", checkoutRes.status, checkoutTxt);
-        }
-        if (checkoutRes.ok) {
-          let session = null;
-          try { session = checkoutTxt ? JSON.parse(checkoutTxt) : null; } catch (_) { session = null; }
-          const redirectUrl = session && (session.url || session.redirect_url);
-          if (redirectUrl) {
-            window.location.href = redirectUrl;
+        if (paymentHandler) {
+          const context = {
+            root,
+            config: cfg,
+            payload,
+            mergedCtx,
+            finalBody,
+            finalBodyToSend,
+            fieldsMap,
+          };
+          const handled = await paymentHandler(context);
+          if (!handled) {
             return;
           }
-          showFinalStep(root);
-          setMsg(root, "");
         } else {
-          setMsg(root, "Une erreur est survenue. Merci de réessayer.");
-          console.warn("[FlowForms] checkout failed:", checkoutRes.status, checkoutTxt);
+          const checkoutUrl = root.getAttribute("data-checkout-url") || cfg.checkout_url || cfg.checkout_endpoint_url || "/api/checkout/sessions/";
+          const checkoutHeaders = Object.assign({}, baseHeaders);
+          if (requireIdem) checkoutHeaders["X-Idempotency-Key"] = "ff-" + uuid4();
+
+          const checkoutRes = await fetch(checkoutUrl, {
+            method: "POST",
+            headers: checkoutHeaders,
+            body: JSON.stringify(finalBodyToSend),
+            credentials: "same-origin",
+          });
+          const checkoutTxt = await checkoutRes.text();
+          if (window.DEBUG_FF) {
+            console.debug("[ff] checkout status", checkoutRes.status, checkoutTxt);
+          }
+          if (checkoutRes.ok) {
+            let session = null;
+            try { session = checkoutTxt ? JSON.parse(checkoutTxt) : null; } catch (_) { session = null; }
+            const redirectUrl = session && (session.url || session.redirect_url);
+            if (redirectUrl) {
+              window.location.href = redirectUrl;
+              return;
+            }
+            showFinalStep(root);
+            setMsg(root, "");
+          } else {
+            setMsg(root, "Une erreur est survenue. Merci de réessayer.");
+            console.warn("[FlowForms] checkout failed:", checkoutRes.status, checkoutTxt);
+          }
+          return;
         }
-        return;
       }
 
       const headers = Object.assign({}, baseHeaders);

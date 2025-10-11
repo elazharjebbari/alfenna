@@ -8,6 +8,7 @@ from decimal import Decimal, InvalidOperation
 from html import escape
 from typing import Any, Dict, Iterable, List, Optional
 
+from django.conf import settings
 from django.http import HttpRequest
 
 from django.urls import NoReverseMatch, reverse
@@ -756,6 +757,21 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         "language_prefix": lang_prefix,
         "testimonials": testimonials,
         "cross_sells": cross_sells,
+    }
+
+    try:
+        preview_url = reverse("billing:preview_totals")
+    except NoReverseMatch:
+        preview_url = "/billing/preview/"
+    try:
+        intent_url = reverse("billing:create_payment_intent")
+    except NoReverseMatch:
+        intent_url = "/billing/intent/create/"
+
+    context_out["checkout_bootstrap"] = {
+        "stripe_publishable_key": getattr(settings, "STRIPE_PUBLISHABLE_KEY", ""),
+        "preview_url": preview_url,
+        "intent_url": intent_url,
     }
 
     def _to_float(value: Any) -> Optional[float]:

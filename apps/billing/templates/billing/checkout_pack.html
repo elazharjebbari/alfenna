@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block head_extra %}
+  <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block content %}
+  <main class="container py-5">
+    <h1 class="h3 mb-3">{% trans "Paiement du pack" %}</h1>
+    <p class="text-muted">{{ product.name }}</p>
+
+    <div class="alert alert-info" role="status">
+      {% if initial_totals %}
+        {% blocktrans with total=initial_totals.total currency=currency_code %}
+          Montant estimé : {{ total }} {{ currency }} (taxes incluses)
+        {% endblocktrans %}
+      {% else %}
+        {% trans "Sélectionnez un pack pour afficher le montant." %}
+      {% endif %}
+    </div>
+
+    <div id="checkout-placeholder" class="border rounded p-4">
+      <p class="mb-2">{% trans "L'interface de paiement se charge..." %}</p>
+      <div id="payment-element"></div>
+    </div>
+  </main>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    window.__CHECKOUT__ = {
+      checkoutKind: "pack",
+      productSlug: "{{ product.slug|escapejs }}",
+      defaultPackSlug: "{{ default_pack_slug|escapejs }}",
+      currency: "{{ currency_code|escapejs }}",
+      stripePK: "{{ stripe_publishable_key|default_if_none:''|escapejs }}",
+      endpoints: {
+        preview: "{{ preview_url|escapejs }}",
+        createIntent: "{{ intent_url|escapejs }}"
+      },
+      totals: {
+        subtotal: {{ initial_totals_data.subtotal }},
+        discount: {{ initial_totals_data.discount }},
+        total: {{ initial_totals_data.total }}
+      },
+      complementaries: {{ complementaries|default:"[]"|safe }},
+      pack: {
+        slug: "{{ default_pack_slug|escapejs }}"
+      }
+    };
+    if (!window.__CHECKOUT__.stripePK) {
+      console.warn("STRIPE_PUBLISHABLE_KEY manquant pour le checkout pack.");
+    }
+  </script>
+{% endblock %}

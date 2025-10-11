@@ -8,6 +8,7 @@ assets:
   js:
     - "/static/js/flowforms.runtime.js"
     - "/static/js/form-stepper-guard.js"
+    - "/static/js/stepper.payment.js"
     - "/static/js/stepper.pricing.js"
   vendors: []
 contract:

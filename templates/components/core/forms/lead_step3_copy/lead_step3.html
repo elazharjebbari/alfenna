@@ -20,6 +20,27 @@
     <input type="hidden" name="{{ fm|safeget:'promotion'|default:'promotion_selected' }}" value="" data-ff-promo>
     <input type="hidden" name="{{ fm|safeget:'quantity'|default:'quantity' }}" value="1" data-ff-quantity-default>
 
+    {% if checkout_bootstrap %}
+      <script>
+        (function () {
+          const bootstrap = {
+            checkoutKind: "pack",
+            productSlug: "{{ checkout_hints.product_slug|default:product.slug|default:''|escapejs }}",
+            currency: "{{ checkout_hints.currency|default:pricing.currency|default:'MAD'|upper|escapejs }}",
+            stripePK: "{{ checkout_bootstrap.stripe_publishable_key|default_if_none:''|escapejs }}",
+            endpoints: {
+              preview: "{{ checkout_bootstrap.preview_url|escapejs }}",
+              createIntent: "{{ checkout_bootstrap.intent_url|escapejs }}"
+            }
+          };
+          if (!bootstrap.stripePK) {
+            console.warn('[checkout] STRIPE_PUBLISHABLE_KEY is empty; payment element will not initialize.');
+          }
+          window.__CHECKOUT__ = Object.assign({}, window.__CHECKOUT__ || {}, bootstrap);
+        })();
+      </script>
+    {% endif %}
+
     <div class="af-shell">
 
         <!-- ===== En‑tête & stepper ===== -->
@@ -466,6 +487,11 @@
             <!-- Sécurité perçue -->
             <div class="d-flex align-items-center gap-2 small text-muted mt-2">
                 <i class="fa-solid fa-lock"></i> {% trans "Paiement sécurisé • 3D Secure" %}
+            </div>
+
+            <div id="af-payment-online" class="mt-3" hidden>
+                <div id="af-payment-element" class="border rounded p-3 bg-white"></div>
+                <div id="af-payment-errors" class="text-danger small mt-2" aria-live="polite"></div>
             </div>
 
             <!-- CTA final -->

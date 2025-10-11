@@ -20,6 +20,27 @@
     <input type="hidden" name="{{ fm|safeget:'promotion'|default:'promotion_selected' }}" value="" data-ff-promo>
     <input type="hidden" name="{{ fm|safeget:'quantity'|default:'quantity' }}" value="1" data-ff-quantity-default>
 
+    {% if checkout_bootstrap %}
+      <script>
+        (function () {
+          const bootstrap = {
+            checkoutKind: "pack",
+            productSlug: "{{ checkout_hints.product_slug|default:product.slug|default:''|escapejs }}",
+            currency: "{{ checkout_hints.currency|default:pricing.currency|default:'MAD'|upper|escapejs }}",
+            stripePK: "{{ checkout_bootstrap.stripe_publishable_key|default_if_none:''|escapejs }}",
+            endpoints: {
+              preview: "{{ checkout_bootstrap.preview_url|escapejs }}",
+              createIntent: "{{ checkout_bootstrap.intent_url|escapejs }}"
+            }
+          };
+          if (!bootstrap.stripePK) {
+            console.warn('[checkout] STRIPE_PUBLISHABLE_KEY is empty; payment element will not initialize.');
+          }
+          window.__CHECKOUT__ = Object.assign({}, window.__CHECKOUT__ || {}, bootstrap);
+        })();
+      </script>
+    {% endif %}
+
     <div class="af-shell">
 
         <!-- ===== En‑tête & stepper ===== -->
@@ -108,64 +129,64 @@
                     <div class="form-text mt-1">{% trans "Format libre. Les caractères non numériques seront nettoyés automatiquement." %}</div>
                 </div>
 
-                <div>
-                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>
-        <input id="ff-email-step1" type="email" class="form-control" data-ff-optional
-               name="{{ fm|safeget:'email'|default:'email' }}" autocomplete="email"
-                           data-ff-email-primary
-                           placeholder="{% trans 'Ex. salma@example.com' %}">
-                </div>
+<!--                <div>-->
+<!--                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>-->
+<!--        <input id="ff-email-step1" type="email" class="form-control" data-ff-optional-->
+<!--               name="{{ fm|safeget:'email'|default:'email' }}" autocomplete="email"-->
+<!--                           data-ff-email-primary-->
+<!--                           placeholder="{% trans 'Ex. salma@example.com' %}">-->
+<!--                </div>-->
 
-                <div>
-                    <label class="af-label" for="ff-address-line1">{% trans "Adresse de livraison" %}</label>
-        <input id="ff-address-line1" class="form-control" type="text" data-ff-optional
-               name="{{ fm|safeget:'address_line1'|default:'address_line1' }}" autocomplete="address-line1"
-                           placeholder="{% trans 'Rue, quartier' %}">
-                </div>
+<!--                <div>-->
+<!--                    <label class="af-label" for="ff-address-line1">{% trans "Adresse de livraison" %}</label>-->
+<!--        <input id="ff-address-line1" class="form-control" type="text" data-ff-optional-->
+<!--               name="{{ fm|safeget:'address_line1'|default:'address_line1' }}" autocomplete="address-line1"-->
+<!--                           placeholder="{% trans 'Rue, quartier' %}">-->
+<!--                </div>-->
 
-                <div>
-                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>
-                    <input id="ff-address-line2" class="form-control" type="text" data-ff-optional
-                           name="{{ fm|safeget:'address_line2'|default:'address_line2' }}" autocomplete="address-line2"
-                           placeholder="{% trans 'Appartement, étage, référence' %}">
-                </div>
+<!--                <div>-->
+<!--                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>-->
+<!--                    <input id="ff-address-line2" class="form-control" type="text" data-ff-optional-->
+<!--                           name="{{ fm|safeget:'address_line2'|default:'address_line2' }}" autocomplete="address-line2"-->
+<!--                           placeholder="{% trans 'Appartement, étage, référence' %}">-->
+<!--                </div>-->
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>
-                        <input id="ff-city" class="form-control" type="text" data-ff-optional
-                               name="{{ fm|safeget:'city'|default:'city' }}" autocomplete="address-level2"
-                               placeholder="{% trans 'Ex. Casablanca' %}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>
-                        <input id="ff-state" class="form-control" type="text" data-ff-optional
-                               name="{{ fm|safeget:'state'|default:'state' }}" autocomplete="address-level1"
-                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">
-                    </div>
-                </div>
+<!--                <div class="row g-3">-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>-->
+<!--                        <input id="ff-city" class="form-control" type="text" data-ff-optional-->
+<!--                               name="{{ fm|safeget:'city'|default:'city' }}" autocomplete="address-level2"-->
+<!--                               placeholder="{% trans 'Ex. Casablanca' %}">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>-->
+<!--                        <input id="ff-state" class="form-control" type="text" data-ff-optional-->
+<!--                               name="{{ fm|safeget:'state'|default:'state' }}" autocomplete="address-level1"-->
+<!--                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>
-                        <input id="ff-postal" class="form-control" type="text" data-ff-optional
-                               name="{{ fm|safeget:'postal_code'|default:'postal_code' }}" autocomplete="postal-code"
-                               placeholder="20000">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>
-                        <select id="ff-country" class="form-select" data-ff-optional
-                                name="{{ fm|safeget:'country'|default:'country' }}" autocomplete="country" >
-                            <option value="">{% trans "Choisissez" %}</option>
-                            <option value="MA" selected>Maroc</option>
-                            <option value="FR">France</option>
-                            <option value="ES">Espagne</option>
-                            <option value="BE">Belgique</option>
-                            <option value="CH">Suisse</option>
-                            <option value="CA">Canada</option>
-                        </select>
-                    </div>
-                </div>
+<!--                <div class="row g-3">-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>-->
+<!--                        <input id="ff-postal" class="form-control" type="text" data-ff-optional-->
+<!--                               name="{{ fm|safeget:'postal_code'|default:'postal_code' }}" autocomplete="postal-code"-->
+<!--                               placeholder="20000">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>-->
+<!--                        <select id="ff-country" class="form-select" data-ff-optional-->
+<!--                                name="{{ fm|safeget:'country'|default:'country' }}" autocomplete="country" >-->
+<!--                            <option value="">{% trans "Choisissez" %}</option>-->
+<!--                            <option value="MA" selected>Maroc</option>-->
+<!--                            <option value="FR">France</option>-->
+<!--                            <option value="ES">Espagne</option>-->
+<!--                            <option value="BE">Belgique</option>-->
+<!--                            <option value="CH">Suisse</option>-->
+<!--                            <option value="CA">Canada</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ fm|safeget:'wa_optin'|default:'wa_optin' }}" value="1" checked>
@@ -303,48 +324,48 @@
             {% endwith %}
 
             <!-- Cross‑sell compact : juste une case -->
-            {% trans "Ajoutez ce complément ?" as default_bump_label %}
-            {% trans "Produit complémentaire" as default_bump_alt %}
-            {% with bump=form.bump %}
-                {% if bump.enabled %}
-                    <div class="af-bump af-bump--compact mt-3">
-                        {% if bump.image %}
-                            <img src="{{ bump.image }}" alt="{{ bump.alt|default:default_bump_alt }}"
-                                 class="af-bump-thumb rounded-3">
-                        {% else %}
-                            <img src="https://placehold.co/72x72?text=+" alt="{{ default_bump_alt }}"
-                                 class="af-bump-thumb rounded-3">
-                        {% endif %}
-                        <div class="flex-grow-1">
-                            <div class="form-check m-0">
-                                <input class="form-check-input" type="checkbox" id="af-bump-optin"
-                                       name="{{ fm|safeget:'bump'|default:'bump_optin' }}" value="{{ bump.value|default:'1' }}"
-                                       data-ff-complementary
-                                       data-ff-complementary-slug="{{ bump.value|default:''|escape }}"
-                                       data-ff-complementary-title="{{ bump.label|default:default_bump_label|escape }}"
-                                       data-ff-complementary-price="{{ bump.price|default:''|escape }}"
-                                       data-ff-complementary-currency="{{ bump.currency|default:pricing.currency|default:'MAD'|escape }}">
-                                <label class="form-check-label fw-semibold" for="af-bump-optin">
-                                    {{ bump.label|default:default_bump_label }}
-                                    {% if bump.sublabel %}
-                                        <span class="text-muted">({{ bump.sublabel }})</span>
-                                    {% endif %}
-                                    {% if bump.price %}
-                                        <span class="af-bump-price">— {{ bump.price }}
-                                            {% if bump.currency %}&nbsp;{{ bump.currency }}
-                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency }}
-                                            {% endif %}
-                                        </span>
-                                    {% endif %}
-                                </label>
-                            </div>
-                            {% if bump.note %}
-                                <div class="small text-muted mt-1">{{ bump.note }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endif %}
-            {% endwith %}
+<!--            {% trans "Ajoutez ce complément ?" as default_bump_label %}-->
+<!--            {% trans "Produit complémentaire" as default_bump_alt %}-->
+<!--            {% with bump=form.bump %}-->
+<!--                {% if bump.enabled %}-->
+<!--                    <div class="af-bump af-bump&#45;&#45;compact mt-3">-->
+<!--                        {% if bump.image %}-->
+<!--                            <img src="{{ bump.image }}" alt="{{ bump.alt|default:default_bump_alt }}"-->
+<!--                                 class="af-bump-thumb rounded-3">-->
+<!--                        {% else %}-->
+<!--                            <img src="https://placehold.co/72x72?text=+" alt="{{ default_bump_alt }}"-->
+<!--                                 class="af-bump-thumb rounded-3">-->
+<!--                        {% endif %}-->
+<!--                        <div class="flex-grow-1">-->
+<!--                            <div class="form-check m-0">-->
+<!--                                <input class="form-check-input" type="checkbox" id="af-bump-optin"-->
+<!--                                       name="{{ fm|safeget:'bump'|default:'bump_optin' }}" value="{{ bump.value|default:'1' }}"-->
+<!--                                       data-ff-complementary-->
+<!--                                       data-ff-complementary-slug="{{ bump.value|default:''|escape }}"-->
+<!--                                       data-ff-complementary-title="{{ bump.label|default:default_bump_label|escape }}"-->
+<!--                                       data-ff-complementary-price="{{ bump.price|default:''|escape }}"-->
+<!--                                       data-ff-complementary-currency="{{ bump.currency|default:pricing.currency|default:'MAD'|escape }}">-->
+<!--                                <label class="form-check-label fw-semibold" for="af-bump-optin">-->
+<!--                                    {{ bump.label|default:default_bump_label }}-->
+<!--                                    {% if bump.sublabel %}-->
+<!--                                        <span class="text-muted">({{ bump.sublabel }})</span>-->
+<!--                                    {% endif %}-->
+<!--                                    {% if bump.price %}-->
+<!--                                        <span class="af-bump-price">— {{ bump.price }}-->
+<!--                                            {% if bump.currency %}&nbsp;{{ bump.currency }}-->
+<!--                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency }}-->
+<!--                                            {% endif %}-->
+<!--                                        </span>-->
+<!--                                    {% endif %}-->
+<!--                                </label>-->
+<!--                            </div>-->
+<!--                            {% if bump.note %}-->
+<!--                                <div class="small text-muted mt-1">{{ bump.note }}</div>-->
+<!--                            {% endif %}-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                {% endif %}-->
+<!--            {% endwith %}-->
 
             <!-- Récap -->
             {% trans "Remise paiement en ligne" as default_summary_discount_label %}
@@ -383,22 +404,22 @@
                 {% trans "Paiement en ligne" as default_payment_online %}
                 {% trans "Paiement à la livraison" as default_payment_cod %}
                 <fieldset class="af-pay" role="radiogroup" aria-label="{% trans 'Méthode de paiement' %}">
-                    <!-- Paiement en ligne -->
-                    <label class="af-pay-option is-online">
-                        <input type="radio" name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}" value="online" class="visually-hidden" checked
-                               data-ff-payment-option>
-                        <span class="af-pay-check" aria-hidden="true"></span>
-                        <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>
-                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}
-                            {% if discount_amount %}
-                                <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
-                            {% elif discount_text %}
-                                <span class="af-discount" id="af-online-discount">{{ discount_text }}</span>
-                            {% else %}
-                                <span class="af-discount" id="af-online-discount">−20&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
-                            {% endif %}
-                        {% endwith %}
-                    </label>
+<!--                    &lt;!&ndash; Paiement en ligne &ndash;&gt;-->
+<!--                    <label class="af-pay-option is-online">-->
+<!--                        <input type="radio" name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}" value="online" class="visually-hidden" checked-->
+<!--                               data-ff-payment-option>-->
+<!--                        <span class="af-pay-check" aria-hidden="true"></span>-->
+<!--                        <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>-->
+<!--                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}-->
+<!--                            {% if discount_amount %}-->
+<!--                                <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>-->
+<!--                            {% elif discount_text %}-->
+<!--                                <span class="af-discount" id="af-online-discount">{{ discount_text }}</span>-->
+<!--                            {% else %}-->
+<!--                                <span class="af-discount" id="af-online-discount">−20&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>-->
+<!--                            {% endif %}-->
+<!--                        {% endwith %}-->
+<!--                    </label>-->
 
                     <!-- Paiement à la livraison -->
                     <label class="af-pay-option">
@@ -469,6 +490,11 @@
                 <i class="fa-solid fa-lock"></i> {% trans "Paiement sécurisé • 3D Secure" %}
             </div>
 
+            <div id="af-payment-online" class="mt-3" hidden>
+                <div id="af-payment-element" class="border rounded p-3 bg-white"></div>
+                <div id="af-payment-errors" class="text-danger small mt-2" aria-live="polite"></div>
+            </div>
+
             <!-- CTA final -->
             <div class="d-grid mt-3">
                 <button type="submit" class="btn af-cta" data-ff-submit
@@ -504,6 +530,9 @@
             </div>
         </section>
     </div>
+    <script src="https://js.stripe.com/v3/"></script>
+    {% get_static_prefix as static_prefix %}
+    <script src="{{ static_prefix }}js/stepper.payment.js"></script>
     <script>
     (function () {
         const root = document.querySelector('[data-ff-root]');
@@ -524,6 +553,16 @@
         const complementaryJson = root.querySelector('[data-ff-complementary-json]');
         const emailPrimary = root.querySelector('[data-ff-email-primary]');
         const emailConfirm = root.querySelector('[data-ff-email-confirm]');
+
+        function normalizePackSlug(value) {
+            if (!value) return '';
+            let slug = String(value).trim().toLowerCase();
+            slug = slug.replace(/_/g, '-');
+            if (slug.startsWith('pack-')) {
+                slug = slug.slice(5);
+            }
+            return slug;
+        }
 
         function syncEmailConfirm() {
             if (emailPrimary && emailConfirm && emailConfirm.value !== emailPrimary.value) {
@@ -569,6 +608,7 @@
 
             const dataset = selected.dataset || {};
             let slug = dataset.ffPackSlug || selected.value || slugify(dataset.ffPackTitle || '') || '';
+            slug = normalizePackSlug(slug);
             if (!slug) {
                 const allOffers = Array.from(root.querySelectorAll('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]'));
                 const index = allOffers.indexOf(selected);

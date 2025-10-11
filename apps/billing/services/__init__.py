@@ -11,6 +11,7 @@ from apps.billing.models import Order
 from .entitlement import EntitlementService
 from .invoice import InvoiceService, get_invoice_service, issue_invoice
 from .order import CheckoutResult, ItemSpec, OrderService, get_order_service
+from .pack import PackCheckoutService, PackLine, PackTotals, compute_pack_totals
 from .pricing import PriceService
 from .refund import RefundService, get_refund_service
 from .stripe_client import StripeClient, get_client
@@ -34,12 +35,16 @@ def _resolve_default_course() -> Any | None:
 __all__ = [
     "CheckoutResult",
     "EntitlementService",
+    "PackCheckoutService",
+    "PackLine",
+    "PackTotals",
     "InvoiceService",
     "issue_invoice",
     "ItemSpec",
     "OrderService",
     "PaymentService",
     "PriceService",
+    "compute_pack_totals",
     "RefundService",
     "StripeClient",
     "get_client",
@@ -177,3 +182,7 @@ EntitlementService = EntitlementService
 RefundService = RefundService
 StripeClient = StripeClient
 InvoiceService = InvoiceService
+PackCheckoutService = PackCheckoutService
+PackLine = PackLine
+PackTotals = PackTotals
+compute_pack_totals = compute_pack_totals
