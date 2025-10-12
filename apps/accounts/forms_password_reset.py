@@ -67,6 +67,8 @@ class OutboxPasswordResetForm(PasswordResetForm):
                 purpose="password_reset",
                 template_slug="accounts/reset",
                 to=[user.email],
+                user=user,
+                language=getattr(request, "LANGUAGE_CODE", None),
                 dedup_key=decision.dedup_key,
                 context={
                     "user_first_name": first_name,

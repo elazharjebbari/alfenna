@@ -20,6 +20,7 @@ from apps.atelier.contracts.product import ProductParams
 from apps.catalog.models import Product as CatalogProduct
 from apps.leads.constants import FormKind
 from apps.leads.utils.fields_map import normalize_fields_map
+from apps.i18n import translation_service
 
 logger = logging.getLogger(__name__)
 
@@ -327,6 +328,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     media_lightbox_db: Optional[bool] = None
 
     if product_obj:
+        active_lang = get_language()
         product_data = {
             "id": str(product_obj.pk),
             "slug": product_obj.slug,
@@ -374,11 +376,17 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
             comp_promo = _coerce_decimal(complementary.promo_price)
             has_promo = bool(comp_price and comp_promo and comp_promo < comp_price)
             effective_price = comp_promo if has_promo else comp_price
+            comp_title = translation_service.get_model(
+                complementary, "title", lang=active_lang, default=complementary.title
+            )
+            comp_short = translation_service.get_model(
+                complementary, "short_description", lang=active_lang, default=complementary.short_description
+            )
             cross_sells.append(
                 {
                     "slug": complementary.slug,
-                    "title": complementary.title,
-                    "short_description": complementary.short_description,
+                    "title": comp_title,
+                    "short_description": comp_short,
                     "price": comp_price,
                     "promo_price": comp_promo if comp_promo is not None else None,
                     "effective_price": effective_price,
@@ -386,7 +394,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                     "currency": complementary.currency or product_data.get("currency"),
                     "image_src": complementary.image_src,
                     "position": relation.position,
-                    "label": relation.label_override or complementary.title,
+                    "label": relation.label_override or comp_title,
                     "value": complementary.slug,
                     "extra": dict(complementary.extra or {}),
                 }
@@ -405,6 +413,22 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                 "currency": primary.get("currency"),
                 "alt": primary.get("title"),
             }
+
+        active_lang = get_language()
+        product_data["name"] = translation_service.get_model(
+            product_obj, "name", lang=active_lang, default=product_data.get("name")
+        )
+        product_data["subname"] = translation_service.get_model(
+            product_obj, "subname", lang=active_lang, default=product_data.get("subname")
+        )
+        product_data["description"] = translation_service.get_model(
+            product_obj, "description", lang=active_lang, default=product_data.get("description")
+        )
+        highlights_translated = translation_service.get_model_json(
+            product_obj, "highlights", lang=active_lang, default=None
+        )
+        if isinstance(highlights_translated, list) and highlights_translated:
+            product_data["highlights"] = highlights_translated
 
     overlay_product = cfg.product.as_dict()
 

@@ -231,6 +231,9 @@ def _common_lecture_ctx(request, params: Mapping[str, Any]) -> Dict[str, Any]:
             raise Http404("Course not found") from exc
         setattr(request, "_course", course)
 
+    course_title = course.get_i18n("title")
+    course_description = course.get_i18n("description")
+
     user = getattr(request, "user", None)
     is_subscribed = False
     if user and getattr(user, "is_authenticated", False):
@@ -319,11 +322,11 @@ def _common_lecture_ctx(request, params: Mapping[str, Any]) -> Dict[str, Any]:
     else:
         checkout_url = f"/billing/checkout/{course.slug}/"
     enrolled_count = course.entitlements.count() if hasattr(course, "entitlements") else None
-    overview_text = _s(getattr(course, "description", ""))
+    overview_text = _s(course_description or getattr(course, "description", ""))
     certificate_text = _s(getattr(course, "certificate_note", "")) or "Certification disponible après validation."
 
     instructor = {
-        "name": _s(getattr(course, "instructor_name", "")) or course.title,
+        "name": _s(getattr(course, "instructor_name", "")) or course_title or course.title,
         "role": _s(getattr(course, "instructor_title", "")),
         "bio": _s(getattr(course, "instructor_bio", "")) or overview_text,
         "avatar_url": _s(getattr(course, "instructor_avatar", "")) or PLACEHOLDER_AVATAR,
@@ -338,6 +341,7 @@ def _common_lecture_ctx(request, params: Mapping[str, Any]) -> Dict[str, Any]:
         if not lectures:
             continue
         lecture_entries = []
+        section_title = section.get_i18n("title")
         for lecture in lectures:
             rank_counter += 1
             lecture_slug_value = _lecture_slug(lecture)
@@ -353,7 +357,7 @@ def _common_lecture_ctx(request, params: Mapping[str, Any]) -> Dict[str, Any]:
             lecture_entries.append(
                 {
                     "id": lecture.id,
-                    "title": lecture.title,
+                    "title": lecture.get_i18n("title"),
                     "order": lecture.order,
                     "display_index": f"{section.order}.{lecture.order}",
                     "slug": lecture_slug_value,
@@ -368,7 +372,7 @@ def _common_lecture_ctx(request, params: Mapping[str, Any]) -> Dict[str, Any]:
         playlist_sections.append(
             {
                 "id": section.id,
-                "title": section.title,
+                "title": section_title,
                 "order": section.order,
                 "collapse_id": f"section{section.id}",
                 "is_active": any(entry["is_active"] for entry in lecture_entries),

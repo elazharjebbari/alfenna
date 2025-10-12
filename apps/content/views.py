@@ -38,8 +38,10 @@ class LectureDetailView(GatedLectureAccessMixin, TemplateView):
         if self.request.user.is_authenticated:
             ctx["user_progress"] = Progress.objects.filter(user=self.request.user, lecture=lecture).first()
 
-        self.meta_title = f"{lecture.title} — {course.title}"
-        self.meta_description = f"Leçon {lecture.section.order}.{lecture.order} du cours {course.title}"
+        course_title = course.get_i18n("title")
+        lecture_title = lecture.get_i18n("title")
+        self.meta_title = f"{lecture_title} — {course_title}"
+        self.meta_description = f"Leçon {lecture.section.order}.{lecture.order} du cours {course_title}"
         self.meta_type = "article"
         if preview:
             self.meta_noindex = True
@@ -109,8 +111,10 @@ class LectureDetailPKView(TemplateView):
         if self.request.user.is_authenticated:
             ctx["user_progress"] = Progress.objects.filter(user=self.request.user, lecture=lecture).first()
 
-        self.meta_title = f"{lecture.title} — {course.title}"
-        self.meta_description = f"Leçon {lecture.section.order}.{lecture.order} du cours {course.title}"
+        course_title = course.get_i18n("title")
+        lecture_title = lecture.get_i18n("title")
+        self.meta_title = f"{lecture_title} — {course_title}"
+        self.meta_description = f"Leçon {lecture.section.order}.{lecture.order} du cours {course_title}"
         self.meta_type = "article"
         if preview:
             self.meta_noindex = True

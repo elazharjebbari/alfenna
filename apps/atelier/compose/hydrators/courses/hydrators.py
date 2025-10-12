@@ -62,9 +62,10 @@ def course_list(request, params: Mapping[str, Any]) -> Dict[str, Any]:
 
     courses: List[Dict[str, Any]] = []
     for course in queryset:
+        title = course.get_i18n("title")
         courses.append(
             {
-                "title": _clean_str(course.title, ""),
+                "title": _clean_str(title, ""),
                 "slug": _clean_str(course.slug, ""),
                 "url": _course_url(course),
                 "cover_url": _course_cover(course),

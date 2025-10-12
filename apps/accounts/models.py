@@ -11,6 +11,7 @@ class StudentProfile(models.Model):
     email_verified_at = models.DateTimeField(blank=True, null=True)
     marketing_opt_in = models.BooleanField(default=False)
     marketing_opt_out_at = models.DateTimeField(blank=True, null=True)
+    locale = models.CharField(max_length=12, blank=True, default="")
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:

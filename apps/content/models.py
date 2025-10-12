@@ -3,7 +3,10 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-class Section(models.Model):
+from apps.i18n import TranslatableMixin
+
+
+class Section(TranslatableMixin, models.Model):
     course = models.ForeignKey('catalog.Course', related_name='sections', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     order = models.PositiveIntegerField(default=1)
@@ -20,6 +23,9 @@ class Section(models.Model):
     def __str__(self) -> str:
         return f"{self.course.title} — {self.order}. {self.title}"
 
+    translatable_fields = ("title",)
+
+
 class LectureType(models.TextChoices):
     VIDEO = 'video', _('Vidéo')
     ARTICLE = 'article', _('Article')
@@ -31,7 +37,7 @@ class LanguageCode(models.TextChoices):
     FR_FR = 'fr_FR', _('Français (France)')
     AR_MA = 'ar_MA', _('Arabe (Maroc)')
 
-class Lecture(models.Model):
+class Lecture(TranslatableMixin, models.Model):
     course = models.ForeignKey('catalog.Course', related_name='lectures', on_delete=models.CASCADE)
     section = models.ForeignKey(Section, related_name='lectures', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
@@ -77,6 +83,8 @@ class Lecture(models.Model):
 
     def __str__(self) -> str:
         return f"{self.section} — {self.order}. {self.title}"
+
+    translatable_fields = ("title",)
 
 
 class LectureVideoVariant(models.Model):

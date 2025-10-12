@@ -48,6 +48,7 @@ def enqueue_email_verification(user) -> None:
         purpose="email_verification",
         template_slug="accounts/verify",
         to=[user.email],
+        user=user,
         dedup_key=decision.dedup_key,
         context={
             "user_first_name": first_name,

@@ -83,6 +83,7 @@ class CampaignService:
                 template_slug=campaign.template_slug,
                 to=[recipient.email],
                 locale=campaign.locale,
+                language=campaign.locale,
                 dedup_key=f"campaign:{campaign.id}:{recipient.email}",
                 subject_override=campaign.subject_override or None,
                 metadata={"campaign_id": campaign.id},

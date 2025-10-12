@@ -211,6 +211,8 @@ class PasswordResetRequestView(APIView):
             purpose="password_reset",
             template_slug="accounts/reset",
             to=[user.email],
+            user=user,
+            language=getattr(request, "LANGUAGE_CODE", None),
             context={
                 "user_first_name": first_name,
                 "reset_url": reset_url,

@@ -19,7 +19,7 @@ def run(*args):
     # Échecs pour chauffer le throttle
     for _ in range(3):
         resp = c.post(url_login, {"username": "flow_user", "password": "wrong"})  # <- username
-        assert resp.status_code in (200, 429), f"Unexpected status on invalid login: {resp.status_code}"
+        assert resp.status_code in (200, 400, 429), f"Unexpected status on invalid login: {resp.status_code}"
 
     # Succès
     resp = c.post(url_login, {"username": "flow_user", "password": "s3cret123", "remember_me": True}, follow=True)

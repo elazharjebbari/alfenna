@@ -1,6 +1,5 @@
 # accounts/urls.py
 from django.urls import path
-from django.views.generic.base import RedirectView
 from .views import (
     LogoutViewPostOnly,
     ProfileView,
@@ -17,15 +16,12 @@ from .views import (
     VerificationSuccessView,
     VerificationErrorView,
 )
+from apps.pages.views.views_login import LoginViewSafe
 
 app_name = "accounts"
 
 urlpatterns = [
-    path(
-        "login/",
-        RedirectView.as_view(pattern_name="pages:login", permanent=False),
-        name="login",
-    ),
+    path("login/", LoginViewSafe.as_view(), name="login"),
     path("logout/", LogoutViewPostOnly.as_view(), name="logout"),
     path("inscription/", SignupView.as_view(), name="register"),
     path("register/", SignupView.as_view(), name="register_legacy"),

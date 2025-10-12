@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
+from apps.i18n import TranslatableMixin
+
 
 class ProductQuerySet(models.QuerySet):
     def active(self):
@@ -129,7 +131,7 @@ class CourseQuerySet(models.QuerySet):
     def published(self):
         return self.filter(is_published=True)
 
-class Course(models.Model):
+class Course(TranslatableMixin, models.Model):
     DIFFICULTY_CHOICES = [
         ("beginner", "Débutant"),
         ("intermediate", "Intermédiaire"),
@@ -157,6 +159,8 @@ class Course(models.Model):
 
     # Cache plan versioning
     plan_version = models.PositiveIntegerField(default=1)
+
+    translatable_fields = ("title", "description")
 
     # Traces
     created_at = models.DateTimeField(auto_now_add=True)

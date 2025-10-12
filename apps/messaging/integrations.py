@@ -78,6 +78,7 @@ def enqueue_account_activation(order) -> None:
         purpose="activation",
         template_slug="accounts/activation",
         to=[recipient],
+        user=user,
         dedup_key=f"order:{order.id}:activation",
         context={
             "user_first_name": _first_name(order),
@@ -97,6 +98,8 @@ def enqueue_invoice_ready(order, *, invoice_url: str | None = None, artifact_sig
         log.info("invoice_skip_missing_email", extra={"order_id": getattr(order, "id", None)})
         return
 
+    user = getattr(order, "user", None)
+
     invoice_url = invoice_url or build_invoice_url(order)
     amount_total = Decimal(getattr(order, "amount_total", 0) or 0) / Decimal("100")
     currency = getattr(order, "currency", "EUR").upper()
@@ -112,6 +115,7 @@ def enqueue_invoice_ready(order, *, invoice_url: str | None = None, artifact_sig
         purpose="invoice_ready",
         template_slug="billing/invoice",
         to=[recipient],
+        user=user,
         dedup_key=f"invoice:{order.id}:{dedup_key}",
         context={
             # historic context (kept for console/debug consumers)

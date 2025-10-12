@@ -80,6 +80,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.core",
     "apps.accounts.apps.AccountsConfig",
+    "apps.i18n.apps.I18NConfig",
     "apps.catalog.apps.CatalogConfig",
     "apps.content.apps.ContentConfig",
     "apps.billing.apps.BillingConfig",
@@ -124,6 +125,7 @@ MIDDLEWARE = [
                  'django.contrib.sessions.middleware.SessionMiddleware',
                  'django.middleware.locale.LocaleMiddleware',  # ← ICI
                  'django.middleware.common.CommonMiddleware',
+                 'apps.i18n.middleware.LanguageNegotiationMiddleware',
                  'django.middleware.csrf.CsrfViewMiddleware',
                  'django.contrib.auth.middleware.AuthenticationMiddleware',
                  'django.contrib.messages.middleware.MessageMiddleware',
@@ -213,6 +215,8 @@ LANGUAGES = [
 
 
 LOCALE_PATHS = [BASE_DIR / 'locale']
+
+I18N_DEBUG_HEADERS = _env_flag("I18N_DEBUG_HEADERS", default=False)
 
 # --------------------------------------------------------------------------------------
 # Static & Media (Django 5)
@@ -328,6 +332,10 @@ LOGGING = {
         'OnlineLearning': {'handlers': ['console'], 'level': LOG_LEVEL, 'propagate': False},
     },
 }
+
+LOGGING["loggers"].update({
+    "i18n.negotiation": {"handlers": ["console"], "level": "INFO"},
+})
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

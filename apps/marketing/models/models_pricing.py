@@ -1,7 +1,9 @@
 from __future__ import annotations
 from django.db import models
 
-class PricePlan(models.Model):
+from apps.i18n import TranslatableMixin
+
+class PricePlan(TranslatableMixin, models.Model):
     slug = models.SlugField(unique=True)
     title = models.CharField(max_length=120)
     currency = models.CharField(max_length=8, default="€")
@@ -51,6 +53,19 @@ class PricePlan(models.Model):
         if not self.currency_symbol:
             self.currency_symbol = self.currency or "€"
         super().save(*args, **kwargs)
+
+    translatable_fields = (
+        "title",
+        "features",
+        "value_breakdown",
+        "ribbon_label",
+        "payment_note",
+        "cta_label",
+        "cta_sublabel",
+        "cta_aria",
+        "second_cta_label",
+        "second_cta_aria",
+    )
 
 
 class PriceFeature(models.Model):

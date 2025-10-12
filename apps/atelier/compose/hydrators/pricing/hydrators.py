@@ -3,6 +3,10 @@ from typing import Any, Dict, List, Optional
 from decimal import Decimal, ROUND_HALF_UP
 import logging
 
+from django.utils.translation import get_language
+
+from apps.i18n import translation_service
+
 logger = logging.getLogger("atelier.pricing.debug")
 
 # ---------- Utils ----------
@@ -67,6 +71,7 @@ def _load_plans_from_db() -> List[Dict[str, Any]]:
 
     plans_qs = PricePlan.objects.filter(is_active=True).order_by("priority", "display_order", "id")
     out: List[Dict[str, Any]] = []
+    active_lang = get_language()
     for plan in plans_qs:
         features: List[str] = []
         for item in plan.get_features():
@@ -109,35 +114,73 @@ def _load_plans_from_db() -> List[Dict[str, Any]]:
             .values("label", "icon_class")
         )
 
+        title_translated = translation_service.get_model(plan, "title", lang=active_lang)
+        ribbon_translated = translation_service.get_model(plan, "ribbon_label", lang=active_lang, default=plan.ribbon_label or "")
+        payment_note = translation_service.get_model(plan, "payment_note", lang=active_lang, default=plan.payment_note or "")
+        features_translated = translation_service.get_model_json(plan, "features", lang=active_lang, default=None)
+        if isinstance(features_translated, list) and features_translated:
+            normalized_features: List[str] = []
+            for item in features_translated:
+                if isinstance(item, dict):
+                    label_value = str(item.get("label") or "").strip()
+                    if label_value:
+                        normalized_features.append(label_value)
+                elif item is not None:
+                    label_value = str(item).strip()
+                    if label_value:
+                        normalized_features.append(label_value)
+            if normalized_features:
+                features = normalized_features
+        breakdown_translated = translation_service.get_model_json(plan, "value_breakdown", lang=active_lang, default=None)
+        if isinstance(breakdown_translated, list) and breakdown_translated:
+            tmp_breakdown: List[Dict[str, Any]] = []
+            for item in breakdown_translated:
+                if isinstance(item, dict):
+                    label_value = str(item.get("label") or "").strip()
+                    amount_value = item.get("amount_cents", item.get("amount"))
+                    try:
+                        amount_int = int(amount_value)
+                    except Exception:
+                        amount_int = 0
+                    tmp_breakdown.append({"label": label_value, "amount_cents": max(0, amount_int)})
+            if tmp_breakdown:
+                breakdown = tmp_breakdown
+
+        cta_label = translation_service.get_model(plan, "cta_label", lang=active_lang, default=plan.cta_label or "")
+        cta_sublabel = translation_service.get_model(plan, "cta_sublabel", lang=active_lang, default=plan.cta_sublabel or "")
+        cta_aria = translation_service.get_model(plan, "cta_aria", lang=active_lang, default=plan.cta_aria or "")
+
         cta = {
-            "label": plan.cta_label or "",
-            "sublabel": plan.cta_sublabel or "",
-            "aria": plan.cta_aria or "",
+            "label": cta_label or "",
+            "sublabel": cta_sublabel or "",
+            "aria": cta_aria or "",
             "data_plan": plan.slug,
         }
 
         second_cta = None
-        if plan.second_cta_label and plan.second_cta_url:
+        second_label = translation_service.get_model(plan, "second_cta_label", lang=active_lang, default=plan.second_cta_label or "")
+        second_aria = translation_service.get_model(plan, "second_cta_aria", lang=active_lang, default=plan.second_cta_aria or "")
+        if second_label and plan.second_cta_url:
             second_cta = {
-                "label": plan.second_cta_label,
+                "label": second_label,
                 "url": plan.second_cta_url,
-                "aria": plan.second_cta_aria or "",
+                "aria": second_aria or "",
                 "data_plan": plan.slug,
             }
 
         out.append(
             {
                 "slug": plan.slug,
-                "title": plan.title,
+                "title": title_translated or plan.title,
                 "price_cents": plan.price_cents,
                 "old_price_cents": plan.old_price_cents or None,
                 "currency": plan.get_currency(),
-                "ribbon_label": plan.ribbon_label or "",
+                "ribbon_label": ribbon_translated or "",
                 "is_featured": bool(plan.is_featured),
                 "features": features,
                 "value_breakdown": breakdown,
                 "bonus_icons": bonus_icons,
-                "payment_note": plan.payment_note or "",
+                "payment_note": payment_note or "",
                 "cta": cta,
                 "second_cta": second_cta,
             }

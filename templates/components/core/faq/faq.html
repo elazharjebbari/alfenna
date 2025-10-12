@@ -1,4 +1,4 @@
-{% load static atelier_utils %}
+{% load static atelier_utils i18n %}
 
 <div class="container">
   <div class="section" id="faq">
@@ -56,7 +56,7 @@
                 <div class="row g-0" style="display: flex;">
                   <!-- Image du côté gauche -->
                   <div class="col-md-6 order-1 order-md-1">
-                    <img src="{% static t.image_static_path %}" style="height: 100%; width: 100%; object-fit: cover;" alt="{{ t.image_alt|default:'Bougie artisanale' }}" class="img-fluid">
+                    <img src="{% static t.image_static_path %}" style="height: 100%; width: 100%; object-fit: cover;" alt="{{ t.image_alt|default:_('Bougie artisanale') }}" class="img-fluid">
                   </div>
                   <!-- Bloc de droite avec la ligne verte et le contenu -->
                   <div class="col-md-6 order-2 order-md-2 position-relative ms-0">
@@ -111,7 +111,9 @@
                             <div><i class="fa fa-circle" style="color: {{ t.accent|default:'#309255' }}; margin-right: 10px;"></i></div>
                             <div>
                               {% if d.kind == 'price' %}
-                                <strong>Prix :</strong> {{ t.price }} DHS pour accès à vie.
+                                {% blocktrans with price=t.price currency=t.currency|default:'DHS' trimmed %}
+                                <strong>Prix :</strong> {{ price }} {{ currency }} pour accès à vie.
+                                {% endblocktrans %}
                               {% else %}
                                 {% render_string d.text_html %}
                               {% endif %}
@@ -124,7 +126,7 @@
                   </div>
                   <!-- Image du côté droit -->
                   <div class="col-md-6 order-1 order-md-2">
-                    <img src="{% static t.right_image_static_path %}" style="height: 100%; width: 100%; object-fit: cover;" alt="{{ t.right_image_alt|default:'Bougie artisanale' }}" class="img-fluid">
+                    <img src="{% static t.right_image_static_path %}" style="height: 100%; width: 100%; object-fit: cover;" alt="{{ t.right_image_alt|default:_('Bougie artisanale') }}" class="img-fluid">
                   </div>
                 </div>
               </div>

@@ -72,6 +72,7 @@ def resend_emails(modeladmin, request, queryset):
             template_slug=outbox.template_slug,
             to=outbox.to,
             locale=outbox.locale,
+            language=outbox.locale,
             context=outbox.context,
             dedup_key=explicit_key,
             scheduled_at=timezone.now(),

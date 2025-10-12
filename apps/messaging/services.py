@@ -9,9 +9,13 @@ from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional
 
 from celery import current_app
+from django.conf import settings
 from django.db import IntegrityError, transaction
-from django.template import Context, Template
+from django.template import Context, Template, TemplateDoesNotExist
+from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.html import strip_tags
+from django.utils.translation import get_language
 
 from .exceptions import DeduplicationConflictError, TemplateNotFoundError
 from .models import EmailTemplate, OutboxEmail
@@ -28,7 +32,8 @@ class EmailComposition:
     html_body: str
     text_body: str
     context: Dict[str, Any]
-    template: EmailTemplate
+    template_slug: str
+    template_version: int
 
 
 class TemplateService:
@@ -59,12 +64,93 @@ class TemplateService:
             html_body=html_body,
             text_body=text_body,
             context=ctx,
-            template=template,
+            template_slug=template.slug,
+            template_version=template.version,
         )
 
 
 class EmailService:
     """Create OutboxEmail rows in an idempotent fashion."""
+
+    @staticmethod
+    def _normalize_language_code(code: Optional[str]) -> Optional[str]:
+        if not code:
+            return None
+        normalized = str(code).strip()
+        if not normalized:
+            return None
+        return normalized.replace("_", "-").lower()
+
+    @classmethod
+    def _preferred_languages(cls, *, language: Optional[str], user: Any, locale: Optional[str]) -> List[str]:
+        candidates: List[Optional[str]] = [language]
+        profile = getattr(user, "profile", None) if user is not None else None
+        profile_locale = getattr(profile, "locale", None)
+        if profile_locale:
+            candidates.append(profile_locale)
+        candidates.append(locale)
+        current_lang = get_language()
+        if current_lang:
+            candidates.append(current_lang)
+        candidates.append(getattr(settings, "LANGUAGE_CODE", None))
+        for lang_code, _ in getattr(settings, "LANGUAGES", []):
+            candidates.append(lang_code)
+        candidates.extend(["fr", "en"])
+
+        ordered: List[str] = []
+        seen: set[str] = set()
+        for candidate in candidates:
+            normalized = cls._normalize_language_code(candidate)
+            if normalized and normalized not in seen:
+                seen.add(normalized)
+                ordered.append(normalized)
+        return ordered
+
+    @staticmethod
+    def _template_base_path(namespace: str, template_slug: str) -> tuple[str, str]:
+        slug_parts = [part for part in template_slug.split("/") if part]
+        if slug_parts:
+            slug_name = slug_parts[-1]
+            dir_parts = slug_parts[:-1]
+        else:
+            slug_name = template_slug
+            dir_parts: List[str] = []
+        if namespace and (not dir_parts or dir_parts[0] != namespace):
+            dir_parts = [namespace, *dir_parts]
+        base_path = "/".join(["emails", *dir_parts, slug_name])
+        return base_path, slug_name
+
+    @classmethod
+    def _render_filesystem_template(
+        cls,
+        namespace: str,
+        template_slug: str,
+        language: str,
+        context: Dict[str, Any],
+    ) -> Optional[EmailComposition]:
+        base_path, slug_name = cls._template_base_path(namespace, template_slug)
+        html_template_name = f"{base_path}.{language}.html"
+        ctx = dict(context)
+        try:
+            html_body = render_to_string(html_template_name, ctx)
+        except TemplateDoesNotExist:
+            return None
+        try:
+            text_body = render_to_string(f"{base_path}.{language}.txt", ctx)
+        except TemplateDoesNotExist:
+            text_body = strip_tags(html_body)
+        try:
+            subject = render_to_string(f"{base_path}.{language}.subject.txt", ctx).strip()
+        except TemplateDoesNotExist:
+            subject = ctx.get("email_subject") or ctx.get("subject") or slug_name.replace("_", " ").title()
+        return EmailComposition(
+            subject=subject,
+            html_body=html_body,
+            text_body=text_body,
+            context=ctx,
+            template_slug=f"fs:{base_path}",
+            template_version=1,
+        )
 
     @staticmethod
     def _serialise_addresses(addresses: Optional[Iterable[str]]) -> List[str]:
@@ -104,6 +190,8 @@ class EmailService:
         template_slug: str,
         to: Iterable[str],
         locale: str = "fr",
+        language: Optional[str] = None,
+        user: Optional[Any] = None,
         context: Optional[Dict[str, Any]] = None,
         dedup_key: Optional[str] = None,
         scheduled_at: Optional[datetime] = None,
@@ -121,16 +209,33 @@ class EmailService:
         if not recipients:
             raise ValueError("At least one recipient must be provided")
 
-        template = TemplateService.resolve(template_slug, locale)
-        composition = TemplateService.render(template, context)
+        context_data = dict(context or {})
+        preferred_languages = cls._preferred_languages(language=language, user=user, locale=locale)
+
+        composition: Optional[EmailComposition] = None
+        resolved_locale: Optional[str] = None
+        for lang in preferred_languages:
+            composition = cls._render_filesystem_template(namespace, template_slug, lang, context_data)
+            if composition is not None:
+                resolved_locale = lang
+                break
+
+        if composition is None:
+            fallback_locale = preferred_languages[0] if preferred_languages else cls._normalize_language_code(locale) or settings.LANGUAGE_CODE
+            template = TemplateService.resolve(template_slug, fallback_locale or "fr")
+            composition = TemplateService.render(template, context_data)
+            resolved_locale = template.locale
+        else:
+            template = None
+
         subject = subject_override or composition.subject
         computed_key = cls._make_dedup_key(
             namespace=namespace,
             purpose=purpose,
             primary_recipient=recipients[0],
-            template_slug=template.slug,
-            template_version=template.version,
-            context=composition.context,
+            template_slug=composition.template_slug,
+            template_version=composition.template_version,
+            context=dict(composition.context),
             explicit_key=dedup_key,
         )
 
@@ -141,9 +246,9 @@ class EmailService:
             "cc": cls._serialise_addresses(cc),
             "bcc": cls._serialise_addresses(bcc),
             "reply_to": cls._serialise_addresses(reply_to),
-            "locale": locale,
-            "template_slug": template.slug,
-            "template_version": template.version,
+            "locale": resolved_locale or locale or settings.LANGUAGE_CODE,
+            "template_slug": composition.template_slug,
+            "template_version": composition.template_version,
             "subject_override": subject_override or "",
             "rendered_subject": subject,
             "rendered_html": composition.html_body,

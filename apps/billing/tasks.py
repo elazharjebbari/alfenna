@@ -121,6 +121,7 @@ def send_refund_email(self, refund_id: int) -> str | None:
             purpose="refund_receipt",
             template_slug="billing/refund_receipt",
             to=[recipient],
+            user=getattr(order, "user", None),
             dedup_key=f"refund:{order.id}:{refund.refund_id}:{refund.amount}",
             context=context,
             metadata={"order_id": order.id, "refund_id": refund.refund_id},

@@ -129,64 +129,64 @@
                     <div class="form-text mt-1">{% trans "Format libre. Les caractères non numériques seront nettoyés automatiquement." %}</div>
                 </div>
 
-<!--                <div>-->
-<!--                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>-->
-<!--        <input id="ff-email-step1" type="email" class="form-control" data-ff-optional-->
-<!--               name="{{ fm|safeget:'email'|default:'email' }}" autocomplete="email"-->
-<!--                           data-ff-email-primary-->
-<!--                           placeholder="{% trans 'Ex. salma@example.com' %}">-->
-<!--                </div>-->
+                <div>
+                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>
+        <input id="ff-email-step1" type="email" class="form-control" data-ff-optional
+               name="{{ fm|safeget:'email'|default:'email' }}" autocomplete="email"
+                           data-ff-email-primary
+                           placeholder="{% trans 'Ex. salma@example.com' %}">
+                </div>
 
-<!--                <div>-->
-<!--                    <label class="af-label" for="ff-address-line1">{% trans "Adresse de livraison" %}</label>-->
-<!--        <input id="ff-address-line1" class="form-control" type="text" data-ff-optional-->
-<!--               name="{{ fm|safeget:'address_line1'|default:'address_line1' }}" autocomplete="address-line1"-->
-<!--                           placeholder="{% trans 'Rue, quartier' %}">-->
-<!--                </div>-->
+                <div>
+                    <label class="af-label" for="ff-address-line1">{% trans "Adresse de livraison" %}</label>
+        <input id="ff-address-line1" class="form-control" type="text" data-ff-optional
+               name="{{ fm|safeget:'address_line1'|default:'address_line1' }}" autocomplete="address-line1"
+                           placeholder="{% trans 'Rue, quartier' %}">
+                </div>
 
-<!--                <div>-->
-<!--                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>-->
-<!--                    <input id="ff-address-line2" class="form-control" type="text" data-ff-optional-->
-<!--                           name="{{ fm|safeget:'address_line2'|default:'address_line2' }}" autocomplete="address-line2"-->
-<!--                           placeholder="{% trans 'Appartement, étage, référence' %}">-->
-<!--                </div>-->
+                <div>
+                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>
+                    <input id="ff-address-line2" class="form-control" type="text" data-ff-optional
+                           name="{{ fm|safeget:'address_line2'|default:'address_line2' }}" autocomplete="address-line2"
+                           placeholder="{% trans 'Appartement, étage, référence' %}">
+                </div>
 
-<!--                <div class="row g-3">-->
-<!--                    <div class="col-md-6">-->
-<!--                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>-->
-<!--                        <input id="ff-city" class="form-control" type="text" data-ff-optional-->
-<!--                               name="{{ fm|safeget:'city'|default:'city' }}" autocomplete="address-level2"-->
-<!--                               placeholder="{% trans 'Ex. Casablanca' %}">-->
-<!--                    </div>-->
-<!--                    <div class="col-md-6">-->
-<!--                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>-->
-<!--                        <input id="ff-state" class="form-control" type="text" data-ff-optional-->
-<!--                               name="{{ fm|safeget:'state'|default:'state' }}" autocomplete="address-level1"-->
-<!--                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>
+                        <input id="ff-city" class="form-control" type="text" data-ff-optional
+                               name="{{ fm|safeget:'city'|default:'city' }}" autocomplete="address-level2"
+                               placeholder="{% trans 'Ex. Casablanca' %}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>
+                        <input id="ff-state" class="form-control" type="text" data-ff-optional
+                               name="{{ fm|safeget:'state'|default:'state' }}" autocomplete="address-level1"
+                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">
+                    </div>
+                </div>
 
-<!--                <div class="row g-3">-->
-<!--                    <div class="col-md-6">-->
-<!--                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>-->
-<!--                        <input id="ff-postal" class="form-control" type="text" data-ff-optional-->
-<!--                               name="{{ fm|safeget:'postal_code'|default:'postal_code' }}" autocomplete="postal-code"-->
-<!--                               placeholder="20000">-->
-<!--                    </div>-->
-<!--                    <div class="col-md-6">-->
-<!--                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>-->
-<!--                        <select id="ff-country" class="form-select" data-ff-optional-->
-<!--                                name="{{ fm|safeget:'country'|default:'country' }}" autocomplete="country" >-->
-<!--                            <option value="">{% trans "Choisissez" %}</option>-->
-<!--                            <option value="MA" selected>Maroc</option>-->
-<!--                            <option value="FR">France</option>-->
-<!--                            <option value="ES">Espagne</option>-->
-<!--                            <option value="BE">Belgique</option>-->
-<!--                            <option value="CH">Suisse</option>-->
-<!--                            <option value="CA">Canada</option>-->
-<!--                        </select>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>
+                        <input id="ff-postal" class="form-control" type="text" data-ff-optional
+                               name="{{ fm|safeget:'postal_code'|default:'postal_code' }}" autocomplete="postal-code"
+                               placeholder="20000">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>
+                        <select id="ff-country" class="form-select" data-ff-optional
+                                name="{{ fm|safeget:'country'|default:'country' }}" autocomplete="country" >
+                            <option value="">{% trans "Choisissez" %}</option>
+                            <option value="MA" selected>Maroc</option>
+                            <option value="FR">France</option>
+                            <option value="ES">Espagne</option>
+                            <option value="BE">Belgique</option>
+                            <option value="CH">Suisse</option>
+                            <option value="CA">Canada</option>
+                        </select>
+                    </div>
+                </div>
 
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ fm|safeget:'wa_optin'|default:'wa_optin' }}" value="1" checked>
@@ -323,49 +323,49 @@
             </div>
             {% endwith %}
 
-            <!-- Cross‑sell compact : juste une case -->
-<!--            {% trans "Ajoutez ce complément ?" as default_bump_label %}-->
-<!--            {% trans "Produit complémentaire" as default_bump_alt %}-->
-<!--            {% with bump=form.bump %}-->
-<!--                {% if bump.enabled %}-->
-<!--                    <div class="af-bump af-bump&#45;&#45;compact mt-3">-->
-<!--                        {% if bump.image %}-->
-<!--                            <img src="{{ bump.image }}" alt="{{ bump.alt|default:default_bump_alt }}"-->
-<!--                                 class="af-bump-thumb rounded-3">-->
-<!--                        {% else %}-->
-<!--                            <img src="https://placehold.co/72x72?text=+" alt="{{ default_bump_alt }}"-->
-<!--                                 class="af-bump-thumb rounded-3">-->
-<!--                        {% endif %}-->
-<!--                        <div class="flex-grow-1">-->
-<!--                            <div class="form-check m-0">-->
-<!--                                <input class="form-check-input" type="checkbox" id="af-bump-optin"-->
-<!--                                       name="{{ fm|safeget:'bump'|default:'bump_optin' }}" value="{{ bump.value|default:'1' }}"-->
-<!--                                       data-ff-complementary-->
-<!--                                       data-ff-complementary-slug="{{ bump.value|default:''|escape }}"-->
-<!--                                       data-ff-complementary-title="{{ bump.label|default:default_bump_label|escape }}"-->
-<!--                                       data-ff-complementary-price="{{ bump.price|default:''|escape }}"-->
-<!--                                       data-ff-complementary-currency="{{ bump.currency|default:pricing.currency|default:'MAD'|escape }}">-->
-<!--                                <label class="form-check-label fw-semibold" for="af-bump-optin">-->
-<!--                                    {{ bump.label|default:default_bump_label }}-->
-<!--                                    {% if bump.sublabel %}-->
-<!--                                        <span class="text-muted">({{ bump.sublabel }})</span>-->
-<!--                                    {% endif %}-->
-<!--                                    {% if bump.price %}-->
-<!--                                        <span class="af-bump-price">— {{ bump.price }}-->
-<!--                                            {% if bump.currency %}&nbsp;{{ bump.currency }}-->
-<!--                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency }}-->
-<!--                                            {% endif %}-->
-<!--                                        </span>-->
-<!--                                    {% endif %}-->
-<!--                                </label>-->
-<!--                            </div>-->
-<!--                            {% if bump.note %}-->
-<!--                                <div class="small text-muted mt-1">{{ bump.note }}</div>-->
-<!--                            {% endif %}-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                {% endif %}-->
-<!--            {% endwith %}-->
+             Cross‑sell compact : juste une case
+            {% trans "Ajoutez ce complément ?" as default_bump_label %}
+            {% trans "Produit complémentaire" as default_bump_alt %}
+            {% with bump=form.bump %}
+                {% if bump.enabled %}
+                    <div class="af-bump af-bump--compact mt-3">
+                        {% if bump.image %}
+                            <img src="{{ bump.image }}" alt="{{ bump.alt|default:default_bump_alt }}"
+                                 class="af-bump-thumb rounded-3">
+                        {% else %}
+                            <img src="https://placehold.co/72x72?text=+" alt="{{ default_bump_alt }}"
+                                 class="af-bump-thumb rounded-3">
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <div class="form-check m-0">
+                                <input class="form-check-input" type="checkbox" id="af-bump-optin"
+                                       name="{{ fm|safeget:'bump'|default:'bump_optin' }}" value="{{ bump.value|default:'1' }}"
+                                       data-ff-complementary
+                                       data-ff-complementary-slug="{{ bump.value|default:''|escape }}"
+                                       data-ff-complementary-title="{{ bump.label|default:default_bump_label|escape }}"
+                                       data-ff-complementary-price="{{ bump.price|default:''|escape }}"
+                                       data-ff-complementary-currency="{{ bump.currency|default:pricing.currency|default:'MAD'|escape }}">
+                                <label class="form-check-label fw-semibold" for="af-bump-optin">
+                                    {{ bump.label|default:default_bump_label }}
+                                    {% if bump.sublabel %}
+                                        <span class="text-muted">({{ bump.sublabel }})</span>
+                                    {% endif %}
+                                    {% if bump.price %}
+                                        <span class="af-bump-price">— {{ bump.price }}
+                                            {% if bump.currency %}&nbsp;{{ bump.currency }}
+                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency }}
+                                            {% endif %}
+                                        </span>
+                                    {% endif %}
+                                </label>
+                            </div>
+                            {% if bump.note %}
+                                <div class="small text-muted mt-1">{{ bump.note }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
 
             <!-- Récap -->
             {% trans "Remise paiement en ligne" as default_summary_discount_label %}
