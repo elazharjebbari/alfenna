@@ -1,0 +1,37 @@
+/*!
+ * Atelier RTL overrides.
+ * Applies light-touch adjustments when the interface runs in a right-to-left locale.
+ */
+
+body.rtl {
+    direction: rtl;
+}
+
+body.rtl .c-wa-fab {
+    right: auto !important;
+    left: var(--fab-offset, 16px);
+    flex-direction: row-reverse;
+}
+
+body.rtl .af-buybar {
+    direction: rtl;
+}
+
+body.rtl .af-buybar .af-close {
+    right: auto;
+    left: 0.75rem;
+}
+
+body.rtl .af-buybar .af-mid {
+    text-align: right;
+}
+
+body.rtl .af-buybar .af-badge {
+    margin-left: 0;
+    margin-right: 0.75rem;
+}
+
+body.rtl .footer-widget .widget-link,
+body.rtl .footer-widget .widget-info {
+    text-align: right;
+}

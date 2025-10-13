@@ -1,0 +1,131 @@
+fr:
+  footer:
+    brand: "Alfenna"
+    address_text: "Alfenna — Rabat, Maroc"
+    opening_hours: "Lun. - Dim. 09:00 - 19:00"
+    shop: "Boutique"
+    support: "Support"
+    quick_links: "Liens rapides"
+    section:
+      shop: "Boutique"
+      support: "Support"
+      quick_links: "Liens rapides"
+    links:
+      shop:
+        pack: "Pack complet Alfenna"
+        training: "Formation en Fabrication de produits Cosmétiques Naturels"
+      contact:
+        tips: "Conseils d’utilisation"
+        follow_up: "Suivi de commande"
+      quick:
+        faq: "FAQ"
+        delivery: "Livraison & retours"
+        privacy: "Confidentialité & Cookies"
+    copyright_tail_html: "— Made with <i class=\"icofont-heart-alt\"></i> by <a href=\"#\" rel=\"noopener\">ZONEX</a>"
+  fab:
+    whatsapp:
+      label: "Besoin d’aide ?"
+      aria_label: "Contacter sur WhatsApp"
+      prefill_text: "Bonjour, je souhaite commander le pack Alfenna."
+  sticky_order:
+    cta_primary: "Je commande le pack"
+    discount_label: "Sac + 4 articles\n offerts"
+    bar_aria_label: "Barre d’achat compacte"
+    close_aria_label: "Masquer la barre"
+    title_fallback: "Pack 8 pièces — soin antifongique"
+  faq:
+    title_html: "Questions & <span>Réponses.</span>"
+    tabs:
+      objections:
+        label: "Objections (Sniper)"
+        items:
+          mycoses:
+            question_html: "Est‑ce que ce pack <strong>guérit</strong> les mycoses ?"
+            answer_html: "<p><strong>Ça dépend du degré, mais il s'agit surtout d'un soin cosmétique.</strong> Il aide à <em>assainir</em> la peau et l’ongle, à <em>réduire les odeurs</em> et à <em>améliorer l’apparence</em>. En cas de mycose sévère ou persistante, demandez l’avis de votre médecin.</p>"
+          timeline:
+            question_html: "En <strong>combien de temps</strong> verrai‑je une différence ?"
+            answer_html: "<ul><li><strong>~7 jours</strong> : odeurs diminuées, confort accru.</li><li><strong>~14 jours</strong> : peau plus douce, fissures apaisées.</li><li><strong>~4 semaines</strong> : ongles visiblement plus nets.</li></ul><p>Les résultats varient selon l’hygiène et l’assiduité.</p>"
+          sensitive_skin:
+            question_html: "Et si j’ai la <strong>peau sensible</strong> (grossesse, diabète) ?"
+            answer_html: "<p>Formule douce. Faites un <strong>test cutané</strong> 24h avant usage. Par précaution (grossesse/diabète), demandez l’avis d’un professionnel de santé. Évitez toute application sur <em>plaies ouvertes</em>.</p>"
+          odor:
+            question_html: "L’<strong>odeur</strong> est‑elle forte ?"
+            answer_html: "<p>Non : parfum <strong>léger et frais</strong>, conçu pour <em>neutraliser</em> les mauvaises odeurs sans être entêtant.</p>"
+          cod:
+            question_html: "Puis‑je <strong>payer à la livraison</strong> ?"
+            answer_html: "<p>Oui. Vous pouvez aussi payer en ligne et bénéficier de <strong>–30&nbsp;MAD</strong> immédiats.</p>"
+          satisfaction:
+            question_html: "Et si <strong>ça ne marche pas</strong> sur moi ?"
+            answer_html: "<p><strong>Satisfait ou remboursé 30 jours.</strong> Notre équipe vous guide pour optimiser la routine (séchage entre orteils, chaussures respirantes, constance).</p>"
+      produit:
+        label: "Produit & Résultats"
+        items:
+          content:
+            question_html: "Que contient exactement le <strong>coffret 8 pièces</strong> ?"
+            answer_html: "<p><strong>1.</strong> Sérum naturel — cible l’ongle • <strong>2.</strong> Gel naturel — nettoie &amp; désodorise • <strong>3.</strong> Hydratant — apaise les fissures • <strong>4.</strong> Trousse • <strong>5.</strong> Pierre ponce • <strong>6.</strong> Lime • <strong>7.</strong> Coupe‑ongles • <strong>8.</strong> Serviette dédiée.</p>"
+          audience:
+            question_html: "À qui s’adresse ce pack ?"
+            answer_html: "<p>Aux <strong>femmes et aux hommes</strong> qui veulent une routine simple pour des <em>pieds nets</em> et des <em>ongles plus clairs</em> (usage personnel, non médical).</p>"
+          duration:
+            question_html: "Quelle est la <strong>durée</strong> d’utilisation approximative ?"
+            answer_html: "<p>En usage quotidien, le pack couvre généralement <strong>4 à 6 semaines</strong> (peut varier selon la fréquence et la zone).</p>"
+          results:
+            question_html: "Quels <strong>résultats réalistes</strong> puis‑je attendre ?"
+            answer_html: "<p>Confort, diminution des odeurs, peau plus douce et ongles d’aspect plus net. Le pack <strong>n’est pas un médicament</strong> et ne remplace pas un traitement antifongique prescrit.</p>"
+          gift:
+            question_html: "Puis‑je l’offrir ?"
+            answer_html: "<p>Oui, la <strong>trousse élégante</strong> en fait un <em>cadeau utile</em> et prêt à offrir.</p>"
+      routine:
+        label: "Utilisation & Routine"
+        items:
+          daily_use:
+            question_html: "Comment utiliser le pack au <strong>quotidien</strong> ?"
+            answer_html: "<ol><li><strong>Matin</strong> : gel sous la douche → <em>séchage soigné</em>.</li><li><strong>Après</strong> : hydratant sur zones sèches/fissurées.</li><li><strong>Soir</strong> : sérum (2‑3 gouttes) sur l’ongle, laisser sécher.</li><li><strong>1×/semaine</strong> : pierre ponce + lime/coupe‑ongles.</li></ol>"
+          medical:
+            question_html: "Puis‑je l’utiliser avec un <strong>traitement médical</strong> ?"
+            answer_html: "<p>Oui, comme <em>soin d’hygiène et de confort</em> complémentaire. Suivez les indications du médecin et évitez d’appliquer sur des lésions ouvertes.</p>"
+          sharing:
+            question_html: "Peut‑on <strong>partager</strong> les outils du pack ?"
+            answer_html: "<p>Par <strong>hygiène</strong>, chaque personne devrait utiliser sa <em>propre lime/serviette</em>. Nettoyez la pierre ponce et les outils après usage.</p>"
+          tips:
+            question_html: "Des <strong>astuces</strong> pour de meilleurs résultats ?"
+            answer_html: "<ul><li>Séchage entre orteils après chaque douche.</li><li>Chaussettes respirantes &amp; chaussures alternées.</li><li>Assiduité 4&nbsp;semaines minimum.</li></ul>"
+          stop:
+            question_html: "Puis‑je arrêter quand l’ongle a l’air sain ?"
+            answer_html: "<p>Réduisez progressivement la fréquence (entretien 2‑3×/semaine) pour conserver le résultat.</p>"
+      ingredients:
+        label: "Ingrédients & Sécurité"
+        items:
+          ingredients:
+            question_html: "Qu’en est‑il des <strong>ingrédients</strong> ?"
+            answer_html: "<p>Formules à base d’<strong>huiles végétales &amp; extraits</strong>, <strong>sans parabènes</strong>. Texture non grasse, parfum léger.</p>"
+          allergens:
+            question_html: "Y a‑t‑il des <strong>allergènes</strong> ?"
+            answer_html: "<p>Comme tout cosmétique, il peut exister une sensibilité. Faites un <strong>test cutané</strong> 24 h avant usage. En cas de réaction, stoppez et consultez.</p>"
+          fragrance:
+            question_html: "Le parfum est‑il conforme ?"
+            answer_html: "<p>Parfum formulé pour un usage <em>quotidien</em> et <em>domestique</em>, avec un sillage léger. Respectez la routine et évitez les excès. (Référence bonnes pratiques IFRA appliquées quand pertinent).</p>"
+          medicine:
+            question_html: "Ce produit est‑il un <strong>médicament</strong> ?"
+            answer_html: "<p><strong>Non</strong>. C’est un produit <strong>cosmétique</strong> destiné à l’hygiène et à l’amélioration de l’apparence. Les promesses sont rédigées selon les <em>critères communs</em> d’allégations en cosmétique (clarté, honnêteté, preuves). En cas d’infection sévère ou persistante, consultez un professionnel de santé.</p>"
+      logistique:
+        label: "Livraison, Paiement & Retours"
+        items:
+          delivery:
+            question_html: "Quels sont les <strong>délais</strong> et zones de livraison ?"
+            answer_html: "<p><strong>24/48 h</strong> partout au Maroc. Emballage soigné et suivi disponible.</p>"
+          payment:
+            question_html: "Quels <strong>modes de paiement</strong> acceptez‑vous ?"
+            answer_html: "<p>Carte en ligne (<strong>–30 MAD</strong> immédiats) ou <strong>paiement à la livraison</strong> (COD).</p>"
+          returns:
+            question_html: "Et si je souhaite <strong>retourner</strong> le produit ?"
+            answer_html: "<p><strong>Satisfait ou remboursé 30 jours.</strong> Contactez notre service client : nous trouvons la meilleure solution (échange, avoir ou remboursement selon l’état des produits).</p>"
+          contact:
+            question_html: "Comment vous <strong>contacter</strong> rapidement ?"
+            answer_html: "<p>WhatsApp, téléphone ou e‑mail (réponse <strong>sous 24 h</strong>). Voir la section <a href=\"#contact\">Contact</a>.</p>"
+  sample:
+    nested:
+      value: "Valeur FR"
+en:
+  footer:
+    shop: "Shop"
