@@ -25,6 +25,11 @@ class FooterComponentTests(SimpleTestCase):
         html = render_to_string(
             "components/core/footer/footer.html",
             {
+                "brand_title": "Alfenna",
+                "shop_title": "Boutique",
+                "support_title": "Support",
+                "quick_title": "Liens rapides",
+                "copyright_tail_html": " — Made with <i class=\"icofont-heart-alt\"></i> by <a href=\"#\">ZONEX</a>",
                 "links_shop": [{"label": "Pack", "url": "/pack"}],
                 "links_contact": [
                     {"label": "WhatsApp", "url": "https://api.whatsapp.com/send?phone=212600000000"},

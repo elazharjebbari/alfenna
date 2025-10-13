@@ -10,24 +10,29 @@ assets:
 
 # Valeurs de référence (documentaires)
 params:
+  brand_title: "footer.brand"
   address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
-  address_text: "Alfenna — Rabat, Maroc"
+  address_text: "footer.address_text"
   email: "partenariat@alfenna.com"
   phone_tel: "+212719646705"
   phone_display: "+212 719-646-705"
-  opening_hours: "Lun. - Dim. 09:00 - 19:00"
+  opening_hours: "footer.opening_hours"
+  shop_title: "footer.section.shop"
+  support_title: "footer.section.support"
+  quick_title: "footer.section.quick_links"
+  copyright_tail_html: "footer.copyright_tail_html"
   socials:
     - { icon: "flaticon-instagram", url: "https://www.instagram.com/alfennaacademy/", new_tab: true }
   links_shop:
-    - { label: "Pack complet Alfenna", url: "/produits/pack-cosmetique-naturel/" }
-    - { label: "Formation en Fabrication de produits Cosmétiques Naturels", url: "/" }
+    - { label: "footer.links.shop.pack", url: "/produits/pack-cosmetique-naturel/" }
+    - { label: "footer.links.shop.training", url: "/" }
   links_contact:
-    - { label: "Conseils d’utilisation", url: "https://api.whatsapp.com/send?phone=212719646705" }
-    - { label: "Suivi de commande", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "footer.links.contact.tips", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "footer.links.contact.follow_up", url: "https://api.whatsapp.com/send?phone=212719646705" }
   links_quick:
-    - { label: "FAQ", url: "/faq" }
-    - { label: "Livraison & retours", url: "https://api.whatsapp.com/send?phone=212719646705" }
-    - { label: "Confidentialité & Cookies", url: "/termes-of-services" }
+    - { label: "footer.links.quick.faq", url: "/faq" }
+    - { label: "footer.links.quick.delivery", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "footer.links.quick.privacy", url: "/termes-of-services" }
   year: 0   # 0 => hydrateur mettra l'année courante
 
 contract:
@@ -43,6 +48,11 @@ contract:
     links_shop: "Liste {label, url}"
     links_contact: "Liste {label, url}"
     links_quick: "Liste {label, url}"
+    brand_title: "Titre de la colonne marque"
+    shop_title: "Titre colonne boutique"
+    support_title: "Titre colonne support"
+    quick_title: "Titre colonne liens rapides"
+    copyright_tail_html: "Texte HTML du copyright (partie après la marque)"
     year: "Année d’affichage (int)"
 
 hydrate:
@@ -55,23 +65,28 @@ hydrate:
   # Whitelist + defaults (manifest-first robuste)
   params:
     address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
-    address_text: "Alfenna — Rabat, Maroc"
+    address_text: "footer.address_text"
     email: "partenariat@alfenna.com"
     phone_tel: "+212719646705"
     phone_display: "+212 719-646-705"
-    opening_hours: "Lun. - Sam. 09:30 - 18:00"
+    opening_hours: "footer.opening_hours"
+    brand_title: "footer.brand"
+    shop_title: "footer.section.shop"
+    support_title: "footer.section.support"
+    quick_title: "footer.section.quick_links"
+    copyright_tail_html: "footer.copyright_tail_html"
     socials:
       - { icon: "flaticon-instagram", url: "https://www.instagram.com/alfennaacademy/", new_tab: true }
     links_shop:
-      - { label: "Pack complet Alfenna", url: "/produits/pack-cosmetique-naturel/" }
-      - { label: "Formation en Fabrication de produits Cosmétiques Naturels", url: "/" }
+      - { label: "footer.links.shop.pack", url: "/produits/pack-cosmetique-naturel/" }
+      - { label: "footer.links.shop.training", url: "/" }
     links_contact:
-      - { label: "Conseils d’utilisation", url: "https://api.whatsapp.com/send?phone=212719646705" }
-      - { label: "Suivi de commande", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "footer.links.contact.tips", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "footer.links.contact.follow_up", url: "https://api.whatsapp.com/send?phone=212719646705" }
     links_quick:
-      - { label: "FAQ", url: "/faq" }
-      - { label: "Livraison & retours", url: "https://api.whatsapp.com/send?phone=212719646705" }
-      - { label: "Confidentialité & Cookies", url: "/termes-of-services" }
+      - { label: "footer.links.quick.faq", url: "/faq" }
+      - { label: "footer.links.quick.delivery", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "footer.links.quick.privacy", url: "/termes-of-services" }
     year: 0   # 0 => hydrateur mettra l'année courante
 
 render:

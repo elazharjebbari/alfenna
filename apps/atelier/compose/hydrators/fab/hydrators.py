@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from typing import Any, Dict
-from urllib.parse import quote
 import re
 
 from django.utils.safestring import mark_safe
@@ -21,7 +20,8 @@ def _digits_only(value: str) -> str:
 def whatsapp(request, params: Dict[str, Any] | None = None) -> Dict[str, Any]:
     params = params or {}
 
-    label = params.get("label") or "Besoin d’aide ?"
+    label = params.get("label") or "fab.whatsapp.label"
+    aria_label = params.get("aria_label") or "fab.whatsapp.aria_label"
     icon_mode = (params.get("icon_mode") or "vendor").strip().lower()
     icon_vendor = params.get("icon_vendor") or "icofont-whatsapp"
     icon_svg = params.get("icon_svg") or ""
@@ -41,20 +41,24 @@ def whatsapp(request, params: Dict[str, Any] | None = None) -> Dict[str, Any]:
         prefill_text = f"Bonjour, j’ai une question sur le produit: {product_slug}"
 
     phone_compact = _digits_only(str(phone_tel))
-    href = "https://wa.me/" + phone_compact
-    if prefill_text:
-        href += f"?text={quote(prefill_text)}"
 
     if icon_mode == "svg" and icon_svg.strip():
         icon_html = mark_safe(icon_svg)
     else:
         icon_html = mark_safe(f'<i class="{icon_vendor}" aria-hidden="true"></i>')
 
+    href_base = "https://wa.me/"
+    if phone_compact:
+        href_base += phone_compact
+
     return {
         "label": label,
-        "href": href,
+        "aria_label": aria_label,
+        "phone_tel": phone_tel,
+        "phone_compact": phone_compact,
+        "href_base": href_base,
         "icon_html": icon_html,
         "offset_bottom": offset_bottom,
         "offset_right": offset_right,
-        "aria_label": "Contacter sur WhatsApp",
+        "prefill_text": prefill_text,
     }

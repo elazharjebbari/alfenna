@@ -11,13 +11,15 @@ assets:
 
 params:
   product_slug: ""
-  cta_label: "Je commande le pack"
+  cta_label: "sticky_order.cta_primary"
   hero_selector: "#hero"
   form_root_selector: "[data-ff-root]"
   input_selector: "#ff-fullname"
   dismiss_days: 1
-  title_fallback: "Pack 8 pièces — soin antifongique"
-  discount_label: "Sac + 4 articles\n offerts"
+  title_fallback: "sticky_order.title_fallback"
+  discount_label: "sticky_order.discount_label"
+  aria_label: "sticky_order.bar_aria_label"
+  close_label: "sticky_order.close_aria_label"
 
 contract:
   optional:
@@ -29,6 +31,8 @@ contract:
     dismiss_days: "int"
     title_fallback: "str"
     discount_label: "str"
+    aria_label: "Libellé aria de la barre"
+    close_label: "Libellé aria du bouton de fermeture"
 
 hydrate:
   module: "apps.atelier.compose.hydrators.sticky.hydrators"

@@ -4,8 +4,6 @@ from typing import Any, Dict
 
 from django.http import HttpRequest
 from django.urls import resolve
-from django.utils.translation import gettext_lazy as _
-
 from apps.catalog.models import Product
 
 
@@ -55,8 +53,8 @@ def buybar_v2(request: HttpRequest, params: Dict[str, Any] | None) -> Dict[str, 
     slug = _get_slug_from_request(request, params.get("product_slug", ""))
     payload = _product_payload(slug)
 
-    title_fallback = str(params.get("title_fallback") or "").strip()
-    title = payload["product_name"] or title_fallback or _("Pack 8 pièces — soin antifongique")
+    title_fallback = str(params.get("title_fallback") or "sticky_order.title_fallback").strip()
+    title = payload["product_name"] or title_fallback
 
     amount = payload["promo_price"] if payload["promo_price"] else payload["price"]
     currency = payload["currency"] or "MAD"
@@ -65,9 +63,11 @@ def buybar_v2(request: HttpRequest, params: Dict[str, Any] | None) -> Dict[str, 
     if discount_label is None:
         # backward compatibility with old key
         discount_label = params.get("online_discount_label")
-    discount_label = str(discount_label or "").strip()
+    discount_label = str(discount_label or "sticky_order.discount_label").strip()
 
-    cta_label = str(params.get("cta_label") or "Je commande le pack")
+    cta_label = str(params.get("cta_label") or "sticky_order.cta_primary")
+    aria_label = str(params.get("aria_label") or "sticky_order.bar_aria_label")
+    close_label = str(params.get("close_label") or "sticky_order.close_aria_label")
 
     return {
         "product_slug": slug,
@@ -78,6 +78,8 @@ def buybar_v2(request: HttpRequest, params: Dict[str, Any] | None) -> Dict[str, 
         "currency": currency,
         "discount_label": discount_label,
         "cta_label": cta_label,
+        "aria_label": aria_label,
+        "close_label": close_label,
         "hero_selector": params.get("hero_selector", "#hero"),
         "form_root_selector": params.get("form_root_selector", "[data-ff-root]"),
         "input_selector": params.get("input_selector", "#ff-fullname"),

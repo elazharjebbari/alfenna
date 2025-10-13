@@ -1,9 +1,10 @@
 {# templates/base.html — SOCLE UNIQUE (compose fallback) #}
 {% load i18n static compress assets %}
 {% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
 
 <!doctype html>
-<html lang="{{ LANGUAGE_CODE|default:'fr' }}" dir="ltr">
+<html lang="{{ LANGUAGE_CODE|default:'fr' }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr' }}">
   <head>
     <link rel="manifest" href="/site.webmanifest">
     <meta name="theme-color" content="#ffffff">
@@ -75,7 +76,7 @@
     {% block extra_head %}{% endblock extra_head %}
   </head>
 
-  <body data-ll-consent-cookie="{{ marketing_config.consent_cookie_name|default:'cookie_consent_marketing' }}" data-ll-analytics-enabled="{{ tracking.analytics_enabled|yesno:'1,0' }}">
+  <body{% if LANGUAGE_BIDI %} class="rtl"{% endif %} data-ll-consent-cookie="{{ marketing_config.consent_cookie_name|default:'cookie_consent_marketing' }}" data-ll-analytics-enabled="{{ tracking.analytics_enabled|yesno:'1,0' }}">
 
       {# Hooks optionnels projet #}
 
