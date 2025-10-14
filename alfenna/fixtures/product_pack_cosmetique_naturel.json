@@ -21,12 +21,12 @@
       "extra": {
         "ui_texts": {
           "bullets": [
-            "Livraison 48 h au Maroc",
-            "Paiement \u00e0 la livraison disponible",
-            "Satisfaction garantie"
+            "t:product_detail.form.bullets.delivery",
+            "t:product_detail.form.bullets.payment",
+            "t:product_detail.form.bullets.guarantee"
           ],
-          "thanks_title": "Merci pour votre commande !",
-          "thanks_subtitle": "Notre \u00e9quipe vous appelle rapidement."
+          "thanks_title": "t:product_detail.form.thanks_title",
+          "thanks_subtitle": "t:product_detail.form.thanks_subtitle"
         }
       },
       "created_at": "2024-01-01T00:00:00Z",

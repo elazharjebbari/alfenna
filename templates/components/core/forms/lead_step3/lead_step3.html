@@ -46,17 +46,17 @@
                         <div class="af-left h-100">
                             <div class="af-small">{% trans "Seulement" %}</div>
                             {% if pricing.has_promo %}
-                            <div class="af-price-now">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency }}
+                            <div class="af-price-now">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency }}
                             </div>
-                            <div class="af-price-old mt-1">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}
+                            <div class="af-price-old mt-1">{{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency }}
                             </div>
                             <div class="af-saving mt-2">
-                                {% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency %}
+                                {% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency_label|default:pricing.currency %}
                                 Vous économisez {{ amount }} {{ currency }}
                                 {% endblocktrans %}
                             </div>
                             {% elif pricing.price %}
-                            <div class="af-price-now">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</div>
+                            <div class="af-price-now">{{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency }}</div>
                             {% endif %}
                         </div>
                     </div>
@@ -154,12 +154,12 @@
                         <select id="ff-country" class="form-select"
                                 name="{{ country_key }}" autocomplete="country" required>
                             <option value="">{% trans "Choisissez" %}</option>
-                            <option value="MA" selected>Maroc</option>
-                            <option value="FR">France</option>
-                            <option value="ES">Espagne</option>
-                            <option value="BE">Belgique</option>
-                            <option value="CH">Suisse</option>
-                            <option value="CA">Canada</option>
+                            <option value="MA" selected>{% trans "Maroc" %}</option>
+                            <option value="FR">{% trans "France" %}</option>
+                            <option value="ES">{% trans "Espagne" %}</option>
+                            <option value="BE">{% trans "Belgique" %}</option>
+                            <option value="CH">{% trans "Suisse" %}</option>
+                            <option value="CA">{% trans "Canada" %}</option>
                         </select>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
 
                 <div class="d-grid">
                     <button type="button" class="btn af-cta" data-ff-next
-                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
+                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %}{% if is_rtl %} &#8249;{% else %} &#8250;{% endif %}</button>
                 </div>
             </div>
         </section>
@@ -183,7 +183,7 @@
             <div class="af-savings-pill" role="note">
                 <span class="af-dot" aria-hidden="true"></span>
                 {% trans "VOUS ÉCONOMISEZ LORS DE VOTRE PREMIER ACHAT" %}
-                <i class="fa-solid fa-chevron-right ms-2" aria-hidden="true"></i>
+                <i class="fa-solid {% if is_rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %} ms-2" aria-hidden="true"></i>
             </div>
 
             <input type="hidden" name="{{ pack_slug_key }}" value="" data-ff-pack-slug>
@@ -219,12 +219,12 @@
                                     {% endif %}
                                     {% if offer.price is not None %}
                                         <div class="af-offer-price">
-                                            <span class="af-amount">{{ offer.price|floatformat:0 }}</span>{% if pricing.currency %}&nbsp;{{ pricing.currency }}{% endif %}
+                                            <span class="af-amount">{{ offer.price|floatformat:0 }}</span>{% if pricing.currency %}&nbsp;{{ pricing.currency_label|default:pricing.currency }}{% endif %}
                                         </div>
                                     {% endif %}
                                     {% if offer.compare_at_price %}
                                         <div class="af-offer-compare small text-muted text-decoration-line-through">
-                                            {{ offer.compare_at_price|floatformat:0 }}{% if pricing.currency %}&nbsp;{{ pricing.currency }}{% endif %}
+                                            {{ offer.compare_at_price|floatformat:0 }}{% if pricing.currency %}&nbsp;{{ pricing.currency_label|default:pricing.currency }}{% endif %}
                                         </div>
                                     {% endif %}
                                     {% if offer.savings_label %}
@@ -302,7 +302,7 @@
                                     {% if bump.price %}
                                         <span class="af-bump-price">— {{ bump.price }}
                                             {% if bump.currency %}&nbsp;{{ bump.currency }}
-                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency }}
+                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency_label|default:pricing.currency }}
                                             {% endif %}
                                         </span>
                                     {% endif %}
@@ -321,14 +321,14 @@
             {% trans "Total mis à jour" as default_summary_total_label %}
             <div class="af-summary mt-3">
                 <div class="af-summary-row"><span>{% trans "Sous‑total" %}</span><strong id="af-subtotal">XXX
-                    MAD</strong></div>
+                    {{ pricing.currency_label|default:pricing.currency }}</strong></div>
                 {% with summary_discount_label=ui_texts.discount_label|default:default_summary_discount_label %}
                     <div class="af-summary-row"><span>{{ summary_discount_label }}</span><strong id="af-discount">XXX
-                        MAD</strong></div>
+                        {{ pricing.currency_label|default:pricing.currency }}</strong></div>
                 {% endwith %}
                 {% with summary_total_label=ui_texts.total_label|default:default_summary_total_label %}
                     <div class="af-summary-row af-summary-total"><span>{{ summary_total_label }}</span><strong
-                            id="af-total">XXX MAD</strong></div>
+                            id="af-total">XXX {{ pricing.currency_label|default:pricing.currency }}</strong></div>
                 {% endwith %}
             </div>
 
@@ -336,7 +336,7 @@
                 <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
                 </button>
                 <button type="button" class="btn af-cta" data-ff-next
-                        data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
+                        data-ll-click="hero_cta_secondary">{% trans "Continuer" %}{% if is_rtl %} &#8249;{% else %} &#8250;{% endif %}</button>
             </div>
         </section>
 
@@ -359,7 +359,7 @@
                                data-ff-payment-option>
                         <span class="af-pay-check" aria-hidden="true"></span>
                         <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>
-                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}
+                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency_label|default:pricing.currency|default:'MAD' %}
                             {% if discount_amount %}
                                 <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
                             {% elif discount_text %}
@@ -402,10 +402,10 @@
             {% trans "Total" as default_payment_total_label %}
             <div class="af-summary mt-3">
                 <div class="af-summary-row">
-                    <span>{% trans "Sous‑total" %}</span><strong id="af-step3-subtotal">XXX MAD</strong>
+                    <span>{% trans "Sous‑total" %}</span><strong id="af-step3-subtotal">XXX {{ pricing.currency_label|default:pricing.currency }}</strong>
                 </div>
                 {% with step3_discount_label=ui_texts.discount_label|default:default_summary_discount_label %}
-                    {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}
+                    {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency_label|default:pricing.currency|default:'MAD' %}
                         <div class="af-summary-row" id="af-step3-discount-row">
                             <span>{{ step3_discount_label }}</span>
                             <strong id="af-step3-discount">
@@ -422,7 +422,7 @@
                 {% endwith %}
                 {% with step3_total_label=ui_texts.payment_total_label|default:default_payment_total_label %}
                     <div class="af-summary-row af-summary-total">
-                        <span>{{ step3_total_label }}</span><strong id="af-step3-total">XXX MAD</strong>
+                        <span>{{ step3_total_label }}</span><strong id="af-step3-total">XXX {{ pricing.currency_label|default:pricing.currency }}</strong>
                     </div>
                 {% endwith %}
             </div>

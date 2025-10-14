@@ -22,19 +22,19 @@
         "media_lightbox": true,
         "ui_texts": {
           "bullets": [
-            "Livraison 48 h partout au Maroc",
-            "Paiement sécurisé ou à la livraison",
-            "Satisfaction garantie"
+            "t:product_detail.form.bullets.delivery",
+            "t:product_detail.form.bullets.payment",
+            "t:product_detail.form.bullets.guarantee"
           ],
           "payment_labels": {
-            "online": "Paiement en ligne (promo)",
-            "cod": "Paiement à la livraison"
+            "online": "t:product_detail.form.payment_labels.online",
+            "cod": "t:product_detail.form.payment_labels.cod"
           },
-          "discount_label": "Remise spéciale paiement en ligne",
-          "total_label": "Total à régler",
+          "discount_label": "t:product_detail.form.discount_label",
+          "total_label": "t:product_detail.form.total_label",
           "online_discount_amount": "20",
-          "thanks_title": "Merci pour votre confiance !",
-          "thanks_subtitle": "Notre équipe vous contacte très vite."
+          "thanks_title": "t:product_detail.form.thanks_title",
+          "thanks_subtitle": "t:product_detail.form.thanks_subtitle"
         },
         "online_discount_amount": "20"
       },

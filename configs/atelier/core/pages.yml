@@ -82,8 +82,8 @@ pages:
 
   product_detail:
     meta:
-      title: "Produit"
-      description: "Fiche detaillee d'un produit alfenna."
+      title: "t:product_detail.meta.title"
+      description: "t:product_detail.meta.description"
     slots:
       vendors:
         component: "vendors/core"
@@ -97,19 +97,19 @@ pages:
           product:
             slug: "pack-cosmetique-naturel"
             id: "pack-cosmetique-naturel"
-            name: "Pack cosmétique naturel — Édition Spa"
-            subname: "<p>Routine complète pour pieds & ongles</p>"
-            description: "Un coffret 8 pièces pour hydrater, purifier et protéger en douceur."
+            name: "t:product_detail.hero.name"
+            subname: "t:product_detail.hero.subname"
+            description: "t:product_detail.hero.description"
             price: 450
             promo_price: 347
             currency: "MAD"
             badges:
-              - { icon: "fa-solid fa-leaf", text: "100% naturel" }
-              - { icon: "fas fa-money-bill", text: "Paiement à la livraison" }
+              - { icon: "fa-solid fa-leaf", text: "t:product_detail.hero.badges.natural" }
+              - { icon: "fas fa-money-bill", text: "t:product_detail.hero.badges.cod" }
             highlights:
-              - "Hydrate intensément pieds & ongles"
-              - "Livraison 24/48h partout au Maroc"
-              - "Formule naturelle sans parabènes"
+              - "t:product_detail.hero.highlights.care"
+              - "t:product_detail.hero.highlights.delivery"
+              - "t:product_detail.hero.highlights.formula"
 #          media:
 #            lightbox: true
 #            images:
@@ -126,6 +126,18 @@ pages:
               offer: "offer_key"
               product: "product"
               promotion: "promotion_selected"
+            ui_texts:
+              bullets:
+                - "t:product_detail.form.bullets.delivery"
+                - "t:product_detail.form.bullets.payment"
+                - "t:product_detail.form.bullets.guarantee"
+              payment_labels:
+                online: "t:product_detail.form.payment_labels.online"
+                cod: "t:product_detail.form.payment_labels.cod"
+              discount_label: "t:product_detail.form.discount_label"
+              total_label: "t:product_detail.form.total_label"
+              thanks_title: "t:product_detail.form.thanks_title"
+              thanks_subtitle: "t:product_detail.form.thanks_subtitle"
           tracking:
             enabled: true
             events:

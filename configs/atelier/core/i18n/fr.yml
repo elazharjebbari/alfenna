@@ -1,3 +1,6 @@
+
+currency:
+  MAD: "MAD"
 footer:
   brand: Alfenna
   address_text: Alfenna — Rabat, Maroc
@@ -212,21 +215,22 @@ faq:
 sample:
   nested:
     value: Valeur FR
+
 product_detail:
   meta:
-    title: "Pack antifongique Alfenna — Fiche produit"
-    description: "Découvrez le rituel spa antifongique : détails, bénéfices et offres."
+    title: "Pack cosmétique naturel Alfenna — Fiche produit"
+    description: "Découvrez le rituel spa antifongique : bienfaits, composition et offres exclusives."
   hero:
-    name: "Sajadat Al-Raha — Confort haute densité"
-    subname: "Soulage vos articulations pendant la prière"
-    description: "Tapis de prière à mémoire de forme pour un confort maximal."
+    name: "Rituel spa naturel — Coffret 8 pièces"
+    subname: "<p>Routine complète pour pieds & ongles</p>"
+    description: "Un coffret 8 pièces pour hydrater, purifier et protéger en douceur."
     badges:
-      delivery: "Livraison 48h partout au Maroc"
+      natural: "100% naturel"
       cod: "Paiement à la livraison"
     highlights:
-      relief: "Soulage genoux et dos"
-      memory: "Mousse mémoire haute densité"
-      antislip: "Housse antidérapante"
+      care: "Hydrate et nourrit la peau"
+      delivery: "Livraison 24/48 h partout au Maroc"
+      formula: "Formule sans parabènes"
   form:
     bullets:
       delivery: "Livraison 48 h partout au Maroc"
@@ -239,3 +243,74 @@ product_detail:
     total_label: "Total à régler"
     thanks_title: "Merci pour votre confiance !"
     thanks_subtitle: "Notre équipe vous contacte très vite."
+
+before_after:
+  wipe:
+    title: "Avant / Après — Stop-scroll"
+    subtitle: "Erreurs fréquentes vs. résultat après formation"
+    hint_text: "Faites glisser le bouton vert pour comparer l’avant/après."
+    hint_ok: "OK"
+    before_alt: "Avant / Après — pieds & ongles enfin sains"
+    before_label: "Avant"
+    before_pills:
+      - "Mycose persistante"
+      - "Odeur gênante"
+      - "Fissures et démangeaisons"
+    after_alt: "Avant / Après — la différence se voit"
+    after_label: "Après"
+    after_pills:
+      - "Gêne & honte"
+      - "Inconfort à la marche"
+      - "Ongle abîmé"
+    cta_label: "Je me lance"
+
+gallery:
+  participants:
+    title: "Avis WhatsApp — clients ravis"
+    subtitle: "Captures réelles publiées avec consentement. Extraits abrégés pour une meilleure lisibilité."
+    proofs:
+      - "Témoignages vérifiés WhatsApp"
+      - "Note moyenne 4,8/5"
+      - "500+ clients satisfaits"
+    cta: "Voir toutes les captures"
+    items:
+      - name: "Noura"
+        badge: "Cliente vérifiée"
+        meta: "WhatsApp • Tanger • 02/10/2025"
+        alt: "Capture WhatsApp — Noura : très satisfaite, livraison gratuite à Tanger."
+        caption: "« Trop satisfaite de la qualité — ce ne sera pas ma dernière commande. Livraison gratuite à Tanger. »"
+      - name: "Fatma"
+        badge: "Cliente vérifiée"
+        meta: "WhatsApp • 12:40"
+        alt: "Capture WhatsApp — Fatma : j’aime trop le pack."
+        caption: "« Coup de cœur ❤️ — j’aime trop ! »"
+      - name: "Aymen"
+        badge: "Client vérifié"
+        meta: "WhatsApp • 17:02"
+        alt: "Capture WhatsApp — Aymen : cadeau à son épouse, service top, livraison gratuite au Maroc."
+        caption: "« Offert à mon épouse : elle a adoré. Service top & livraison gratuite partout au Maroc. »"
+      - name: "Ibtissam"
+        badge: "Cliente vérifiée"
+        meta: "WhatsApp • 15:30"
+        alt: "Capture WhatsApp — Ibtissam : différence visible, à l’aise en sandales."
+        caption: "« La différence se voit : je me sens à l’aise en sandales. »"
+      - name: "Cliente +212 637…564"
+        badge: "Cliente vérifiée"
+        meta: "WhatsApp • 11:20"
+        alt: "Capture WhatsApp — cliente anonyme : pack 8 × 1, j’adore."
+        caption: "« Pack 8‑en‑1 : j’adore ! »"
+      - name: "Asmae"
+        badge: "Cliente vérifiée"
+        meta: "WhatsApp • 11:30"
+        alt: "Capture WhatsApp — Asmae : offert à sa maman, veut commander le sien, très utile 8‑en‑1."
+        caption: "« Offert à maman : elle a beaucoup aimé. Je prends le mien — vraiment utile 8‑en‑1. »"
+      - name: "Asmae"
+        badge: "Cliente vérifiée"
+        meta: "WhatsApp"
+        alt: "Capture WhatsApp — Asmae : livraison rapide, nouvelle commande."
+        caption: "« Livraison rapide — je recommande à nouveau. »"
+      - name: "Amina"
+        badge: "Cliente vérifiée"
+        meta: "WhatsApp • 15:33"
+        alt: "Capture WhatsApp — Amina : gel et crème agréables, hydratation profonde, sans effet gras."
+        caption: "« Gel & crème agréables, hydratation profonde, peau douce toute la journée, sans effet gras. »"

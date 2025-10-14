@@ -72,3 +72,15 @@
   .ba-after{transition:none}
 }
 
+
+
+.ba-section.ba-section-rtl{direction:rtl}
+.ba-section.ba-section-rtl .ba-hint{justify-content:flex-start}
+.ba-wipe.is-rtl{direction:ltr}
+.ba-wipe.is-rtl .ba-pills.left{left:auto;right:14px;}
+.ba-wipe.is-rtl .ba-pills.right{right:auto;left:14px;text-align:left;}
+.ba-wipe.is-rtl .label-left{left:auto;right:12px;}
+.ba-wipe.is-rtl .label-right{right:auto;left:12px;}
+.ba-section.ba-section-rtl .ba-actions{flex-direction:row-reverse;}
+.ba-section.ba-section-rtl .ba-snaps{flex-direction:row-reverse;}
+.ba-section.ba-section-rtl .ba-cta{margin-left:0;margin-right:auto;}

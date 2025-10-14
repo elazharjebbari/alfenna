@@ -1,0 +1,272 @@
+[
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100001,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "name",
+      "language": "ar",
+      "text": "طقس سبا طبيعي — حزمة من 8 قطع",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100002,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "subname",
+      "language": "ar",
+      "text": "<p>روتين متكامل للعناية بالقدمين والأظافر</p>",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100003,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "description",
+      "language": "ar",
+      "text": "طقم شامل يعالج الروائح ويلطف البشرة مع نتائج ملحوظة خلال 4 أسابيع.",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100004,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "highlights.0",
+      "language": "ar",
+      "text": "يعيد النعومة والمظهر الصحي للأظافر.",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100005,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "highlights.1",
+      "language": "ar",
+      "text": "حقيبة أنيقة تجعل الروتين عملياً وسهل الحمل.",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100006,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "highlights.2",
+      "language": "ar",
+      "text": "تركيبة نباتية لطيفة غنيّة بالزيوت الأساسية.",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100007,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "badges.0.text",
+      "language": "ar",
+      "text": "100% طبيعي",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100008,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "badges.1.text",
+      "language": "ar",
+      "text": "بدون بارابين",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100009,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "badges.2.text",
+      "language": "ar",
+      "text": "تركيبة لطيفة",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100010,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "offers.0.title",
+      "language": "ar",
+      "text": "حزمة سولو",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100011,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "offers.0.savings_label",
+      "language": "ar",
+      "text": "توفير 50 درهماً",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100012,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "offers.1.title",
+      "language": "ar",
+      "text": "حزمة ديو",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100013,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "offers.1.savings_label",
+      "language": "ar",
+      "text": "الأكثر اختياراً",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100014,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "testimonials.0.quote",
+      "language": "ar",
+      "text": "مجموعة كاملة؛ قدماي أصبحتا أكثر راحة ونعومة!",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100015,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "testimonials.1.quote",
+      "language": "ar",
+      "text": "توصيل سريع ومنتجات فعالة أستخدمها يومياً.",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100016,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "cross_sells.0.label",
+      "language": "ar",
+      "text": "+ شمعة تدليك مرطبة",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100017,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "cross_sells.0.title",
+      "language": "ar",
+      "text": "شمعة تدليك مرطبة",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "i18n.stringtranslation",
+    "pk": 100018,
+    "fields": {
+      "model_label": "catalog.product",
+      "object_id": "pack-cosmetique-naturel",
+      "field": "cross_sells.0.short_description",
+      "language": "ar",
+      "text": "شمع صويا مع عطر طبيعي، وزن 150 غرام.",
+      "status": "active",
+      "source": "manual",
+      "created_at": "2025-01-01T00:00:00Z",
+      "updated_at": "2025-01-01T00:00:00Z"
+    }
+  }
+]

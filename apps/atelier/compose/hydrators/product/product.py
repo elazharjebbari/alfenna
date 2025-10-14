@@ -6,7 +6,7 @@ import json
 import logging
 from decimal import Decimal, InvalidOperation
 from html import escape
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, cast
 
 from django.conf import settings
 from django.http import HttpRequest
@@ -728,6 +728,8 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         ui_texts_final.update(cfg.ui_texts)
     if cfg.form.ui_texts:
         ui_texts_final.update(cfg.form.ui_texts)
+    if ui_texts_final:
+        ui_texts_final = cast(Dict[str, Any], db_translator.walk(ui_texts_final))
 
     form_cfg = cfg.form
     action_url = _resolve_action_url(form_cfg.action_url)
@@ -759,6 +761,15 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         "has_promo": bool(price and promo and promo < price),
         "savings": (price - promo) if (price and promo and price > promo) else None,
     }
+    currency_code = pricing.get("currency") or product_data.get("currency")
+    currency_label = ""
+    if currency_code:
+        currency_label = db_translator.t(
+            f"currency.{currency_code}", default=str(currency_code)
+        )
+    if currency_label:
+        pricing["currency_label"] = currency_label
+        pricing["currency_display"] = currency_label
 
     language_code = getattr(request, "LANGUAGE_CODE", None) or get_language() or "en"
     lang_prefix = str(language_code).lower()[:2]
@@ -910,6 +921,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         "base_price": _to_float(pricing.get("price")),
         "promo_price": _to_float(pricing.get("promo_price")),
         "currency": pricing.get("currency") or product_data.get("currency") or "MAD",
+        "currency_display": pricing.get("currency_label") or pricing.get("currency_display") or pricing.get("currency") or product_data.get("currency") or "MAD",
         "online_discount": _to_float(online_discount_raw) or 0.0,
         "product_id": product_data.get("id"),
         "product_slug": product_data.get("slug"),

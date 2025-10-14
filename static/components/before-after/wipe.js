@@ -13,13 +13,19 @@
     var range  = root.querySelector('.ba-range');
     var after  = root.querySelector('.ba-after');
     var handle = root.querySelector('.ba-handle');
+    var isRtl  = root.getAttribute('data-ba-rtl') === '1';
 
     var supportsClip = CSS && CSS.supports && CSS.supports('clip-path', 'inset(0 50% 0 0)');
 
     function setVal(v, fireDrag) {
       v = Math.max(0, Math.min(100, v | 0));
-      if (supportsClip) after.style.setProperty('--wipe', v + '%');
-      else after.style.width = v + '%';
+      if (supportsClip) {
+        after.style.setProperty('--wipe', v + '%');
+      } else {
+        after.style.width = v + '%';
+        after.style.left = 0;
+        after.style.right = 'auto';
+      }
       handle.style.left = 'calc(' + v + '%)';
       if (range) {
         range.value = v;
@@ -93,6 +99,7 @@
 
     // init
     var start = parseInt((range && range.value) || after.style.getPropertyValue('--wipe')) || 50;
+    root.classList.toggle('is-rtl', isRtl);
     setVal(start, false);
   }
 
