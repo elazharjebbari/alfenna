@@ -15,7 +15,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
 from django.http import HttpResponseNotFound
@@ -77,9 +76,9 @@ urlpatterns = [
     path("flows/", include(("apps.flowforms.urls", "flowforms"), namespace="flowforms")),
 ]
 
-urlpatterns += i18n_patterns(
+urlpatterns += [
     path("", include(("apps.pages.urls", "pages"), namespace="pages")),
-)
+]
 def _chatbot_disabled_view(*args, **kwargs):
     return HttpResponseNotFound()
 

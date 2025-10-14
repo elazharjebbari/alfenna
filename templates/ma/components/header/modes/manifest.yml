@@ -1,0 +1,147 @@
+alias: header/modes
+template: "components/core/header/modes/header_modes.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/core/header/banner_ticker.css"
+  js: []
+  vendors: []
+
+params:
+  topbar:
+    enabled: true
+    text_html: "t:header.topbar.text_html"
+    deadline_ts: ""
+    cta: { label: "t:header.topbar.cta_label", url: "#form-stepper" }
+  banner:
+    enabled: true
+    colors:
+      from: "#2c6a57"
+      to: "#1f4f42"
+    speed_ms: 5000
+    pattern:
+      url: "images/patterns/alfenna/alfenna_dots_v1.svg"
+      size: 40
+      opacity: 0.16
+    messages:
+      - text: "t:header.banner.messages.morocco"
+        icon:
+          kind: "svg"
+          value: "images/icons/morocco.svg"
+      - text: "t:header.banner.messages.delivery"
+        icon:
+          kind: "icofont"
+          value: "icofont-fast-delivery"
+          color: "#bbf7d0"
+          bg: "rgba(187, 247, 208, 0.2)"
+      - text: "t:header.banner.messages.discount"
+        icon:
+          kind: "icofont"
+          value: "icofont-sale-discount"
+          color: "#fca5a5"
+          bg: "rgba(252, 165, 165, 0.22)"
+          outline: "rgba(252, 165, 165, 0.45)"
+        badge: "t:header.banner.messages.discount_badge"
+      - text: "t:header.banner.messages.check"
+        icon:
+          kind: "icofont"
+          value: "icofont-verification-check"
+          color: "#bae6fd"
+          bg: "rgba(186, 230, 253, 0.18)"
+      - text: "t:header.banner.messages.cod"
+        icon:
+          kind: "icofont"
+          value: "icofont-money-bag"
+          color: "#fde68a"
+          bg: "rgba(253, 230, 138, 0.22)"
+      - text: "t:header.banner.messages.natural"
+        icon: { kind: "svg", value: "images/icons/leaf.svg" }
+  menu:
+    - label: "t:header.menu.home"
+      key: "home"
+    - label: "t:header.menu.product"
+      key: "course"
+    - label: "t:header.menu.faq"
+      key: "faq"
+    - label: "t:header.menu.contact"
+      key: "contact"
+  primary_cta_label: "t:header.primary_cta.label"
+  primary_cta_sublabel: "t:header.primary_cta.sublabel"
+  primary_cta_aria: "t:header.primary_cta.aria"
+  rating_badge_text: "t:header.rating_badge_text"
+  logo_alt: "t:header.logo.alt"
+  contact:
+    phone_tel: "t:header.contact.phone_tel"
+    phone_display: "t:header.contact.phone_display"
+    email: "t:header.contact.email"
+    address_url: "t:header.contact.address_url"
+    address_text: "t:header.contact.address_text"
+  socials:
+    - icon: "icofont-whatsapp"
+      url: "https://wa.me/212719646705"
+      new_tab: true
+    - icon: "flaticon-instagram"
+      url: "https://www.instagram.com/alfennaacademy/"
+      new_tab: true
+
+contract:
+  optional:
+    topbar:
+      enabled: "bool"
+      text_html: "str"
+      deadline_ts: "str"
+      cta?:
+        label: "str"
+        url: "str"
+    banner:
+      enabled: "bool"
+      colors?:
+        from?: "str"
+        to?: "str"
+      speed_ms?: "int"
+      pattern?:
+        url?: "str"
+        size?: "int"
+        opacity?: "float"
+      messages?:
+        - text: "str"
+          icon?:
+            kind?: "str"
+            value?: "str"
+            color?: "str"
+            bg?: "str"
+            outline?: "str"
+          badge?: "str"
+    menu:
+      - label: "str"
+        url?: "str"
+        url_name?: "str"
+        key?: "str"
+    primary_cta_label: "str"
+    primary_cta_sublabel: "str"
+    primary_cta_aria: "str"
+    rating_badge_text: "str"
+    logo_alt: "str"
+    contact:
+      phone_tel: "str"
+      phone_display: "str"
+      email: "str"
+      address_url: "str"
+      address_text: "str"
+    socials:
+      - icon: "str"
+        url: "str"
+        new_tab?: "bool"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header_modes.hydrators"
+  func: "modes_struct"
+
+compose:
+  children:
+    main: "header/modes/main"
+    mobile: "header/modes/mobile"
+
+render:
+  cacheable: false

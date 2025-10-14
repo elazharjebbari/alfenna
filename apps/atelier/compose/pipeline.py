@@ -22,11 +22,35 @@ from apps.atelier.compose.cache import ttl_for
 from apps.atelier.ab.waffle import resolve_variant, is_preview_active
 from apps.atelier import services
 from apps.atelier.components.metrics import record_impression, should_record
-from apps.atelier.i18n import i18n_walk
+from apps.atelier.i18n.translation_service import TranslationService
 
 log = logging.getLogger("atelier.compose.pipeline")
 
 DEFAULT_SITE_VERSION = "core"
+
+
+def _resolve_locale(request) -> str:
+    locale = getattr(request, "LANGUAGE_CODE", None)
+    if not locale:
+        locale = getattr(getattr(request, "_segments", None), "lang", None)
+    if not locale:
+        locale = getattr(settings, "ATELIER_I18N_DEFAULT_LOCALE", "fr")
+    return str(locale or "fr")
+
+
+def _get_translation_service(request, namespace: str | None) -> TranslationService:
+    locale = _resolve_locale(request)
+    site_version = (namespace or "").strip() or _effective_namespace(request)
+    cache = getattr(request, "_translation_services", None)
+    if cache is None:
+        cache = {}
+        request._translation_services = cache
+    key = (locale, site_version)
+    service = cache.get(key)
+    if service is None:
+        service = TranslationService(locale=locale, site_version=site_version)
+        cache[key] = service
+    return service
 
 
 def _stable_content_rev(spec: Dict[str, Any]) -> str:
@@ -379,12 +403,28 @@ def _render_parent_with_children(
         return ""
 
     # 1) Hydrate parent
+    translation = _get_translation_service(request, namespace)
     slot_params = dict(slot_ctx.get("params") or {})
-    ctx = _hydrate(alias_base, request, slot_params, namespace=namespace)
+    resolved_before = translation.resolved_keys
+    missing_before = translation.missing_keys
+    translated_params = translation.walk(slot_params)
+    ctx = _hydrate(alias_base, request, translated_params, namespace=namespace)
 
-    seg_lang = getattr(getattr(request, "_segments", None), "lang", None)
-    lang = seg_lang or getattr(request, "LANGUAGE_CODE", None)
-    ctx = i18n_walk(ctx, namespace, lang)
+    ctx = translation.walk(ctx)
+
+    if settings.DEBUG:
+        resolved_after = translation.resolved_keys
+        missing_after = translation.missing_keys
+        resolved_new = sorted(resolved_after.difference(resolved_before))
+        missing_new = sorted(missing_after.difference(missing_before))
+        log.debug(
+            "compose.i18n slot=%s page=%s alias=%s resolved=%d missing=%s",
+            slot_ctx.get("id") or "",
+            page_ctx.get("id") or "",
+            alias_base,
+            len(resolved_new),
+            missing_new,
+        )
 
     if "variant_key" not in ctx:
         ctx["variant_key"] = slot_ctx.get("variant_key")

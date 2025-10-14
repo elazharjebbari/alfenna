@@ -1,0 +1,82 @@
+alias: header/modes/mobile
+template: "components/core/header/modes/mobile/mobile_menu.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+params:
+  contact:
+    phone_tel: "t:header.contact.phone_tel"
+    phone_display: "t:header.contact.phone_display"
+    email: "t:header.contact.email"
+    address_url: "t:header.contact.address_url"
+    address_text: "t:header.contact.address_text"
+  socials:
+    - icon: "icofont-whatsapp"
+      url: "https://wa.me/212719646705"
+      new_tab: true
+    - icon: "flaticon-instagram"
+      url: "https://www.instagram.com/alfennaacademy/"
+      new_tab: true
+  course_slug: "bougies-naturelles"
+  menu:
+    - label: "t:header.menu.home"
+      key: "home"
+    - label: "t:header.menu.product"
+      key: "course"
+    - label: "t:header.menu.faq"
+      key: "faq"
+    - label: "t:header.menu.contact"
+      key: "contact"
+
+contract:
+  optional:
+    contact:
+      phone_tel: "str"
+      phone_display: "str"
+      email: "str"
+      address_url: "str"
+      address_text: "str"
+    socials:
+      - icon: "str"
+        url: "str"
+        new_tab?: "bool"
+    course_slug: "str"
+    mode_override: "str"
+    menu:
+      - label: "str"
+        url?: "str"
+        url_name?: "str"
+        key?: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header_modes.hydrators"
+  func: "modes_mobile"
+  contact:
+    phone_tel: "+212719646705"
+    phone_display: "+212 719-646-705"
+    email: "partenariat@alfenna.com"
+    address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
+    address_text: "ألفينا — الرباط، المغرب"
+  socials:
+    - icon: "icofont-whatsapp"
+      url: "https://wa.me/212719646705"
+      new_tab: true
+    - icon: "flaticon-instagram"
+      url: "https://www.instagram.com/alfennaacademy/"
+      new_tab: true
+  menu:
+    - label: "الرئيسية"
+      key: "home"
+    - label: "حزمة ألفينا"
+      key: "course"
+    - label: "الأسئلة الشائعة"
+      key: "faq"
+    - label: "تواصل معنا"
+      key: "contact"
+
+render:
+  cacheable: false

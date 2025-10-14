@@ -1,0 +1,42 @@
+footer:
+  shop: Shop
+header:
+  topbar:
+    text_html: "100% Natural | Paraben-free | Gentle formula | Made in Morocco | Protection & repair"
+    cta_label: "Order now"
+  banner:
+    messages:
+      morocco: "Shipping across Morocco"
+      delivery: "Free 24h delivery"
+      discount: "-30% today [today_human]"
+      discount_badge: "OFFER"
+      check: "Check before you pay"
+      cod: "Cash on delivery"
+      natural: "100% natural product"
+product_detail:
+  meta:
+    title: "Alfenna antifungal kit — Product page"
+    description: "Discover the full spa ritual: product details, benefits, and special offers."
+  hero:
+    name: "Sajadat Al-Raha — Premium comfort mat"
+    subname: "Relieves your joints while you pray"
+    description: "Memory foam prayer mat delivering full support and lasting comfort."
+    badges:
+      delivery: "48h delivery across Morocco"
+      cod: "Cash on delivery"
+    highlights:
+      relief: "Relieves knees and back"
+      memory: "High-density memory foam"
+      antislip: "Anti-slip cover for added stability"
+  form:
+    bullets:
+      delivery: "48h delivery across Morocco"
+      payment: "Secure payment or cash on delivery"
+      guarantee: "Satisfaction guaranteed"
+    payment_labels:
+      online: "Online payment (promo)"
+      cod: "Cash on delivery"
+    discount_label: "Special discount for online payment"
+    total_label: "Total amount due"
+    thanks_title: "Thank you for your trust!"
+    thanks_subtitle: "Our team will contact you very soon."

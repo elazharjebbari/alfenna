@@ -1,0 +1,112 @@
+[
+  {
+    "model": "catalog.product",
+    "pk": 5100,
+    "fields": {
+      "slug": "pack-cosmetique-naturel",
+      "name": "Pack cosm\u00e9tique naturel \u2014 \u00c9dition Spa",
+      "subname": "<p>Routine compl\u00e8te pour pieds & ongles</p>",
+      "description": "Un coffret 8 pi\u00e8ces pour hydrater, purifier et prot\u00e9ger en douceur.",
+      "seo_title": "Pack cosm\u00e9tique naturel \u2014 Routine spa \u00e0 domicile",
+      "seo_description": "Découvrez le coffret cosm\u00e9tique naturel : 8 produits pour une routine spa compl\u00e8te. Livraison rapide au Maroc.",
+      "highlights": [
+        "Hydrate intens\u00e9ment pieds & ongles",
+        "Livraison 24/48h partout au Maroc",
+        "Formule naturelle sans parab\u00e8nes"
+      ],
+      "price": "450.00",
+      "promo_price": "347.00",
+      "currency": "MAD",
+      "is_active": true,
+      "extra": {
+        "ui_texts": {
+          "bullets": [
+            "Livraison 48 h au Maroc",
+            "Paiement \u00e0 la livraison disponible",
+            "Satisfaction garantie"
+          ],
+          "thanks_title": "Merci pour votre commande !",
+          "thanks_subtitle": "Notre \u00e9quipe vous appelle rapidement."
+        }
+      },
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "catalog.productbadge",
+    "pk": 5200,
+    "fields": {
+      "product": 5100,
+      "text": "100% naturel",
+      "icon": "fa-solid fa-leaf"
+    }
+  },
+  {
+    "model": "catalog.productbadge",
+    "pk": 5201,
+    "fields": {
+      "product": 5100,
+      "text": "Sans parab\u00e8nes",
+      "icon": "fa-solid fa-shield-heart"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 5300,
+    "fields": {
+      "product": 5100,
+      "kind": "hero",
+      "src": "/static/images/landing-page/product-single/pack-hero.webp",
+      "thumb": "/static/images/landing-page/product-single/pack-hero_thumb.webp",
+      "alt": "Pack cosm\u00e9tique naturel \u2014 visuel principal",
+      "position": 0
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 5301,
+    "fields": {
+      "product": 5100,
+      "kind": "gallery",
+      "src": "/static/images/landing-page/product-single/pack-detail-1.webp",
+      "thumb": "/static/images/landing-page/product-single/pack-detail-1_thumb.webp",
+      "alt": "D\u00e9tail du coffret cosm\u00e9tique naturel",
+      "position": 1
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 5302,
+    "fields": {
+      "product": 5100,
+      "kind": "gallery",
+      "src": "/static/images/landing-page/product-single/pack-detail-2.webp",
+      "thumb": "/static/images/landing-page/product-single/pack-detail-2_thumb.webp",
+      "alt": "Routine spa \u00e0 domicile \u2014 illustration",
+      "position": 2
+    }
+  },
+  {
+    "model": "catalog.testimonialmedia",
+    "pk": 5400,
+    "fields": {
+      "product": 5100,
+      "author": "Nadia",
+      "quote": "Un coffret complet, mes pieds n'ont jamais \u00e9t\u00e9 aussi doux !",
+      "position": 0,
+      "image_url": "https://placehold.co/160x160?text=NV"
+    }
+  },
+  {
+    "model": "catalog.testimonialmedia",
+    "pk": 5401,
+    "fields": {
+      "product": 5100,
+      "author": "Karim",
+      "quote": "Livraison rapide et produits efficaces, je recommande.",
+      "position": 1,
+      "image_url": "https://placehold.co/160x160?text=KR"
+    }
+  }
+]

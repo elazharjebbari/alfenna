@@ -2,10 +2,13 @@ from __future__ import annotations
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from parler.models import TranslatableModel, TranslatedFields
 
-class Section(models.Model):
+class Section(TranslatableModel):
     course = models.ForeignKey('catalog.Course', related_name='sections', on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
+    translations = TranslatedFields(
+        title=models.CharField(max_length=200),
+    )
     order = models.PositiveIntegerField(default=1)
     is_published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,7 +21,8 @@ class Section(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f"{self.course.title} — {self.order}. {self.title}"
+        course_label = self.course.safe_translation_getter("title", default=getattr(self.course, "slug", str(self.course.pk)))
+        return f"{course_label} — {self.order}. {self.safe_translation_getter('title', default='')}"
 
 class LectureType(models.TextChoices):
     VIDEO = 'video', _('Vidéo')
@@ -31,10 +35,12 @@ class LanguageCode(models.TextChoices):
     FR_FR = 'fr_FR', _('Français (France)')
     AR_MA = 'ar_MA', _('Arabe (Maroc)')
 
-class Lecture(models.Model):
+class Lecture(TranslatableModel):
     course = models.ForeignKey('catalog.Course', related_name='lectures', on_delete=models.CASCADE)
     section = models.ForeignKey(Section, related_name='lectures', on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
+    translations = TranslatedFields(
+        title=models.CharField(max_length=200),
+    )
     order = models.PositiveIntegerField(default=1)
     type = models.CharField(max_length=16, choices=LectureType.choices, default=LectureType.ARTICLE)
 
@@ -76,7 +82,8 @@ class Lecture(models.Model):
             return reverse("content:lecture-detail-pk", args=[self.pk])
 
     def __str__(self) -> str:
-        return f"{self.section} — {self.order}. {self.title}"
+        section_label = self.section.safe_translation_getter('title', default=f"Section {self.section.pk}")
+        return f"{section_label} — {self.order}. {self.safe_translation_getter('title', default='')}"
 
 
 class LectureVideoVariant(models.Model):

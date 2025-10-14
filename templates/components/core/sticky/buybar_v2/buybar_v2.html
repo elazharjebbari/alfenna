@@ -20,17 +20,34 @@
     </div>
 
     <div class="af-mid">
-      {% if amount %}
-        <div class="af-price">
-          {{ amount|floatformat:0 }} {{ currency }}
-          {% if original_price and original_price > amount %}
-            <span class="af-price-old">{{ original_price|floatformat:0 }} {{ currency }}</span>
+      {% if plan_title or plan_features %}
+        <div class="af-plan">
+          {% if plan_title %}
+            <div class="af-plan-title">{{ plan_title }}</div>
+          {% endif %}
+          {% if plan_features %}
+            <ul class="af-plan-features">
+              {% for feature in plan_features %}
+                <li>{{ feature }}</li>
+              {% endfor %}
+            </ul>
           {% endif %}
         </div>
       {% endif %}
-      {% if discount_label %}
-        <span class="af-badge">{{ discount_label|linebreaksbr }}</span>
-      {% endif %}
+
+      <div class="af-price-block">
+        {% if amount %}
+          <div class="af-price">
+            {{ amount|floatformat:0 }} {{ currency }}
+            {% if original_price and original_price > amount %}
+              <span class="af-price-old">{{ original_price|floatformat:0 }} {{ currency }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if discount_label %}
+          <span class="af-badge">{{ discount_label|linebreaksbr }}</span>
+        {% endif %}
+      </div>
     </div>
 
     <button class="af-cta" data-af-cta data-ll-click="buybar_cta_click">

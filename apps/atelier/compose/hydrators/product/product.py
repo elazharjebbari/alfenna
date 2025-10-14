@@ -8,17 +8,19 @@ from decimal import Decimal, InvalidOperation
 from html import escape
 from typing import Any, Dict, Iterable, List, Optional
 
+from django.conf import settings
 from django.http import HttpRequest
-
 from django.urls import NoReverseMatch, reverse
 from django.utils.translation import get_language
 
 from apps.atelier.components.registry import NamespaceComponentMissing, get as get_component
 from apps.atelier.components.utils import split_alias_namespace
 from apps.atelier.contracts.product import ProductParams
+from apps.atelier.i18n.translation_service import TranslationService
 from apps.catalog.models import Product as CatalogProduct
 from apps.leads.constants import FormKind
 from apps.leads.utils.fields_map import normalize_fields_map
+from apps.i18n.utils import build_translation_key
 
 logger = logging.getLogger(__name__)
 
@@ -196,6 +198,115 @@ def _merge_media_images(base: List[Dict[str, Any]], overlay: List[Dict[str, Any]
     return merged
 
 
+def _translate_value(
+    translator: TranslationService,
+    instance: CatalogProduct,
+    field: str,
+    value: Any,
+    *,
+    suffix: str | None = None,
+    site_version: str | None = None,
+) -> Any:
+    if not isinstance(value, str) or not value:
+        return value
+    key = build_translation_key(instance, field, suffix=suffix, site_version=site_version)
+    return translator.t(key, default=value)
+
+
+def _translate_product_content(
+    translator: TranslationService,
+    product_obj: CatalogProduct,
+    product_data: Dict[str, Any],
+    offers: List[Dict[str, Any]],
+    testimonials: List[Dict[str, Any]],
+    *,
+    site_version: str,
+) -> None:
+    product_data["name"] = _translate_value(
+        translator, product_obj, "name", product_data.get("name"), site_version=site_version
+    )
+    product_data["subname"] = _translate_value(
+        translator,
+        product_obj,
+        "subname",
+        product_data.get("subname"),
+        site_version=site_version,
+    )
+    product_data["description"] = _translate_value(
+        translator,
+        product_obj,
+        "description",
+        product_data.get("description"),
+        site_version=site_version,
+    )
+
+    highlights = product_data.get("highlights") or []
+    if isinstance(highlights, list):
+        product_data["highlights"] = [
+            _translate_value(
+                translator,
+                product_obj,
+                "highlights",
+                item,
+                suffix=str(idx),
+                site_version=site_version,
+            )
+            for idx, item in enumerate(highlights)
+        ]
+
+    badges = product_data.get("badges") or []
+    for idx, badge in enumerate(badges):
+        if isinstance(badge, dict) and badge.get("text"):
+            badge["text"] = _translate_value(
+                translator,
+                product_obj,
+                "badges",
+                badge["text"],
+                suffix=f"{idx}.text",
+                site_version=site_version,
+            )
+
+    for idx, offer in enumerate(offers):
+        if offer.get("title"):
+            offer["title"] = _translate_value(
+                translator,
+                product_obj,
+                "offers",
+                offer["title"],
+                suffix=f"{idx}.title",
+                site_version=site_version,
+            )
+        if offer.get("savings_label"):
+            offer["savings_label"] = _translate_value(
+                translator,
+                product_obj,
+                "offers",
+                offer["savings_label"],
+                suffix=f"{idx}.savings_label",
+                site_version=site_version,
+            )
+
+    for idx, testimonial in enumerate(testimonials):
+        if testimonial.get("author"):
+            testimonial["author"] = _translate_value(
+                translator,
+                product_obj,
+                "testimonials",
+                testimonial["author"],
+                suffix=f"{idx}.author",
+                site_version=site_version,
+            )
+        if testimonial.get("quote"):
+            testimonial["quote"] = _translate_value(
+                translator,
+                product_obj,
+                "testimonials",
+                testimonial["quote"],
+                suffix=f"{idx}.quote",
+                site_version=site_version,
+            )
+
+
 def _coerce_decimal(value: Any) -> Any:
     if value in (None, ""):
         return None
@@ -241,6 +352,29 @@ def _sanitize_lookup_value(value: Any) -> str:
     return text
 
 
+def _resolve_product_slug(request, params: Dict[str, Any] | None) -> str:
+    """Extract the product slug from the request/params with graceful fallbacks."""
+    resolver_match = getattr(request, "resolver_match", None)
+    if resolver_match and isinstance(getattr(resolver_match, "kwargs", None), dict):
+        for key in ("product_slug", "slug"):
+            candidate = resolver_match.kwargs.get(key)
+            if candidate:
+                return _sanitize_lookup_value(candidate)
+
+    attribute_slug = getattr(request, "_product_slug", "")
+    if attribute_slug:
+        return _sanitize_lookup_value(attribute_slug)
+
+    if isinstance(params, dict):
+        product_params = params.get("product")
+        if isinstance(product_params, dict):
+            param_slug = product_params.get("slug")
+            if param_slug:
+                return _sanitize_lookup_value(param_slug)
+
+    return ""
+
+
 def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str, Any] | None = None) -> Dict[str, Any]:
     """Return the rendering context for the product component."""
     cfg = ProductParams.from_dict(params)
@@ -255,22 +389,27 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     lookup_id = lookup_params.get("id")
     lookup_id = _sanitize_lookup_value(lookup_id) if lookup_id is not None else ""
 
+    resolved_slug = _resolve_product_slug(request, params)
+    if resolved_slug:
+        lookup_slug = resolved_slug
+
+    lang_code = getattr(request, "LANGUAGE_CODE", None) or get_language() or "fr"
+    site_version = getattr(request, "site_version", None) or "core"
+    db_translator = TranslationService(locale=lang_code, site_version=site_version)
+
     if not lookup_slug:
         lookup_slug = cfg.product_slug or cfg.product.slug
     if not lookup_id:
         lookup_id = cfg.product_id or cfg.product.id
 
-    if not lookup_slug:
-        request_slug = getattr(request, "_product_slug", "")
-        if request_slug:
-            lookup_slug = str(request_slug).strip()
-    if not lookup_slug:
-        resolver = getattr(request, "resolver_match", None)
-        if resolver and isinstance(getattr(resolver, "kwargs", None), dict):
-            lookup_slug = str(resolver.kwargs.get("product_slug") or resolver.kwargs.get("slug") or "").strip()
-
     lookup_slug = _sanitize_lookup_value(lookup_slug)
     lookup_id = _sanitize_lookup_value(lookup_id)
+    if not lookup_slug:
+        logger.warning(
+            "product.hydrator.missing_slug path=%s lookup_id=%s",
+            getattr(request, "path", "-"),
+            lookup_id or "-",
+        )
 
     product_obj: Optional[CatalogProduct] = None
     queryset = CatalogProduct.objects.filter(is_active=True).prefetch_related(
@@ -286,6 +425,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         try:
             product_obj = queryset.get(slug=lookup_slug)
         except CatalogProduct.DoesNotExist:
+            logger.warning("product.hydrator.not_found slug=%s", lookup_slug)
             product_obj = None
 
     if product_obj is None and lookup_id:
@@ -297,6 +437,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         try:
             product_obj = queryset.get(pk=pk_value)
         except (CatalogProduct.DoesNotExist, ValueError):
+            logger.warning("product.hydrator.not_found_by_id id=%s", lookup_id)
             product_obj = None
 
     product_data: Dict[str, Any] = {}
@@ -374,6 +515,44 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                     "extra": dict(complementary.extra or {}),
                 }
             )
+
+        _translate_product_content(
+            db_translator,
+            product_obj,
+            product_data,
+            offers_db,
+            testimonials,
+            site_version=site_version,
+        )
+
+        for idx, item in enumerate(cross_sells):
+            if item.get("label"):
+                item["label"] = _translate_value(
+                    db_translator,
+                    product_obj,
+                    "cross_sells",
+                    item["label"],
+                    suffix=f"{idx}.label",
+                    site_version=site_version,
+                )
+            if item.get("short_description"):
+                item["short_description"] = _translate_value(
+                    db_translator,
+                    product_obj,
+                    "cross_sells",
+                    item["short_description"],
+                    suffix=f"{idx}.short_description",
+                    site_version=site_version,
+                )
+            if item.get("title"):
+                item["title"] = _translate_value(
+                    db_translator,
+                    product_obj,
+                    "cross_sells",
+                    item["title"],
+                    suffix=f"{idx}.title",
+                    site_version=site_version,
+                )
 
         if cross_sells and not bump_db:
             primary = min(cross_sells, key=lambda item: item.get("position", 0))
@@ -744,5 +923,16 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                 context_out["pricing"][f"{key}_display"] = f"{value:.2f}"
             except (TypeError, ValueError):
                 context_out["pricing"][f"{key}_display"] = str(value)
+
+    if settings.DEBUG:
+        logger.debug(
+            "product.hydrator.context slug=%s product_found=%s media=%d testimonials=%d cross_sells=%d offers=%d",
+            lookup_slug or "-",
+            bool(product_obj),
+            len(media_images_db),
+            len(testimonials),
+            len(cross_sells),
+            len(final_offers),
+        )
 
     return context_out

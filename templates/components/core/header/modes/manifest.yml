@@ -12,9 +12,9 @@ assets:
 params:
   topbar:
     enabled: true
-    text_html: "100% Naturel | Sans Parabènes | Formule Douce | Fabriqué au Maroc | Protection & Restauration"
+    text_html: "t:header.topbar.text_html"
     deadline_ts: ""
-    cta: { label: "J'achete", url: "#form-stepper" }
+    cta: { label: "t:header.topbar.cta_label", url: "#form-stepper" }
   banner:
     enabled: true
     colors:
@@ -26,37 +26,37 @@ params:
       size: 40
       opacity: 0.16
     messages:
-      - text: "Livraison Partout au Maroc"
+      - text: "t:header.banner.messages.morocco"
         icon:
           kind: "svg"
           value: "images/icons/morocco.svg"
-      - text: "Livraison 24h gratuite"
+      - text: "t:header.banner.messages.delivery"
         icon:
           kind: "icofont"
           value: "icofont-fast-delivery"
           color: "#bbf7d0"
           bg: "rgba(187, 247, 208, 0.2)"
-      - text: "-30% aujourd’hui [today_human]"
+      - text: "t:header.banner.messages.discount"
         icon:
           kind: "icofont"
           value: "icofont-sale-discount"
           color: "#fca5a5"
           bg: "rgba(252, 165, 165, 0.22)"
           outline: "rgba(252, 165, 165, 0.45)"
-        badge: "OFFRE"
-      - text: "Vérifiez avant de payer"
+        badge: "t:header.banner.messages.discount_badge"
+      - text: "t:header.banner.messages.check"
         icon:
           kind: "icofont"
           value: "icofont-verification-check"
           color: "#bae6fd"
           bg: "rgba(186, 230, 253, 0.18)"
-      - text: "Paiement à la livraison"
+      - text: "t:header.banner.messages.cod"
         icon:
           kind: "icofont"
           value: "icofont-money-bag"
           color: "#fde68a"
           bg: "rgba(253, 230, 138, 0.22)"
-      - text: "Produit 100% naturel"
+      - text: "t:header.banner.messages.natural"
         icon: { kind: "svg", value: "images/icons/leaf.svg" }
 
 contract:

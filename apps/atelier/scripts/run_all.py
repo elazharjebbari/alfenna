@@ -3,7 +3,11 @@ import time
 from typing import Dict, List
 
 SCRIPTS = [
+    "apps.pages.scripts.smoke_product_page",
     "apps.atelier.scripts.components.fab_whatsapp_smoke",
+    "apps.atelier.scripts.suite.tests_scripts.test_lang_prefix_smoke",
+    "apps.atelier.scripts.suite.tests_scripts.test_rtl_layout_smoke",
+    "apps.atelier.scripts.suite.tests_scripts.test_i18n_walk_smoke",
 ]
 
 

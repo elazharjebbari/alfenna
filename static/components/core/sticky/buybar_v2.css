@@ -17,8 +17,7 @@
 
 .af-buybar {
   position: fixed;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   bottom: calc(env(safe-area-inset-bottom, 0px));
   z-index: var(--af-buybar-z);
   transform: translateY(110%);
@@ -58,7 +57,7 @@
 
 .af-buybar--pill .af-close {
   position: absolute;
-  right: 0.35rem;
+  inset-inline-end: 0.35rem;
   top: -0.9rem;
   width: 28px;
   height: 28px;
@@ -92,8 +91,45 @@
 .af-buybar--pill .af-mid {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
+  gap: 0.75rem;
+  margin-inline-start: auto;
+}
+
+.af-buybar--pill .af-plan {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 220px;
+}
+
+.af-buybar--pill .af-plan-title {
+  font: 600 14px/1.1 "Montserrat", "Inter", system-ui, sans-serif;
+  color: #2f4f4d;
+}
+
+.af-buybar--pill .af-plan-features {
+  margin: 0.4rem 0 0;
+  padding: 0;
+  list-style: none;
+  font: 500 12px/1.3 "Inter", system-ui, sans-serif;
+  color: rgba(23, 50, 54, 0.8);
+}
+
+.af-buybar--pill .af-plan-features li + li {
+  margin-top: 0.15rem;
+}
+
+.af-buybar--pill .af-plan-features li::before {
+  content: "•";
+  color: var(--af-buybar-teal);
+  margin-inline-end: 0.35rem;
+}
+
+.af-buybar--pill .af-price-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
 }
 
 .af-buybar--pill .af-price {

@@ -9,15 +9,15 @@ assets:
   vendors: []
 
 params:
-  label: "fab.whatsapp.label"
-  aria_label: "fab.whatsapp.aria_label"
+  label: "t:fab.whatsapp.label"
+  aria_label: "t:fab.whatsapp.aria_label"
   icon_mode: "vendor"
   icon_vendor: "icofont-whatsapp"
   icon_svg: ""
   offset_bottom: 120
   offset_right: 16
   phone_tel: "+212719646705"
-  prefill_text: "fab.whatsapp.prefill_text"
+  prefill_text: "t:fab.whatsapp.prefill_text"
 
 contract:
   optional:
@@ -36,15 +36,15 @@ hydrate:
   module: "apps.atelier.compose.hydrators.fab.hydrators"
   func: "whatsapp"
   params:
-    label: "fab.whatsapp.label"
-    aria_label: "fab.whatsapp.aria_label"
+    label: "t:fab.whatsapp.label"
+    aria_label: "t:fab.whatsapp.aria_label"
     icon_mode: "vendor"
     icon_vendor: "icofont-whatsapp"
     icon_svg: ""
     offset_bottom: 130
     offset_right: 16
     phone_tel: "+212719646705"
-    prefill_text: "fab.whatsapp.prefill_text"
+    prefill_text: "t:fab.whatsapp.prefill_text"
 
 render:
   cacheable: true

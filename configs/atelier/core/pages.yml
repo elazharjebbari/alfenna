@@ -95,19 +95,21 @@ pages:
           lookup:
             slug: "{{ url.kwargs.product_slug }}"
           product:
-            id: "demo-product"
-            name: "Sajadat Al-Raha"
-            description: "Tapis de priere a memoire de forme pour un confort maximal."
-            price: 399
-            promo_price: 329
+            slug: "pack-cosmetique-naturel"
+            id: "pack-cosmetique-naturel"
+            name: "Pack cosmétique naturel — Édition Spa"
+            subname: "<p>Routine complète pour pieds & ongles</p>"
+            description: "Un coffret 8 pièces pour hydrater, purifier et protéger en douceur."
+            price: 450
+            promo_price: 347
             currency: "MAD"
             badges:
-              - { icon: "fas fa-truck", text: "Livraison 48h" }
-              - { icon: "fas fa-money-bill", text: "Paiement a la livraison" }
+              - { icon: "fa-solid fa-leaf", text: "100% naturel" }
+              - { icon: "fas fa-money-bill", text: "Paiement à la livraison" }
             highlights:
-              - "Soulage genoux et dos"
-              - "Mousse memo haute densite"
-              - "Housse antiderapante"
+              - "Hydrate intensément pieds & ongles"
+              - "Livraison 24/48h partout au Maroc"
+              - "Formule naturelle sans parabènes"
 #          media:
 #            lightbox: true
 #            images:

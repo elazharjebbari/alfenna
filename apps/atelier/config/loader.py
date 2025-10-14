@@ -11,6 +11,7 @@ BASE_DIR = Path(settings.BASE_DIR)
 CFG_ROOT = BASE_DIR / "configs" / "atelier"
 FALLBACK_NAMESPACE = "core"
 RESERVED_NAMESPACE_DIRS = {"base", "__pycache__"}
+_REQUIRED_VARY_FIELDS = ("lang", "site_version")
 
 # --------- Normalisation interne (slots/variants/children) ---------
 
@@ -370,7 +371,11 @@ def get_cache_slots(*, namespace: str | None = None) -> Dict:
 
 
 def get_vary_fields(*, namespace: str | None = None) -> list[str]:
-    return list(load_config(namespace).get("cache", {}).get("vary_fields", []) or [])
+    fields = list(load_config(namespace).get("cache", {}).get("vary_fields", []) or [])
+    for required in _REQUIRED_VARY_FIELDS:
+        if required not in fields:
+            fields.append(required)
+    return fields
 
 
 def get_qa_policy(*, namespace: str | None = None) -> Dict:

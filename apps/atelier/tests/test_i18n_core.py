@@ -2,42 +2,33 @@ from __future__ import annotations
 
 from django.test import SimpleTestCase
 
-from apps.atelier import i18n
+from apps.atelier.i18n import service as i18n_service
 
 
 class AtelierI18NTests(SimpleTestCase):
-    def setUp(self) -> None:
-        i18n._load_namespace.cache_clear()
+    def test_load_catalog_uses_site_version_override(self) -> None:
+        catalog = i18n_service.load_catalog("ar", "ma")
 
-    def test_load_messages_caching(self):
-        info_before = i18n._load_namespace.cache_info()
-        messages_fr = i18n.load_messages("core", "fr")
-        self.assertIn("footer", messages_fr)
-        info_after_first = i18n._load_namespace.cache_info()
-        self.assertEqual(info_after_first.misses, info_before.misses + 1)
+        self.assertIn("footer", catalog)
+        self.assertEqual(catalog["footer"]["shop"], "المتجر")
 
-        # second call should hit the cache
-        i18n.load_messages("core", "fr")
-        info_after_second = i18n._load_namespace.cache_info()
-        self.assertEqual(info_after_second.hits, info_after_first.hits + 1)
-
-    def test_tr_key_hit_and_miss(self):
-        translated = i18n.tr("core", "fr", "footer.shop")
+    def test_t_key_lookup_and_default(self) -> None:
+        translated = i18n_service.t("footer.shop", "fr", "core")
         self.assertEqual(translated, "Boutique")
 
-        untouched = i18n.tr("core", "fr", "Plain text sentence")
+        untouched = i18n_service.t("Plain text sentence", "fr", "core")
         self.assertEqual(untouched, "Plain text sentence")
 
-    def test_i18n_walk_nested(self):
+    def test_i18n_walk_nested_translates_keys(self) -> None:
         payload = {
-            "title": "faq.title",
+            "title": "faq.title_html",
             "items": ["footer.shop", {"label": "footer.support"}, 42],
             "metadata": ("footer.brand", "unchanged"),
         }
 
-        converted = i18n.i18n_walk(payload, namespace="ma", lang="ar")
+        converted = i18n_service.i18n_walk(payload, "ar", "ma")
 
-        self.assertEqual(converted["title"], "الأسئلة الشائعة")
+        self.assertIn("الأسئلة", converted["title"])
         self.assertEqual(converted["items"][0], "المتجر")
         self.assertEqual(converted["items"][1]["label"], "الدعم")
         self.assertEqual(converted["items"][2], 42)

@@ -8,6 +8,7 @@ from django.test import RequestFactory, SimpleTestCase
 from django.utils import translation
 
 from apps.atelier.compose import pipeline
+from apps.atelier.compose.response import render_base
 
 
 class RTLLayoutTests(SimpleTestCase):
@@ -16,6 +17,14 @@ class RTLLayoutTests(SimpleTestCase):
     def _base_context(self):
         request = self.factory.get("/")
         request.LANGUAGE_CODE = translation.get_language() or "fr"
+        request._segments = SimpleNamespace(
+            lang=request.LANGUAGE_CODE,
+            device="desktop",
+            consent="Y",
+            source="",
+            campaign="",
+            qa=False,
+        )
         context = {
             "marketing_config": SimpleNamespace(cookie_banner_enabled=False, consent_cookie_name=""),
             "tracking": SimpleNamespace(analytics_enabled=False),
@@ -34,6 +43,7 @@ class RTLLayoutTests(SimpleTestCase):
     def test_html_dir_rtl_when_ar(self) -> None:
         with translation.override("ar"):
             request, context = self._base_context()
+            request._segments.lang = "ar"
             request.LANGUAGE_CODE = "ar"
             html = render_to_string("base.html", context=context, request=request)
 
@@ -55,6 +65,10 @@ class RTLLayoutTests(SimpleTestCase):
             )
 
             page_ctx = pipeline.build_page_spec("online_home", request)
+            fragments = {}
             assets = pipeline.collect_page_assets(page_ctx)
+            response = render_base(page_ctx, fragments, assets, request)
+            response.render()
 
-        self.assertIn(static("css/rtl.css"), assets.get("css", []))
+        css_assets = response.context_data["page_assets"]["css"]
+        self.assertIn(static("css/rtl.css"), css_assets)

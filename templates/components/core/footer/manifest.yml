@@ -10,29 +10,29 @@ assets:
 
 # Valeurs de référence (documentaires)
 params:
-  brand_title: "footer.brand"
+  brand_title: "t:footer.brand"
   address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
-  address_text: "footer.address_text"
+  address_text: "t:footer.address_text"
   email: "partenariat@alfenna.com"
   phone_tel: "+212719646705"
   phone_display: "+212 719-646-705"
-  opening_hours: "footer.opening_hours"
-  shop_title: "footer.section.shop"
-  support_title: "footer.section.support"
-  quick_title: "footer.section.quick_links"
-  copyright_tail_html: "footer.copyright_tail_html"
+  opening_hours: "t:footer.opening_hours"
+  shop_title: "t:footer.section.shop"
+  support_title: "t:footer.section.support"
+  quick_title: "t:footer.section.quick_links"
+  copyright_tail_html: "t:footer.copyright_tail_html"
   socials:
     - { icon: "flaticon-instagram", url: "https://www.instagram.com/alfennaacademy/", new_tab: true }
   links_shop:
-    - { label: "footer.links.shop.pack", url: "/produits/pack-cosmetique-naturel/" }
-    - { label: "footer.links.shop.training", url: "/" }
+    - { label: "t:footer.links.shop.pack", url: "/produits/pack-cosmetique-naturel/" }
+    - { label: "t:footer.links.shop.training", url: "/" }
   links_contact:
-    - { label: "footer.links.contact.tips", url: "https://api.whatsapp.com/send?phone=212719646705" }
-    - { label: "footer.links.contact.follow_up", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "t:footer.links.contact.tips", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "t:footer.links.contact.follow_up", url: "https://api.whatsapp.com/send?phone=212719646705" }
   links_quick:
-    - { label: "footer.links.quick.faq", url: "/faq" }
-    - { label: "footer.links.quick.delivery", url: "https://api.whatsapp.com/send?phone=212719646705" }
-    - { label: "footer.links.quick.privacy", url: "/termes-of-services" }
+    - { label: "t:footer.links.quick.faq", url: "/faq" }
+    - { label: "t:footer.links.quick.delivery", url: "https://api.whatsapp.com/send?phone=212719646705" }
+    - { label: "t:footer.links.quick.privacy", url: "/termes-of-services" }
   year: 0   # 0 => hydrateur mettra l'année courante
 
 contract:
@@ -65,28 +65,28 @@ hydrate:
   # Whitelist + defaults (manifest-first robuste)
   params:
     address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
-    address_text: "footer.address_text"
+    address_text: "t:footer.address_text"
     email: "partenariat@alfenna.com"
     phone_tel: "+212719646705"
     phone_display: "+212 719-646-705"
-    opening_hours: "footer.opening_hours"
-    brand_title: "footer.brand"
-    shop_title: "footer.section.shop"
-    support_title: "footer.section.support"
-    quick_title: "footer.section.quick_links"
-    copyright_tail_html: "footer.copyright_tail_html"
+    opening_hours: "t:footer.opening_hours"
+    brand_title: "t:footer.brand"
+    shop_title: "t:footer.section.shop"
+    support_title: "t:footer.section.support"
+    quick_title: "t:footer.section.quick_links"
+    copyright_tail_html: "t:footer.copyright_tail_html"
     socials:
       - { icon: "flaticon-instagram", url: "https://www.instagram.com/alfennaacademy/", new_tab: true }
     links_shop:
-      - { label: "footer.links.shop.pack", url: "/produits/pack-cosmetique-naturel/" }
-      - { label: "footer.links.shop.training", url: "/" }
+      - { label: "t:footer.links.shop.pack", url: "/produits/pack-cosmetique-naturel/" }
+      - { label: "t:footer.links.shop.training", url: "/" }
     links_contact:
-      - { label: "footer.links.contact.tips", url: "https://api.whatsapp.com/send?phone=212719646705" }
-      - { label: "footer.links.contact.follow_up", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "t:footer.links.contact.tips", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "t:footer.links.contact.follow_up", url: "https://api.whatsapp.com/send?phone=212719646705" }
     links_quick:
-      - { label: "footer.links.quick.faq", url: "/faq" }
-      - { label: "footer.links.quick.delivery", url: "https://api.whatsapp.com/send?phone=212719646705" }
-      - { label: "footer.links.quick.privacy", url: "/termes-of-services" }
+      - { label: "t:footer.links.quick.faq", url: "/faq" }
+      - { label: "t:footer.links.quick.delivery", url: "https://api.whatsapp.com/send?phone=212719646705" }
+      - { label: "t:footer.links.quick.privacy", url: "/termes-of-services" }
     year: 0   # 0 => hydrateur mettra l'année courante
 
 render:

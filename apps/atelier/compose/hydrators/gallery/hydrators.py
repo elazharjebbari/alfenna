@@ -109,9 +109,6 @@ def participants(request, params: Dict[str, Any]) -> Dict[str, Any]:
             items_qs = items_qs.filter(models.Q(product_code=pc) | models.Q(product_code=""))
         items_qs = items_qs.order_by("sort_order", "id")
 
-    print('-'*30)
-    print('-'*30)
-    print('gal.pk : %s' % gal.id)
     items: List[Dict[str, Any]] = [_item_to_ctx(it) for it in items_qs]
 
     # En-têtes & preuves (db-first → override par params au besoin)
@@ -152,5 +149,4 @@ def participants(request, params: Dict[str, Any]) -> Dict[str, Any]:
             "close": _("Fermer"),
         }
     }
-    print(context)
     return context

@@ -21,13 +21,13 @@ class PipelineI18nIntegrationTests(TestCase):
             "test/i18n-component",
             "components/test/i18n_component.html",
             namespace="core",
-            params={"title": "footer.shop"},
+            params={"title": "t:header.menu.home"},
         )
         registry.register(
             "test/i18n-component",
             "components/test/i18n_component.html",
             namespace="ma",
-            params={"title": "footer.shop"},
+            params={"title": "t:header.menu.home"},
         )
 
     def tearDown(self) -> None:
@@ -83,11 +83,11 @@ class PipelineI18nIntegrationTests(TestCase):
 
     def test_params_are_translated_before_render(self) -> None:
         request = self._request(namespace="ma", lang="ar")
-        page_ctx, slot_ctx = self._contexts("ma", {"title": "footer.shop"})
+        page_ctx, slot_ctx = self._contexts("ma", {"title": "t:header.menu.home"})
 
         html = pipeline.render_slot_fragment(page_ctx, slot_ctx, request)["html"]
 
-        self.assertIn("المتجر", html)
+        self.assertIn("الرئيسية", html)
 
     def test_noop_when_keys_absent(self) -> None:
         request = self._request(namespace="ma", lang="ar")
@@ -96,3 +96,11 @@ class PipelineI18nIntegrationTests(TestCase):
         html = pipeline.render_slot_fragment(page_ctx, slot_ctx, request)["html"]
 
         self.assertIn("NotAKey", html)
+
+    def test_dict_token_is_translated(self) -> None:
+        request = self._request(namespace="ma", lang="ar")
+        page_ctx, slot_ctx = self._contexts("ma", {"title": {"t": "header.menu.contact"}})
+
+        html = pipeline.render_slot_fragment(page_ctx, slot_ctx, request)["html"]
+
+        self.assertIn("تواصل معنا", html)

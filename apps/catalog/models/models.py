@@ -1,10 +1,17 @@
 from __future__ import annotations
 import uuid
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
+from django.utils import translation
+from parler.managers import TranslatableManager, TranslatableQuerySet
+from parler.models import TranslatableModel, TranslatedFields
+
+from apps.i18n.models import TranslatableMixin
 
 
 class ProductQuerySet(models.QuerySet):
@@ -12,11 +19,22 @@ class ProductQuerySet(models.QuerySet):
         return self.filter(is_active=True)
 
 
-class Product(models.Model):
+class Product(TranslatableMixin):
     class MediaKind(models.TextChoices):
         HERO = "hero", "Hero"
         GALLERY = "gallery", "Gallery"
         LIFESTYLE = "lifestyle", "Lifestyle"
+
+    translatable_fields = (
+        "name",
+        "subname",
+        "description",
+        "highlights",
+        "badges",
+        "offers",
+        "testimonials",
+        "cross_sells",
+    )
 
     slug = models.SlugField(max_length=220, unique=True)
     name = models.CharField(max_length=180)
@@ -125,11 +143,66 @@ class TestimonialMedia(models.Model):
         return f"testimonial:{self.product.slug}:{self.position}"
 
 
-class CourseQuerySet(models.QuerySet):
+class CourseQuerySet(TranslatableQuerySet):
+    _translation_fields = {"title", "description", "seo_title", "seo_description"}
+
+    def _rewrite_translation_kwargs(self, kwargs: dict) -> dict:
+        rewritten = {}
+        for key, value in kwargs.items():
+            base_key = key.split("__", 1)[0]
+            if base_key in self._translation_fields:
+                rewritten[f"translations__{key}"] = value
+            else:
+                rewritten[key] = value
+        return rewritten
+
+    def _rewrite_q(self, node: Q) -> Q:
+        children = []
+        for child in node.children:
+            if isinstance(child, Q):
+                children.append(self._rewrite_q(child))
+            elif isinstance(child, tuple):
+                key, value = child
+                base_key = key.split("__", 1)[0]
+                if base_key in self._translation_fields:
+                    children.append((f"translations__{key}", value))
+                else:
+                    children.append(child)
+            else:
+                children.append(child)
+        node.children = children
+        return node
+
+    def _filter_or_exclude(self, negate, *args, **kwargs):
+        if kwargs:
+            kwargs = self._rewrite_translation_kwargs(kwargs)
+        if args:
+            new_args = []
+            for arg in args:
+                if isinstance(arg, Q):
+                    new_args.append(self._rewrite_q(arg))
+                elif isinstance(arg, dict):
+                    new_args.append(self._rewrite_translation_kwargs(arg))
+                else:
+                    new_args.append(arg)
+            args = tuple(new_args)
+        return super()._filter_or_exclude(negate, *args, **kwargs)
+
     def published(self):
         return self.filter(is_published=True)
 
-class Course(models.Model):
+
+class CourseManager(TranslatableManager.from_queryset(CourseQuerySet)):
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        lang = translation.get_language() or getattr(settings, "PARLER_DEFAULT_LANGUAGE_CODE", None)
+        if lang:
+            qs = qs.active_translations(lang)
+        return qs
+
+
+class Course(TranslatableModel):
     DIFFICULTY_CHOICES = [
         ("beginner", "Débutant"),
         ("intermediate", "Intermédiaire"),
@@ -137,13 +210,13 @@ class Course(models.Model):
     ]
 
     course_key = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)
-    title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=220, unique=True)
-    description = models.TextField(blank=True)
-
-    # SEO
-    seo_title = models.CharField(max_length=70, blank=True)
-    seo_description = models.CharField(max_length=160, blank=True)
+    translations = TranslatedFields(
+        title=models.CharField(max_length=200),
+        description=models.TextField(blank=True),
+        seo_title=models.CharField(max_length=70, blank=True),
+        seo_description=models.CharField(max_length=160, blank=True),
+    )
     image = models.ImageField(upload_to='course_images/', blank=True, null=True)
 
     difficulty = models.CharField(max_length=16, choices=DIFFICULTY_CHOICES, default="beginner")
@@ -162,16 +235,13 @@ class Course(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    objects = CourseQuerySet.as_manager()
+    objects = CourseManager()
 
     class Meta:
         ordering = ['-published_at', '-created_at']
-        indexes = [
-            models.Index(fields=['slug']),
-        ]
 
     def __str__(self) -> str:
-        return self.title
+        return self.safe_translation_getter("title", default=self.slug or str(self.pk))
 
     def clean(self):
         # Slug immuable si déjà publié
