@@ -19,7 +19,7 @@ from apps.i18n.models import StringTranslation
 SLUG = "pack-cosmetique-naturel"
 BASE_DIR = Path(__file__).resolve().parent.parent
 FIXTURE_FILES = (
-    BASE_DIR / "apps" / "catalog" / "fixtures" / "products_pack_cosmetique.json",
+    BASE_DIR / "apps" / "catalog" / "fixtures" / "products_pack_cosmetique_naturel.json",
     BASE_DIR / "apps" / "catalog" / "fixtures" / "product_pack_cosmetique_naturel_ar_translations.json",
 )
 
