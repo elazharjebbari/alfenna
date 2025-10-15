@@ -30,7 +30,10 @@ class LeadProgressAPIView(APIView):
         allowed = {
             # step1
             "full_name",
+            "first_name",
+            "last_name",
             "phone",
+            "phone_number",
             "email",
             "address_line1",
             "address_line2",
@@ -39,6 +42,7 @@ class LeadProgressAPIView(APIView):
             "postal_code",
             "country",
             # step2
+            "pack_slug",
             "offer_key",
             "offer",
             "pack_slug",
@@ -52,17 +56,32 @@ class LeadProgressAPIView(APIView):
             "accept_terms",
             "promotion_selected",
         }
-        incoming = {
-            key: value
-            for key, value in payload.items()
-            if key in allowed or str(key).startswith("context.")
+        alias_map = {
+            "phone_number": "phone",
+            "address": "address_line1",
+            "firstName": "first_name",
+            "lastName": "last_name",
         }
+
+        incoming: Dict[str, object] = {}
+        for key, value in payload.items():
+            if key in allowed or str(key).startswith("context."):
+                incoming[key] = value
+
         nested_payload = payload.get("payload") if isinstance(payload, dict) else {}
         if isinstance(nested_payload, dict):
             for key, value in nested_payload.items():
                 if key in allowed or str(key).startswith("context."):
                     incoming[key] = value
-        return incoming
+
+        normalized: Dict[str, object] = {}
+        for key, value in incoming.items():
+            target_key = alias_map.get(key, key)
+            normalized[target_key] = value
+            if target_key != key and key not in normalized:
+                normalized[key] = value
+
+        return normalized
 
     def post(self, request, *args, **kwargs):
         logger.info("PROGRESS HEADERS: %s", dict(request.headers))

@@ -825,12 +825,30 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     if complementaries_ctx:
         flow_context["complementaries"] = complementaries_ctx
 
+    def _filter_fields(values: List[str | None]) -> List[str]:
+        seen: set[str] = set()
+        filtered: List[str] = []
+        for value in values:
+            if not value or value in seen:
+                continue
+            seen.add(value)
+            filtered.append(value)
+        return filtered
+
     progress_steps = {
-        "step1": [
-            field
-            for field in [
+        "step1": _filter_fields(
+            [
+                form_fields_map.get("first_name"),
+                form_fields_map.get("last_name"),
                 form_fields_map.get("fullname"),
+                form_fields_map.get("email"),
                 form_fields_map.get("phone"),
+                form_fields_map.get("address_line1"),
+                form_fields_map.get("address_line2"),
+                form_fields_map.get("city"),
+                form_fields_map.get("state"),
+                form_fields_map.get("postal_code"),
+                form_fields_map.get("country"),
                 form_fields_map.get("product"),
                 "campaign",
                 "source",
@@ -839,20 +857,19 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                 "utm_campaign",
                 form_fields_map.get("wa_optin"),
             ]
-            if field
-        ],
-        "step2": [
-            field
-            for field in [
+        ),
+        "step2": _filter_fields(
+            [
+                form_fields_map.get("pack_slug"),
                 form_fields_map.get("offer"),
                 form_fields_map.get("quantity"),
                 form_fields_map.get("bump"),
                 form_fields_map.get("promotion"),
                 form_fields_map.get("address"),
                 form_fields_map.get("payment_method"),
+                "context.complementary_slugs",
             ]
-            if field
-        ],
+        ),
     }
 
     flow_config = {

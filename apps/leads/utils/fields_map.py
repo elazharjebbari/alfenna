@@ -6,6 +6,8 @@ from typing import Dict, Mapping
 
 DEFAULT_FIELDS_MAP: Dict[str, str] = {
     "fullname": "full_name",
+    "first_name": "first_name",
+    "last_name": "last_name",
     "phone": "phone_number",
     "email": "email",
     "address_line1": "address_line1",

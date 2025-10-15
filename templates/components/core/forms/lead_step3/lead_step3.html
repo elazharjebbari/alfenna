@@ -333,11 +333,18 @@
                 {% endwith %}
             </div>
 
-            <div class="d-flex justify-content-between align-items-center gap-2 mt-3">
-                <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
-                </button>
-                <button type="button" class="btn af-cta" data-ff-next
-                        data-ll-click="hero_cta_secondary">{% trans "Continuer" %}{% if is_rtl %} &#8249;{% else %} &#8250;{% endif %}</button>
+            <div class="d-flex justify-content-between align-items-center gap-2 mt-3{% if is_rtl %} flex-row-reverse{% endif %}">
+                {% if is_rtl %}
+                    <button type="button" class="btn af-cta" data-ff-next
+                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8249;</button>
+                    <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
+                    </button>
+                    <button type="button" class="btn af-cta" data-ff-next
+                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
+                {% endif %}
             </div>
         </section>
 

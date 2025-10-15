@@ -45,6 +45,7 @@ _LEAD_UPDATABLE_FIELDS: tuple[str, ...] = (
     "tax_id_type",
     "tax_id",
     "course_slug",
+    "pack_slug",
     "currency",
     "coupon_code",
     "client_ts",
@@ -56,6 +57,7 @@ _LEAD_UPDATABLE_FIELDS: tuple[str, ...] = (
 
 _CONTEXT_ENRICH_KEYS: tuple[str, ...] = (
     "product",
+    "pack_slug",
     "offer_key",
     "quantity",
     "bump_optin",
@@ -100,6 +102,18 @@ def _coerce_boolean(value: Any) -> bool:
         if lowered in {"0", "false", "no", "off", "n"}:
             return False
     return bool(value)
+
+
+def _split_full_name(value: Any) -> tuple[str, str]:
+    as_str = str(value or "").strip()
+    if not as_str:
+        return "", ""
+    parts = [part for part in as_str.split() if part]
+    if not parts:
+        return "", ""
+    if len(parts) == 1:
+        return parts[0], ""
+    return parts[0], " ".join(parts[1:])
 
 
 @dataclass(slots=True)
@@ -341,6 +355,16 @@ class LeadProgressAPIView(APIView):
             context.update(context_patch)
             lead.context = context
             dirty_fields.append("context")
+
+        full_name_value = payload.get("full_name") or payload.get("fullname")
+        if full_name_value:
+            first_guess, last_guess = _split_full_name(full_name_value)
+            if first_guess and not payload.get("first_name") and lead.first_name != first_guess:
+                lead.first_name = first_guess
+                dirty_fields.append("first_name")
+            if last_guess and not payload.get("last_name") and lead.last_name != last_guess:
+                lead.last_name = last_guess
+                dirty_fields.append("last_name")
 
         # trace meta si disponible (IP/UA sur premier passage typiquement)
         if meta.get("ip") and not lead.ip_addr:
