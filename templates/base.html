@@ -77,7 +77,7 @@
     {% block extra_head %}{% endblock extra_head %}
   </head>
 
-  <body{% if is_rtl %} class="rtl"{% endif %} data-ll-consent-cookie="{{ marketing_config.consent_cookie_name|default:'cookie_consent_marketing' }}" data-ll-analytics-enabled="{{ tracking.analytics_enabled|yesno:'1,0' }}">
+  <body class="has-floating-header{% if is_rtl %} rtl{% endif %}" data-ll-consent-cookie="{{ marketing_config.consent_cookie_name|default:'cookie_consent_marketing' }}" data-ll-analytics-enabled="{{ tracking.analytics_enabled|yesno:'1,0' }}">
 
       {# Hooks optionnels projet #}
 
@@ -150,6 +150,61 @@
         <script src="{{ src }}" defer></script>
       {% endfor %}
     {% endif %}
+
+    <script>
+      (function () {
+        function updateOffset() {
+          var header = document.querySelector('.header-section');
+          if (!header) { return; }
+          var height = Math.ceil(header.getBoundingClientRect().height);
+          if (!height) { return; }
+          document.documentElement.style.setProperty('--header-offset', height + 'px');
+        }
+
+        function scheduleUpdate() {
+          if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(updateOffset);
+          } else {
+            setTimeout(updateOffset, 50);
+          }
+        }
+
+        function init() {
+          var header = document.querySelector('.header-section');
+          if (!header) { return; }
+          document.body.classList.add('has-floating-header');
+          updateOffset();
+
+          if ('ResizeObserver' in window) {
+            var ro = new ResizeObserver(updateOffset);
+            ro.observe(header);
+          } else {
+            window.addEventListener('resize', scheduleUpdate, { passive: true });
+            window.addEventListener('orientationchange', scheduleUpdate);
+          }
+
+          if ('MutationObserver' in window) {
+            var mo = new MutationObserver(scheduleUpdate);
+            mo.observe(header, { attributes: true, childList: true, subtree: true });
+          }
+
+          if (window.matchMedia) {
+            var mq = window.matchMedia('(max-width: 991px)');
+            if (mq && mq.addEventListener) {
+              mq.addEventListener('change', scheduleUpdate);
+            } else if (mq && mq.addListener) {
+              mq.addListener(scheduleUpdate);
+            }
+          }
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+      })();
+    </script>
 
     {% if tracking.analytics_enabled %}
       <script src="{% static 'site/analytics_bootstrap.js' %}" defer></script>

@@ -7,7 +7,8 @@
 <div data-ll-page-id="product_detail" data-ll-slot-id="header">
     {{ slots_html.header|default_if_none:""|safe }}
 </div>
-<div class="d-none d-md-block">
+<div class="d-block d-md-none">
+    <div class="section-padding-02"></div>
     <div class="section-padding"></div>
 </div>
 <div data-ll-page-id="product_detail" data-ll-slot-id="language_switch">
@@ -15,8 +16,9 @@
 </div>
 <div class="d-none d-md-block">
     <div class="section-padding"></div>
+    <div class="section-padding-02"></div>
 </div>
-<div class="section-padding"></div>
+
 <div data-ll-page-id="product_detail" data-ll-slot-id="product_hero">
     {{ slots_html.product_hero|default_if_none:""|safe }}
 </div>
