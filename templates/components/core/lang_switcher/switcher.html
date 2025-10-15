@@ -1,0 +1,10 @@
+{% load i18n %}
+<div class="lang-switcher d-{{ breakpoint }}-none" role="group" aria-label="{% trans 'Choix de la langue' %}">
+  {% for option in options %}
+    <a href="{{ option.url }}"
+       class="lang-switcher__btn{% if option.is_active %} is-active{% endif %}"
+       aria-current="{% if option.is_active %}true{% else %}false{% endif %}">
+      <span>{{ option.label }}</span>
+    </a>
+  {% endfor %}
+</div>

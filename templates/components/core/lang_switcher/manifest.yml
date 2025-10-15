@@ -1,0 +1,33 @@
+alias: "lang/switcher"
+template: "components/core/lang_switcher/switcher.html"
+
+assets:
+  head: []
+  css:
+    - "/static/components/core/lang_switcher.css"
+  js: []
+  vendors: []
+
+params:
+  locales:
+    - code: "fr"
+      label: "FR"
+    - code: "ar"
+      label: "العربية"
+  breakpoint: "lg"
+
+contract:
+  optional:
+    locales:
+      - code: "str"
+        label: "str"
+        rtl?: "bool"
+        url?: "str"
+    breakpoint: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.lang.hydrators"
+  func: "language_switcher"
+
+render:
+  cacheable: false
