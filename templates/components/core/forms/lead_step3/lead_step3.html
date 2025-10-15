@@ -333,18 +333,14 @@
                 {% endwith %}
             </div>
 
-            <div class="d-flex justify-content-between align-items-center gap-2 mt-3{% if is_rtl %} flex-row-reverse{% endif %}">
-                {% if is_rtl %}
-                    <button type="button" class="btn af-cta" data-ff-next
-                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8249;</button>
-                    <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
-                    </button>
-                {% else %}
-                    <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
-                    </button>
-                    <button type="button" class="btn af-cta" data-ff-next
-                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
-                {% endif %}
+            <div class="d-flex justify-content-between align-items-center gap-2 mt-3">
+                <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>
+                    {% trans "Étape précédente" %}
+                </button>
+                <button type="button" class="btn af-cta" data-ff-next
+                        data-ll-click="hero_cta_secondary">
+                    {% trans "Continuer" %}{% if is_rtl %} &#8249;{% else %} &#8250;{% endif %}
+                </button>
             </div>
         </section>
 
@@ -362,21 +358,21 @@
                 {% trans "Paiement à la livraison" as default_payment_cod %}
                 <fieldset class="af-pay" role="radiogroup" aria-label="{% trans 'Méthode de paiement' %}">
                     <!-- Paiement en ligne -->
-                    <label class="af-pay-option is-online">
-                        <input type="radio" name="{{ payment_mode_key }}" value="online" class="visually-hidden" checked
-                               data-ff-payment-option>
-                        <span class="af-pay-check" aria-hidden="true"></span>
-                        <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>
-                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency_label|default:pricing.currency|default:'MAD' %}
-                            {% if discount_amount %}
-                                <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
-                            {% elif discount_text %}
-                                <span class="af-discount" id="af-online-discount">{{ discount_text }}</span>
-                            {% else %}
-                                <span class="af-discount" id="af-online-discount">−20&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
-                            {% endif %}
-                        {% endwith %}
-                    </label>
+<!--                    <label class="af-pay-option is-online">-->
+<!--                        <input type="radio" name="{{ payment_mode_key }}" value="online" class="visually-hidden" checked-->
+<!--                               data-ff-payment-option>-->
+<!--                        <span class="af-pay-check" aria-hidden="true"></span>-->
+<!--                        <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>-->
+<!--                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency_label|default:pricing.currency|default:'MAD' %}-->
+<!--                            {% if discount_amount %}-->
+<!--                                <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>-->
+<!--                            {% elif discount_text %}-->
+<!--                                <span class="af-discount" id="af-online-discount">{{ discount_text }}</span>-->
+<!--                            {% else %}-->
+<!--                                <span class="af-discount" id="af-online-discount">−20&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>-->
+<!--                            {% endif %}-->
+<!--                        {% endwith %}-->
+<!--                    </label>-->
 
                     <!-- Paiement à la livraison -->
                     <label class="af-pay-option">
