@@ -13,7 +13,9 @@
               </a>
             </div>
             <div class="widget-address">
-              <h4 class="footer-widget-title">Alfenna</h4>
+              {% if brand_title %}
+              <h4 class="footer-widget-title">{{ brand_title }}</h4>
+              {% endif %}
               {% if address_url and address_text %}
                 <p><a href="{{ address_url }}" target="_blank" rel="noopener">{{ address_text }}</a></p>
               {% endif %}
@@ -35,7 +37,7 @@
         <!-- Col 2 -->
         <div class="col-lg-3 col-md-6">
           <div class="footer-widget">
-            <h4 class="footer-widget-title">Boutique</h4>
+            {% if shop_title %}<h4 class="footer-widget-title">{{ shop_title }}</h4>{% endif %}
             <ul class="widget-link">
               {% for l in links_shop %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
             </ul>
@@ -44,7 +46,7 @@
         <!-- Col 3 -->
         <div class="col-lg-3 col-md-6">
           <div class="footer-widget">
-            <h4 class="footer-widget-title">Support</h4>
+            {% if support_title %}<h4 class="footer-widget-title">{{ support_title }}</h4>{% endif %}
             <ul class="widget-link">
               {% for l in links_contact %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
             </ul>
@@ -53,7 +55,7 @@
         <!-- Col 4 -->
         <div class="col-lg-3 col-md-6">
           <div class="footer-widget">
-            <h4 class="footer-widget-title">Quick Links</h4>
+            {% if quick_title %}<h4 class="footer-widget-title">{{ quick_title }}</h4>{% endif %}
             <ul class="widget-link">
               {% for l in links_quick %}<li><a href="{{ l.url }}">{{ l.label }}</a></li>{% endfor %}
             </ul>
@@ -70,7 +72,7 @@
       <div class="copyright-wrapper">
         <div class="copyright-link"></div>
         <div class="copyright-text">
-          <p>&copy; {{ year }} <span>Alfenna</span> — Made with <i class="icofont-heart-alt"></i> by <a href="#" rel="noopener">ZONEX</a></p>
+          <p>&copy; {{ year }}{% if brand_title %} <span>{{ brand_title }}</span>{% endif %}{% if copyright_tail_html %} {{ copyright_tail_html|safe }}{% endif %}</p>
         </div>
       </div>
     </div>

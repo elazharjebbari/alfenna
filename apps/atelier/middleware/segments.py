@@ -1,7 +1,9 @@
 # apps/atelier/middleware/segments.py
 from dataclasses import dataclass
 
+from django.conf import settings
 from apps.marketing.helpers import has_marketing_consent
+from django.utils import translation
 
 @dataclass
 class Segments:
@@ -17,9 +19,25 @@ class SegmentResolverMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # Langue (header -> 'fr'/'en')
-        lang_hdr = (request.headers.get("Accept-Language") or "fr")
-        lang = lang_hdr.split(",")[0].split("-")[0].lower() or "fr"
+        existing_segments = getattr(request, "_segments", None)
+        if existing_segments and getattr(existing_segments, "lang", None):
+            lang = existing_segments.lang
+        else:
+            url_lang = (getattr(request, "url_lang", "") or "").strip().lower()
+            if url_lang:
+                lang = url_lang
+            else:
+                cookie_lang = (request.COOKIES.get(getattr(settings, "LANGUAGE_COOKIE_NAME", "lang"), "") or "").strip().lower()
+                if cookie_lang:
+                    lang = cookie_lang
+                else:
+                    lang_hdr = (request.headers.get("Accept-Language") or "fr")
+                    lang = lang_hdr.split(",")[0].split("-")[0].lower() or "fr"
+        if not lang:
+            lang = "fr"
+        request.META.setdefault("HTTP_ACCEPT_LANGUAGE", lang)
+        translation.activate(lang)
+        request.LANGUAGE_CODE = lang
 
         # Device (UA simple)
         ua = (request.META.get("HTTP_USER_AGENT", "") or "").lower()
@@ -35,8 +53,9 @@ class SegmentResolverMiddleware:
         # QA flag (piloté ailleurs par preview; ici reste False)
         qa = False
 
-        request._segments = Segments(
+        segments = Segments(
             lang=lang, device=device, consent=consent,
             source=source, campaign=campaign, qa=qa
         )
+        request._segments = segments
         return self.get_response(request)

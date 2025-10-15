@@ -71,16 +71,15 @@ THIRD_PARTY_APPS = [
                        "rest_framework",
                        "corsheaders",
                        'meta',
-                       'sslserver'
+                       'sslserver',
+                       'parler',
                    ] + [
                        "formtools",  # wizard django officiel
                        "compressor"
                    ]
 
 LOCAL_APPS = [
-    "apps.core",
     "apps.accounts.apps.AccountsConfig",
-    "apps.i18n.apps.I18NConfig",
     "apps.catalog.apps.CatalogConfig",
     "apps.content.apps.ContentConfig",
     "apps.billing.apps.BillingConfig",
@@ -94,6 +93,7 @@ LOCAL_APPS = [
     "apps.chatbot.apps.ChatbotConfig",
     "apps.adsbridge.apps.AdsBridgeConfig",
     "apps.messaging.apps.MessagingConfig",
+    "apps.i18n.apps.I18NConfig",
 
 ]
 
@@ -115,6 +115,7 @@ MIDDLEWARE = [
                  'apps.marketing.middleware.ConsentDebugHeadersMiddleware',
                  'whitenoise.middleware.WhiteNoiseMiddleware',  # <= ici
                  "apps.atelier.middleware.site_version.PathPrefixSiteVersionMiddleware",
+                 "apps.atelier.middleware.language_prefix.LanguagePrefixMiddleware",
              ] + [
                  "apps.atelier.middleware.request_id.RequestIdMiddleware",
                  "apps.atelier.middleware.segments.SegmentResolverMiddleware",
@@ -123,9 +124,7 @@ MIDDLEWARE = [
 
              ] + [
                  'django.contrib.sessions.middleware.SessionMiddleware',
-                 'django.middleware.locale.LocaleMiddleware',  # ← ICI
                  'django.middleware.common.CommonMiddleware',
-                 'apps.i18n.middleware.LanguageNegotiationMiddleware',
                  'django.middleware.csrf.CsrfViewMiddleware',
                  'django.contrib.auth.middleware.AuthenticationMiddleware',
                  'django.contrib.messages.middleware.MessageMiddleware',
@@ -156,6 +155,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
+                'apps.i18n.context_processors.language_direction',
                 "apps.marketing.context_processors.seo",
             ],
         },
@@ -216,7 +216,30 @@ LANGUAGES = [
 
 LOCALE_PATHS = [BASE_DIR / 'locale']
 
-I18N_DEBUG_HEADERS = _env_flag("I18N_DEBUG_HEADERS", default=False)
+ATELIER_I18N_DEFAULT_LOCALE = "fr"
+ATELIER_I18N_SITE_MAP = {
+    "core": "fr",
+    "fr": "fr",
+    "ma": "ar",
+}
+
+PARLER_DEFAULT_LANGUAGE_CODE = "fr"
+PARLER_LANGUAGES = {
+    None: (
+        {"code": "fr"},
+        {"code": "ar"},
+    ),
+    "default": {
+        "fallbacks": ["fr"],
+        "hide_untranslated": False,
+    },
+}
+
+LANGUAGE_PREFIXES = ["fr", "ar", "en"]
+LANGUAGE_DEFAULT_SITE_PREFIX = "maroc"
+LANGUAGE_COOKIE_NAME = "lang"
+LANGUAGE_COOKIE_MAX_AGE = 60 * 60 * 24 * 180
+RTL_LANGUAGES = {"ar"}
 
 # --------------------------------------------------------------------------------------
 # Static & Media (Django 5)
@@ -332,10 +355,6 @@ LOGGING = {
         'OnlineLearning': {'handlers': ['console'], 'level': LOG_LEVEL, 'propagate': False},
     },
 }
-
-LOGGING["loggers"].update({
-    "i18n.negotiation": {"handlers": ["console"], "level": "INFO"},
-})
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

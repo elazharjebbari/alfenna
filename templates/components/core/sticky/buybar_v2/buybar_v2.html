@@ -5,10 +5,10 @@
      data-input="{{ input_selector }}"
      data-dismiss-days="{{ dismiss_days }}"
      id="af-buybar-v2"
-     aria-label="{% trans 'Barre d’achat compacte' %}">
+     aria-label="{{ aria_label }}">
 
   <div class="af-inner">
-    <button class="af-close" aria-label="{% trans 'Masquer la barre' %}">×</button>
+    <button class="af-close" aria-label="{{ close_label }}">×</button>
 
     <div class="af-left" aria-hidden="true">
       <div class="af-ico">
@@ -20,17 +20,34 @@
     </div>
 
     <div class="af-mid">
-      {% if amount %}
-        <div class="af-price">
-          {{ amount|floatformat:0 }} {{ currency }}
-          {% if original_price and original_price > amount %}
-            <span class="af-price-old">{{ original_price|floatformat:0 }} {{ currency }}</span>
+      {% if title or features %}
+        <div class="af-plan">
+          {% if title %}
+            <div class="af-plan-title">{{ title|safe }}</div>
           {% endif %}
+<!--          {% if features %}-->
+<!--            <ul class="af-plan-features">-->
+<!--              {% for feature in features %}-->
+<!--                <li>{{ feature|safe }}</li>-->
+<!--              {% endfor %}-->
+<!--            </ul>-->
+<!--          {% endif %}-->
         </div>
       {% endif %}
-      {% if discount_label %}
-        <span class="af-badge">{{ discount_label|linebreaksbr }}</span>
-      {% endif %}
+
+      <div class="af-price-block">
+        {% if amount %}
+          <div class="af-price">
+            {{ amount|floatformat:0 }} {{ currency_label|default:currency }}
+            {% if original_price and original_price > amount %}
+              <span class="af-price-old">{{ original_price|floatformat:0 }} {{ currency_label|default:currency }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if discount_label %}
+          <span class="af-badge">{{ discount_label|linebreaksbr }}</span>
+        {% endif %}
+      </div>
     </div>
 
     <button class="af-cta" data-af-cta data-ll-click="buybar_cta_click">

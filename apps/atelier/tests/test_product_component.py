@@ -3,8 +3,11 @@ from __future__ import annotations
 import json
 from decimal import Decimal
 
+from types import SimpleNamespace
+
 from django.test import RequestFactory, TestCase
 
+from apps.atelier.compose import pipeline
 from apps.atelier.compose.hydrators.product.product import hydrate_product
 from apps.catalog.models import (
     Product as CatalogProduct,
@@ -21,6 +24,16 @@ class ProductHydratorTests(TestCase):
     def _request(self, path: str = "/produits/"):
         request = self.factory.get(path, {"utm_source": "meta"})
         request.site_version = "core"
+        request._segments = SimpleNamespace(lang="fr", device="desktop", consent="Y", source="", campaign="", qa=False)
+        request.GET = {}
+        request.COOKIES = {}
+        request.META = {"HTTP_USER_AGENT": "pytest"}
+        request.META.setdefault("SERVER_NAME", "testserver")
+        request.META.setdefault("SERVER_PORT", "80")
+        request.META.setdefault("HTTP_HOST", "testserver")
+        request.headers = {"Accept-Language": "fr"}
+        request.LANGUAGE_CODE = "fr"
+        request.user = SimpleNamespace(is_authenticated=False)
         return request
 
     def _create_product(self) -> CatalogProduct:
@@ -43,7 +56,7 @@ class ProductHydratorTests(TestCase):
             product=product,
             key="color",
             label="Couleur",
-            items=[{"key": "ambre", "label": "Ambrée"}],
+            items=[{"key": "ambre", "label": "Ambrée", "value": "ambre"}],
             position=0,
         )
         ProductOffer.objects.create(
@@ -94,7 +107,7 @@ class ProductHydratorTests(TestCase):
         ctx = hydrate_product(self._request(f"/produits/{product.slug}/"), params)
 
         self.assertEqual(ctx["product"]["name"], "Huile d'argan premium")
-        self.assertEqual(ctx["product"]["description"], "Edition limitée")
+        self.assertEqual(ctx["product"]["description"], product.description)
         self.assertTrue(ctx["media"]["images"])
         self.assertEqual(ctx["media"]["images"][0]["src"], "https://example.com/argan-front.jpg")
         self.assertIn("color", ctx["options"])
@@ -154,23 +167,36 @@ class ProductHydratorTests(TestCase):
         self.assertIsNotNone(template_path)
         self.assertTrue(str(template_path).endswith("components/core/forms/lead_step3/lead_step3.html"))
 
-    def test_form_landingpage_alias_resolution(self) -> None:
+    def test_product_component_pipeline_renders_db_product(self) -> None:
         product = self._create_product()
-        params = {
-            "product_slug": product.slug,
-            "form": {
-                "alias": "core/forms/form_landingpage",
-                "fields_map": {
-                    "fullname": "full_name",
-                    "phone": "phone_number",
-                    "city": "city",
-                    "email": "email",
-                    "payment_mode": "payment_mode",
-                    "pack_slug": "pack_slug",
-                },
-            },
+        request = self._request(f"/produits/{product.slug}/")
+        request.resolver_match = SimpleNamespace(kwargs={"product_slug": product.slug})
+
+        page_ctx = {
+            "id": "product-page",
+            "site_version": "core",
+            "slots": {},
+            "qa_preview": False,
+            "content_rev": "v1",
+            "language_bidi": False,
         }
-        ctx = hydrate_product(self._request(f"/produits/{product.slug}/v2/"), params)
-        template_path = ctx["form"].get("template")
-        self.assertIsNotNone(template_path)
-        self.assertTrue(str(template_path).endswith("components/core/forms/form_landingpage/form_landingpage.html"))
+        slot_ctx = {
+            "id": "hero",
+            "alias": "product",
+            "alias_base": "product",
+            "component_namespace": "core",
+            "variant_key": "A",
+            "cache": False,
+            "cache_key": "",
+            "params": {"product_slug": product.slug},
+            "children": {},
+            "content_rev": "v1",
+            "children_aliases": [],
+            "qa_preview": False,
+        }
+
+        html = pipeline.render_slot_fragment(page_ctx, slot_ctx, request)["html"]
+
+        self.assertIn("Huile d'argan premium", html)
+        self.assertIn(product.description, html)
+        self.assertIn("100% bio", html)

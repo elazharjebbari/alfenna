@@ -1,0 +1,23 @@
+footer:
+  brand: "ألفينا"
+  columns:
+    - title: "روابط سريعة"
+    - title: "الدعم"
+  links:
+    store: "المتجر"
+    support: "الدعم"
+faq:
+  title: "الأسئلة الشائعة"
+  items:
+    q_label: "س:"
+    a_label: "ج:"
+fab:
+  label: "مساعدة"
+  tooltip: "تحدث معنا"
+sticky_order:
+  cta:
+    primary: "اشتري الآن"
+    secondary: "أضف إلى السلة"
+  note: "دفع آمن"
+test_i18n_component:
+  title: "عنصر اختبار"

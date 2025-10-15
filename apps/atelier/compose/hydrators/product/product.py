@@ -6,21 +6,21 @@ import json
 import logging
 from decimal import Decimal, InvalidOperation
 from html import escape
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, cast
 
 from django.conf import settings
 from django.http import HttpRequest
-
 from django.urls import NoReverseMatch, reverse
 from django.utils.translation import get_language
 
 from apps.atelier.components.registry import NamespaceComponentMissing, get as get_component
 from apps.atelier.components.utils import split_alias_namespace
 from apps.atelier.contracts.product import ProductParams
+from apps.atelier.i18n.translation_service import TranslationService
 from apps.catalog.models import Product as CatalogProduct
 from apps.leads.constants import FormKind
 from apps.leads.utils.fields_map import normalize_fields_map
-from apps.i18n import translation_service
+from apps.i18n.utils import build_translation_key
 
 logger = logging.getLogger(__name__)
 
@@ -198,6 +198,115 @@ def _merge_media_images(base: List[Dict[str, Any]], overlay: List[Dict[str, Any]
     return merged
 
 
+def _translate_value(
+    translator: TranslationService,
+    instance: CatalogProduct,
+    field: str,
+    value: Any,
+    *,
+    suffix: str | None = None,
+    site_version: str | None = None,
+) -> Any:
+    if not isinstance(value, str) or not value:
+        return value
+    key = build_translation_key(instance, field, suffix=suffix, site_version=site_version)
+    return translator.t(key, default=value)
+
+
+def _translate_product_content(
+    translator: TranslationService,
+    product_obj: CatalogProduct,
+    product_data: Dict[str, Any],
+    offers: List[Dict[str, Any]],
+    testimonials: List[Dict[str, Any]],
+    *,
+    site_version: str,
+) -> None:
+    product_data["name"] = _translate_value(
+        translator, product_obj, "name", product_data.get("name"), site_version=site_version
+    )
+    product_data["subname"] = _translate_value(
+        translator,
+        product_obj,
+        "subname",
+        product_data.get("subname"),
+        site_version=site_version,
+    )
+    product_data["description"] = _translate_value(
+        translator,
+        product_obj,
+        "description",
+        product_data.get("description"),
+        site_version=site_version,
+    )
+
+    highlights = product_data.get("highlights") or []
+    if isinstance(highlights, list):
+        product_data["highlights"] = [
+            _translate_value(
+                translator,
+                product_obj,
+                "highlights",
+                item,
+                suffix=str(idx),
+                site_version=site_version,
+            )
+            for idx, item in enumerate(highlights)
+        ]
+
+    badges = product_data.get("badges") or []
+    for idx, badge in enumerate(badges):
+        if isinstance(badge, dict) and badge.get("text"):
+            badge["text"] = _translate_value(
+                translator,
+                product_obj,
+                "badges",
+                badge["text"],
+                suffix=f"{idx}.text",
+                site_version=site_version,
+            )
+
+    for idx, offer in enumerate(offers):
+        if offer.get("title"):
+            offer["title"] = _translate_value(
+                translator,
+                product_obj,
+                "offers",
+                offer["title"],
+                suffix=f"{idx}.title",
+                site_version=site_version,
+            )
+        if offer.get("savings_label"):
+            offer["savings_label"] = _translate_value(
+                translator,
+                product_obj,
+                "offers",
+                offer["savings_label"],
+                suffix=f"{idx}.savings_label",
+                site_version=site_version,
+            )
+
+    for idx, testimonial in enumerate(testimonials):
+        if testimonial.get("author"):
+            testimonial["author"] = _translate_value(
+                translator,
+                product_obj,
+                "testimonials",
+                testimonial["author"],
+                suffix=f"{idx}.author",
+                site_version=site_version,
+            )
+        if testimonial.get("quote"):
+            testimonial["quote"] = _translate_value(
+                translator,
+                product_obj,
+                "testimonials",
+                testimonial["quote"],
+                suffix=f"{idx}.quote",
+                site_version=site_version,
+            )
+
+
 def _coerce_decimal(value: Any) -> Any:
     if value in (None, ""):
         return None
@@ -243,14 +352,27 @@ def _sanitize_lookup_value(value: Any) -> str:
     return text
 
 
-def _is_empty_value(value: Any) -> bool:
-    if value is None:
-        return True
-    if isinstance(value, str):
-        return value.strip() == ""
-    if isinstance(value, (list, tuple, set, dict)):
-        return len(value) == 0
-    return False
+def _resolve_product_slug(request, params: Dict[str, Any] | None) -> str:
+    """Extract the product slug from the request/params with graceful fallbacks."""
+    resolver_match = getattr(request, "resolver_match", None)
+    if resolver_match and isinstance(getattr(resolver_match, "kwargs", None), dict):
+        for key in ("product_slug", "slug"):
+            candidate = resolver_match.kwargs.get(key)
+            if candidate:
+                return _sanitize_lookup_value(candidate)
+
+    attribute_slug = getattr(request, "_product_slug", "")
+    if attribute_slug:
+        return _sanitize_lookup_value(attribute_slug)
+
+    if isinstance(params, dict):
+        product_params = params.get("product")
+        if isinstance(product_params, dict):
+            param_slug = product_params.get("slug")
+            if param_slug:
+                return _sanitize_lookup_value(param_slug)
+
+    return ""
 
 
 def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str, Any] | None = None) -> Dict[str, Any]:
@@ -258,37 +380,36 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     cfg = ProductParams.from_dict(params)
     params = params or {}
 
-    product_params_raw = (
-        dict(params.get("product") or {}) if isinstance(params.get("product"), dict) else {}
-    )
-    media_params_raw = (
-        dict(params.get("media") or {}) if isinstance(params.get("media"), dict) else {}
-    )
-    ui_texts_params_raw = (
-        dict(params.get("ui_texts") or {}) if isinstance(params.get("ui_texts"), dict) else {}
-    )
+    product_params_raw = params.get("product") if isinstance(params.get("product"), dict) else {}
+    media_params_raw = params.get("media") if isinstance(params.get("media"), dict) else {}
+    ui_texts_params_raw = params.get("ui_texts") if isinstance(params.get("ui_texts"), dict) else {}
 
     lookup_params = cfg.lookup if isinstance(getattr(cfg, "lookup", None), dict) else {}
     lookup_slug = _sanitize_lookup_value(lookup_params.get("slug"))
     lookup_id = lookup_params.get("id")
     lookup_id = _sanitize_lookup_value(lookup_id) if lookup_id is not None else ""
 
+    resolved_slug = _resolve_product_slug(request, params)
+    if resolved_slug:
+        lookup_slug = resolved_slug
+
+    lang_code = getattr(request, "LANGUAGE_CODE", None) or get_language() or "fr"
+    site_version = getattr(request, "site_version", None) or "core"
+    db_translator = TranslationService(locale=lang_code, site_version=site_version)
+
     if not lookup_slug:
         lookup_slug = cfg.product_slug or cfg.product.slug
     if not lookup_id:
         lookup_id = cfg.product_id or cfg.product.id
 
-    if not lookup_slug:
-        request_slug = getattr(request, "_product_slug", "")
-        if request_slug:
-            lookup_slug = str(request_slug).strip()
-    if not lookup_slug:
-        resolver = getattr(request, "resolver_match", None)
-        if resolver and isinstance(getattr(resolver, "kwargs", None), dict):
-            lookup_slug = str(resolver.kwargs.get("product_slug") or resolver.kwargs.get("slug") or "").strip()
-
     lookup_slug = _sanitize_lookup_value(lookup_slug)
     lookup_id = _sanitize_lookup_value(lookup_id)
+    if not lookup_slug:
+        logger.warning(
+            "product.hydrator.missing_slug path=%s lookup_id=%s",
+            getattr(request, "path", "-"),
+            lookup_id or "-",
+        )
 
     product_obj: Optional[CatalogProduct] = None
     queryset = CatalogProduct.objects.filter(is_active=True).prefetch_related(
@@ -304,6 +425,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         try:
             product_obj = queryset.get(slug=lookup_slug)
         except CatalogProduct.DoesNotExist:
+            logger.warning("product.hydrator.not_found slug=%s", lookup_slug)
             product_obj = None
 
     if product_obj is None and lookup_id:
@@ -315,6 +437,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         try:
             product_obj = queryset.get(pk=pk_value)
         except (CatalogProduct.DoesNotExist, ValueError):
+            logger.warning("product.hydrator.not_found_by_id id=%s", lookup_id)
             product_obj = None
 
     product_data: Dict[str, Any] = {}
@@ -328,7 +451,6 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     media_lightbox_db: Optional[bool] = None
 
     if product_obj:
-        active_lang = get_language()
         product_data = {
             "id": str(product_obj.pk),
             "slug": product_obj.slug,
@@ -376,17 +498,11 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
             comp_promo = _coerce_decimal(complementary.promo_price)
             has_promo = bool(comp_price and comp_promo and comp_promo < comp_price)
             effective_price = comp_promo if has_promo else comp_price
-            comp_title = translation_service.get_model(
-                complementary, "title", lang=active_lang, default=complementary.title
-            )
-            comp_short = translation_service.get_model(
-                complementary, "short_description", lang=active_lang, default=complementary.short_description
-            )
             cross_sells.append(
                 {
                     "slug": complementary.slug,
-                    "title": comp_title,
-                    "short_description": comp_short,
+                    "title": complementary.title,
+                    "short_description": complementary.short_description,
                     "price": comp_price,
                     "promo_price": comp_promo if comp_promo is not None else None,
                     "effective_price": effective_price,
@@ -394,11 +510,49 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                     "currency": complementary.currency or product_data.get("currency"),
                     "image_src": complementary.image_src,
                     "position": relation.position,
-                    "label": relation.label_override or comp_title,
+                    "label": relation.label_override or complementary.title,
                     "value": complementary.slug,
                     "extra": dict(complementary.extra or {}),
                 }
             )
+
+        _translate_product_content(
+            db_translator,
+            product_obj,
+            product_data,
+            offers_db,
+            testimonials,
+            site_version=site_version,
+        )
+
+        for idx, item in enumerate(cross_sells):
+            if item.get("label"):
+                item["label"] = _translate_value(
+                    db_translator,
+                    product_obj,
+                    "cross_sells",
+                    item["label"],
+                    suffix=f"{idx}.label",
+                    site_version=site_version,
+                )
+            if item.get("short_description"):
+                item["short_description"] = _translate_value(
+                    db_translator,
+                    product_obj,
+                    "cross_sells",
+                    item["short_description"],
+                    suffix=f"{idx}.short_description",
+                    site_version=site_version,
+                )
+            if item.get("title"):
+                item["title"] = _translate_value(
+                    db_translator,
+                    product_obj,
+                    "cross_sells",
+                    item["title"],
+                    suffix=f"{idx}.title",
+                    site_version=site_version,
+                )
 
         if cross_sells and not bump_db:
             primary = min(cross_sells, key=lambda item: item.get("position", 0))
@@ -414,67 +568,61 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                 "alt": primary.get("title"),
             }
 
-        active_lang = get_language()
-        product_data["name"] = translation_service.get_model(
-            product_obj, "name", lang=active_lang, default=product_data.get("name")
-        )
-        product_data["subname"] = translation_service.get_model(
-            product_obj, "subname", lang=active_lang, default=product_data.get("subname")
-        )
-        product_data["description"] = translation_service.get_model(
-            product_obj, "description", lang=active_lang, default=product_data.get("description")
-        )
-        highlights_translated = translation_service.get_model_json(
-            product_obj, "highlights", lang=active_lang, default=None
-        )
-        if isinstance(highlights_translated, list) and highlights_translated:
-            product_data["highlights"] = highlights_translated
-
     overlay_product = cfg.product.as_dict()
 
-    override_flags = {"__override__", "_override", "override"}
+    if not product_obj:
+        if isinstance(product_params_raw, dict) and "id" in product_params_raw:
+            product_data["id"] = overlay_product.get("id") or product_data.get("id")
+        elif "id" not in product_data and overlay_product.get("id"):
+            product_data["id"] = overlay_product.get("id")
 
-    def _flag_enabled(raw_value: Any) -> bool:
-        if isinstance(raw_value, bool):
-            return raw_value
-        if raw_value in (None, "", 0):
-            return False
-        if isinstance(raw_value, str):
-            return raw_value.strip().lower() in {"1", "true", "yes", "on"}
-        return bool(raw_value)
+        if isinstance(product_params_raw, dict) and "slug" in product_params_raw:
+            product_data["slug"] = overlay_product.get("slug") or product_data.get("slug")
+        elif "slug" not in product_data:
+            if overlay_product.get("slug"):
+                product_data["slug"] = overlay_product.get("slug")
+            elif lookup_slug:
+                product_data["slug"] = lookup_slug
 
-    override_mode = any(_flag_enabled(product_params_raw.get(flag)) for flag in override_flags)
-    for flag in override_flags:
-        product_params_raw.pop(flag, None)
+        if isinstance(product_params_raw, dict) and "name" in product_params_raw:
+            product_data["name"] = overlay_product.get("name") or product_data.get("name")
+        elif "name" not in product_data and overlay_product.get("name"):
+            product_data["name"] = overlay_product.get("name")
 
-    def _merge_product_overlay() -> None:
-        if not product_params_raw:
-            return
+        if isinstance(product_params_raw, dict) and "subname" in product_params_raw:
+            product_data["subname"] = overlay_product.get("subname") or product_data.get("subname")
+        elif "subname" not in product_data and overlay_product.get("subname"):
+            product_data["subname"] = overlay_product.get("subname")
 
-        keys = (
-            "id",
-            "slug",
-            "name",
-            "subname",
-            "description",
-            "price",
-            "promo_price",
-            "currency",
-            "badges",
-            "highlights",
-        )
+        if isinstance(product_params_raw, dict) and "description" in product_params_raw:
+            product_data["description"] = overlay_product.get("description") or product_data.get("description")
+        elif "description" not in product_data and overlay_product.get("description"):
+            product_data["description"] = overlay_product.get("description")
 
-        for key in keys:
-            if key not in product_params_raw:
-                continue
-            overlay_value = overlay_product.get(key)
-            if key in {"badges", "highlights"} and overlay_value is None:
-                overlay_value = []
-            if product_obj and not override_mode and not _is_empty_value(product_data.get(key)):
-                continue
-            product_data[key] = overlay_value
+        if isinstance(product_params_raw, dict) and "price" in product_params_raw:
+            product_data["price"] = overlay_product.get("price")
+        elif "price" not in product_data and overlay_product.get("price") is not None:
+            product_data["price"] = overlay_product.get("price")
 
-    _merge_product_overlay()
+        if isinstance(product_params_raw, dict) and "promo_price" in product_params_raw:
+            product_data["promo_price"] = overlay_product.get("promo_price")
+        elif "promo_price" not in product_data and overlay_product.get("promo_price") is not None:
+            product_data["promo_price"] = overlay_product.get("promo_price")
+
+        if isinstance(product_params_raw, dict) and "currency" in product_params_raw:
+            product_data["currency"] = overlay_product.get("currency") or product_data.get("currency")
+        elif "currency" not in product_data and overlay_product.get("currency"):
+            product_data["currency"] = overlay_product.get("currency")
+
+        if isinstance(product_params_raw, dict) and "badges" in product_params_raw:
+            product_data["badges"] = overlay_product.get("badges") or []
+        elif "badges" not in product_data:
+            product_data["badges"] = overlay_product.get("badges") or []
+
+        if isinstance(product_params_raw, dict) and "highlights" in product_params_raw:
+            product_data["highlights"] = list(overlay_product.get("highlights") or [])
+        elif "highlights" not in product_data:
+            product_data["highlights"] = list(overlay_product.get("highlights") or [])
 
     product_data.setdefault("id", cfg.product.id or lookup_id or lookup_slug or "product")
     product_data.setdefault("slug", lookup_slug)
@@ -561,18 +709,12 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     else:
         final_offers = offers_db
 
-    for idx, offer in enumerate(final_offers):
-        if not isinstance(offer, dict):
-            continue
-        if "price" in offer:
-            offer["price"] = _coerce_decimal(offer.get("price"))
-        if "compare_at_price" in offer:
-            offer["compare_at_price"] = _coerce_decimal(offer.get("compare_at_price"))
-        slug_value = offer.get("pack_slug") or offer.get("slug") or offer.get("code")
-        if not slug_value:
-            slug_value = f"offer_{idx+1}"
-        offer.setdefault("pack_slug", slug_value)
-        offer.setdefault("slug", slug_value)
+    for offer in final_offers:
+        if isinstance(offer, dict):
+            if "price" in offer:
+                offer["price"] = _coerce_decimal(offer.get("price"))
+            if "compare_at_price" in offer:
+                offer["compare_at_price"] = _coerce_decimal(offer.get("compare_at_price"))
 
     bump_final: Dict[str, Any] = dict(bump_db)
     if cfg.form.bump:
@@ -586,6 +728,8 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         ui_texts_final.update(cfg.ui_texts)
     if cfg.form.ui_texts:
         ui_texts_final.update(cfg.form.ui_texts)
+    if ui_texts_final:
+        ui_texts_final = cast(Dict[str, Any], db_translator.walk(ui_texts_final))
 
     form_cfg = cfg.form
     action_url = _resolve_action_url(form_cfg.action_url)
@@ -617,6 +761,15 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         "has_promo": bool(price and promo and promo < price),
         "savings": (price - promo) if (price and promo and price > promo) else None,
     }
+    currency_code = pricing.get("currency") or product_data.get("currency")
+    currency_label = ""
+    if currency_code:
+        currency_label = db_translator.t(
+            f"currency.{currency_code}", default=str(currency_code)
+        )
+    if currency_label:
+        pricing["currency_label"] = currency_label
+        pricing["currency_display"] = currency_label
 
     language_code = getattr(request, "LANGUAGE_CODE", None) or get_language() or "en"
     lang_prefix = str(language_code).lower()[:2]
@@ -672,62 +825,34 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
     if complementaries_ctx:
         flow_context["complementaries"] = complementaries_ctx
 
-    def _mapped(*keys: str) -> list[str]:
-        seen: list[str] = []
-        for key in keys:
-            if not key:
-                continue
-            mapped = form_fields_map.get(key) or key
-            mapped = str(mapped).strip()
-            if mapped and mapped not in seen:
-                seen.append(mapped)
-        return seen
-
     progress_steps = {
-        "step1": _mapped(
-            "fullname",
-            "first_name",
-            "last_name",
-            "email",
-            "phone",
-            "address_line1",
-            "address_line2",
-            "city",
-            "state",
-            "postal_code",
-            "country",
-            "wa_optin",
-            "campaign",
-            "source",
-            "utm_source",
-            "utm_medium",
-            "utm_campaign",
-        ),
-        "step2": _mapped(
-            "pack_slug",
-            "offer",
-            "offer_key",
-            "quantity",
-            "bump",
-            "bump_optin",
-            "promotion",
-            "promotion_selected",
-            "context.pack.slug",
-            "context.pack.title",
-            "context.pack.price",
-            "context.pack.currency",
-            "context.complementary_slugs",
-        ),
-        "step3": _mapped(
-            "coupon_code",
-            "payment_mode",
-            "payment_method",
-            "context.payment.method",
-            "email",
-            "currency",
-            "course_slug",
-            "accept_terms",
-        ),
+        "step1": [
+            field
+            for field in [
+                form_fields_map.get("fullname"),
+                form_fields_map.get("phone"),
+                form_fields_map.get("product"),
+                "campaign",
+                "source",
+                "utm_source",
+                "utm_medium",
+                "utm_campaign",
+                form_fields_map.get("wa_optin"),
+            ]
+            if field
+        ],
+        "step2": [
+            field
+            for field in [
+                form_fields_map.get("offer"),
+                form_fields_map.get("quantity"),
+                form_fields_map.get("bump"),
+                form_fields_map.get("promotion"),
+                form_fields_map.get("address"),
+                form_fields_map.get("payment_method"),
+            ]
+            if field
+        ],
     }
 
     flow_config = {
@@ -771,21 +896,6 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         "cross_sells": cross_sells,
     }
 
-    try:
-        preview_url = reverse("billing:preview_totals")
-    except NoReverseMatch:
-        preview_url = "/billing/preview/"
-    try:
-        intent_url = reverse("billing:create_payment_intent")
-    except NoReverseMatch:
-        intent_url = "/billing/intent/create/"
-
-    context_out["checkout_bootstrap"] = {
-        "stripe_publishable_key": getattr(settings, "STRIPE_PUBLISHABLE_KEY", ""),
-        "preview_url": preview_url,
-        "intent_url": intent_url,
-    }
-
     def _to_float(value: Any) -> Optional[float]:
         if value in (None, ""):
             return None
@@ -811,6 +921,7 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
         "base_price": _to_float(pricing.get("price")),
         "promo_price": _to_float(pricing.get("promo_price")),
         "currency": pricing.get("currency") or product_data.get("currency") or "MAD",
+        "currency_display": pricing.get("currency_label") or pricing.get("currency_display") or pricing.get("currency") or product_data.get("currency") or "MAD",
         "online_discount": _to_float(online_discount_raw) or 0.0,
         "product_id": product_data.get("id"),
         "product_slug": product_data.get("slug"),
@@ -824,5 +935,16 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
                 context_out["pricing"][f"{key}_display"] = f"{value:.2f}"
             except (TypeError, ValueError):
                 context_out["pricing"][f"{key}_display"] = str(value)
+
+    if settings.DEBUG:
+        logger.debug(
+            "product.hydrator.context slug=%s product_found=%s media=%d testimonials=%d cross_sells=%d offers=%d",
+            lookup_slug or "-",
+            bool(product_obj),
+            len(media_images_db),
+            len(testimonials),
+            len(cross_sells),
+            len(final_offers),
+        )
 
     return context_out

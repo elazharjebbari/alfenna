@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-12 13:06+0100\n"
+"POT-Creation-Date: 2025-10-06 01:35-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: ar\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,16 +33,105 @@ msgstr ""
 #: apps/accounts/forms_signup.py:19
 #: apps/accounts/templates/accounts/register.html:16
 #: templates/components/core/accounts/register_form/component.html:26
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:39
-#: templates/components/core/forms/lead_step3/lead_step3.html:113
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:113
+#: templates/components/core/forms/lead/lead.html:6
+#: templates/components/core/forms/lead_step2/lead_step2.html:7
+#: templates/components/core/forms/lead_step3/lead_step3.html:71
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:26
 msgid "Nom complet"
-msgstr ""
+msgstr "الاسم الكامل"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:145
+msgid "Complément d’adresse"
+msgstr "تكملة العنوان"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:145
+msgid "(optionnel)"
+msgstr "(اختياري)"
+#: templates/components/core/forms/lead_step3/lead_step3.html:147
+msgid "Ville"
+msgstr "المدينة"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:151
+msgid "Région / Wilaya"
+msgstr "الجهة / الولاية"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:166
+msgid "Code postal"
+msgstr "الرمز البريدي"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:170
+msgid "Choisissez"
+msgstr "اختر"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:175
+msgid "Maroc"
+msgstr "المغرب"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:176
+msgid "France"
+msgstr "فرنسا"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:177
+msgid "Espagne"
+msgstr "إسبانيا"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:178
+msgid "Belgique"
+msgstr "بلجيكا"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:179
+msgid "Suisse"
+msgstr "سويسرا"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:180
+msgid "Canada"
+msgstr "كندا"
+
+#: apps/atelier/compose/hydrators/before_after/hydrators.py:40
+msgid "Avant / Après — Résultat concret"
+msgstr "قبل / بعد — نتيجة ملموسة"
+
+#: apps/atelier/compose/hydrators/before_after/hydrators.py:32
+msgid "Bougie - Avant"
+msgstr "شمعة - قبل"
+
+#: apps/atelier/compose/hydrators/before_after/hydrators.py:33
+msgid "Bougie - Après"
+msgstr "شمعة - بعد"
+
+#: apps/atelier/compose/hydrators/before_after/hydrators.py:52
+msgid "Faites glisser le bouton vert pour comparer l’avant/après."
+msgstr "حرّك الزر الأخضر لمقارنة قبل/بعد."
+
+#: apps/atelier/compose/hydrators/before_after/hydrators.py:53
+msgid "OK"
+msgstr "حسنًا"
+
+#: templates/components/core/before_after/wipe/wipe.html:24
+msgid "Comparer l’avant et l’après"
+msgstr "قارن بين قبل وبعد"
+
+#: templates/components/core/before_after/wipe/wipe.html:41
+msgid "Révéler l’après"
+msgstr "أظهر النتيجة"
+
+#: templates/components/core/before_after/wipe/wipe.html:67
+#: templates/components/core/before_after/wipe/wipe.html:81
+#: templates/components/core/before_after/wipe/wipe.html:104
+msgid "Avant"
+msgstr "قبل"
+
+#: templates/components/core/before_after/wipe/wipe.html:67
+#: templates/components/core/before_after/wipe/wipe.html:86
+#: templates/components/core/before_after/wipe/wipe.html:105
+msgid "Après"
+msgstr "بعد"
+
 
 #: apps/accounts/forms_signup.py:20
 #: templates/components/core/checkout/payment_form.html:14
 msgid "Adresse e-mail"
-msgstr ""
+msgstr "البريد الإلكتروني"
 
 #: apps/accounts/forms_signup.py:21
 #: apps/accounts/templates/accounts/login.html:37
@@ -50,11 +140,11 @@ msgstr ""
 #: templates/components/core/accounts/login/form.html:45
 #: templates/components/core/accounts/register_form/component.html:60
 msgid "Mot de passe"
-msgstr ""
+msgstr "كلمة المرور"
 
 #: apps/accounts/forms_signup.py:22
 msgid "Confirmez le mot de passe"
-msgstr ""
+msgstr "تأكيد كلمة المرور"
 
 #: apps/accounts/forms_signup.py:23
 #: apps/accounts/templates/accounts/register.html:99
@@ -103,21 +193,19 @@ msgstr ""
 #: apps/atelier/compose/hydrators/accounts/verify_error.py:28
 #: templates/accounts/verification_error.html:15
 msgid "Retour à la connexion"
-msgstr "العودة إلى تسجيل الدخول"
+msgstr ""
 
 #: apps/accounts/templates/accounts/login.html:4
 #: apps/atelier/compose/hydrators/accounts/login.py:55
-#: apps/i18n/scripts/suite/tests_scripts/test_03_gettext_roundtrip.py:11
-#: apps/i18n/scripts/suite/tests_scripts/test_03_gettext_roundtrip.py:14
 #: templates/components/core/accounts/login/form.html:5
 msgid "Connexion"
-msgstr "تسجيل الدخول"
+msgstr ""
 
 #: apps/accounts/templates/accounts/login.html:5
 #: apps/atelier/compose/hydrators/accounts/login.py:56
 #: templates/components/core/accounts/login/form.html:6
 msgid "Accède à tes cours en toute sécurité."
-msgstr "ادخل إلى دوراتك بأمان."
+msgstr ""
 
 #: apps/accounts/templates/accounts/login.html:50
 #: apps/accounts/templates/accounts/password_reset_confirm.html:34
@@ -173,6 +261,8 @@ msgstr ""
 #: templates/components/core/accounts/login/form.html:73
 #: templates/components/core/accounts/register_form/component.html:117
 #: templates/components/core/header/auth_links.html:33
+#: templates/components/core/header/modes/main/header_modes_main.html:54
+#: templates/components/core/header/modes/mobile/mobile_menu.html:40
 msgid "Se connecter"
 msgstr ""
 
@@ -297,22 +387,18 @@ msgstr ""
 
 #: apps/accounts/templates/accounts/password_reset_request.html:16
 #: apps/accounts/templates/accounts/register.html:33
-#: draft/history_codex.txt:1255
 #: templates/components/core/accounts/password_reset_form/component.html:25
 #: templates/components/core/accounts/register_form/component.html:43
-#: templates/components/core/forms/lead_step3/lead_step3.html:133
-#: templates/components/core/forms/lead_step3/lead_step3.html:435
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:132
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:434
+#: templates/components/core/forms/lead_step3/lead_step3.html:207
 msgid "Adresse e‑mail"
-msgstr ""
+msgstr "البريد الإلكتروني"
 
 #: apps/accounts/templates/accounts/password_reset_request.html:37
 #: templates/components/core/accounts/password_reset_form/component.html:46
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:89
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:120
+#: templates/components/core/forms/lead_step2/lead_step2.html:28
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:68
 msgid "Retour"
-msgstr ""
+msgstr "رجوع"
 
 #: apps/accounts/templates/accounts/register.html:4
 #: apps/accounts/templates/accounts/register.html:103
@@ -628,58 +714,6 @@ msgstr ""
 msgid "Questions fréquentes"
 msgstr ""
 
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:45
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:66
-msgid "Participante"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:70
-#, python-format
-msgid "Ouvrir la photo de %(name)s"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:118
-msgid "Leurs créations & sourires"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:122
-msgid "1 200+ participantes formées"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:123
-msgid "Note moyenne 4,9/5"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:124
-msgid "Formations certifiantes"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:127
-msgid "Voir plus de réalisations"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:148
-msgid "Preuves sociales"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:149
-msgid "Agrandissement image"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:150
-msgid "Précédente"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:151
-msgid "Suivante"
-msgstr ""
-
-#: apps/atelier/compose/hydrators/gallery/hydrators.py:152
-#: templates/components/core/carousel_multi/multimedia.html:156
-#: templates/components/core/modals/login/login.html:25
-msgid "Fermer"
-msgstr ""
-
 #: apps/atelier/compose/hydrators/modals/hydrators.py:38
 msgid "Email ou nom d'utilisateur"
 msgstr ""
@@ -689,17 +723,11 @@ msgstr ""
 msgid "S'inscrire"
 msgstr ""
 
-#: apps/atelier/compose/hydrators/sticky/hydrators.py:59
-msgid "Pack 8 pièces — soin antifongique"
-msgstr ""
-
 #: apps/billing/templates/billing/checkout.html:18
-#: templates/components/core/forms/lead_step3/lead_step3.html:57
-#: templates/components/core/forms/lead_step3/lead_step3.html:396
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:57
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:395
+#: templates/components/core/forms/lead_step3/lead_step3.html:29
+#: templates/components/core/forms/lead_step3/lead_step3.html:185
 msgid "Paiement"
-msgstr ""
+msgstr "الدفع"
 
 #: apps/billing/templates/billing/checkout.html:19
 msgid "Cours"
@@ -716,26 +744,6 @@ msgstr ""
 
 #: apps/billing/templates/billing/checkout.html:71
 msgid "Paiement en cours de finalisation..."
-msgstr ""
-
-#: apps/billing/templates/billing/checkout_pack.html:10
-msgid "Paiement du pack"
-msgstr ""
-
-#: apps/billing/templates/billing/checkout_pack.html:15
-#, python-format
-msgid ""
-"\n"
-"          Montant estimé : %(total)s %(currency)s (taxes incluses)\n"
-"        "
-msgstr ""
-
-#: apps/billing/templates/billing/checkout_pack.html:19
-msgid "Sélectionnez un pack pour afficher le montant."
-msgstr ""
-
-#: apps/billing/templates/billing/checkout_pack.html:24
-msgid "L'interface de paiement se charge..."
 msgstr ""
 
 #: apps/catalog/templates/catalog/course_detail.html:8
@@ -763,12 +771,8 @@ msgstr ""
 msgid "Suivant"
 msgstr ""
 
-#: apps/checkout/views.py:167
+#: apps/checkout/views.py:83
 msgid "payment_method must be 'online'."
-msgstr ""
-
-#: apps/checkout/views.py:182
-msgid "Payment amount missing or invalid."
 msgstr ""
 
 #: apps/content/mixins.py:120
@@ -829,98 +833,6 @@ msgstr ""
 
 #: apps/leads/api/serializers.py:13
 msgid "Vous devez accepter les conditions."
-msgstr ""
-
-#: apps/pages/tests/test_i18n_urls.py:24
-#: templates/components/core/forms/lead_step3/lead_step3.html:50
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:50
-msgid "NATUREL • SOIN • CONFIANCE"
-msgstr "طبيعي • عناية • ثقة"
-
-#: draft/history_codex.txt:1259
-#: templates/components/core/forms/lead_step3/lead_step3.html:137
-#: templates/components/core/forms/lead_step3/lead_step3.html:436
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:136
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:435
-msgid "Ex. salma@example.com"
-msgstr ""
-
-#: draft/history_codex.txt:1263 draft/history_codex.txt:1343
-#: templates/components/core/forms/lead_step3/lead_step3.html:141
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:140
-msgid "Adresse de livraison"
-msgstr ""
-
-#: draft/history_codex.txt:1266
-#: templates/components/core/forms/lead_step3/lead_step3.html:144
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:143
-msgid "Rue, quartier"
-msgstr ""
-
-#: draft/history_codex.txt:1270
-#: templates/components/core/forms/lead_step3/lead_step3.html:148
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:147
-msgid "Complément d’adresse"
-msgstr ""
-
-#: draft/history_codex.txt:1270
-#: templates/components/core/forms/lead_step3/lead_step3.html:148
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:147
-msgid "(optionnel)"
-msgstr ""
-
-#: draft/history_codex.txt:1273
-#: templates/components/core/forms/lead_step3/lead_step3.html:151
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:150
-msgid "Appartement, étage, référence"
-msgstr ""
-
-#: draft/history_codex.txt:1278
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:47
-#: templates/components/core/forms/lead_step3/lead_step3.html:156
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:155
-msgid "Ville"
-msgstr ""
-
-#: draft/history_codex.txt:1281
-#: templates/components/core/forms/lead_step3/lead_step3.html:159
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:158
-msgid "Ex. Casablanca"
-msgstr ""
-
-#: draft/history_codex.txt:1284
-#: templates/components/core/forms/lead_step3/lead_step3.html:162
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:161
-msgid "Région / Wilaya"
-msgstr ""
-
-#: draft/history_codex.txt:1287
-#: templates/components/core/forms/lead_step3/lead_step3.html:165
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:164
-msgid "Ex. Casablanca-Settat"
-msgstr ""
-
-#: draft/history_codex.txt:1293
-#: templates/components/core/forms/lead_step3/lead_step3.html:171
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:170
-msgid "Code postal"
-msgstr ""
-
-#: draft/history_codex.txt:1299
-#: templates/components/core/checkout/order_summary.html:95
-#: templates/components/core/forms/lead_step3/lead_step3.html:177
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:176
-msgid "Pays"
-msgstr ""
-
-#: draft/history_codex.txt:1302
-#: templates/components/core/forms/lead_step3/lead_step3.html:180
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:179
-msgid "Choisissez"
-msgstr ""
-
-#: draft/history_codex.txt:1346
-msgid "Rue, quartier, ville (code postal si possible)"
 msgstr ""
 
 #: draft/template_ref_to_convert/carpet/base.html:25
@@ -1085,10 +997,12 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/faq/faq.html:42
 #: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:26
 #: draft/template_ref_to_convert/carpet/components/faq/faq_sihaty.html:127
+#: templates/components/core/forms/lead/lead.html:23
 msgid "Commander maintenant"
 msgstr ""
 
 #: draft/template_ref_to_convert/carpet/components/cta/sticky_cta.html:99
+#: templates/components/core/forms/lead_step2/lead_step2.html:29
 msgid "Commander"
 msgstr ""
 
@@ -1102,14 +1016,13 @@ msgstr ""
 
 #: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:78
 #: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:606
-#: templates/components/core/forms/lead_step3/lead_step3.html:234
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:233
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:49
 msgid "Offre"
 msgstr ""
 
 #: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:78
 msgid "vous économisez"
-msgstr ""
+msgstr "توفّر"
 
 #: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:86
 #: draft/template_ref_to_convert/carpet/components/timer/timer.html:105
@@ -1422,7 +1335,7 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:307
 #: templates/components/core/checkout/order_summary.html:21
 msgid "Vous économisez"
-msgstr ""
+msgstr "وفرْت"
 
 #: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:330
 #: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:330
@@ -1529,11 +1442,8 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/header/main_header.html:12
 #: draft/template_ref_to_convert/carpet/components/offer/offre_violet.html:32
 #: draft/template_ref_to_convert/carpet/components/product/product-luxe.html:534
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:104
-#: templates/components/core/forms/lead_step3/lead_step3.html:95
-#: templates/components/core/forms/lead_step3/lead_step3.html:405
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:95
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:404
+#: templates/components/core/forms/lead_step3/lead_step3.html:61
+#: templates/components/core/forms/lead_step3/lead_step3.html:201
 msgid "Paiement à la livraison"
 msgstr ""
 
@@ -1676,14 +1586,12 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:507
 #: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:699
 #: templates/components/core/accounts/auth_message/component.html:37
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:51
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:90
-#: templates/components/core/forms/lead_step3/lead_step3.html:200
-#: templates/components/core/forms/lead_step3/lead_step3.html:390
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:199
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:389
+#: templates/components/core/forms/lead_step2/lead_step2.html:16
+#: templates/components/core/forms/lead_step3/lead_step3.html:98
+#: templates/components/core/forms/lead_step3/lead_step3.html:179
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:35
 msgid "Continuer"
-msgstr ""
+msgstr "متابعة"
 
 #: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3.html:516
 #: draft/template_ref_to_convert/carpet/components/forms/forms-upsell/3_v2.html:727
@@ -1963,7 +1871,6 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:219
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:237
 #: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:219
-#: templates/components/core/product/_media_v4.html:52
 msgid "Image précédente"
 msgstr ""
 
@@ -1976,7 +1883,7 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:223
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:241
 #: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:223
-#: templates/components/core/product/_media_v4.html:55
+#: templates/components/core/product/_media.html:24
 msgid "Image suivante"
 msgstr ""
 
@@ -1989,7 +1896,6 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3.html:233
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:251
 #: draft/template_ref_to_convert/carpet/components/product/product_oud_dynamic.html:233
-#: templates/components/core/product/_media_v4.html:32
 msgid "Images du produit"
 msgstr ""
 
@@ -2377,7 +2283,6 @@ msgid "-30s"
 msgstr ""
 
 #: draft/template_ref_to_convert/carpet/screens/thank_you.html:4
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:127
 msgid "Merci !"
 msgstr ""
 
@@ -2401,11 +2306,11 @@ msgstr ""
 msgid "Adresse e‑mail vérifiée"
 msgstr ""
 
-#: templates/base.html:99 templates/base_copy.html:37
+#: templates/base.html:96 templates/base_copy.html:37
 msgid "En-tête du site"
 msgstr ""
 
-#: templates/base.html:129 templates/base_copy.html:61
+#: templates/base.html:126 templates/base_copy.html:61
 msgid "Pied de page"
 msgstr ""
 
@@ -2435,6 +2340,11 @@ msgstr ""
 
 #: templates/components/core/carousel_multi/multimedia.html:155
 msgid "Faites glisser pour parcourir"
+msgstr ""
+
+#: templates/components/core/carousel_multi/multimedia.html:156
+#: templates/components/core/modals/login/login.html:25
+msgid "Fermer"
 msgstr ""
 
 #: templates/components/core/checkout/button_checkout.html:13
@@ -2478,6 +2388,10 @@ msgstr ""
 #: templates/components/core/checkout/order_summary.html:92
 msgid "Dont taxes"
 msgstr ""
+
+#: templates/components/core/checkout/order_summary.html:95
+msgid "Pays"
+msgstr "البلد"
 
 #: templates/components/core/checkout/order_summary.html:97
 msgid "Devise"
@@ -2540,298 +2454,267 @@ msgstr ""
 msgid "Contactez-nous à"
 msgstr ""
 
-#: templates/components/core/faq/faq.html:59
-#: templates/components/core/faq/faq.html:129
-msgid "Bougie artisanale"
-msgstr "شمعة مصنوعة يدويًا"
-
-#: templates/components/core/faq/faq.html:114
-#, python-format
-msgid "<strong>Prix :</strong> %(price)s %(currency)s pour accès à vie."
-msgstr "<strong>السعر:</strong> %(price)s %(currency)s للوصول مدى الحياة."
-
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:33
-msgid "Finalisez votre demande en 3 étapes"
+#: templates/components/core/forms/lead/lead.html:7
+msgid "Ex: Amine Benali"
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:34
-#: templates/components/core/forms/lead_step3/lead_step3.html:61
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:61
-msgid "Étape 1 / 4"
+#: templates/components/core/forms/lead/lead.html:10
+#: templates/components/core/forms/lead_step2/lead_step2.html:11
+msgid "Numero de telephone"
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:40
-msgid "Ex. Salma El Idrissi"
+#: templates/components/core/forms/lead/lead.html:11
+msgid "Ex: 06 12 34 56 78"
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:43
-msgid "Téléphone"
+#: templates/components/core/forms/lead/lead.html:12
+msgid "WhatsApp accepte - Format : 06 12 34 56 78 ou +212"
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:48
-msgid "Ex. Rabat"
+#: templates/components/core/forms/lead/lead.html:16
+#: templates/components/core/forms/lead_step2/lead_step2.html:22
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:58
+msgid "Adresse complete"
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:56
-msgid "Sélectionnez l'offre qui vous convient"
+#: templates/components/core/forms/lead/lead.html:17
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:59
+msgid "Quartier, ville, code postal"
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:72
-msgid "Aucune offre configurée."
+#: templates/components/core/forms/lead/lead.html:24
+msgid "Donnees protegees, aucune revente."
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:80
-msgid "Ajouter le supplément recommandé"
+#: templates/components/core/forms/lead_step2/lead_step2.html:13
+msgid "WhatsApp accepte"
 msgstr ""
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:96
-msgid "Email (facultatif)"
-msgstr ""
+#: templates/components/core/forms/lead_step3/lead_step3.html:22
+msgid "NATUREL • SOIN • CONFIANCE"
+msgstr "طبيعي • عناية • ثقة"
 
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:108
-#: templates/components/core/forms/lead_step3/lead_step3.html:404
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:403
-msgid "Paiement en ligne"
-msgstr ""
-
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:116
-msgid "J’accepte les conditions générales"
-msgstr ""
-
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:121
-msgid "Valider"
-msgstr ""
-
-#: templates/components/core/forms/form_landingpage/form_landingpage.html:127
-msgid "Votre demande a bien été enregistrée."
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:52
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:52
+#: templates/components/core/forms/lead_step3/lead_step3.html:24
 msgid "Progression"
-msgstr ""
+msgstr "التقدّم"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:53
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:53
+#: templates/components/core/forms/lead_step3/lead_step3.html:25
 msgid "Contact"
-msgstr ""
+msgstr "التواصل"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:55
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:55
+#: templates/components/core/forms/lead_step3/lead_step3.html:27
 msgid "Offres"
-msgstr ""
+msgstr "العروض"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:59
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:59
+#: templates/components/core/forms/lead_step3/lead_step3.html:31
 msgid "Confirmation"
-msgstr ""
+msgstr "التأكيد"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:70
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:70
+#: templates/components/core/forms/lead_step3/lead_step3.html:33
+msgid "Étape 1 / 4"
+msgstr "المرحلة 1 من 4"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:42
 msgid "Seulement"
-msgstr ""
+msgstr "فقط"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:77
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:77
+#: templates/components/core/forms/lead_step3/lead_step3.html:49
 #, python-format
 msgid ""
 "\n"
 "                                Vous économisez %(amount)s %(currency)s\n"
 "                                "
 msgstr ""
+"\n"
+"                                وفرت %(amount)s %(currency)s\n"
+"                                "
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:94
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:94
+#: templates/components/core/forms/lead_step3/lead_step3.html:60
 msgid "Livraison 48 h"
-msgstr ""
+msgstr "توصيل خلال 48 ساعة إلى جميع أنحاء المغرب"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:96
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:96
+#: templates/components/core/forms/lead_step3/lead_step3.html:62
 #, python-format
 msgid "100%% naturel"
-msgstr ""
+msgstr "طبيعي 100%%"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:104
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:104
+#: templates/components/core/forms/lead_step3/lead_step3.html:64
 msgid "clientes"
-msgstr ""
+msgstr "عميلات"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:116
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:116
+#: templates/components/core/forms/lead_step3/lead_step3.html:74
 msgid "Ex. Salma Benali"
-msgstr ""
+msgstr "مثال: سلمى بنعلي"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:77
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:30
+msgid "Numéro de téléphone"
+msgstr "رقم الهاتف"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:83
+msgid "WhatsApp ou mobile actif"
+msgstr "رقم واتساب أو هاتف فعّال"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:93
+msgid "OK pour être contacté(e) sur WhatsApp pour confirmer la livraison"
+msgstr "أوافق على التواصل عبر واتساب لتأكيد التوصيل"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:107
+msgid "VOUS ÉCONOMISEZ LORS DE VOTRE PREMIER ACHAT"
+msgstr "تستفيد من تخفيض في أول عملية شراء"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:112
+msgid "Choix du pack"
+msgstr "اختيار الحزمة"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:117
+msgid "Pack Solo"
+msgstr "حزمة سولو"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:120
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:120
-msgid "Numéro de téléphone"
-msgstr ""
+msgid "Oui"
+msgstr "نعم"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:126
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:126
-msgid "WhatsApp ou mobile actif"
-msgstr ""
+#: templates/components/core/forms/lead_step3/lead_step3.html:130
+msgid "MEILLEUR CHOIX"
+msgstr "الخيار الأفضل"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:127
-msgid "Merci d'indiquer un numéro de téléphone"
-msgstr ""
+#: templates/components/core/forms/lead_step3/lead_step3.html:131
+msgid "Pack Duo"
+msgstr "حزمة ديو"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:129
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:128
-msgid ""
-"Format libre. Les caractères non numériques seront nettoyés automatiquement."
-msgstr ""
+#: templates/components/core/forms/lead_step3/lead_step3.html:133
+msgid "Éco 209 MAD"
+msgstr "توفير 209 دراهم"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:141
+msgid "Bougie parfumée"
+msgstr "شمعة معطرة"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:147
+msgid "+ Bougie parfumée en cire de soja"
+msgstr "+ شمعة معطرة بشمع الصويا"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:148
+msgid "150 g"
+msgstr "150 غ"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:152
+msgid "Optionnelle · Parfums variés disponibles"
+msgstr "اختيارية • روائح متنوعة متاحة"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:159
+msgid "Adresse de livraison"
+msgstr "عنوان التوصيل"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:162
+msgid "Rue, quartier, ville (code postal si possible)"
+msgstr "الشارع، الحي، المدينة (مع الرمز البريدي إن أمكن)"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:168
+#: templates/components/core/forms/lead_step3/lead_step3.html:221
+msgid "Sous‑total"
+msgstr "المجموع الفرعي"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:170
+#: templates/components/core/forms/lead_step3/lead_step3.html:224
+msgid "Remise paiement en ligne"
+msgstr "تخفيض للدفع الإلكتروني"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:172
+msgid "Total mis à jour"
+msgstr "الإجمالي بعد التحديث"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:177
+msgid "Étape précédente"
+msgstr "المرحلة السابقة"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:188
+msgid "Méthode de paiement"
+msgstr "طريقة الدفع"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:193
+msgid "Paiement en ligne"
+msgstr "دفع إلكتروني"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:194
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:193
-msgid "OK pour être contacté(e) sur WhatsApp pour confirmer la livraison"
-msgstr ""
+msgid "de réduction"
+msgstr "تخفيض"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:209
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:208
-msgid "VOUS ÉCONOMISEZ LORS DE VOTRE PREMIER ACHAT"
-msgstr ""
+msgid "Ex. salma@example.com"
+msgstr "مثال: salma@example.com"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:214
+msgid "OK pour recevoir la confirmation par e‑mail"
+msgstr "أوافق على استلام التأكيد عبر البريد الإلكتروني"
+
+#: templates/components/core/forms/lead_step3/lead_step3.html:227
+msgid "Total"
+msgstr "الإجمالي"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:233
-#: templates/components/core/forms/lead_step3/lead_step3.html:315
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:232
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:314
-msgid "MEILLEUR CHOIX"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:235
-#: templates/components/core/forms/lead_step3/lead_step3.html:327
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:234
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:326
-msgid "Ajoutez ce complément ?"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:236
-#: templates/components/core/forms/lead_step3/lead_step3.html:328
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:235
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:327
-msgid "Produit complémentaire"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:237
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:236
-msgid "Choix du pack"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:291
-#: templates/components/core/forms/lead_step3/lead_step3.html:295
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:290
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:294
-msgid "Pack Solo"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:298
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:297
-msgid "Oui"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:311
-#: templates/components/core/forms/lead_step3/lead_step3.html:316
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:310
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:315
-msgid "Pack Duo"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:318
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:317
-msgid "Éco 209 MAD"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:371
-#: templates/components/core/forms/lead_step3/lead_step3.html:459
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:370
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:458
-msgid "Remise paiement en ligne"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:372
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:371
-msgid "Total mis à jour"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:374
-#: templates/components/core/forms/lead_step3/lead_step3.html:463
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:373
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:462
-msgid "Sous‑total"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:387
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:386
-msgid "Étape précédente"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:406
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:405
-msgid "Méthode de paiement"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:415
-#: templates/components/core/forms/lead_step3/lead_step3.html:419
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:414
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:418
-msgid "de réduction"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:437
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:436
-msgid "OK pour recevoir la confirmation par e‑mail"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:460
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:459
-msgid "Total"
-msgstr ""
-
-#: templates/components/core/forms/lead_step3/lead_step3.html:490
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:489
 msgid "Paiement sécurisé • 3D Secure"
-msgstr ""
+msgstr "دفع آمن • 3D Secure"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:502
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:501
+#: templates/components/core/forms/lead_step3/lead_step3.html:239
 msgid "Confirmer la commande"
-msgstr ""
+msgstr "تأكيد الطلب"
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:526
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:525
+#: templates/components/core/forms/lead_step3/lead_step3.html:249
 msgid "Merci, votre commande est enregistrée."
-msgstr ""
+msgstr "شكراً، تم تسجيل طلبك."
 
-#: templates/components/core/forms/lead_step3/lead_step3.html:527
-#: templates/components/core/forms/lead_step3_copy/lead_step3.html:526
+#: templates/components/core/forms/lead_step3/lead_step3.html:250
 msgid "Vous recevrez une confirmation très bientôt."
-msgstr ""
+msgstr "ستتلقى تأكيداً في أقرب وقت."
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:20
+msgid "Etape 1 / 3"
+msgstr "المرحلة 1 من 3"
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:21
+msgid "Votre demande"
+msgstr "طلبك"
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:32
+msgid "WhatsApp accepte - format : +212 ou 06"
+msgstr "يُقبل واتساب — الصيغة: ‎+212 أو 06"
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:41
+msgid "Quantité"
+msgstr "الكمية"
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:70
+msgid "Valider"
+msgstr "تأكيد"
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:78
+msgid "Merci, votre commande est enregistree."
+msgstr "شكراً، تم تسجيل طلبك."
+
+#: templates/components/core/forms/lead_step3/lead_step3_copy.html:79
+msgid "Vous recevrez une confirmation tres bientot."
+msgstr "ستتلقى تأكيداً قريباً جداً."
 
 #: templates/components/core/header/auth_links.html:20
+#: templates/components/core/header/modes/main/header_modes_main.html:49
+#: templates/components/core/header/modes/mobile/mobile_menu.html:35
 msgid "Se déconnecter"
 msgstr ""
 
-#: templates/components/core/product/_info.html:26
+#: templates/components/core/product/_info.html:17
+#: templates/components/core/forms/lead_step3/lead_step3.html:54
 #, python-format
-msgid "Vous economisez %(amount)s %(currency)s"
-msgstr "أنت توفّر %(amount)s %(currency)s"
+msgid "Vous économisez %(amount)s %(currency)s"
+msgstr "توفر %(amount)s %(currency)s"
 
-#: templates/components/core/product/_media_v4.html:4
+#: templates/components/core/product/_media.html:21
+msgid "Image precedente"
+msgstr ""
+
+#: templates/components/core/product/_media.html:28
 msgid "Galerie produit"
-msgstr ""
-
-#: templates/components/core/product/_media_v4.html:9
-msgid "Miniatures"
-msgstr ""
-
-#: templates/components/core/product/_media_v4.html:20
-#, python-format
-msgid "Miniature %(n)s"
-msgstr ""
-
-#: templates/components/core/product/_media_v4.html:36
-#, python-format
-msgid "Image %(index)s sur %(total)s"
 msgstr ""
 
 #: templates/components/core/product/_options.html:6
@@ -2840,12 +2723,4 @@ msgstr ""
 
 #: templates/components/core/product/hero.html:23
 msgid "Ce formulaire necessite une configuration."
-msgstr ""
-
-#: templates/components/core/sticky/buybar_v2/buybar_v2.html:8
-msgid "Barre d’achat compacte"
-msgstr ""
-
-#: templates/components/core/sticky/buybar_v2/buybar_v2.html:11
-msgid "Masquer la barre"
 msgstr ""

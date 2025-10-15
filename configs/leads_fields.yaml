@@ -1,39 +1,69 @@
 # configs/leads_fields.yaml
 global:
   require_idempotency_header: true
-  client_ts_max_skew_seconds: 7200
+  client_ts_max_skew_seconds: 7200  # 2h
   signed_token_required: true
+  signing:
+    drop_empty: true
 
 form_kinds:
-  checkout_intent:
+  email_ebook:
     fields:
-      # identité / contact
       email: { required: false, max_length: 254, validators: ["email"] }
-      phone: { required: true, hard_required: true, max_length: 32, validators: ["phone"] }
-      full_name: { required: false, max_length: 150 }
+      first_name: { required: false, max_length: 100 }
+      ebook_id: { required: false, max_length: 64 }
+      newsletter_optin: { required: false, type: bool }
+  contact_full:
+    fields:
       first_name: { required: false, max_length: 100 }
       last_name: { required: false, max_length: 100 }
-
-      # adresse (les vrais champs utilisés par le stepper)
+      email: { required: false, max_length: 254, validators: ["email"] }
+      phone: { required: false, max_length: 32, validators: ["phone"] }
       address_line1: { required: false, max_length: 200 }
       address_line2: { required: false, max_length: 200 }
       city: { required: false, max_length: 100 }
       state: { required: false, max_length: 100 }
       postal_code: { required: false, max_length: 20, validators: ["postal"] }
       country: { required: false, max_length: 2 }
-
-      # paiement / panier
-      currency: { required: false, max_length: 3 }
-      payment_mode: { required: false, hard_required: true, max_length: 16 }
-      payment_method: { required: false, max_length: 16 }
-      promotion_selected: { required: false, max_length: 64 }
-
-      # packs / quantités / cross-sell
-      pack_slug: { required: false, hard_required: true, max_length: 64 }
+      message: { required: false, max_length: 2000 }
+      preferred_channel: { required: false, max_length: 16 }
+  checkout_intent:
+    fields:
+      course_slug: { required: true, max_length: 220 }
+      pack_slug: { required: false, max_length: 64 }
+      currency: { required: true, max_length: 3 }
+      coupon_code: { required: false, max_length: 64 }
+      full_name: { required: false, max_length: 150 }
+      first_name: { required: false, max_length: 100 }
+      last_name: { required: false, max_length: 100 }
+      email: { required: false, max_length: 254, validators: ["email"] }
+      phone: { required: false, max_length: 32, validators: ["phone"] }
+      billing_address_line1: { required: false, max_length: 200 }
+      billing_address_line2: { required: false, max_length: 200 }
+      billing_city: { required: false, max_length: 100 }
+      billing_state: { required: false, max_length: 100 }
+      billing_postal_code: { required: false, max_length: 20, validators: ["postal"] }
+      billing_country: { required: false, max_length: 2 }
+      company_name: { required: false, max_length: 150 }
+      tax_id_type: { required: false, max_length: 16 }
+      tax_id: { required: false, max_length: 32 }
+      save_customer: { required: false, type: bool }
+      accept_terms: { required: true, type: bool }
+      invoice_language: { required: false, max_length: 8 }
+      product: { required: false, max_length: 220 }
       offer_key: { required: false, max_length: 64 }
-      quantity: { required: false, max_length: 4 }
+      quantity: { required: false }
       bump_optin: { required: false, type: bool }
-      context.complementary_slugs: { required: false, type: list }
+      promotion_selected: { required: false, max_length: 64 }
+      address_raw: { required: false, max_length: 400 }
+      payment_method: { required: false, max_length: 16 }
+      payment_mode: { required: false, max_length: 32 }
+      wa_optin: { required: false, type: bool }
+  product_lead:
+    fields:
+      full_name: { required: true }
+      phone: { required: true, min_digits: 6 }
+      email: { required: false, validators: ["email"] }
+      address: { required: false }
 
-      # légal
-      accept_terms: { required: true, hard_required: true, type: bool }
+campaign_overrides: {}

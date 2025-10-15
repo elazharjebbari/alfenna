@@ -9,6 +9,7 @@
   --radius-sm: .25rem;
   --radius-md: .5rem;
   --radius-lg: .75rem;
+  --header-offset: 8rem;
 }
 
 html { box-sizing: border-box; }
@@ -26,6 +27,10 @@ body {
                "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body.has-floating-header main#content {
+  padding-top: var(--header-offset, 8rem);
 }
 
 .visually-hidden {

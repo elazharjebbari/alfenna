@@ -82,32 +82,36 @@ pages:
 
   product_detail:
     meta:
-      title: "Produit"
-      description: "Fiche detaillee d'un produit alfenna."
+      title: "t:product_detail.meta.title"
+      description: "t:product_detail.meta.description"
     slots:
       vendors:
         component: "vendors/core"
       header:
         component: "header/modes"
+      language_switch:
+        component: "lang/switcher"
       product_hero:
         component: "core/product"
         params:
           lookup:
             slug: "{{ url.kwargs.product_slug }}"
-#          product:
-#            id: "demo-product"
-#            name: "Sajadat Al-Raha"
-#            description: "Tapis de priere a memoire de forme pour un confort maximal."
-#            price: 399
-#            promo_price: 329
-#            currency: "MAD"
-#            badges:
-#              - { icon: "fas fa-truck", text: "Livraison 48h" }
-#              - { icon: "fas fa-money-bill", text: "Paiement a la livraison" }
-#            highlights:
-#              - "Soulage genoux et dos"
-#              - "Mousse memo haute densite"
-#              - "Housse antiderapante"
+          product:
+            slug: "pack-cosmetique-naturel"
+            id: "pack-cosmetique-naturel"
+            name: "t:product_detail.hero.name"
+            subname: "t:product_detail.hero.subname"
+            description: "t:product_detail.hero.description"
+            price: 450
+            promo_price: 347
+            currency: "MAD"
+            badges:
+              - { icon: "fa-solid fa-leaf", text: "t:product_detail.hero.badges.natural" }
+              - { icon: "fas fa-money-bill", text: "t:product_detail.hero.badges.cod" }
+            highlights:
+              - "t:product_detail.hero.highlights.care"
+              - "t:product_detail.hero.highlights.delivery"
+              - "t:product_detail.hero.highlights.formula"
 #          media:
 #            lightbox: true
 #            images:
@@ -124,6 +128,18 @@ pages:
               offer: "offer_key"
               product: "product"
               promotion: "promotion_selected"
+            ui_texts:
+              bullets:
+                - "t:product_detail.form.bullets.delivery"
+                - "t:product_detail.form.bullets.payment"
+                - "t:product_detail.form.bullets.guarantee"
+              payment_labels:
+                online: "t:product_detail.form.payment_labels.online"
+                cod: "t:product_detail.form.payment_labels.cod"
+              discount_label: "t:product_detail.form.discount_label"
+              total_label: "t:product_detail.form.total_label"
+              thanks_title: "t:product_detail.form.thanks_title"
+              thanks_subtitle: "t:product_detail.form.thanks_subtitle"
           tracking:
             enabled: true
             events:
@@ -131,6 +147,12 @@ pages:
               media_switch: "product_media_switch"
       sticky_buybar_v2:
         component: "sticky/buybar_v2"
+        params:
+          title_token: "t:product_detail.hero.name"
+          feature_tokens:
+            - "t:product_detail.form.bullets.delivery"
+            - "t:product_detail.form.bullets.payment"
+            - "t:product_detail.form.bullets.guarantee"
       faq:
         component: "faq/main"
       fab_whatsapp:
@@ -146,61 +168,6 @@ pages:
         cache: true
       before_after_wipe:
         component: "before-after/wipe"
-  product_detail_landing:
-    meta:
-      title: "Produit — Landing V2"
-      description: "Fiche produit optimisée pour la landing courte."
-    slots:
-      vendors:
-        component: "vendors/core"
-      header:
-        component: "header/modes"
-      product_hero:
-        component: "core/product"
-        params:
-          lookup:
-            slug: "{{ url.kwargs.product_slug }}"
-          product:
-            id: "demo-product"
-            name: "Sajadat Al-Raha"
-            description: "Tapis de priere a memoire de forme pour un confort maximal."
-            price: 399
-            promo_price: 329
-            currency: "MAD"
-            badges:
-              - { icon: "fas fa-truck", text: "Livraison 48h" }
-              - { icon: "fas fa-money-bill", text: "Paiement a la livraison" }
-            highlights:
-              - "Soulage genoux et dos"
-              - "Mousse memo haute densite"
-              - "Housse antiderapante"
-          form:
-            alias: "core/forms/form_landingpage"
-            action_url: "leads:collect"
-            fields_map:
-              fullname: "full_name"
-              phone: "phone_number"
-              city: "city"
-              email: "email"
-              payment_mode: "payment_mode"
-              pack_slug: "pack_slug"
-              complementary_slugs: "context.complementary_slugs"
-          tracking:
-            enabled: true
-            events:
-              view: "lp_variant_view_v2"
-              media_switch: "product_media_switch"
-      sticky_buybar_v2:
-        component: "sticky/buybar_v2"
-      faq:
-        component: "faq/main"
-      fab_whatsapp:
-        component: "fab/whatsapp"
-      footer:
-        component: "footer/main"
-      chatbot:
-        component: "chatbot/shell"
-        cache: false
   faq:
     meta:
       title: "Lumière Academy — Questions fréquentes"

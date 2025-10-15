@@ -1,7 +1,8 @@
-{% load static atelier_images atelier_utils %}
+{% load static atelier_images atelier_utils i18n  %}
 
 <div class="section">
-  <section class="ba-section"
+  <section class="ba-section{% if is_rtl %} ba-section-rtl{% endif %}"
+           dir="{% if is_rtl %}rtl{% else %}ltr{% endif %}"
            aria-labelledby="{{ id }}-title"
            style="--ba-bg: {{ style.bg_color|default:'#e7f8ee' }}; --ba-radius: {{ style.radius|default:20 }}px; --ba-handle: {{ style.handle_color|default:'#309255' }};">
 
@@ -18,15 +19,16 @@
       </div>
       {% endif %}
 
-      <div class="ba-wipe"
+      <div class="ba-wipe{% if is_rtl %} is-rtl{% endif %}"
            id="{{ id }}"
            role="region"
-           aria-label="Comparer l'avant et l'après"
+           aria-label="{% trans "Comparer l’avant et l’après" %}"
            data-snap="{% if options.snap_points %}{{ options.snap_points|join:',' }}{% else %}0,50,100{% endif %}"
            data-ev-view="{{ events.view|default:'ba_view' }}"
            data-ev-drag="{{ events.drag|default:'ba_drag' }}"
            data-ev-drag-end="{{ events.drag_end|default:'ba_drag_end' }}"
-           data-ev-snap-after="{{ events.snap_after|default:'ba_snap_after' }}">
+           data-ev-snap-after="{{ events.snap_after|default:'ba_snap_after' }}"
+           data-ba-rtl="{% if is_rtl %}1{% else %}0{% endif %}">
 
         <!-- AVANT -->
         <div class="ba-layer ba-before" aria-hidden="true">
@@ -38,7 +40,7 @@
             {% endfor %}
           </ul>
           {% endif %}
-          <span class="ba-corner label-left">{{ before.label|default:"Avant" }}</span>
+          <span class="ba-corner label-left">{{ before.label }}</span>
         </div>
 
         <!-- APRÈS -->
@@ -51,7 +53,7 @@
             {% endfor %}
           </ul>
           {% endif %}
-          <span class="ba-corner label-right">{{ after.label|default:"Après" }}</span>
+          <span class="ba-corner label-right">{{ after.label }}</span>
         </div>
 
         <!-- rail + range -->
@@ -59,7 +61,7 @@
           <input type="range" class="ba-range"
                  min="0" max="100" step="1"
                  value="{{ options.default_value|default:'50' }}"
-                 aria-label="Révéler l’après"
+                 aria-label="{% trans "Révéler l’après" %}"
                  aria-valuemin="0" aria-valuemax="100"
                  aria-valuenow="{{ options.default_value|default:'50' }}">
           <div class="ba-handle" aria-hidden="true"></div>
@@ -71,13 +73,13 @@
       <div class="ba-mobile-tags">
         {% if before.pills %}
         <div class="ba-chip-row">
-          <span class="ba-chip-title"><i class="fa fa-exclamation-circle"></i> Avant</span>
+          <span class="ba-chip-title"><i class="fa fa-exclamation-circle"></i> {% trans "Avant" %}</span>
           <div class="ba-chip-scroll">{% for p in before.pills %}<span class="ba-chip">{{ p.text }}</span>{% endfor %}</div>
         </div>
         {% endif %}
         {% if after.pills %}
         <div class="ba-chip-row">
-          <span class="ba-chip-title"><i class="fa fa-leaf"></i> Après</span>
+          <span class="ba-chip-title"><i class="fa fa-leaf"></i> {% trans "Après" %}</span>
           <div class="ba-chip-scroll">{% for p in after.pills %}<span class="ba-chip">{{ p.text }}</span>{% endfor %}</div>
         </div>
         {% endif %}
@@ -87,14 +89,14 @@
       <!-- actions -->
       <div class="ba-actions">
         <div class="ba-snaps">
-          <button class="ba-snap" data-snap-to="0">Avant</button>
+          <button class="ba-snap" data-snap-to="0">{% trans "Avant" %}</button>
           <button class="ba-snap" data-snap-to="50">50%</button>
-          <button class="ba-snap" data-snap-to="100">Après</button>
+          <button class="ba-snap" data-snap-to="100">{% trans "Après" %}</button>
         </div>
         {% if cta %}
         <a href="{{ cta.url|default:'#' }}" class="btn btn-primary btn-hover-dark ba-cta"
            data-ev="{{ events.cta_click|default:'ba_cta_near' }}">
-          <i class="fa fa-play-circle me-1"></i>{{ cta.label|default:"Je me lance" }}
+          <i class="fa-solid fa-bolt me-1"></i>{{ cta.label|default:"Achetez maintenant" }}
         </a>
         {% endif %}
       </div>

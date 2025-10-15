@@ -3,9 +3,11 @@ from __future__ import annotations
 from typing import Dict, Any
 import logging
 
+from django.conf import settings
 from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
 from django.template.response import TemplateResponse
+from django.templatetags.static import static
 
 from apps.atelier.compose.pages import page_meta
 from apps.atelier.config.loader import FALLBACK_NAMESPACE
@@ -87,6 +89,20 @@ def render_base(page_ctx: dict, fragments: dict, assets: dict, request):
     fragments = fragments or {}
     assets = assets or {"css": [], "js": [], "head": []}
 
+    segments = getattr(request, "_segments", None)
+    configured_default_lang = getattr(settings, "LANGUAGE_CODE", "fr")
+    lang_code = getattr(segments, "lang", None) or getattr(request, "LANGUAGE_CODE", configured_default_lang)
+    lang_code = (lang_code or configured_default_lang).lower()
+    primary_lang = lang_code.split("-")[0]
+    rtl_languages = {code.split("-")[0] for code in getattr(settings, "RTL_LANGUAGES", {"ar"})}
+    is_rtl = primary_lang in rtl_languages
+    lang_dir = "rtl" if is_rtl else "ltr"
+
+    css_assets = list(dict.fromkeys(assets.get("css", []) or []))
+    if is_rtl:
+        css_assets.append(static("css/rtl.css"))
+    css_assets = list(dict.fromkeys(css_assets))
+
     page_id = page_ctx.get("id") or ""
     namespace = page_ctx.get("site_version")
     ctx = {
@@ -94,13 +110,16 @@ def render_base(page_ctx: dict, fragments: dict, assets: dict, request):
         "page_meta": page_meta(page_id, namespace=namespace) if page_id else {},
         "slots_html": _merge_slots_context(page_ctx, fragments),
         "page_assets": {
-            "css": list(dict.fromkeys(assets.get("css", []) or [])),
+            "css": css_assets,
             "js": list(dict.fromkeys(assets.get("js", []) or [])),
             "head": list(dict.fromkeys(assets.get("head", []) or [])),
         },
         "qa_preview": bool(page_ctx.get("qa_preview")),
         "content_rev": page_ctx.get("content_rev"),
         "site_version": namespace,
+        "lang_code": lang_code,
+        "lang_dir": lang_dir,
+        "is_rtl": is_rtl,
     }
 
     template_name = _choose_template(page_ctx)

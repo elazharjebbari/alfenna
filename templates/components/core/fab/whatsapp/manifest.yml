@@ -9,14 +9,15 @@ assets:
   vendors: []
 
 params:
-  label: "Besoin d’aide ?"
+  label: "t:fab.whatsapp.label"
+  aria_label: "t:fab.whatsapp.aria_label"
   icon_mode: "vendor"
   icon_vendor: "icofont-whatsapp"
   icon_svg: ""
   offset_bottom: 120
   offset_right: 16
   phone_tel: "+212719646705"
-  prefill_text: "Bonjour, je souhaite commander le pack Alfenna."
+  prefill_text: "t:fab.whatsapp.prefill_text"
 
 contract:
   optional:
@@ -28,20 +29,22 @@ contract:
     offset_right: "Décalage droite (px)"
     phone_tel: "Numéro WhatsApp format international"
     prefill_text: "Message prérempli"
+    aria_label: "Libellé aria du bouton"
 
 hydrate:
   python: "apps.atelier.compose.hydrators.fab.hydrators.whatsapp"
   module: "apps.atelier.compose.hydrators.fab.hydrators"
   func: "whatsapp"
   params:
-    label: "Besoin d’aide ?"
+    label: "t:fab.whatsapp.label"
+    aria_label: "t:fab.whatsapp.aria_label"
     icon_mode: "vendor"
     icon_vendor: "icofont-whatsapp"
     icon_svg: ""
     offset_bottom: 130
     offset_right: 16
     phone_tel: "+212719646705"
-    prefill_text: "Bonjour, je souhaite commander le pack Alfenna !"
+    prefill_text: "t:fab.whatsapp.prefill_text"
 
 render:
   cacheable: true

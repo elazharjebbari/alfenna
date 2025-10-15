@@ -1,0 +1,23 @@
+footer:
+  brand: "Alfenna"
+  columns:
+    - title: "Liens rapides"
+    - title: "Support"
+  links:
+    store: "Boutique"
+    support: "Support"
+faq:
+  title: "Foire aux questions"
+  items:
+    q_label: "Q :"
+    a_label: "R :"
+fab:
+  label: "Aide"
+  tooltip: "Discutez avec nous"
+sticky_order:
+  cta:
+    primary: "Acheter maintenant"
+    secondary: "Ajouter au panier"
+  note: "Paiement sécurisé"
+test_i18n_component:
+  title: "Composant test"

@@ -142,45 +142,8 @@
     fieldsMap = fieldsMap || parseFieldsMap(root, cfg);
     const skipNames = new Set(["csrfmiddlewaretoken"]);
 
-    function normalizeComplementaryValue(value) {
-      if (value === undefined || value === null) return [];
-      if (Array.isArray(value)) {
-        return value
-          .map((item) => normalizeComplementaryValue(item))
-          .reduce((acc, item) => acc.concat(item), []);
-      }
-      if (typeof value === "string") {
-        const trimmed = value.trim();
-        if (!trimmed) return [];
-        if (trimmed[0] === "[" && trimmed[trimmed.length - 1] === "]") {
-          try {
-            const parsed = JSON.parse(trimmed);
-            if (Array.isArray(parsed)) {
-              return normalizeComplementaryValue(parsed);
-            }
-          } catch (_) {
-            /* ignore malformed JSON */
-          }
-        }
-        return [trimmed];
-      }
-      return [String(value).trim()].filter(Boolean);
-    }
-
     function assign(key, value) {
       if (value === null || key === "") return;
-      if (key === "context.complementary_slugs") {
-        const existing = normalizeComplementaryValue(out[key]);
-        const incoming = normalizeComplementaryValue(value);
-        if (!existing.length && !incoming.length) {
-          out[key] = [];
-          return;
-        }
-        const combined = existing.concat(incoming).filter(Boolean);
-        const unique = Array.from(new Set(combined));
-        out[key] = unique;
-        return;
-      }
       out[key] = value;
     }
 
@@ -217,77 +180,6 @@
     return out;
   }
 
-  const REQUIRED_MESSAGE = "Ce champ est obligatoire.";
-
-  function cssEscape(value) {
-    if (window.CSS && typeof window.CSS.escape === "function") {
-      return window.CSS.escape(value);
-    }
-    return String(value || '').replace(/["'\\]/g, '\\$&');
-  }
-
-  function ensureFeedback(field) {
-    const group = field.closest('.form-group, .mb-3, .form-floating') || field.parentElement;
-    if (!group) return null;
-    let feedback = group.querySelector('.invalid-feedback');
-    if (!feedback) {
-      feedback = document.createElement('div');
-      feedback.className = 'invalid-feedback';
-      group.appendChild(feedback);
-    }
-    return feedback;
-  }
-
-  function setFieldError(field, message) {
-    field.classList.toggle('is-invalid', Boolean(message));
-    try { field.setCustomValidity(message || ''); } catch (_) { /* ignore */ }
-    const fb = ensureFeedback(field);
-    if (fb) fb.textContent = message || '';
-  }
-
-  function clearFieldError(field) {
-    setFieldError(field, '');
-  }
-
-  function elementHasValue(field) {
-    if (field.disabled) return true;
-    if (field.type === 'checkbox' || field.type === 'radio') {
-      return field.checked;
-    }
-    if (field.type === 'hidden') {
-      return true;
-    }
-    return String(field.value || '').trim().length > 0;
-  }
-
-  function visibleTargets(elements) {
-    return elements.filter((el) => el.type !== 'hidden' && !el.hasAttribute('data-ff-optional'));
-  }
-
-  function validateRequiredStep(root, cfg, stepIndex) {
-    const required = progressAllowList(cfg, `step${stepIndex}`) || [];
-    if (!required.length) return true;
-    const fieldsMap = parseFieldsMap(root, cfg);
-    let ok = true;
-
-    required.forEach((key) => {
-      if (!key) return;
-      const mapped = (fieldsMap && fieldsMap[key]) || key;
-      const selector = `[name="${cssEscape(mapped)}"]`;
-      const nodes = Array.from(root.querySelectorAll(selector));
-      if (!nodes.length) return;
-      const uiNodes = visibleTargets(nodes);
-      if (!uiNodes.length) return;
-      const hasValue = nodes.some((el) => elementHasValue(el));
-      if (!hasValue) {
-        uiNodes.forEach((field) => setFieldError(field, REQUIRED_MESSAGE));
-        ok = false;
-      }
-    });
-
-    return ok;
-  }
-
   function progressAllowList(cfg, stepKey) {
     const map = (cfg && (cfg.progress_steps || cfg.progressSteps)) || {};
     if (map && typeof map === "object" && Array.isArray(map[stepKey])) {
@@ -296,39 +188,19 @@
     return null;
   }
 
-  function normalizeBooleanLike(value) {
-    if (value === null || value === undefined) return value;
-    if (typeof value === "boolean") return value;
-    const str = String(value).trim().toLowerCase();
-    if (["1", "true", "on", "yes", "y", "t"].includes(str)) return true;
-    if (["0", "false", "off", "no", "n", "f"].includes(str)) return false;
-    return value;
-  }
-
-  async function postStepProgress(root, cfg, stepKey, fields) {
+  async function sendProgressUpdate(root, cfg, stepIndex) {
+    if (!cfg) return { skipped: true };
     const url = cfg.progress_url || (cfg.backend_config && cfg.backend_config.progress_url) || PROGRESS_DEFAULT_URL;
-    if (!url) return false;
+    if (!url) return { skipped: true };
+    const stepKey = typeof stepIndex === "number" ? `step${stepIndex}` : String(stepIndex || "");
+    if (!stepKey) return { skipped: true };
 
-    try {
-      if (typeof window.ffSyncPackFields === "function") window.ffSyncPackFields();
-      if (typeof window.ffSyncComplementary === "function") window.ffSyncComplementary();
-      if (typeof window.ffSyncPaymentField === "function") window.ffSyncPaymentField();
-    } catch (e) {
-      if (window.DEBUG_FF) console.warn("[FlowForms] pre-sync failed", e);
-    }
-
-    const flowKey = cfg.flow_key || cfg.progress_flow_key || PROGRESS_DEFAULT_FLOW_KEY;
-    const sessionKey = ensureProgressSessionKey(cfg.progress_session_storage_key);
-    const formKind = cfg.form_kind || cfg.progress_form_kind || "checkout_intent";
-
-    ensureProgressHiddenFields(root, cfg, sessionKey, flowKey);
     const fieldsMap = parseFieldsMap(root, cfg);
     const allPayload = collectFields(root, cfg, fieldsMap) || {};
-    const fieldList = Array.isArray(fields) && fields.length ? fields : null;
-
+    const allowList = progressAllowList(cfg, stepKey);
     const payload = {};
-    if (fieldList) {
-      fieldList.forEach((key) => {
+    if (allowList && allowList.length) {
+      allowList.forEach((key) => {
         if (Object.prototype.hasOwnProperty.call(allPayload, key)) {
           payload[key] = allPayload[key];
         }
@@ -345,35 +217,15 @@
       });
     }
 
-    // Alias / normalisations
-    if (!payload.offer && payload.offer_key) payload.offer = payload.offer_key;
-    if (!payload.offer_key && payload.offer) payload.offer_key = payload.offer;
-    if (!payload.payment_mode && payload.payment_method) payload.payment_mode = payload.payment_method;
-    if (!payload.payment_method && payload.payment_mode) payload.payment_method = payload.payment_mode;
-
-    if (payload.bump_optin !== undefined) {
-      payload.bump_optin = normalizeBooleanLike(payload.bump_optin);
-    }
-    if (payload.accept_terms !== undefined) {
-      payload.accept_terms = normalizeBooleanLike(payload.accept_terms);
+    if (!Object.keys(payload).length) {
+      return { skipped: true };
     }
 
-    if (payload["context.complementary_slugs"] !== undefined) {
-      try {
-        const comp = payload["context.complementary_slugs"];
-        if (typeof comp === "string" && comp.trim().startsWith("[")) {
-          payload["context.complementary_slugs"] = JSON.parse(comp);
-        } else if (!Array.isArray(comp)) {
-          payload["context.complementary_slugs"] = comp ? [comp] : [];
-        }
-      } catch (_) {
-        payload["context.complementary_slugs"] = [];
-      }
-    }
+    const flowKey = cfg.flow_key || cfg.progress_flow_key || PROGRESS_DEFAULT_FLOW_KEY;
+    const sessionKey = ensureProgressSessionKey(cfg.progress_session_storage_key);
+    const formKind = cfg.form_kind || cfg.progress_form_kind || "checkout_intent";
 
-    const stepNumMatch = /step(\d+)/i.exec(stepKey || "");
-    const stepIdxForKey = stepNumMatch ? stepNumMatch[1] : stepKey;
-    const idemKey = `flow:${flowKey}:${sessionKey}:step:${stepIdxForKey}`;
+    ensureProgressHiddenFields(root, cfg, sessionKey, flowKey);
 
     const body = {
       flow_key: flowKey,
@@ -381,7 +233,6 @@
       form_kind: formKind,
       step: stepKey,
       payload,
-      _idempotency_key: idemKey,
     };
 
     try {
@@ -390,7 +241,6 @@
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
-          "X-Idempotency-Key": idemKey,
         },
         body: JSON.stringify(body),
         credentials: "same-origin",
@@ -398,30 +248,13 @@
       if (!resp.ok) {
         const txt = await resp.text().catch(() => "");
         console.warn("[FlowForms] progress failed", resp.status, txt);
-        return false;
+        return { ok: false, status: resp.status };
       }
-      return true;
+      return { ok: true, status: resp.status };
     } catch (err) {
       console.warn("[FlowForms] progress error", err);
-      return false;
+      return { ok: false, error: err };
     }
-  }
-
-  async function sendProgressUpdate(root, cfg, stepIndex) {
-    if (!cfg) return { skipped: true };
-    const stepKey = typeof stepIndex === "number" ? `step${stepIndex}` : String(stepIndex || "");
-    if (!stepKey) return { skipped: true };
-
-    const allowList = progressAllowList(cfg, stepKey);
-    let fields = allowList;
-    if (!fields || !fields.length) {
-      const fieldsMap = parseFieldsMap(root, cfg);
-      const allPayload = collectFields(root, cfg, fieldsMap) || {};
-      fields = Object.keys(allPayload);
-    }
-
-    const ok = await postStepProgress(root, cfg, stepKey, fields);
-    return ok ? { ok: true } : { ok: false };
   }
 
   function parseFloatSafe(value) {
@@ -463,20 +296,6 @@
     }
   }
 
-  function formatAmountSigned(amount, currency) {
-    const safe = Number.isFinite(amount) ? amount : 0;
-    const absValue = Math.abs(safe);
-    const base = formatAmount(absValue, currency);
-    if (safe < 0) {
-      if (base.startsWith("-")) return base;
-      return `-${base}`;
-    }
-    if (safe === 0) {
-      return formatAmount(0, currency);
-    }
-    return base;
-  }
-
   function setText(root, selector, text) {
     const el = root && root.querySelector ? root.querySelector(selector) : null;
     if (el) el.textContent = text;
@@ -490,129 +309,54 @@
 
   function updateCheckoutSummary(root, hints, totals) {
     if (!totals) return;
-    const currency = totals.currency || (hints && hints.currency) || "MAD";
-    const step2State = totals.step2 ? Object.assign({}, totals.step2) : null;
-    const step3State = totals.step3 ? Object.assign({}, totals.step3) : null;
-
-    const fallbackSubtotal = Number.isFinite(totals.subtotal) ? totals.subtotal : 0;
-    const fallbackDiscount = Number.isFinite(totals.discountBase)
-      ? Math.max(totals.discountBase, 0)
-      : Math.abs(Number.isFinite(totals.discount) ? totals.discount : 0);
-
-    const step2Subtotal = Number.isFinite(step2State && step2State.subtotal) ? step2State.subtotal : fallbackSubtotal;
-    const step2Discount = Number.isFinite(step2State && step2State.discount)
-      ? step2State.discount
-      : -Math.min(fallbackDiscount, step2Subtotal);
-    const step2Total = Number.isFinite(step2State && step2State.total)
-      ? step2State.total
-      : step2Subtotal + step2Discount;
-
-    const step3Subtotal = Number.isFinite(step3State && step3State.subtotal) ? step3State.subtotal : step2Subtotal;
-    const step3Discount = Number.isFinite(step3State && step3State.discount)
-      ? step3State.discount
-      : (totals.paymentMethod === "online" ? -Math.min(fallbackDiscount, step3Subtotal) : 0);
-    const step3Total = Number.isFinite(step3State && step3State.total)
-      ? step3State.total
-      : step3Subtotal + step3Discount;
-
-    setText(root, "#af-subtotal", formatAmount(step2Subtotal, currency));
-    setText(root, "#af-discount", formatAmountSigned(step2Discount, currency));
-    setText(root, "#af-total", formatAmount(step2Total, currency));
-    setText(root, "#af-step3-subtotal", formatAmount(step3Subtotal, currency));
-    setText(root, "#af-step3-discount", formatAmountSigned(step3Discount, currency));
-    setText(root, "#af-step3-total", formatAmount(step3Total, currency));
-    toggleVisibility(root, "#af-step3-discount-row", Math.abs(step3Discount || 0) > 0.0001);
+    const currency = (hints && hints.currency) || "MAD";
+    const subtotal = totals.subtotal || 0;
+    const discount = totals.discount || 0;
+    const total = totals.total || 0;
+    setText(root, "#af-subtotal", formatAmount(subtotal, currency));
+    setText(root, "#af-discount", discount > 0 ? `-${formatAmount(discount, currency)}` : formatAmount(0, currency));
+    setText(root, "#af-total", formatAmount(total, currency));
+    setText(root, "#af-step3-subtotal", formatAmount(subtotal, currency));
+    setText(root, "#af-step3-discount", discount > 0 ? `-${formatAmount(discount, currency)}` : formatAmount(0, currency));
+    setText(root, "#af-step3-total", formatAmount(total, currency));
+    toggleVisibility(root, "#af-step3-discount-row", discount > 0.0001);
 
     const onlineSpan = root && root.querySelector ? root.querySelector("#af-online-discount") : null;
     if (onlineSpan) {
-      const baseDiscount = Math.min(Math.abs(step2Discount || 0), Math.max(step2Subtotal, 0));
-      if (baseDiscount > 0) {
+      const baseDiscount = hints && hints.onlineDiscount ? Number(hints.onlineDiscount) : 0;
+      if (discount > 0) {
+        onlineSpan.textContent = `-${formatAmount(discount, currency)} de réduction`;
+      } else if (baseDiscount > 0) {
         onlineSpan.textContent = `-${formatAmount(baseDiscount, currency)} de réduction`;
-      } else if (hints && Number.isFinite(hints.onlineDiscount) && hints.onlineDiscount > 0) {
-        onlineSpan.textContent = `-${formatAmount(Math.abs(hints.onlineDiscount), currency)} de réduction`;
       }
     }
   }
 
   function enrichCheckout(root, finalBody, fieldsMap, hints) {
-    hints = hints || {};
+    if (!hints) return null;
     fieldsMap = fieldsMap || {};
-
     const paymentField = fieldsMap.payment_method || fieldsMap.paymentMethod || "payment_method";
     const quantityField = fieldsMap.quantity || "quantity";
     const bumpField = fieldsMap.bump || fieldsMap.bump_optin || "bump_optin";
-
     const paymentRaw = finalBody[paymentField];
     const paymentMethod = (paymentRaw || "").toString().toLowerCase() || "cod";
-
-    let quantity = parseInt(finalBody[quantityField], 10);
+    const quantityRaw = finalBody[quantityField];
+    let quantity = parseInt(quantityRaw, 10);
     if (!Number.isFinite(quantity) || quantity <= 0) quantity = 1;
-
-    const bumpValue = finalBody[bumpField];
-    const bumpSelected = bumpValue === true || bumpValue === 1 || bumpValue === "1" || bumpValue === "true" || bumpValue === "on";
-
-    const pricingState = (typeof window.ffComputePricingTotals === "function" && window.ffComputePricingTotals(root)) || (root && root.__afPricingState) || null;
-
-    let currency = hints.currency || "MAD";
-    let packUnitPrice = 0;
-    let subtotal = 0;
-    let bumpAmount = 0;
-    let baseDiscount = 0;
-
-    if (pricingState) {
-      if (pricingState.currency) {
-        currency = pricingState.currency;
-      } else if (pricingState.pack && pricingState.pack.currency) {
-        currency = pricingState.pack.currency;
-      }
-      if (pricingState.pack && Number.isFinite(pricingState.pack.unitPrice)) {
-        packUnitPrice = pricingState.pack.unitPrice;
-      }
-      if (Number.isFinite(pricingState.quantity)) {
-        quantity = pricingState.quantity;
-      }
-      if (pricingState.bump) {
-        if (Number.isFinite(pricingState.bump.total)) {
-          bumpAmount = pricingState.bump.total;
-        } else if (pricingState.bump.selected && Number.isFinite(pricingState.bump.unitPrice)) {
-          bumpAmount = pricingState.bump.unitPrice;
-        }
-      }
-      if (Number.isFinite(pricingState.subtotal)) {
-        subtotal = pricingState.subtotal;
-      }
-      if (pricingState.discount && Number.isFinite(pricingState.discount.online)) {
-        baseDiscount = Math.max(pricingState.discount.online, 0);
-      }
+    const unitPrice = Number.isFinite(hints.unitPrice) ? hints.unitPrice : (Number.isFinite(hints.promoPrice) ? hints.promoPrice : (Number.isFinite(hints.basePrice) ? hints.basePrice : 0));
+    const subtotal = Math.max(unitPrice, 0) * quantity;
+    const bumpSelected = finalBody[bumpField] !== undefined && finalBody[bumpField] !== null && finalBody[bumpField] !== "" && finalBody[bumpField] !== false && finalBody[bumpField] !== "0";
+    const bumpAmount = bumpSelected && Number.isFinite(hints.bumpPrice) ? Math.max(hints.bumpPrice, 0) : 0;
+    let discount = 0;
+    if (paymentMethod === "online" && Number.isFinite(hints.onlineDiscount) && hints.onlineDiscount > 0) {
+      discount = Math.min(hints.onlineDiscount, subtotal);
     }
-
-    if (!Number.isFinite(subtotal) || subtotal <= 0) {
-      const hintsUnit = Number.isFinite(hints.unitPrice)
-        ? hints.unitPrice
-        : (Number.isFinite(hints.promoPrice)
-            ? hints.promoPrice
-            : (Number.isFinite(hints.basePrice) ? hints.basePrice : 0));
-      packUnitPrice = Number.isFinite(packUnitPrice) && packUnitPrice > 0 ? packUnitPrice : (hintsUnit || 0);
-      bumpAmount = bumpSelected && Number.isFinite(hints.bumpPrice) ? Math.max(hints.bumpPrice, 0) : bumpAmount;
-      subtotal = Math.max(packUnitPrice, 0) * quantity + Math.max(bumpAmount, 0);
-    }
-
-    if (!Number.isFinite(baseDiscount) || baseDiscount < 0) {
-      const hintsDiscount = Number.isFinite(hints.onlineDiscount) ? hints.onlineDiscount : 0;
-      baseDiscount = Math.max(Math.min(hintsDiscount, subtotal), 0);
-    }
-
-    baseDiscount = Math.min(baseDiscount, subtotal);
-    const discountApplied = paymentMethod === "online" ? baseDiscount : 0;
-    const total = Math.max(subtotal - discountApplied, 0);
+    const total = Math.max(subtotal - discount + bumpAmount, 0);
     const amountMinor = Math.round(total * 100);
-
     finalBody.amount_minor = amountMinor;
     finalBody.amount_cents = amountMinor;
-    finalBody.amount = amountMinor;
-
-    if (!finalBody.currency && currency) {
-      finalBody.currency = currency;
+    if (!finalBody.currency && hints.currency) {
+      finalBody.currency = hints.currency;
     }
     if (!finalBody.product_id && hints.productId) {
       finalBody.product_id = hints.productId;
@@ -626,130 +370,27 @@
     if (!finalBody.course_slug && finalBody.product_slug) {
       finalBody.course_slug = finalBody.product_slug;
     }
-
-    finalBody.online_discount_amount = discountApplied;
-    finalBody.online_discount_minor = Math.round(discountApplied * 100);
-    finalBody.checkout_discount_amount = baseDiscount;
-    finalBody.checkout_discount_minor = Math.round(baseDiscount * 100);
+    finalBody.online_discount_amount = discount;
+    finalBody.online_discount_minor = Math.round(discount * 100);
     finalBody.checkout_bump_amount = bumpAmount;
-    finalBody.checkout_bump_minor = Math.round(Math.max(bumpAmount, 0) * 100);
-    finalBody.checkout_subtotal_minor = Math.round(Math.max(subtotal, 0) * 100);
+    finalBody.checkout_bump_minor = Math.round(bumpAmount * 100);
+    finalBody.checkout_subtotal_minor = Math.round(subtotal * 100);
     finalBody.checkout_total_minor = amountMinor;
-
-    if (!finalBody.line_items) {
-      const liCurrency = (finalBody.currency || currency || "MAD").toLowerCase();
-      finalBody.line_items = [
-        {
-          price_data: {
-            currency: liCurrency,
-            unit_amount: amountMinor,
-          },
-          quantity: 1,
-        },
-      ];
-    }
-
     return {
       subtotal,
-      discount: discountApplied,
-      discountBase: baseDiscount,
+      discount,
       bumpAmount,
       total,
       quantity,
       paymentMethod,
       amountMinor,
-      currency,
-      step2: pricingState && pricingState.totals && pricingState.totals.step2
-        ? Object.assign({}, pricingState.totals.step2)
-        : {
-            subtotal,
-            discount: -baseDiscount,
-            total: Math.max(subtotal - baseDiscount, 0),
-          },
-      step3: pricingState && pricingState.totals && pricingState.totals.step3
-        ? Object.assign({}, pricingState.totals.step3)
-        : {
-            subtotal,
-            discount: paymentMethod === "online" ? -discountApplied : 0,
-            total,
-          },
+      currency: hints.currency || "MAD",
     };
   }
 
   function buildFinalBody(root, cfg) {
     const fieldsMap = parseFieldsMap(root, cfg);
     const payload = collectFields(root, cfg, fieldsMap);
-    let complementaryFromPayload = null;
-    if (payload && Array.isArray(payload["context.complementary_slugs"])) {
-      complementaryFromPayload = payload["context.complementary_slugs"].filter(Boolean);
-      delete payload["context.complementary_slugs"];
-    }
-    const packHidden = root && root.querySelector ? root.querySelector('[data-ff-pack-slug]') : null;
-    if (packHidden) {
-      const packValue = (packHidden.value || "").trim();
-      const packKey = fieldsMap.pack_slug || "pack_slug";
-      const offerKeyName = fieldsMap.offer_key || fieldsMap.offer || "offer_key";
-      let finalPack = packValue;
-          if (!finalPack) {
-            const selectedOffer = root.querySelector(`[name="${offerKeyName}"]:checked`);
-        if (selectedOffer) {
-          const ds = selectedOffer.dataset || {};
-          finalPack = ds.ffPackSlug || selectedOffer.value || "";
-          if (!finalPack) {
-            const titleForSlug = ds.ffPackTitle || selectedOffer.value || "";
-            if (titleForSlug) {
-              finalPack = titleForSlug
-                .toString()
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, "");
-            }
-          }
-          payload[offerKeyName] = finalPack;
-          const offerAliasName = fieldsMap.offer || "offer";
-          if (offerAliasName && offerAliasName !== offerKeyName && !payload[offerAliasName]) {
-            payload[offerAliasName] = payload[offerKeyName];
-          }
-          if (ds.ffPackTitle && root.querySelector('[data-ff-pack-field="title"]')) {
-            root.querySelector('[data-ff-pack-field="title"]').value = ds.ffPackTitle || "";
-          }
-          if (ds.ffPackPrice && root.querySelector('[data-ff-pack-field="price"]')) {
-            root.querySelector('[data-ff-pack-field="price"]').value = ds.ffPackPrice || "";
-          }
-          if (ds.ffPackCurrency && root.querySelector('[data-ff-pack-field="currency"]')) {
-            root.querySelector('[data-ff-pack-field="currency"]').value = ds.ffPackCurrency || "";
-          }
-        }
-      }
-      if (finalPack) {
-        payload[packKey] = finalPack;
-        packHidden.value = finalPack;
-        payload[offerKeyName] = finalPack;
-      }
-    }
-
-    const paymentKey = fieldsMap.payment_mode || "payment_mode";
-    const paymentMethodKey = fieldsMap.payment_method || fieldsMap.paymentMethod || "payment_method";
-    const paymentValue = (payload[paymentKey] || payload[paymentMethodKey] || "").toString().trim();
-    if (paymentValue) {
-      payload[paymentKey] = paymentValue;
-      payload[paymentMethodKey] = paymentValue;
-      if (paymentKey !== "payment_mode") payload.payment_mode = paymentValue;
-      payload.payment_method = paymentValue;
-    }
-
-    if (payload.bump_optin !== undefined) {
-      const rawBump = payload.bump_optin;
-      const bumpValue = rawBump === true || rawBump === 1 || rawBump === "1" || rawBump === "true" || rawBump === "on";
-      payload.bump_optin = bumpValue;
-    }
-
-    if (payload.accept_terms !== undefined) {
-      const rawTerms = payload.accept_terms;
-      payload.accept_terms = rawTerms === true || rawTerms === 1 || rawTerms === "1" || rawTerms === "true" || rawTerms === "on";
-    }
-
     payload.form_kind = cfg.form_kind || "email_ebook";
     payload.client_ts = (cfg.context && cfg.context.client_ts) || nowIso();
     if (payload.honeypot === undefined) payload.honeypot = "";
@@ -762,19 +403,9 @@
       }
     }
 
-    const mergedCtxBase = Object.assign({}, (cfg.context || {}), pick(qsParams(), [
+    const mergedCtx = Object.assign({}, (cfg.context || {}), pick(qsParams(), [
       "campaign", "source", "utm_source", "utm_medium", "utm_campaign"
     ]));
-    let mergedCtx = mergedCtxBase;
-    if (complementaryFromPayload && complementaryFromPayload.length) {
-      const existing = Array.isArray(mergedCtxBase.complementary_slugs)
-        ? mergedCtxBase.complementary_slugs.filter(Boolean)
-        : [];
-      const combined = existing.concat(complementaryFromPayload);
-      mergedCtx = Object.assign({}, mergedCtxBase, {
-        complementary_slugs: Array.from(new Set(combined.filter(Boolean)))
-      });
-    }
 
     const finalBody = Object.assign({}, payload);
     if (mergedCtx && Object.keys(mergedCtx).length) {
@@ -954,55 +585,35 @@
       const paymentMethod = (finalBody[paymentField] || "").toString().toLowerCase();
 
       if (paymentMethod === "online") {
-        const paymentHandler = (window.__StepperPayment__ && typeof window.__StepperPayment__.handleOnlineSubmit === "function")
-          ? window.__StepperPayment__.handleOnlineSubmit
-          : null;
+        const checkoutUrl = root.getAttribute("data-checkout-url") || cfg.checkout_url || cfg.checkout_endpoint_url || "/api/checkout/sessions/";
+        const checkoutHeaders = Object.assign({}, baseHeaders);
+        if (requireIdem) checkoutHeaders["X-Idempotency-Key"] = "ff-" + uuid4();
 
-        if (paymentHandler) {
-          const context = {
-            root,
-            config: cfg,
-            payload,
-            mergedCtx,
-            finalBody,
-            finalBodyToSend,
-            fieldsMap,
-          };
-          const handled = await paymentHandler(context);
-          if (!handled) {
+        const checkoutRes = await fetch(checkoutUrl, {
+          method: "POST",
+          headers: checkoutHeaders,
+          body: JSON.stringify(finalBodyToSend),
+          credentials: "same-origin",
+        });
+        const checkoutTxt = await checkoutRes.text();
+        if (window.DEBUG_FF) {
+          console.debug("[ff] checkout status", checkoutRes.status, checkoutTxt);
+        }
+        if (checkoutRes.ok) {
+          let session = null;
+          try { session = checkoutTxt ? JSON.parse(checkoutTxt) : null; } catch (_) { session = null; }
+          const redirectUrl = session && (session.url || session.redirect_url);
+          if (redirectUrl) {
+            window.location.href = redirectUrl;
             return;
           }
+          showFinalStep(root);
+          setMsg(root, "");
         } else {
-          const checkoutUrl = root.getAttribute("data-checkout-url") || cfg.checkout_url || cfg.checkout_endpoint_url || "/api/checkout/sessions/";
-          const checkoutHeaders = Object.assign({}, baseHeaders);
-          if (requireIdem) checkoutHeaders["X-Idempotency-Key"] = "ff-" + uuid4();
-
-          const checkoutRes = await fetch(checkoutUrl, {
-            method: "POST",
-            headers: checkoutHeaders,
-            body: JSON.stringify(finalBodyToSend),
-            credentials: "same-origin",
-          });
-          const checkoutTxt = await checkoutRes.text();
-          if (window.DEBUG_FF) {
-            console.debug("[ff] checkout status", checkoutRes.status, checkoutTxt);
-          }
-          if (checkoutRes.ok) {
-            let session = null;
-            try { session = checkoutTxt ? JSON.parse(checkoutTxt) : null; } catch (_) { session = null; }
-            const redirectUrl = session && (session.url || session.redirect_url);
-            if (redirectUrl) {
-              window.location.href = redirectUrl;
-              return;
-            }
-            showFinalStep(root);
-            setMsg(root, "");
-          } else {
-            setMsg(root, "Une erreur est survenue. Merci de réessayer.");
-            console.warn("[FlowForms] checkout failed:", checkoutRes.status, checkoutTxt);
-          }
-          return;
+          setMsg(root, "Une erreur est survenue. Merci de réessayer.");
+          console.warn("[FlowForms] checkout failed:", checkoutRes.status, checkoutTxt);
         }
+        return;
       }
 
       const headers = Object.assign({}, baseHeaders);
@@ -1063,12 +674,6 @@
       }
     };
 
-    const syncPackFieldsHook = () => {
-      if (typeof window.ffSyncPackFields === 'function') {
-        try { window.ffSyncPackFields(); } catch (err) { if (window.DEBUG_FF) console.warn('[ff] syncPackFields failed', err); }
-      }
-    };
-
     refreshCheckout();
 
     root.addEventListener("click", async (e) => {
@@ -1077,10 +682,6 @@
       if (t.closest("[data-ff-next]")) {
         e.preventDefault();
         const cur = getCurrentStep(root);
-        if (!validateRequiredStep(root, cfg, cur)) {
-          return;
-        }
-        syncPackFieldsHook();
         const max = getMaxStep(root);
         if (progressActive && cur < max) {
           try {
@@ -1107,7 +708,6 @@
       const target = event.target;
       if (!target) return;
       if (target.matches("input, select, textarea")) {
-        clearFieldError(target);
         setTimeout(refreshCheckout, 0);
       }
     });
@@ -1115,9 +715,6 @@
     root.addEventListener("input", (event) => {
       const target = event.target;
       if (!target) return;
-      if (target.matches('input, select, textarea')) {
-        clearFieldError(target);
-      }
       if (target.matches('[data-ff-field="quantity"], [name*="quantity"], input[type="number"], input[data-ff-cast="int"], input[data-ff-cast="float"]')) {
         setTimeout(refreshCheckout, 0);
       }
@@ -1127,18 +724,6 @@
       const btn = e.target && e.target.closest && e.target.closest("[data-ff-submit]");
       if (!btn) return;
       e.preventDefault();
-      const cur = getCurrentStep(root);
-      if (!validateRequiredStep(root, cfg, cur)) {
-        return;
-      }
-      syncPackFieldsHook();
-      if (progressActive) {
-        try {
-          await sendProgressUpdate(root, cfg, cur);
-        } catch (err) {
-          console.warn("[FlowForms] progress (submit) threw", err);
-        }
-      }
       await handleSubmit(root, Object.assign({}, cfg));
     });
   }

@@ -3,8 +3,9 @@ from urllib.parse import quote_plus
 
 from django.db import models
 from django.templatetags.static import static
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, get_language
 
+from apps.atelier.i18n.translation_service import TranslationService
 from apps.catalog.models.models_catalog import Gallery, GalleryItem
 
 
@@ -109,9 +110,6 @@ def participants(request, params: Dict[str, Any]) -> Dict[str, Any]:
             items_qs = items_qs.filter(models.Q(product_code=pc) | models.Q(product_code=""))
         items_qs = items_qs.order_by("sort_order", "id")
 
-    print('-'*30)
-    print('-'*30)
-    print('gal.pk : %s' % gal.id)
     items: List[Dict[str, Any]] = [_item_to_ctx(it) for it in items_qs]
 
     # En-têtes & preuves (db-first → override par params au besoin)
@@ -152,5 +150,10 @@ def participants(request, params: Dict[str, Any]) -> Dict[str, Any]:
             "close": _("Fermer"),
         }
     }
-    print(context)
-    return context
+
+    translator = TranslationService(
+        locale=getattr(request, "LANGUAGE_CODE", None) or get_language() or "fr",
+        site_version=getattr(request, "site_version", None) or "core",
+    )
+    translated_context = translator.walk(context)
+    return translated_context

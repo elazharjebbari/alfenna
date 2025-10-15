@@ -1,45 +1,22 @@
 {% load static i18n safeget %}
 {% url 'leads:collect' as leads_collect_url %}
 {% url 'leads:sign' as leads_sign_url %}
-{% with fm=fields_map %}
+{% with fullname_key=fields_map|safeget:'fullname'|default:'full_name' phone_key=fields_map|safeget:'phone'|default:fields_map|safeget:'phone_number'|default:'phone' email_key=fields_map|safeget:'email'|default:'email' address_line1_key=fields_map|safeget:'address_line1'|default:fields_map|safeget:'address'|default:'address_line1' address_line2_key=fields_map|safeget:'address_line2'|default:'address_line2' city_key=fields_map|safeget:'city'|default:'city' state_key=fields_map|safeget:'state'|default:'state' postal_code_key=fields_map|safeget:'postal_code'|default:'postal_code' country_key=fields_map|safeget:'country'|default:'country' quantity_key=fields_map|safeget:'quantity'|default:'quantity' offer_key=fields_map|safeget:'offer'|default:'offer_key' pack_slug_key=fields_map|safeget:'pack_slug'|default:'pack_slug' product_key=fields_map|safeget:'product'|default:'product' promotion_key=fields_map|safeget:'promotion'|default:'promotion_selected' payment_mode_key=fields_map|safeget:'payment_mode'|default:fields_map|safeget:'payment_method'|default:'payment_method' payment_method_key=fields_map|safeget:'payment_method'|default:fields_map|safeget:'payment_mode'|default:'payment_method' bump_key=fields_map|safeget:'bump'|default:'bump_optin' wa_key=fields_map|safeget:'wa_optin'|default:'wa_optin' flow_key=form.flow_key|default:'checkout_intent_flow' ui_texts=form.ui_texts %}
 {% with action_target=action_url|default:leads_collect_url %}
 
 <form id="form-stepper" class="c-lead-form c-lead-form--stepper af-form card border-0 shadow-sm"
       data-ff-root data-steps="4" method="post" action=""
       data-action-url="{{ action_target }}"
       data-require-signed="true" data-sign-url="{{ leads_sign_url }}"
-      data-fields-map='{"fullname":"{{ fm|safeget:'fullname'|default:'full_name' }}","phone":"{{ fm|safeget:'phone'|default:'phone' }}","email":"{{ fm|safeget:'email'|default:'email' }}","address_line1":"{{ fm|safeget:'address_line1'|default:'address_line1' }}","address_line2":"{{ fm|safeget:'address_line2'|default:'address_line2' }}","city":"{{ fm|safeget:'city'|default:'city' }}","state":"{{ fm|safeget:'state'|default:'state' }}","postal_code":"{{ fm|safeget:'postal_code'|default:'postal_code' }}","country":"{{ fm|safeget:'country'|default:'country' }}","quantity":"{{ fm|safeget:'quantity'|default:'quantity' }}","offer":"{{ fm|safeget:'offer'|default:'offer_key' }}","pack_slug":"{{ fm|safeget:'pack_slug'|default:'pack_slug' }}","product":"{{ fm|safeget:'product'|default:'product' }}","promotion":"{{ fm|safeget:'promotion'|default:'promotion_selected' }}","payment_mode":"{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}","payment_method":"{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}","bump":"{{ fm|safeget:'bump'|default:'bump_optin' }}","wa_optin":"{{ fm|safeget:'wa_optin'|default:'wa_optin' }}","context.complementary_slugs":"context.complementary_slugs"}'
+      data-fields-map='{"fullname":"{{ fullname_key }}","phone":"{{ phone_key }}","email":"{{ email_key }}","address_line1":"{{ address_line1_key }}","address_line2":"{{ address_line2_key }}","city":"{{ city_key }}","state":"{{ state_key }}","postal_code":"{{ postal_code_key }}","country":"{{ country_key }}","quantity":"{{ quantity_key }}","offer":"{{ offer_key }}","pack_slug":"{{ pack_slug_key }}","product":"{{ product_key }}","promotion":"{{ promotion_key }}","payment_mode":"{{ payment_mode_key }}","payment_method":"{{ payment_method_key }}","bump":"{{ bump_key }}","wa_optin":"{{ wa_key }}","context.complementary_slugs":"context.complementary_slugs"}'
       data-checkout-url="/api/checkout/sessions/"
       novalidate>
     {% csrf_token %}
-    <input type="hidden" name="{{ fm|safeget:'product'|default:'product' }}" value="{{ product.id|default:product.slug }}" data-ff-product>
-            <input type="hidden" name="{{ fm|safeget:'course_slug'|default:'course_slug' }}" value="{{ checkout_hints.course_slug|default:product.slug|default:'' }}" data-ff-course-slug>
-    <input type="hidden" name="{{ fm|safeget:'currency'|default:'currency' }}" value="{{ pricing.currency|default:'MAD' }}" data-ff-currency-field>
+    <input type="hidden" name="{{ product_key }}" value="{{ product.id|default:product.slug }}" data-ff-product>
     <input type="hidden" name="ff_session_key" value="" data-ff-session-key>
-    <input type="hidden" name="ff_flow_key" value="{{ form.flow_key|default:'checkout_intent_flow' }}" data-ff-flow-key>
-    <input type="hidden" name="{{ fm|safeget:'promotion'|default:'promotion_selected' }}" value="" data-ff-promo>
-    <input type="hidden" name="{{ fm|safeget:'quantity'|default:'quantity' }}" value="1" data-ff-quantity-default>
-
-    {% if checkout_bootstrap %}
-      <script>
-        (function () {
-          const bootstrap = {
-            checkoutKind: "pack",
-            productSlug: "{{ checkout_hints.product_slug|default:product.slug|default:''|escapejs }}",
-            currency: "{{ checkout_hints.currency|default:pricing.currency|default:'MAD'|upper|escapejs }}",
-            stripePK: "{{ checkout_bootstrap.stripe_publishable_key|default_if_none:''|escapejs }}",
-            endpoints: {
-              preview: "{{ checkout_bootstrap.preview_url|escapejs }}",
-              createIntent: "{{ checkout_bootstrap.intent_url|escapejs }}"
-            }
-          };
-          if (!bootstrap.stripePK) {
-            console.warn('[checkout] STRIPE_PUBLISHABLE_KEY is empty; payment element will not initialize.');
-          }
-          window.__CHECKOUT__ = Object.assign({}, window.__CHECKOUT__ || {}, bootstrap);
-        })();
-      </script>
-    {% endif %}
+    <input type="hidden" name="ff_flow_key" value="{{ flow_key }}" data-ff-flow-key>
+    <input type="hidden" name="{{ promotion_key }}" value="" data-ff-promo>
+    <input type="hidden" name="{{ quantity_key }}" value="1" data-ff-quantity-default>
 
     <div class="af-shell">
 
@@ -69,17 +46,17 @@
                         <div class="af-left h-100">
                             <div class="af-small">{% trans "Seulement" %}</div>
                             {% if pricing.has_promo %}
-                            <div class="af-price-now">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency }}
+                            <div class="af-price-now">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency }}
                             </div>
-                            <div class="af-price-old mt-1">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}
+                            <div class="af-price-old mt-1">{{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency }}
                             </div>
                             <div class="af-saving mt-2">
-                                {% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency %}
-                                Vous économisez {{ amount }} {{ currency }}
+                                {% blocktrans trimmed with amount=pricing.savings|floatformat:0 currency=pricing.currency_label|default:pricing.currency_display|default:pricing.currency %}
+                                  Vous économisez {{ amount }} {{ currency }}
                                 {% endblocktrans %}
                             </div>
                             {% elif pricing.price %}
-                            <div class="af-price-now">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</div>
+                            <div class="af-price-now">{{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency }}</div>
                             {% endif %}
                         </div>
                     </div>
@@ -111,8 +88,8 @@
             <div class="vstack gap-3">
                 <div>
                     <label class="af-label" for="ff-fullname">{% trans "Nom complet" %}</label>
-        <input id="ff-fullname" class="form-control" type="text" data-ff-optional
-               name="{{ fm|safeget:'fullname'|default:'full_name' }}" autocomplete="name"
+                    <input id="ff-fullname" class="form-control" type="text"
+                           name="{{ fullname_key }}" autocomplete="name" required
                            placeholder="{% trans 'Ex. Salma Benali' %}">
                 </div>
 
@@ -121,75 +98,75 @@
                     <div class="input-group">
                         <span class="input-group-text">+212 / 06</span>
                         <input id="ff-phone" type="tel" class="form-control"
-                               name="{{ fm|safeget:'phone'|default:'phone' }}" inputmode="tel" autocomplete="tel"
+                               name="{{ phone_key }}" inputmode="tel" autocomplete="tel"
                                minlength="6" maxlength="20" required
                                placeholder="{% trans 'WhatsApp ou mobile actif' %}">
-                        <div class="invalid-feedback">{% trans "Merci d'indiquer un numéro de téléphone" %}</div>
                     </div>
                     <div class="form-text mt-1">{% trans "Format libre. Les caractères non numériques seront nettoyés automatiquement." %}</div>
                 </div>
 
-                <div>
-                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>
-        <input id="ff-email-step1" type="email" class="form-control" data-ff-optional
-               name="{{ fm|safeget:'email'|default:'email' }}" autocomplete="email"
-                           data-ff-email-primary
-                           placeholder="{% trans 'Ex. salma@example.com' %}">
-                </div>
+<!--                <div>-->
+<!--                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>-->
+<!--                    <input id="ff-email-step1" type="email" class="form-control"-->
+<!--                           name="{{ email_key }}" autocomplete="email" required-->
+<!--                           data-ff-email-primary-->
+<!--                           placeholder="{% trans 'Ex. salma@example.com' %}">-->
+<!--                </div>-->
 
                 <div>
                     <label class="af-label" for="ff-address-line1">{% trans "Adresse de livraison" %}</label>
-        <input id="ff-address-line1" class="form-control" type="text" data-ff-optional
-               name="{{ fm|safeget:'address_line1'|default:'address_line1' }}" autocomplete="address-line1"
+                    <input id="ff-address-line1" class="form-control" type="text"
+                           name="{{ address_line1_key }}" autocomplete="address-line1" required
                            placeholder="{% trans 'Rue, quartier' %}">
                 </div>
 
-                <div>
-                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>
-                    <input id="ff-address-line2" class="form-control" type="text" data-ff-optional
-                           name="{{ fm|safeget:'address_line2'|default:'address_line2' }}" autocomplete="address-line2"
-                           placeholder="{% trans 'Appartement, étage, référence' %}">
-                </div>
+<!--                <div>-->
+<!--                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>-->
+<!--                    <input id="ff-address-line2" class="form-control" type="text"-->
+<!--                           name="{{ address_line2_key }}" autocomplete="address-line2"-->
+<!--                           placeholder="{% trans 'Appartement, étage, référence' %}">-->
+<!--                </div>-->
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>
-                        <input id="ff-city" class="form-control" type="text" data-ff-optional
-                               name="{{ fm|safeget:'city'|default:'city' }}" autocomplete="address-level2"
-                               placeholder="{% trans 'Ex. Casablanca' %}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>
-                        <input id="ff-state" class="form-control" type="text" data-ff-optional
-                               name="{{ fm|safeget:'state'|default:'state' }}" autocomplete="address-level1"
-                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">
-                    </div>
-                </div>
+<!--                <div class="row g-3">-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>-->
+<!--                        <input id="ff-city" class="form-control" type="text"-->
+<!--                               name="{{ city_key }}" autocomplete="address-level2" required-->
+<!--                               placeholder="{% trans 'Ex. Casablanca' %}">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>-->
+<!--                        <input id="ff-state" class="form-control" type="text"-->
+<!--                               name="{{ state_key }}" autocomplete="address-level1"-->
+<!--                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>
-                        <input id="ff-postal" class="form-control" type="text" data-ff-optional
-                               name="{{ fm|safeget:'postal_code'|default:'postal_code' }}" autocomplete="postal-code"
-                               placeholder="20000">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>
-                        <select id="ff-country" class="form-select" data-ff-optional
-                                name="{{ fm|safeget:'country'|default:'country' }}" autocomplete="country" >
-                            <option value="">{% trans "Choisissez" %}</option>
-                            <option value="MA" selected>Maroc</option>
-                            <option value="FR">France</option>
-                            <option value="ES">Espagne</option>
-                            <option value="BE">Belgique</option>
-                            <option value="CH">Suisse</option>
-                            <option value="CA">Canada</option>
-                        </select>
-                    </div>
-                </div>
+<!--                <div class="row g-3">-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>-->
+<!--                        {% trans 'Ex. 20000' as default_postal_placeholder %}-->
+<!--                        <input id="ff-postal" class="form-control" type="text"-->
+<!--                               name="{{ postal_code_key }}" autocomplete="postal-code" required-->
+<!--                               placeholder="{{ ui_texts.postal_placeholder|default:default_postal_placeholder }}">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>-->
+<!--                        <select id="ff-country" class="form-select"-->
+<!--                                name="{{ country_key }}" autocomplete="country" required>-->
+<!--                            <option value="">{% trans "Choisissez" %}</option>-->
+<!--                            <option value="MA" selected>{% trans "Maroc" %}</option>-->
+<!--                            <option value="FR">{% trans "France" %}</option>-->
+<!--                            <option value="ES">{% trans "Espagne" %}</option>-->
+<!--                            <option value="BE">{% trans "Belgique" %}</option>-->
+<!--                            <option value="CH">{% trans "Suisse" %}</option>-->
+<!--                            <option value="CA">{% trans "Canada" %}</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ fm|safeget:'wa_optin'|default:'wa_optin' }}" value="1" checked>
+                    <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ wa_key }}" value="1" checked>
                     <label class="form-check-label" for="ff-wa-optin">
                         {% trans "OK pour être contacté(e) sur WhatsApp pour confirmer la livraison" %}
                     </label>
@@ -197,7 +174,7 @@
 
                 <div class="d-grid">
                     <button type="button" class="btn af-cta" data-ff-next
-                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
+                            data-ll-click="hero_cta_secondary">{% trans "Continuer" %}{% if is_rtl %} &#8249;{% else %} &#8250;{% endif %}</button>
                 </div>
             </div>
         </section>
@@ -207,26 +184,13 @@
             <div class="af-savings-pill" role="note">
                 <span class="af-dot" aria-hidden="true"></span>
                 {% trans "VOUS ÉCONOMISEZ LORS DE VOTRE PREMIER ACHAT" %}
-                <i class="fa-solid fa-chevron-right ms-2" aria-hidden="true"></i>
+                <i class="fa-solid {% if is_rtl %}fa-chevron-left{% else %}fa-chevron-right{% endif %} ms-2" aria-hidden="true"></i>
             </div>
 
-            <input type="hidden"
-                   name="{{ fm|safeget:'pack_slug'|default:'pack_slug' }}"
-                   value=""
-                   data-ff-pack-slug
-                   data-ff-field="{{ fm|safeget:'pack_slug'|default:'pack_slug' }}">
-            <input type="hidden" name="context.pack.slug" value="" data-ff-pack-field="slug">
-            <input type="hidden" name="context.pack.title" value="" data-ff-pack-field="title">
-            <input type="hidden" name="context.pack.price" value="" data-ff-pack-field="price">
-            <input type="hidden" name="context.pack.currency" value="" data-ff-pack-field="currency">
-
-            <div data-ff-complementary-store class="d-none"></div>
-
-            <input type="hidden"
-                   name="context.complementary_slugs"
-                   value="[]"
-                   data-ff-field="context.complementary_slugs"
-                   data-ff-complementary-json>
+            <input type="hidden" name="{{ pack_slug_key }}" value="" data-ff-pack-slug>
+            <div data-ff-complementary-store class="d-none">
+                <input type="hidden" name="context.complementary_slugs" value="" data-ff-complementary-item>
+            </div>
 
             <!-- Offres -->
             {% with offers=form.offers %}
@@ -237,22 +201,15 @@
             <div class="row g-3 af-offers" role="group" aria-label="{% trans 'Choix du pack' %}">
                 {% if offers %}
                     {% for offer in offers %}
-                    {% with slug_candidate=offer.code|default:offer.pack_slug|default:offer.slug|default:'offer_'|add:forloop.counter %}
-                    {% with pack_slug=slug_candidate %}
+                        {% with code=offer.code|default:'offer_'|add:forloop.counter %}
                         <div class="col-md-6">
                             <label class="af-card-radio {% if offer.is_featured %}is-featured{% endif %}"
                                    data-ll-click="buybar_select_plan"
-                                   data-id="{{ slug_candidate|escape }}"
-                                   data-ll-payload='{"offer_code":"{{ slug_candidate|escapejs }}"}'>
-
-                                <input type="radio" class="visually-hidden" name="{{ fm|safeget:'offer'|default:'offer_key' }}" value="{{ slug_candidate }}"
-                                       data-ff-pack-slug="{{ pack_slug }}"
-                                       data-ff-pack-title="{{ offer.title|default:''|escape }}"
-                                       data-ff-pack-price="{{ offer.price|default:'' }}"
-                                       data-ff-pack-currency="{{ offer.currency|default:pricing.currency|default:'MAD' }}"
-                                       {% if offer.is_featured %}checked{% elif forloop.first %}checked{% endif %}
-                                >
-
+                                   data-id="{{ code|escape }}"
+                                   data-ll-payload='{"offer_code":"{{ code|escapejs }}"}'>
+                                <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="{{ code }}"
+                                       data-ff-pack-slug="{{ offer.pack_slug|default:code }}"
+                                       {% if offer.is_featured %}checked{% elif forloop.first %}checked{% endif %}>
                                 <div class="af-offer-card">
                                     {% if offer.is_featured %}
                                         <div class="af-badge-best">{{ offer.badge_label|default:default_offer_badge }}</div>
@@ -263,12 +220,12 @@
                                     {% endif %}
                                     {% if offer.price is not None %}
                                         <div class="af-offer-price">
-                                            <span class="af-amount">{{ offer.price|floatformat:0 }}</span>{% if pricing.currency %}&nbsp;{{ pricing.currency }}{% endif %}
+                                            <span class="af-amount">{{ offer.price|floatformat:0 }}</span>{% if pricing.currency %}&nbsp;{{ pricing.currency_label|default:pricing.currency }}{% endif %}
                                         </div>
                                     {% endif %}
                                     {% if offer.compare_at_price %}
                                         <div class="af-offer-compare small text-muted text-decoration-line-through">
-                                            {{ offer.compare_at_price|floatformat:0 }}{% if pricing.currency %}&nbsp;{{ pricing.currency }}{% endif %}
+                                            {{ offer.compare_at_price|floatformat:0 }}{% if pricing.currency %}&nbsp;{{ pricing.currency_label|default:pricing.currency }}{% endif %}
                                         </div>
                                     {% endif %}
                                     {% if offer.savings_label %}
@@ -278,7 +235,6 @@
                             </label>
                         </div>
                         {% endwith %}
-                        {% endwith %}
                     {% endfor %}
                 {% else %}
                     <div class="col-md-6">
@@ -286,11 +242,8 @@
                                data-ll-click="buybar_select_plan"
                                data-id="solo"
                                data-ll-payload='{"offer_code":"solo"}'>
-                            <input type="radio" class="visually-hidden" name="{{ fm|safeget:'offer'|default:'offer_key' }}" value="solo" checked
-                                   data-ff-pack-slug="solo"
-                                   data-ff-pack-title="{% trans 'Pack Solo' %}"
-                                   data-ff-pack-price="299.00"
-                                   data-ff-pack-currency="{{ pricing.currency|default:'MAD' }}">
+                            <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="solo" checked
+                                   data-ff-pack-slug="solo">
                             <div class="af-offer-card">
                                 <h5 class="af-offer-title mb-3">{% trans "Pack Solo" %}</h5>
                                 <div class="af-offer-price"><span class="af-amount">349</span>&nbsp;MAD</div>
@@ -306,11 +259,8 @@
                                data-ll-click="buybar_select_plan"
                                data-id="duo"
                                data-ll-payload='{"offer_code":"duo"}'>
-                            <input type="radio" class="visually-hidden" name="{{ fm|safeget:'offer'|default:'offer_key' }}" value="duo"
-                                   data-ff-pack-slug="duo"
-                                   data-ff-pack-title="{% trans 'Pack Duo' %}"
-                                   data-ff-pack-price="489.00"
-                                   data-ff-pack-currency="{{ pricing.currency|default:'MAD' }}">
+                            <input type="radio" class="visually-hidden" name="{{ offer_key }}" value="duo"
+                                   data-ff-pack-slug="duo">
                             <div class="af-offer-card">
                                 <div class="af-badge-best">{% trans "MEILLEUR CHOIX" %}</div>
                                 <h5 class="af-offer-title mb-3">{% trans "Pack Duo" %}</h5>
@@ -323,7 +273,7 @@
             </div>
             {% endwith %}
 
-             Cross‑sell compact : juste une case
+            <!-- Cross‑sell compact : juste une case -->
             {% trans "Ajoutez ce complément ?" as default_bump_label %}
             {% trans "Produit complémentaire" as default_bump_alt %}
             {% with bump=form.bump %}
@@ -339,7 +289,7 @@
                         <div class="flex-grow-1">
                             <div class="form-check m-0">
                                 <input class="form-check-input" type="checkbox" id="af-bump-optin"
-                                       name="{{ fm|safeget:'bump'|default:'bump_optin' }}" value="{{ bump.value|default:'1' }}"
+                                       name="{{ bump_key }}" value="{{ bump.value|default:'1' }}"
                                        data-ff-complementary
                                        data-ff-complementary-slug="{{ bump.value|default:''|escape }}"
                                        data-ff-complementary-title="{{ bump.label|default:default_bump_label|escape }}"
@@ -353,7 +303,7 @@
                                     {% if bump.price %}
                                         <span class="af-bump-price">— {{ bump.price }}
                                             {% if bump.currency %}&nbsp;{{ bump.currency }}
-                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency }}
+                                            {% elif pricing.currency %}&nbsp;{{ pricing.currency_label|default:pricing.currency }}
                                             {% endif %}
                                         </span>
                                     {% endif %}
@@ -372,14 +322,14 @@
             {% trans "Total mis à jour" as default_summary_total_label %}
             <div class="af-summary mt-3">
                 <div class="af-summary-row"><span>{% trans "Sous‑total" %}</span><strong id="af-subtotal">XXX
-                    MAD</strong></div>
+                    {{ pricing.currency_label|default:pricing.currency }}</strong></div>
                 {% with summary_discount_label=ui_texts.discount_label|default:default_summary_discount_label %}
                     <div class="af-summary-row"><span>{{ summary_discount_label }}</span><strong id="af-discount">XXX
-                        MAD</strong></div>
+                        {{ pricing.currency_label|default:pricing.currency }}</strong></div>
                 {% endwith %}
                 {% with summary_total_label=ui_texts.total_label|default:default_summary_total_label %}
                     <div class="af-summary-row af-summary-total"><span>{{ summary_total_label }}</span><strong
-                            id="af-total">XXX MAD</strong></div>
+                            id="af-total">XXX {{ pricing.currency_label|default:pricing.currency }}</strong></div>
                 {% endwith %}
             </div>
 
@@ -387,7 +337,7 @@
                 <button type="button" class="btn btn-outline-secondary af-btn" data-ff-prev>{% trans "Étape précédente" %}
                 </button>
                 <button type="button" class="btn af-cta" data-ff-next
-                        data-ll-click="hero_cta_secondary">{% trans "Continuer" %} &#8250;</button>
+                        data-ll-click="hero_cta_secondary">{% trans "Continuer" %}{% if is_rtl %} &#8249;{% else %} &#8250;{% endif %}</button>
             </div>
         </section>
 
@@ -396,7 +346,7 @@
             <h2 id="af-pay-title" class="af-h2 mb-3">{% trans "Paiement" %}</h2>
 
             {% if payment_method_key != payment_mode_key %}
-            <input type="hidden" name="{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}" value="" data-ff-payment-legacy>
+            <input type="hidden" name="{{ payment_method_key }}" value="" data-ff-payment-legacy>
             {% endif %}
 
             <!-- Méthode de paiement -->
@@ -404,26 +354,26 @@
                 {% trans "Paiement en ligne" as default_payment_online %}
                 {% trans "Paiement à la livraison" as default_payment_cod %}
                 <fieldset class="af-pay" role="radiogroup" aria-label="{% trans 'Méthode de paiement' %}">
-<!--                    &lt;!&ndash; Paiement en ligne &ndash;&gt;-->
-<!--                    <label class="af-pay-option is-online">-->
-<!--                        <input type="radio" name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}" value="online" class="visually-hidden" checked-->
-<!--                               data-ff-payment-option>-->
-<!--                        <span class="af-pay-check" aria-hidden="true"></span>-->
-<!--                        <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>-->
-<!--                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}-->
-<!--                            {% if discount_amount %}-->
-<!--                                <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>-->
-<!--                            {% elif discount_text %}-->
-<!--                                <span class="af-discount" id="af-online-discount">{{ discount_text }}</span>-->
-<!--                            {% else %}-->
-<!--                                <span class="af-discount" id="af-online-discount">−20&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>-->
-<!--                            {% endif %}-->
-<!--                        {% endwith %}-->
-<!--                    </label>-->
+                    <!-- Paiement en ligne -->
+                    <label class="af-pay-option is-online">
+                        <input type="radio" name="{{ payment_mode_key }}" value="online" class="visually-hidden" checked
+                               data-ff-payment-option>
+                        <span class="af-pay-check" aria-hidden="true"></span>
+                        <span class="af-pay-label">{{ payment_labels.online|default:default_payment_online }}</span>
+                        {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency_label|default:pricing.currency|default:'MAD' %}
+                            {% if discount_amount %}
+                                <span class="af-discount" id="af-online-discount">−{{ discount_amount }}&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
+                            {% elif discount_text %}
+                                <span class="af-discount" id="af-online-discount">{{ discount_text }}</span>
+                            {% else %}
+                                <span class="af-discount" id="af-online-discount">−20&nbsp;{{ currency_code }} {% trans "de réduction" %}</span>
+                            {% endif %}
+                        {% endwith %}
+                    </label>
 
                     <!-- Paiement à la livraison -->
                     <label class="af-pay-option">
-                        <input type="radio" name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}" value="cod" class="visually-hidden"
+                        <input type="radio" name="{{ payment_mode_key }}" value="cod" class="visually-hidden"
                                data-ff-payment-option>
                         <span class="af-pay-check" aria-hidden="true"></span>
                         <span class="af-pay-label">{{ payment_labels.cod|default:default_payment_cod }}</span>
@@ -437,7 +387,7 @@
             {% trans "OK pour recevoir la confirmation par e‑mail" as default_email_optin %}
             <div class="mt-3">
                 <label class="af-label" for="ff-email">{{ ui_texts.email_label|default:default_email_label }}</label>
-                <input type="email" id="ff-email" name="{{ fm|safeget:'email'|default:'email' }}" class="form-control" data-ff-optional
+                <input type="email" id="ff-email" name="{{ email_key }}" class="form-control"
                        placeholder="{{ ui_texts.email_placeholder|default:default_email_placeholder }}" autocomplete="email"
                        data-ff-email-confirm>
             </div>
@@ -448,22 +398,15 @@
                 </label>
             </div>
 
-            <div class="form-check mt-3">
-              <input class="form-check-input" type="checkbox" id="ff-terms" name="accept_terms" required>
-              <label for="ff-terms" class="form-check-label">J’accepte les conditions générales</label>
-              <div class="invalid-feedback">Merci d’accepter les conditions.</div>
-            </div>
-
-
             <!-- Récap rapide (reprend le style de l’étape 2) -->
             {% trans "Remise paiement en ligne" as default_summary_discount_label %}
             {% trans "Total" as default_payment_total_label %}
             <div class="af-summary mt-3">
                 <div class="af-summary-row">
-                    <span>{% trans "Sous‑total" %}</span><strong id="af-step3-subtotal">XXX MAD</strong>
+                    <span>{% trans "Sous‑total" %}</span><strong id="af-step3-subtotal">XXX {{ pricing.currency_label|default:pricing.currency }}</strong>
                 </div>
                 {% with step3_discount_label=ui_texts.discount_label|default:default_summary_discount_label %}
-                    {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency|default:'MAD' %}
+                    {% with discount_amount=ui_texts.online_discount_amount discount_text=ui_texts.online_discount_text currency_code=pricing.currency_label|default:pricing.currency|default:'MAD' %}
                         <div class="af-summary-row" id="af-step3-discount-row">
                             <span>{{ step3_discount_label }}</span>
                             <strong id="af-step3-discount">
@@ -480,7 +423,7 @@
                 {% endwith %}
                 {% with step3_total_label=ui_texts.payment_total_label|default:default_payment_total_label %}
                     <div class="af-summary-row af-summary-total">
-                        <span>{{ step3_total_label }}</span><strong id="af-step3-total">XXX MAD</strong>
+                        <span>{{ step3_total_label }}</span><strong id="af-step3-total">XXX {{ pricing.currency_label|default:pricing.currency }}</strong>
                     </div>
                 {% endwith %}
             </div>
@@ -488,11 +431,6 @@
             <!-- Sécurité perçue -->
             <div class="d-flex align-items-center gap-2 small text-muted mt-2">
                 <i class="fa-solid fa-lock"></i> {% trans "Paiement sécurisé • 3D Secure" %}
-            </div>
-
-            <div id="af-payment-online" class="mt-3" hidden>
-                <div id="af-payment-element" class="border rounded p-3 bg-white"></div>
-                <div id="af-payment-errors" class="text-danger small mt-2" aria-live="polite"></div>
             </div>
 
             <!-- CTA final -->
@@ -530,9 +468,6 @@
             </div>
         </section>
     </div>
-    <script src="https://js.stripe.com/v3/"></script>
-    {% get_static_prefix as static_prefix %}
-    <script src="{{ static_prefix }}js/stepper.payment.js"></script>
     <script>
     (function () {
         const root = document.querySelector('[data-ff-root]');
@@ -541,28 +476,10 @@
         if (!pills.length) return;
 
         const packSlugField = root.querySelector('[data-ff-pack-slug]');
-        const packContextFields = {
-            slug: root.querySelector('[data-ff-pack-field="slug"]'),
-            title: root.querySelector('[data-ff-pack-field="title"]'),
-            price: root.querySelector('[data-ff-pack-field="price"]'),
-            currency: root.querySelector('[data-ff-pack-field="currency"]'),
-        };
-        const currencyField = root.querySelector('[data-ff-currency-field]');
         const paymentLegacyField = root.querySelector('[data-ff-payment-legacy]');
         const complementaryStore = root.querySelector('[data-ff-complementary-store]');
-        const complementaryJson = root.querySelector('[data-ff-complementary-json]');
         const emailPrimary = root.querySelector('[data-ff-email-primary]');
         const emailConfirm = root.querySelector('[data-ff-email-confirm]');
-
-        function normalizePackSlug(value) {
-            if (!value) return '';
-            let slug = String(value).trim().toLowerCase();
-            slug = slug.replace(/_/g, '-');
-            if (slug.startsWith('pack-')) {
-                slug = slug.slice(5);
-            }
-            return slug;
-        }
 
         function syncEmailConfirm() {
             if (emailPrimary && emailConfirm && emailConfirm.value !== emailPrimary.value) {
@@ -583,81 +500,17 @@
             syncEmailConfirm();
         }
 
-        function ensureDefaultPack() {
-            const options = root.querySelectorAll('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]');
-            if (!options.length) return;
-            const alreadyChecked = root.querySelector('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]:checked');
-            if (alreadyChecked) return;
-            const duo = root.querySelector('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"][value="duo"]');
-            const target = duo || options[0];
-            if (target) {
-                target.checked = true;
-            }
+        function syncPackSlug() {
+            if (!packSlugField) return;
+            const selected = root.querySelector('[name="{{ offer_key }}"]:checked');
+            if (!selected) return;
+            const slug = selected.getAttribute('data-ff-pack-slug') || selected.value || '';
+            packSlugField.value = slug;
         }
-
-        function slugify(text) {
-            return (text || '').toString().trim().toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-        }
-
-        function syncPackFields() {
-            const selected = root.querySelector('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]:checked');
-            if (!selected) {
-                return;
-            }
-
-            const dataset = selected.dataset || {};
-            let slug = dataset.ffPackSlug || selected.value || slugify(dataset.ffPackTitle || '') || '';
-            slug = normalizePackSlug(slug);
-            if (!slug) {
-                const allOffers = Array.from(root.querySelectorAll('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]'));
-                const index = allOffers.indexOf(selected);
-                if (index >= 0) slug = `offer_${index + 1}`;
-            }
-            if (packSlugField) {
-                packSlugField.value = slug;
-            }
-            if (packContextFields.slug) {
-                packContextFields.slug.value = slug;
-            }
-            if (packContextFields.title) {
-                packContextFields.title.value = dataset.ffPackTitle || '';
-            }
-            if (packContextFields.price) {
-                packContextFields.price.value = dataset.ffPackPrice || '';
-            }
-            if (packContextFields.currency) {
-                packContextFields.currency.value = dataset.ffPackCurrency || '{{ pricing.currency|default:"" }}';
-            }
-        }
-
-        function syncCheckoutMeta() {
-            const meta = (typeof window !== 'undefined' && window.__CHECKOUT__) ? window.__CHECKOUT__ : {};
-            if (currencyField) {
-                if (meta.currency) {
-                    currencyField.value = meta.currency;
-                } else if (!currencyField.value) {
-                    currencyField.value = '{{ pricing.currency|default:"" }}';
-                }
-            }
-        }
-
-        window.ffSyncPackFields = function () {
-            syncPackFields();
-            syncCheckoutMeta();
-        };
-
-        window.ffSyncComplementary = function () {
-            syncComplementary();
-        };
-
-        window.ffSyncPaymentField = function () {
-            syncPaymentLegacy();
-        };
 
         function syncPaymentLegacy() {
             if (!paymentLegacyField) return;
-            const selected = root.querySelector('[name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}"]:checked');
+            const selected = root.querySelector('[name="{{ payment_mode_key }}"]:checked');
             paymentLegacyField.value = selected ? selected.value || '' : '';
         }
 
@@ -685,22 +538,12 @@
                 input.setAttribute('data-ff-complementary-item', '1');
                 complementaryStore.appendChild(input);
             });
-            if (complementaryJson) {
-                try {
-                    complementaryJson.value = JSON.stringify(slugs);
-                } catch (err) {
-                    complementaryJson.value = '[]';
-                }
-            }
         }
 
         syncPills();
-        ensureDefaultPack();
-        syncPackFields();
-        syncCheckoutMeta();
+        syncPackSlug();
         syncPaymentLegacy();
         syncComplementary();
-        syncCheckoutMeta();
 
         const observer = new MutationObserver(syncPills);
         root.querySelectorAll('[data-ff-step]').forEach((step) => observer.observe(step, {
@@ -711,13 +554,13 @@
         root.addEventListener('change', (event) => {
             const target = event.target;
             if (!target) return;
-            if (target.matches('[name="{{ fm|safeget:'offer'|default:'offer_key' }}"]')) {
-                syncPackFields();
+            if (target.matches('[name="{{ offer_key }}"]')) {
+                syncPackSlug();
             }
             if (target.closest('[data-ff-complementary]')) {
                 syncComplementary();
             }
-            if (target.matches('[name="{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}"]')) {
+            if (target.matches('[name="{{ payment_mode_key }}"]')) {
                 syncPaymentLegacy();
             }
             if (target === emailPrimary) {
@@ -734,7 +577,7 @@
             if (target.closest('[data-ff-next],[data-ff-prev]')) {
                 setTimeout(() => {
                     syncPills();
-                    syncPackFields();
+                    syncPackSlug();
                     syncPaymentLegacy();
                     syncComplementary();
                 }, 0);
@@ -745,125 +588,76 @@
         });
     })();
     </script>
-    <script src="{% static 'js/stepper.pricing.js' %}"></script>
 </form>
 
 {% if form.flow_config_json %}
 <script type="application/json" data-ff-config>
-{
-  "form_kind": "checkout_intent",
-  "flow_key": "checkout_intent_flow",
-  "endpoint_url": "{{ action_target }}",
-  "progress_url": "/api/leads/progress/",
-  "require_idempotency": true,
-  "require_signed_token": true,
-  "sign_url": "{{ leads_sign_url }}",
-
-  "progress_session_field_name": "ff_session_key",
-  "progress_flow_field_name": "ff_flow_key",
-  "progress_session_storage_key": "ff_session",
-
-  "progress_steps": {
-    "step1": [
-      "{{ fm|safeget:'phone'|default:'phone' }}"
-    ],
-    "step2": [
-      "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
-      "{{ fm|safeget:'offer'|default:'offer_key' }}",
-      "{{ fm|safeget:'quantity'|default:'quantity' }}",
-      "context.complementary_slugs"
-    ],
-    "step3": [
-      "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
-      "accept_terms",
-      "{{ fm|safeget:'currency'|default:'currency' }}"
-    ]
-  },
-
-  "fields_map": {
-    "fullname": "{{ fm|safeget:'fullname'|default:'full_name' }}",
-    "phone": "{{ fm|safeget:'phone'|default:'phone' }}",
-    "email": "{{ fm|safeget:'email'|default:'email' }}",
-    "address_line1": "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
-    "address_line2": "{{ fm|safeget:'address_line2'|default:'address_line2' }}",
-    "city": "{{ fm|safeget:'city'|default:'city' }}",
-    "state": "{{ fm|safeget:'state'|default:'state' }}",
-    "postal_code": "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
-    "country": "{{ fm|safeget:'country'|default:'country' }}",
-    "quantity": "{{ fm|safeget:'quantity'|default:'quantity' }}",
-    "offer": "{{ fm|safeget:'offer'|default:'offer_key' }}",
-    "pack_slug": "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
-    "product": "{{ fm|safeget:'product'|default:'product' }}",
-    "promotion": "{{ fm|safeget:'promotion'|default:'promotion_selected' }}",
-    "payment_mode": "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
-    "payment_method": "{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}",
-    "bump": "{{ fm|safeget:'bump'|default:'bump_optin' }}",
-    "wa_optin": "{{ fm|safeget:'wa_optin'|default:'wa_optin' }}",
-    "context.complementary_slugs": "context.complementary_slugs",
-    "currency": "{{ fm|safeget:'currency'|default:'currency' }}"
-  },
-
-  "context": {}
-}
+    {{form.flow_config_json | safe}}
 </script>
-
 {% else %}
 <script type="application/json" data-ff-config>
-{
-  "form_kind": "checkout_intent",
-  "flow_key": "checkout_intent_flow",
-  "endpoint_url": "{{ action_target }}",
-  "progress_url": "/api/leads/progress/",
-  "require_idempotency": true,
-  "require_signed_token": true,
-  "sign_url": "{{ leads_sign_url }}",
-
-  "progress_session_field_name": "ff_session_key",
-  "progress_flow_field_name": "ff_flow_key",
-  "progress_session_storage_key": "ff_session",
-
-  "progress_steps": {
-    "step1": [
-      "{{ fm|safeget:'phone'|default:'phone' }}"
-    ],
-    "step2": [
-      "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
-      "{{ fm|safeget:'offer'|default:'offer_key' }}",
-      "{{ fm|safeget:'quantity'|default:'quantity' }}",
-      "context.complementary_slugs"
-    ],
-    "step3": [
-      "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
-      "accept_terms",
-      "{{ fm|safeget:'currency'|default:'currency' }}"
-    ]
-  },
-
-  "fields_map": {
-    "fullname": "{{ fm|safeget:'fullname'|default:'full_name' }}",
-    "phone": "{{ fm|safeget:'phone'|default:'phone' }}",
-    "email": "{{ fm|safeget:'email'|default:'email' }}",
-    "address_line1": "{{ fm|safeget:'address_line1'|default:'address_line1' }}",
-    "address_line2": "{{ fm|safeget:'address_line2'|default:'address_line2' }}",
-    "city": "{{ fm|safeget:'city'|default:'city' }}",
-    "state": "{{ fm|safeget:'state'|default:'state' }}",
-    "postal_code": "{{ fm|safeget:'postal_code'|default:'postal_code' }}",
-    "country": "{{ fm|safeget:'country'|default:'country' }}",
-    "quantity": "{{ fm|safeget:'quantity'|default:'quantity' }}",
-    "offer": "{{ fm|safeget:'offer'|default:'offer_key' }}",
-    "pack_slug": "{{ fm|safeget:'pack_slug'|default:'pack_slug' }}",
-    "product": "{{ fm|safeget:'product'|default:'product' }}",
-    "promotion": "{{ fm|safeget:'promotion'|default:'promotion_selected' }}",
-    "payment_mode": "{{ fm|safeget:'payment_mode'|default:fm|safeget:'payment_method'|default:'payment_method' }}",
-    "payment_method": "{{ fm|safeget:'payment_method'|default:fm|safeget:'payment_mode'|default:'payment_method' }}",
-    "bump": "{{ fm|safeget:'bump'|default:'bump_optin' }}",
-    "wa_optin": "{{ fm|safeget:'wa_optin'|default:'wa_optin' }}",
-    "context.complementary_slugs": "context.complementary_slugs",
-    "currency": "{{ fm|safeget:'currency'|default:'currency' }}"
-  },
-
-  "context": {}
-}
+    {
+        "form_kind": "checkout_intent",
+        "flow_key": "checkout_intent_flow",
+        "endpoint_url": "{{ action_target }}",
+        "require_idempotency": true,
+        "require_signed_token": true,
+        "sign_url": "{{ leads_sign_url }}",
+        "progress_url": "/api/leads/progress/",
+        "progress_steps": {
+            "step1": [
+                "{{ fullname_key }}",
+                "{{ phone_key }}",
+                "{{ email_key }}",
+                "{{ address_line1_key }}",
+                "{{ address_line2_key }}",
+                "{{ city_key }}",
+                "{{ state_key }}",
+                "{{ postal_code_key }}",
+                "{{ country_key }}",
+                "{{ product_key }}",
+                "{{ wa_key }}"
+            ],
+            "step2": [
+                "{{ pack_slug_key }}",
+                "{{ offer_key }}",
+                "{{ quantity_key }}",
+                "{{ bump_key }}",
+                "{{ promotion_key }}",
+                "context.complementary_slugs"
+            ],
+            "step3": [
+                "{{ payment_mode_key }}",
+                "{{ email_key }}"
+            ]
+        },
+        "progress_session_field_name": "ff_session_key",
+        "progress_flow_field_name": "ff_flow_key",
+        "progress_session_storage_key": "ff_session",
+        "progress_form_kind": "checkout_intent",
+        "context": {},
+        "fields_map": {
+            "fullname": "{{ fullname_key }}",
+            "phone": "{{ phone_key }}",
+            "email": "{{ email_key }}",
+            "address_line1": "{{ address_line1_key }}",
+            "address_line2": "{{ address_line2_key }}",
+            "city": "{{ city_key }}",
+            "state": "{{ state_key }}",
+            "postal_code": "{{ postal_code_key }}",
+            "country": "{{ country_key }}",
+            "quantity": "{{ quantity_key }}",
+            "offer": "{{ offer_key }}",
+            "pack_slug": "{{ pack_slug_key }}",
+            "product": "{{ product_key }}",
+            "promotion": "{{ promotion_key }}",
+            "payment_mode": "{{ payment_mode_key }}",
+            "payment_method": "{{ payment_method_key }}",
+            "bump": "{{ bump_key }}",
+            "wa_optin": "{{ wa_key }}",
+            "context.complementary_slugs": "context.complementary_slugs"
+        }
+    }
 </script>
 {% endif %}
 {% endwith %}

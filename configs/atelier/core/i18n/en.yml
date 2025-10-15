@@ -1,0 +1,137 @@
+
+currency:
+  MAD: "MAD"
+footer:
+  shop: Shop
+header:
+  topbar:
+    text_html: "100% Natural | Paraben-free | Gentle formula | Made in Morocco | Protection & repair"
+    cta_label: "Order now"
+  banner:
+    messages:
+      morocco: "Shipping across Morocco"
+      delivery: "Free 24h delivery"
+      discount: "-30% today [today_human]"
+      discount_badge: "OFFER"
+      check: "Check before you pay"
+      cod: "Cash on delivery"
+      natural: "100% natural product"
+  primary_cta:
+    label: "Start now"
+    sublabel: "Secure payment • Immediate access"
+    aria: "Start now — Immediate access"
+  menu:
+    home: "Home"
+    trainings: "Our Trainings"
+    product: "Our Pack"
+    faq: "FAQ"
+    contact: "Contact"
+  contact:
+    phone_tel: "+212719646705"
+    phone_display: "+212 719-646-705"
+    email: "partnership@alfenna.com"
+    address_text: "Alfenna — Rabat, Morocco"
+    address_url: "https://maps.google.com/?q=Casablanca%2C%20Morocco"
+  rating_badge_text: "★ 4.8 / 5 • 500+ reviews"
+  logo:
+    alt: "Alfenna"
+product_detail:
+  meta:
+    title: "Alfenna natural cosmetic pack — Product page"
+    description: "Explore the antifungal spa ritual: benefits, contents, and exclusive offers."
+  hero:
+    name: "Natural spa ritual — 8-piece set"
+    subname: "<p>Complete routine for feet & nails</p>"
+    description: "An 8-piece kit to hydrate, purify, and protect gently."
+    badges:
+      natural: "100% natural"
+      cod: "Cash on delivery"
+    highlights:
+      care: "Deep care to hydrate and soothe skin"
+      delivery: "24/48h delivery across Morocco"
+      formula: "Paraben-free gentle formula"
+  form:
+    bullets:
+      delivery: "48h delivery across Morocco"
+      payment: "Secure payment or cash on delivery"
+      guarantee: "Satisfaction guaranteed"
+    payment_labels:
+      online: "Online payment (promo)"
+      cod: "Cash on delivery"
+    discount_label: "Special discount for online payment"
+    total_label: "Total amount due"
+    thanks_title: "Thank you for your trust!"
+    thanks_subtitle: "Our team will contact you very soon."
+    placeholders:
+      postal: "e.g. 20000"
+
+before_after:
+  wipe:
+    title: "Before / After — Scroll stopper"
+    subtitle: "Common issues versus the result after the treatment"
+    hint_text: "Drag the green button to compare before and after."
+    hint_ok: "OK"
+    before_alt: "Before / After — feet and nails finally healthy"
+    before_label: "Before"
+    before_pills:
+      - "Persistent fungal issue"
+      - "Unpleasant odor"
+      - "Cracks & itching"
+    after_alt: "Before / After — the change is visible"
+    after_label: "After"
+    after_pills:
+      - "Embarrassment & discomfort"
+      - "Walking discomfort"
+      - "Damaged nail"
+    cta_label: "Get started"
+
+gallery:
+  participants:
+    title: "WhatsApp reviews — happy customers"
+    subtitle: "Real screenshots shared with consent. Shortened for readability."
+    proofs:
+      - "Verified WhatsApp testimonials"
+      - "Average rating 4.8/5"
+      - "500+ satisfied customers"
+    cta: "View all screenshots"
+    items:
+      - name: "Noura"
+        badge: "Verified customer"
+        meta: "WhatsApp • Tangier • 02/10/2025"
+        alt: "WhatsApp capture — Noura: very satisfied, free delivery in Tangier."
+        caption: ""Tremendously satisfied — won’t be my last order. Free delivery to Tangier.""
+      - name: "Fatma"
+        badge: "Verified customer"
+        meta: "WhatsApp • 12:40"
+        alt: "WhatsApp capture — Fatma: I really love the pack."
+        caption: ""Absolute favourite ❤️ — I love it!""
+      - name: "Aymen"
+        badge: "Verified customer"
+        meta: "WhatsApp • 17:02"
+        alt: "WhatsApp capture — Aymen: gift for his wife, great service, free delivery nationwide."
+        caption: ""Gifted to my wife: she loved it. Great service & free delivery across Morocco.""
+      - name: "Ibtissam"
+        badge: "Verified customer"
+        meta: "WhatsApp • 15:30"
+        alt: "WhatsApp capture — Ibtissam: visible difference, comfortable in sandals."
+        caption: ""The difference is visible: I feel confident wearing sandals.""
+      - name: "Customer +212 637…564"
+        badge: "Verified customer"
+        meta: "WhatsApp • 11:20"
+        alt: "WhatsApp capture — anonymous customer: 8-in-1 pack, I love it."
+        caption: ""8-in-1 pack: I love it!""
+      - name: "Asmae"
+        badge: "Verified customer"
+        meta: "WhatsApp • 11:30"
+        alt: "WhatsApp capture — Asmae: gifted to her mother, wants another one, very useful 8-in-1."
+        caption: ""Gifted to my mum: she loved it. I’m getting one too — super useful 8-in-1.""
+      - name: "Asmae"
+        badge: "Verified customer"
+        meta: "WhatsApp"
+        alt: "WhatsApp capture — Asmae: fast delivery, reordering."
+        caption: ""Fast delivery — I’m ordering again.""
+      - name: "Amina"
+        badge: "Verified customer"
+        meta: "WhatsApp • 15:33"
+        alt: "WhatsApp capture — Amina: pleasant gel and cream, deep hydration, no greasy effect."
+        caption: ""Lovely gel & cream, deep hydration, soft skin all day, no greasy feel.""

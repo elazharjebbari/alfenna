@@ -115,7 +115,7 @@ def faq_main(request, params: Mapping[str, Any]) -> Dict[str, Any]:
     p = dict(params or {})
     _log("RAW(faq_main)", p, anomalies, list(p.keys()))
 
-    title_html = _s(p.get("title_html"), "Questions & <span>Réponses.</span>")
+    title_html = _s(p.get("title_html"), "faq.title_html")
     padding_top = _s(p.get("padding_top"), "60px")
     padding_bottom = _s(p.get("padding_bottom"), "60px")
 

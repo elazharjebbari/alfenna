@@ -35,16 +35,12 @@ html[dir='rtl'] .af-topbar {
 }
 .af-track {
   display: flex;
-  gap: 2.25rem;
   will-change: transform;
   animation: af-marquee var(--af-speed, 10000ms) linear infinite;
 }
 .af-topbar:hover .af-track,
 .af-topbar:focus-within .af-track {
   animation-play-state: paused;
-}
-html[dir="rtl"] .af-track {
-  animation-direction: reverse;
 }
 @media (prefers-reduced-motion: reduce) {
   .af-track {
@@ -64,7 +60,21 @@ html[dir="rtl"] .af-track {
   gap: 2.25rem;
   margin: 0;
   padding: 0;
+  padding-inline-end: 2.25rem;
   list-style: none;
+}
+
+html[dir='rtl'] .af-track,
+html[dir='rtl'] .af-list {
+  direction: ltr;
+}
+
+html[dir='rtl'] .af-list {
+  flex-direction: row;
+}
+
+html[dir='rtl'] .af-text {
+  direction: rtl;
 }
 .af-item {
   display: inline-flex;

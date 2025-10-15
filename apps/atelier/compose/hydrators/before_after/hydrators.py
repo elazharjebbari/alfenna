@@ -3,6 +3,9 @@ from typing import Any, Dict, Mapping, List, Optional
 import uuid
 import logging
 
+from django.utils.translation import get_language, gettext as _
+from apps.atelier.i18n.translation_service import TranslationService
+
 logger = logging.getLogger("atelier.before_after.debug")
 
 # ---------- helpers ----------
@@ -51,7 +54,7 @@ def wipe(request, params: Mapping[str, Any]) -> Dict[str, Any]:
     _log("RAW", p)
 
     # bloc principal
-    title = _s(p.get("title"), "Avant / Après — Résultat concret")
+    title = _s(p.get("title"), _("Avant / Après — Résultat concret"))
     subtitle = _s(p.get("subtitle"), "")
 
     before = _as_dict(p.get("before"))
@@ -62,8 +65,8 @@ def wipe(request, params: Mapping[str, Any]) -> Dict[str, Any]:
         # ex: 'images/before_after/avant-1'
         out = {
             "image": _s(side.get("image"), f"images/before_after/{'avant' if kind=='before' else 'apres'}-1"),
-            "alt":   _s(side.get("alt"),   "Bougie - " + ("Avant" if kind=="before" else "Après")),
-            "label": _s(side.get("label"), "Avant" if kind=="before" else "Après"),
+            "alt":   _s(side.get("alt"),   _("Bougie - Avant") if kind == "before" else _("Bougie - Après")),
+            "label": _s(side.get("label"), _("Avant") if kind == "before" else _("Après")),
             "pills": [],
         }
         pills = _as_list_of_dicts(side.get("pills"))
@@ -96,8 +99,8 @@ def wipe(request, params: Mapping[str, Any]) -> Dict[str, Any]:
     hint_raw = _as_dict(p.get("hint"))
     hint = {
         "enabled": _b(hint_raw.get("enabled"), True),
-        "text": _s(hint_raw.get("text"), "Faites glisser le bouton vert pour comparer l'avant/après."),
-        "ok_label": _s(hint_raw.get("ok_label"), "OK"),
+        "text": _s(hint_raw.get("text"), _("Faites glisser le bouton vert pour comparer l’avant/après.")),
+        "ok_label": _s(hint_raw.get("ok_label"), _("OK")),
         "storage_key": _s(hint_raw.get("storage_key"), ""),
     }
     if not hint["text"].strip():
@@ -120,6 +123,10 @@ def wipe(request, params: Mapping[str, Any]) -> Dict[str, Any]:
 
     obj_id = "ba_" + uuid.uuid4().hex[:8]
 
+    lang_code = getattr(request, "LANGUAGE_CODE", None) or get_language() or "fr"
+    lang_code = lang_code.lower()
+    is_rtl = lang_code.split("-", 1)[0] in {"ar", "he", "fa", "ur"}
+
     ctx = {
         "id": obj_id,
         "title": title,
@@ -141,7 +148,11 @@ def wipe(request, params: Mapping[str, Any]) -> Dict[str, Any]:
             "snap_after": "ba_snap_after",
             "kpi_click": "ba_kpi_click",
             "cta_click": "ba_cta_near",
-        }
+        },
+        "is_rtl": is_rtl,
     }
-    _log("CTX", ctx)
-    return ctx
+
+    translator = TranslationService(locale=lang_code, site_version=getattr(request, "site_version", "core"))
+    translated_ctx = translator.walk(ctx)
+    _log("CTX", translated_ctx)
+    return translated_ctx

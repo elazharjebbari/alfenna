@@ -175,25 +175,29 @@ pages:
         component: "vendors/core"
       header:
         component: "header/modes"
+      language_switch:
+        component: "lang/switcher"
       product_hero:
         component: "core/product"
         params:
           lookup:
             slug: "{{ url.kwargs.product_slug }}"
           product:
-            id: "demo-product"
-            name: "Sajadat Al-Raha"
-            description: "Tapis de priere a memoire de forme pour un confort maximal."
-            price: 399
-            promo_price: 329
+            slug: "pack-cosmetique-naturel"
+            id: "pack-cosmetique-naturel"
+            name: "Pack cosmétique naturel — Édition Spa"
+            subname: "<p>Routine complète pour pieds & ongles</p>"
+            description: "Un coffret 8 pièces pour hydrater, purifier et protéger en douceur."
+            price: 450
+            promo_price: 347
             currency: "MAD"
             badges:
-              - { icon: "fas fa-truck", text: "Livraison 48h" }
-              - { icon: "fas fa-money-bill", text: "Paiement a la livraison" }
+              - { icon: "fa-solid fa-leaf", text: "100% naturel" }
+              - { icon: "fas fa-money-bill", text: "Paiement à la livraison" }
             highlights:
-              - "Soulage genoux et dos"
-              - "Mousse memo haute densite"
-              - "Housse antiderapante"
+              - "Hydrate intensément pieds & ongles"
+              - "Livraison 24/48h partout au Maroc"
+              - "Formule naturelle sans parabènes"
 #          media:
 #            lightbox: true
 #            images:
@@ -217,6 +221,12 @@ pages:
               media_switch: "product_media_switch"
       sticky_buybar_v2:
         component: "sticky/buybar_v2"
+        params:
+          title_token: "t:product_detail.hero.name"
+          feature_tokens:
+            - "t:product_detail.form.bullets.delivery"
+            - "t:product_detail.form.bullets.payment"
+            - "t:product_detail.form.bullets.guarantee"
       faq:
         component: "faq/main"
       fab_whatsapp:
@@ -229,54 +239,6 @@ pages:
           offset_right: 16
           phone_tel: "+212719646705"
           prefill_text: "Bonjour, j’ai une question sur le pack Alfenna."
-      footer:
-        component: "footer/main"
-      chatbot:
-        component: "chatbot/shell"
-        cache: false
-  product_detail_landing:
-    meta:
-      title: "Produit — Landing V2"
-      description: "Fiche produit optimisée pour la landing courte."
-    slots:
-      vendors:
-        component: "vendors/core"
-      header:
-        component: "header/modes"
-      product_hero:
-        component: "core/product"
-        params:
-          lookup:
-            slug: "{{ url.kwargs.product_slug }}"
-          product:
-            id: "demo-product"
-            name: "Sajadat Al-Raha"
-            description: "Tapis de priere a memoire de forme pour un confort maximal."
-            price: 399
-            promo_price: 329
-            currency: "MAD"
-          form:
-            alias: "core/forms/form_landingpage"
-            action_url: "leads:collect"
-            fields_map:
-              fullname: "full_name"
-              phone: "phone_number"
-              city: "city"
-              email: "email"
-              payment_mode: "payment_mode"
-              pack_slug: "pack_slug"
-              complementary_slugs: "context.complementary_slugs"
-          tracking:
-            enabled: true
-            events:
-              view: "lp_variant_view_v2"
-              media_switch: "product_media_switch"
-      sticky_buybar_v2:
-        component: "sticky/buybar_v2"
-      faq:
-        component: "faq/main"
-      fab_whatsapp:
-        component: "fab/whatsapp"
       footer:
         component: "footer/main"
       chatbot:

@@ -6,7 +6,7 @@ from typing import Dict, Mapping
 
 DEFAULT_FIELDS_MAP: Dict[str, str] = {
     "fullname": "full_name",
-    "phone": "phone",
+    "phone": "phone_number",
     "email": "email",
     "address_line1": "address_line1",
     "address_line2": "address_line2",
@@ -14,6 +14,8 @@ DEFAULT_FIELDS_MAP: Dict[str, str] = {
     "state": "state",
     "postal_code": "postal_code",
     "country": "country",
+    "address": "address",
+    "address_raw": "address",
     "quantity": "quantity",
     "offer": "offer_key",
     "pack_slug": "pack_slug",
@@ -24,36 +26,15 @@ DEFAULT_FIELDS_MAP: Dict[str, str] = {
     "bump": "bump_optin",
     "wa_optin": "wa_optin",
     "context.complementary_slugs": "context.complementary_slugs",
-    "context.pack.slug": "context.pack.slug",
-    "context.pack.title": "context.pack.title",
-    "context.pack.price": "context.pack.price",
-    "context.pack.currency": "context.pack.currency",
-    "context.addon.slug": "context.addon.slug",
-    "context.addon.title": "context.addon.title",
-    "context.addon.price": "context.addon.price",
-    "context.addon.currency": "context.addon.currency",
-    "context.payment.method": "context.payment.method",
-    "context.checkout.total": "context.checkout.total",
-    "context.checkout.subtotal": "context.checkout.subtotal",
-    "context.checkout.discount": "context.checkout.discount",
-    "context.checkout.currency": "context.checkout.currency",
-    "context.checkout.quantity": "context.checkout.quantity",
-    "context.checkout.amount_minor": "context.checkout.amount_minor",
 }
 
 _KEY_ALIASES = {
     "full_name": "fullname",
     "phone_number": "phone",
     "payment": "payment_method",
-    "address": "address_line1",
-    "address_raw": "address_line1",
 }
 
 _VALUE_ALIASES = {
-    "phone_number": "phone",
-    "phoneNumber": "phone",
-    "address": "address_line1",
-    "address_raw": "address_line1",
     "payment_mode": "payment_method",
     "paymentMethod": "payment_method",
 }
@@ -96,4 +77,10 @@ def normalize_fields_map(overrides: Mapping[str, str] | None = None) -> Dict[str
     merged["payment_mode"] = payment_value
 
     # If only a compact address field is provided, mirror it on address_line1
+    if "address" in merged and merged.get("address_line1") == "address_line1":
+        merged["address_line1"] = merged["address"]
+
+    if "address_raw" in merged and merged.get("address_line1") == "address_line1":
+        merged["address_line1"] = merged["address_raw"]
+
     return merged

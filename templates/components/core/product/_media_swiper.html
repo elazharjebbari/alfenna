@@ -1,0 +1,7 @@
+{% load i18n static %}
+
+{% if media %}
+  {% include "components/core/product/_media_swiper_inner.html" with image_list=media.images product=product only %}
+{% else %}
+  {% include "components/core/product/_media_swiper_inner.html" with image_list=images product=product only %}
+{% endif %}

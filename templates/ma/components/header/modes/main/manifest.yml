@@ -1,0 +1,57 @@
+alias: header/modes/main
+template: "components/core/header/modes/main/header_modes_main.html"
+
+assets:
+  head: []
+  css: []
+  js: []
+  vendors: []
+
+params:
+  logo_src: "images/logo/logo_text_black_200x60.webp"
+  logo_alt: "t:header.logo.alt"
+  show_rating_badge: true
+  primary_cta_label: "t:header.primary_cta.label"
+  primary_cta_sublabel: "t:header.primary_cta.sublabel"
+  primary_cta_aria: "t:header.primary_cta.aria"
+  rating_badge_text: "t:header.rating_badge_text"
+  menu:
+    - label: "t:header.menu.home"
+      key: "home"
+    - label: "t:header.menu.trainings"
+      key: "packs"
+    - label: "t:header.menu.product"
+      key: "course"
+    - label: "t:header.menu.faq"
+      key: "faq"
+    - label: "t:header.menu.contact"
+      key: "contact"
+
+contract:
+  optional:
+    logo_src: "str"
+    logo_alt: "str"
+    show_rating_badge: "bool"
+    primary_cta_label: "str"
+    primary_cta_sublabel: "str"
+    primary_cta_aria: "str"
+    rating_badge_text: "str"
+    mode_override: "str"
+
+hydrate:
+  module: "apps.atelier.compose.hydrators.header_modes.hydrators"
+  func: "modes_main"
+  menu:
+    - label: "الرئيسية"
+      key: "home"
+    - label: "دوراتنا"
+      key: "packs"
+    - label: "حزمة ألفينا"
+      key: "course"
+    - label: "الأسئلة الشائعة"
+      key: "faq"
+    - label: "تواصل معنا"
+      key: "contact"
+
+render:
+  cacheable: false

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from types import SimpleNamespace
-from urllib.parse import unquote
 
 from django.test import RequestFactory, SimpleTestCase
 
@@ -27,11 +26,12 @@ class WhatsappHydratorTests(SimpleTestCase):
             "offset_right": "22",
         }
         context = hydrators.whatsapp(self._request(), params)
-        self.assertTrue(context["href"].startswith("https://wa.me/212719646705"))
+        self.assertTrue(context["href_base"].startswith("https://wa.me/212719646705"))
         self.assertIn("icofont-whatsapp", context["icon_html"])
         self.assertEqual(context["offset_bottom"], 28)
         self.assertEqual(context["offset_right"], 22)
-        self.assertEqual(context["label"], params.get("label", "Besoin d’aide ?"))
+        self.assertEqual(context["label"], params.get("label", "fab.whatsapp.label"))
+        self.assertEqual(context["aria_label"], params.get("aria_label", "fab.whatsapp.aria_label"))
 
     def test_prefill_falls_back_to_slug(self) -> None:
         params = {
@@ -39,8 +39,7 @@ class WhatsappHydratorTests(SimpleTestCase):
             "prefill_text": "",
         }
         context = hydrators.whatsapp(self._request("pack-demo"), params)
-        decoded_href = unquote(context["href"])
-        self.assertIn("pack-demo", decoded_href)
+        self.assertIn("pack-demo", context["prefill_text"])
 
     def test_svg_icon_mode(self) -> None:
         svg = "<svg viewBox=\"0 0 24 24\"></svg>"

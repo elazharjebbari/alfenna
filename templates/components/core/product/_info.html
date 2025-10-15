@@ -4,7 +4,7 @@
   .pack-line .badge{
     display:inline-block;border-radius:999px;
     background:#e9f6ef;color:#216b4a;font-weight:700;font-size:.85em;
-    border:1px solid #cde8d8;margin-right:.5rem;vertical-align:middle
+    border:1px solid #cde8d8;margin-inline-end:.5rem;vertical-align:middle
   }
   .pack-line .items{opacity:.9}
 </style>
@@ -16,14 +16,24 @@
   <div>
     {% if pricing.has_promo %}
       <div class="d-flex align-items-baseline gap-2">
-        <span class="fs-3 fw-bold text-danger">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency }}</span>
-        <span class="text-muted text-decoration-line-through">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</span>
+        <span class="fs-3 fw-bold text-danger">
+          {{ pricing.promo_price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency_display|default:pricing.currency }}
+        </span>
+        <span class="text-muted text-decoration-line-through">
+          {{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency_display|default:pricing.currency }}
+        </span>
       </div>
     {% elif pricing.price %}
-      <div class="fs-3 fw-bold">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</div>
+      <div class="fs-3 fw-bold">
+        {{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency_display|default:pricing.currency }}
+      </div>
     {% endif %}
     {% if pricing.savings %}
-      <small class="text-success">{% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency %}Vous economisez {{ amount }} {{ currency }}{% endblocktrans %}</small>
+      <small class="text-success">
+        {% blocktrans trimmed with amount=pricing.savings|floatformat:0 currency=pricing.currency_label|default:pricing.currency_display|default:pricing.currency %}
+          Vous économisez {{ amount }} {{ currency }}
+        {% endblocktrans %}
+      </small>
     {% endif %}
   </div>
 

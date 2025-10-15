@@ -66,6 +66,11 @@ def footer_main(request, params: Mapping[str, Any]) -> Dict[str, Any]:
     phone_tel = _str(p.get("phone_tel"), "")
     phone_display = _str(p.get("phone_display"), "")
     opening_hours = _str(p.get("opening_hours"), "")
+    brand_title = _str(p.get("brand_title"), "")
+    shop_title = _str(p.get("shop_title"), "")
+    support_title = _str(p.get("support_title"), "")
+    quick_title = _str(p.get("quick_title"), "")
+    copyright_tail_html = _str(p.get("copyright_tail_html"), "")
 
     socials = _norm_socials(p.get("socials"), anomalies)
     links_shop = _norm_links(p.get("links_shop"), anomalies, "links_shop")
@@ -92,6 +97,11 @@ def footer_main(request, params: Mapping[str, Any]) -> Dict[str, Any]:
         "links_contact": links_contact,
         "links_quick": links_quick,
         "year": year,
+        "brand_title": brand_title,
+        "shop_title": shop_title,
+        "support_title": support_title,
+        "quick_title": quick_title,
+        "copyright_tail_html": copyright_tail_html,
     }
     _log("NORMALIZED(footer_main)", ctx, anomalies, list(p.keys()))
     return ctx

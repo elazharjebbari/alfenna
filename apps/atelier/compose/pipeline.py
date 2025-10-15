@@ -10,6 +10,8 @@ from django.template.loader import render_to_string
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from django.conf import settings
+from django.utils.translation import get_language_info
+from django.templatetags.static import static
 
 from apps.atelier.config.loader import get_page_spec, get_experiments_spec
 from apps.atelier.components.registry import get as get_component, NamespaceComponentMissing
@@ -20,10 +22,35 @@ from apps.atelier.compose.cache import ttl_for
 from apps.atelier.ab.waffle import resolve_variant, is_preview_active
 from apps.atelier import services
 from apps.atelier.components.metrics import record_impression, should_record
+from apps.atelier.i18n.translation_service import TranslationService
 
 log = logging.getLogger("atelier.compose.pipeline")
 
 DEFAULT_SITE_VERSION = "core"
+
+
+def _resolve_locale(request) -> str:
+    locale = getattr(request, "LANGUAGE_CODE", None)
+    if not locale:
+        locale = getattr(getattr(request, "_segments", None), "lang", None)
+    if not locale:
+        locale = getattr(settings, "ATELIER_I18N_DEFAULT_LOCALE", "fr")
+    return str(locale or "fr")
+
+
+def _get_translation_service(request, namespace: str | None) -> TranslationService:
+    locale = _resolve_locale(request)
+    site_version = (namespace or "").strip() or _effective_namespace(request)
+    cache = getattr(request, "_translation_services", None)
+    if cache is None:
+        cache = {}
+        request._translation_services = cache
+    key = (locale, site_version)
+    service = cache.get(key)
+    if service is None:
+        service = TranslationService(locale=locale, site_version=site_version)
+        cache[key] = service
+    return service
 
 
 def _stable_content_rev(spec: Dict[str, Any]) -> str:
@@ -376,9 +403,29 @@ def _render_parent_with_children(
         return ""
 
     # 1) Hydrate parent
+    translation = _get_translation_service(request, namespace)
     slot_params = dict(slot_ctx.get("params") or {})
-    ctx = _hydrate(alias_base, request, slot_params, namespace=namespace)
-    
+    resolved_before = translation.resolved_keys
+    missing_before = translation.missing_keys
+    translated_params = translation.walk(slot_params)
+    ctx = _hydrate(alias_base, request, translated_params, namespace=namespace)
+
+    ctx = translation.walk(ctx)
+
+    if settings.DEBUG:
+        resolved_after = translation.resolved_keys
+        missing_after = translation.missing_keys
+        resolved_new = sorted(resolved_after.difference(resolved_before))
+        missing_new = sorted(missing_after.difference(missing_before))
+        log.debug(
+            "compose.i18n slot=%s page=%s alias=%s resolved=%d missing=%s",
+            slot_ctx.get("id") or "",
+            page_ctx.get("id") or "",
+            alias_base,
+            len(resolved_new),
+            missing_new,
+        )
+
     if "variant_key" not in ctx:
         ctx["variant_key"] = slot_ctx.get("variant_key")
 
@@ -500,7 +547,16 @@ def _effective_namespace(request, explicit: str | None = None) -> str:
 
 def build_page_spec(page_id: str, request, *, namespace: str | None = None, extra: dict | None = None) -> Dict[str, Any]:
     ns = _effective_namespace(request, namespace)
-    log.info("build_page_spec page_id=%s site_version=%s", page_id, ns)
+    seg_lang = getattr(getattr(request, "_segments", None), "lang", None)
+    lang = seg_lang or getattr(request, "LANGUAGE_CODE", None)
+    log.info("build_page_spec page_id=%s site_version=%s lang=%s", page_id, ns, lang)
+    lang_bidi = False
+    lang_code = (lang or getattr(settings, "LANGUAGE_CODE", "en")) or "en"
+    try:
+        lang_info = get_language_info(lang_code)
+        lang_bidi = bool(lang_info.get("bidi"))
+    except KeyError:
+        lang_bidi = False
 
     spec = get_page_spec(page_id, namespace=ns) or {}
     slots_def: Dict[str, Any] = spec.get("slots") or {}
@@ -625,6 +681,8 @@ def build_page_spec(page_id: str, request, *, namespace: str | None = None, extr
         "qa_preview": page_qa_preview,
         "content_rev": page_rev,
         "site_version": ns,
+        "lang": lang,
+        "language_bidi": lang_bidi,
     }
 
 
@@ -690,7 +748,13 @@ def collect_page_assets(page_ctx: Dict[str, Any]) -> Dict[str, list]:
                 aliases.append(ch_alias)
     namespace = page_ctx.get("site_version") or DEFAULT_SITE_VERSION
     collected = collect_assets_for(aliases, namespace=namespace)
-    return order_and_dedupe(collected)
+    assets = order_and_dedupe(collected)
+    if bool(page_ctx.get("language_bidi")):
+        rtl_href = static("css/rtl.css")
+        css_list = assets.setdefault("css", [])
+        if rtl_href not in css_list:
+            css_list.append(rtl_href)
+    return assets
 
 
 def render_page(request, page_id: str, content_rev: str, *, namespace: str | None = None) -> Dict[str, Any]:

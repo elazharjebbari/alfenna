@@ -4,8 +4,10 @@ import logging
 import html
 
 from django.urls import reverse, NoReverseMatch
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.formats import date_format
+
+from apps.atelier.i18n.translation_service import TranslationService
 
 logger = logging.getLogger("atelier.header.debug")
 
@@ -92,7 +94,39 @@ def _norm_icon(raw_icon: Dict[str, Any] | None) -> Dict[str, str] | None:
     return icon
 
 
-def _norm_banner(raw_banner: Dict[str, Any] | None) -> Dict[str, Any]:
+def _human_today_label(request=None) -> str:
+    lang = getattr(request, "LANGUAGE_CODE", None) or translation.get_language() or "fr"
+    with translation.override(lang):
+        today_local = timezone.localdate()
+        return date_format(today_local, "l j F", use_l10n=True)
+
+
+def _get_translator(request=None) -> TranslationService | None:
+    if request is None:
+        return None
+    locale = getattr(request, "LANGUAGE_CODE", None) or translation.get_language() or "fr"
+    site_version = getattr(request, "site_version", None) or "core"
+    try:
+        return TranslationService(locale=locale, site_version=site_version)
+    except Exception:
+        return None
+
+
+def _resolve_token(value: Any, translator: TranslationService | None) -> Any:
+    if not isinstance(value, str):
+        return value
+    stripped = value.strip()
+    if not stripped.startswith("t:"):
+        return value
+    token = stripped[2:].strip()
+    if not token:
+        return value
+    if not translator:
+        return value
+    return translator.t(token, default=value)
+
+
+def _norm_banner(raw_banner: Dict[str, Any] | None, *, request=None) -> Dict[str, Any]:
     defaults = {
         "enabled": False,
         "colors": {"from": "#2c6a57", "to": "#1f4f42"},
@@ -107,23 +141,32 @@ def _norm_banner(raw_banner: Dict[str, Any] | None) -> Dict[str, Any]:
     if not isinstance(raw_banner, dict):
         return defaults
 
-    today_local = timezone.localdate()
-    today_label = date_format(today_local, "l j F", use_l10n=True)
+    today_label: str | None = None
+    translator = _get_translator(request)
 
     messages: List[Dict[str, Any]] = []
     for raw_msg in raw_banner.get("messages", []) or []:
         if not isinstance(raw_msg, dict):
             continue
-        text = str(raw_msg.get("text") or "").strip()
+        text_resolved = _resolve_token(raw_msg.get("text"), translator)
+        text = str(text_resolved or "").strip()
         if not text:
             continue
         icon = _norm_icon(raw_msg.get("icon"))
-        badge = str(raw_msg.get("badge") or "").strip() or None
+        badge_resolved = _resolve_token(raw_msg.get("badge"), translator)
+        badge = str(badge_resolved or "").strip() or None
+        text_plain = text
         text_escaped = html.escape(text)
-        if "[today_human]" in text_escaped:
-            text_escaped = text_escaped.replace("[today_human]", f'<span class="af-date">{html.escape(today_label)}</span>')
+        if "[today_human]" in text:
+            if today_label is None:
+                today_label = _human_today_label(request)
+            text_plain = text.replace("[today_human]", today_label)
+            text_escaped = text_escaped.replace(
+                "[today_human]",
+                f'<span class="af-date">{html.escape(today_label)}</span>',
+            )
         messages.append({
-            "text": text,
+            "text": text_plain,
             "text_html": text_escaped,
             "icon": icon,
             "badge": badge,
@@ -177,7 +220,16 @@ def header_struct(request, params: Dict[str, Any]) -> Dict[str, Any]:
 
     tb_raw = _as_dict(p.get("topbar"))
     enabled = bool(tb_raw.get("enabled")) if "enabled" in tb_raw else False
-    text_html = tb_raw.get("text_html") if isinstance(tb_raw.get("text_html"), str) else ""
+    translator = _get_translator(request)
+    text_html_raw = tb_raw.get("text_html") if isinstance(tb_raw.get("text_html"), str) else ""
+    text_html_resolved = _resolve_token(text_html_raw, translator)
+    text_html = text_html_resolved if isinstance(text_html_resolved, str) else text_html_raw
+    if text_html and "[today_human]" in text_html:
+        today_label = _human_today_label(request)
+        text_html = text_html.replace(
+            "[today_human]",
+            f'<span class="af-date">{html.escape(today_label)}</span>',
+        )
     deadline_ts = tb_raw.get("deadline_ts") if isinstance(tb_raw.get("deadline_ts"), str) else ""
 
     cta = None
@@ -216,7 +268,7 @@ def header_struct(request, params: Dict[str, Any]) -> Dict[str, Any]:
         "topbar": topbar_ctx,
         "contact": contact,
         "socials": socials,
-        "banner": _norm_banner(p.get("banner")),
+        "banner": _norm_banner(p.get("banner"), request=request),
     }
     _log("NORMALIZED(header_struct)", ctx, anomalies, list(p.keys()))
     return ctx

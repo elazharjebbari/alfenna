@@ -16,15 +16,15 @@ params:
 #  primary_cta_aria: "J'achète"
 #  course_slug: "bougies-naturelles"     # ← slug demandé
   menu:
-    - label: "Accueil"
+    - label: "t:header.menu.home"
       url_name: "pages:home"
-    - label: "Nos Formations"
+    - label: "t:header.menu.trainings"
       url_name: "pages:packs"
-    - label: "Notre Pack"
+    - label: "t:header.menu.product"
       url: "/produits/pack-cosmetique-naturel/"
-    - label: "FAQ"
+    - label: "t:header.menu.faq"
       url: "#faq"
-    - label: "Contact"
+    - label: "t:header.menu.contact"
       url: "#contact"
 
 contract:
@@ -42,15 +42,15 @@ hydrate:
   module: "apps.atelier.compose.hydrators.header_modes.hydrators"
   func: "modes_main"
   menu:
-    - label: "Accueil"
+    - label: "t:header.menu.home"
       url_name: "pages:home"
-    - label: "Nos Formations"
+    - label: "t:header.menu.trainings"
       url_name: "pages:packs"
-    - label: "Notre Pack"
+    - label: "t:header.menu.product"
       url: "/produits/pack-cosmetique-naturel/"
-    - label: "FAQ"
+    - label: "t:header.menu.faq"
       url: "#faq"
-    - label: "Contact"
+    - label: "t:header.menu.contact"
       url: "#contact"
 render:
   cacheable: false

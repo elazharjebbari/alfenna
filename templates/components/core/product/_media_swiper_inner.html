@@ -1,0 +1,58 @@
+{% load i18n %}
+
+<div class="gallery-main-wrapper">
+  <div class="gallery-main swiper afg-hero"
+       aria-roledescription="carousel"
+       aria-label="{% trans 'Images du produit' %}">
+    <div class="swiper-wrapper">
+      {% for image in image_list %}
+      <div class="swiper-slide" role="group"
+           aria-label="{% blocktrans with index=forloop.counter total=image_list|length %}Image {{ index }} sur {{ total }}{% endblocktrans %}">
+        <div class="ratio ratio-4x3 afg-hero-frame">
+          <div class="swiper-zoom-container">
+            {% with main_src=image.src|default:'https://placehold.co/960x720?text=Image' main_alt=image.alt|default:product.name %}
+            <picture>
+              <img src="{{ main_src }}"
+                   alt="{{ main_alt }}"
+                   class="gallery-main-img d-block w-100 h-100"
+                   width="{{ image.width|default:'1200' }}"
+                   height="{{ image.height|default:'900' }}"
+                   loading="{{ image.loading|default:'lazy' }}"
+                   decoding="{{ image.decoding|default:'async' }}">
+            </picture>
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if image_list|length > 1 %}
+    <button class="swiper-button-prev afg-paddle" type="button" aria-label="{% trans 'Image précédente' %}">
+      <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+    </button>
+    <button class="swiper-button-next afg-paddle" type="button" aria-label="{% trans 'Image suivante' %}">
+      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+    </button>
+    <div class="swiper-pagination afg-dots" aria-hidden="true"></div>
+    {% endif %}
+  </div>
+
+  {% if image_list|length > 1 %}
+  <div class="gallery-thumbs swiper" role="tablist" aria-label="{% trans 'Miniatures' %}">
+    <div class="swiper-wrapper">
+      {% for image in image_list %}
+      <div class="swiper-slide afg-thumb"
+           role="tab"
+           aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+           aria-controls="afg-slide-{{ forloop.counter0 }}"
+           tabindex="{% if forloop.first %}0{% else %}-1{% endif %}">
+        <img class="thumb" src="{{ image.thumb|default:image.src }}"
+             alt="{% blocktrans with n=forloop.counter %}Miniature {{ n }}{% endblocktrans %}"
+             width="176" height="132" loading="lazy">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>

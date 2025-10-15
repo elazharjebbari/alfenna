@@ -1,0 +1,82 @@
+python manage.py shell --settings=alfenna.settings.prod -c "from django.core.cache import cache; cache.clear()" && find . -name '*.pyc' -delete && find . -name '__pycache__' -exec rm -rf {} +
+export DJANGO_SETTINGS_MODULE=alfenna.settings.dev
+export DJANGO_SETTINGS_MODULE=alfenna.settings.prod
+tree -P "*.py|*.html|*.css|*.js|*.yaml|*.json|*.yml" --prune
+tree -P "*.py|*.html|*.css|*.js|*.yaml|*.json|*.yml" --prune
+python manage.py runscript apps.content.scripts.purge_and_seed_single_course --script-args "--apply slug=bougies-naturelles title='Bougies naturelles'"
+rsync -avz -e ssh root@153.92.222.24:/usr/local/lsws/Example/html/lumiere-academy/media/videos/ ./media/videos/
+rsync -avz -e media/videos/workshop-testimonals/fr_therapeute-temoignage.mp4 root@46.202.128.168:/www/var/alfenna/media/videos/workshop-testimonals/
+find /var/www/alfenna/media -type d -exec chmod 755 {} +
+find /var/www/alfenna/media -type f -exec chmod 644 {} +
+chown -R www-data:www-data /var/www/alfenna/media
+namei -l /var/www/alfenna/media/videos/workshop-testimonals/fr_therapeute-temoignage.mp4
+python manage.py runserver 127.0.0.1:9013  --settings=alfenna.settings.dev
+
+python manage.py runserver 127.0.0.1:9013  --settings=alfenna.settings.prod
+python manage.py runsslserver 0.0.0.0:8000  --settings=alfenna.settings.prod
+ssh root@46.202.128.168
+
+python manage.py collectstatic --clear --settings=alfenna.settings.prod
+
+python manage.py runserver --settings=alfenna.settings.dev
+
+python manage.py collectstatic --clear --settings=alfenna.settings.prod
+python manage.py collectstatic --settings=alfenna.settings.prod
+python manage.py compress --settings=alfenna.settings.prod
+python manage.py runsslserver 127.0.0.1:9013  --settings=alfenna.settings.prod
+
+#######################################################################################################################
+#######################################################################################################################
+
+sudo chown -R nobody:nogroup /var/www/alfenna/staticfiles
+sudo find /var/www/alfenna/staticfiles -type d -exec chmod 755 {} \;
+sudo find /var/www/alfenna/staticfiles -type f -exec chmod 644 {} \;
+
+sudo chown -R nobody:nogroup /var/www/alfenna/logs
+sudo find /var/www/alfenna/logs -type d -exec chmod 755 {} \;
+sudo find /var/www/alfenna/logs -type f -exec chmod 644 {} \;
+
+find /var/www/alfenna/media -type d -exec chmod 755 {} +
+find /var/www/alfenna/media -type f -exec chmod 644 {} +
+chown -R www-data:www-data /var/www/alfenna/media
+namei -l /var/www/alfenna/media/videos/workshop-testimonals/fr_therapeute-temoignage.mp4
+sudo find /var/www/alfenna/media -type d -exec chmod 755 {} \;
+sudo find /var/www/alfenna/media -type f -exec chmod 644 {} \;
+#######################################################################################################################
+#######################################################################################################################
+
+export DJANGO_SETTINGS_MODULE=alfenna.settings.dev
+export DEV_EMAIL_CONSOLE=1
+export MESSAGING_SECURE_BASE_URL="http://127.0.0.1:8000"
+
+python manage.py migrate
+celery -A alfenna worker -l info -Q email,default &
+celery -A alfenna beat   -l info &
+python manage.py runserver 8000
+python manage.py runsslserver 127.0.0.1:8000  --settings=alfenna.settings.prod
+#######################################################################################################################
+celery -A alfenna worker -l info -Q default,email,analytics,leads,ads -n ll_all@%h --autoscale=16,1 --prefetch-multiplier=1 -Ofair
+export DEFAULT_FROM_EMAIL=service-client@lumiereacademy.com
+export EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+export EMAIL_HOST=smtp.gmail.com
+export EMAIL_PORT=587
+export EMAIL_USE_TLS=1
+export EMAIL_HOST_USER=EMAIL_HOST_USER
+export EMAIL_HOST_PASSWORD=Password-ServiceClient-2025
+export MESSAGING_SECURE_BASE_URL=https://lumiereacademy.com    # domaine réel
+export EMAIL_PREFLIGHT_MODE=send
+export EMAIL_PREFLIGHT_TO=elazhar.jebbari@gmail.com
+python manage.py shell -c "from apps.messaging.tasks import drain_outbox_batch; print(drain_outbox_batch(limit=5))"
+
+
+DEFAULT_FROM_EMAIL
+EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD
+celery -A alfenna worker -l info -Q default,email,analytics,leads,ads -n ll_all@%h --autoscale=16,1 --prefetch-multiplier=1 -Ofair
+rsync -avz --progress ~/.codex/auth.json root@46.202.128.168:~/.codex/auth.json
+
+
+DJANGO_SETTINGS_MODULE=alfenna.settings.dev python manage.py compilemessages -l fr -l en -l ar
+
+
+ django-admin compilemessages
