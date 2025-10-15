@@ -69,8 +69,8 @@
     "fields": {
       "product": 5100,
       "kind": "gallery",
-      "src": "/static/images/landing-page/style-de-vie/sac-2.png",
-      "thumb": "/static/images/landing-page/style-de-vie/sac-2_highlight.png",
+      "src": "/static/images/landing-page/product-single/sac-2.png",
+      "thumb": "/static/images/landing-page/product-single/sac-2_highlight.png",
       "alt": "D\u00e9tail du coffret cosm\u00e9tique naturel",
       "position": 1
     }
