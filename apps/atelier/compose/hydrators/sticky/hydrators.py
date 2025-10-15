@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from django.http import HttpRequest
 from django.urls import resolve
+from django.utils.translation import get_language
 
 from apps.catalog.models import Product
 from apps.marketing.models.models_pricing import PricePlan
+from apps.atelier.i18n.translation_service import TranslationService
 
 
 def _get_slug_from_request(request: HttpRequest, fallback: str = "") -> str:
@@ -33,6 +35,7 @@ def _product_payload(slug: str) -> Dict[str, Any]:
         "price": None,
         "promo_price": None,
         "currency": "MAD",
+        "highlights": [],
     }
     if not slug:
         return ctx
@@ -94,37 +97,120 @@ def _plan_payload(plan_slug: str | None) -> Dict[str, Any]:
     }
 
 
+def _translate_currency(code: str, translator: Optional[TranslationService]) -> str:
+    if not code:
+        return ""
+    key = f"currency.{code}"
+    if translator is None:
+        return code
+    return translator.t(key, default=code)
+
+
+def _collect_features(feature_values: Any, feature_tokens: Any, *, translator: Optional[TranslationService], fallback: Optional[List[str]] = None) -> List[str]:
+    features: List[str] = []
+
+    if isinstance(feature_values, (list, tuple)):
+        for value in feature_values:
+            if isinstance(value, str) and value.strip():
+                features.append(value.strip())
+
+    if isinstance(feature_tokens, (list, tuple)):
+        for token in feature_tokens:
+            token_str = str(token or "").strip()
+            if not token_str:
+                continue
+            lookup = token_str
+            if token_str.startswith("t:"):
+                lookup = token_str[2:].strip()
+            if not lookup:
+                continue
+            if translator is not None:
+                translated = translator.t(lookup, default=lookup)
+            else:
+                translated = lookup
+            features.append(translated)
+
+    if not features and fallback:
+        features.extend(fallback)
+
+    return [item for item in features if item]
+
+
 def buybar_v2(request: HttpRequest, params: Dict[str, Any] | None) -> Dict[str, Any]:
     params = params or {}
     slug = _get_slug_from_request(request, params.get("product_slug", ""))
     payload = _product_payload(slug)
-    plan_data = _plan_payload(params.get("plan_slug"))
+
+    plan_slug_param = str(params.get("plan_slug") or "").strip()
+    plan_data = _plan_payload(plan_slug_param) if plan_slug_param else {
+        "plan_found": False,
+        "plan_slug": "",
+        "plan_title": "",
+        "plan_features": [],
+        "plan_price": None,
+        "plan_old_price": None,
+        "plan_currency": "",
+    }
+
+    locale = getattr(request, "LANGUAGE_CODE", None) or get_language() or "fr"
+    site_version = getattr(request, "site_version", None) or "core"
+    translator: Optional[TranslationService] = None
+    try:
+        translator = TranslationService(locale=locale, site_version=site_version)
+    except Exception:
+        translator = None
+
+    title_param = params.get("title")
+    title: Optional[str] = None
+    if isinstance(title_param, str) and title_param.strip():
+        title = title_param.strip()
+    else:
+        title_token = str(params.get("title_token") or "").strip()
+        if title_token:
+            lookup = title_token[2:].strip() if title_token.startswith("t:") else title_token
+            if translator is not None and lookup:
+                title = translator.t(lookup, default=lookup)
+            elif lookup:
+                title = lookup
 
     title_fallback = str(params.get("title_fallback") or "sticky_order.title_fallback").strip()
-    title = payload["product_name"] or plan_data.get("plan_title") or title_fallback
+    if not title:
+        title = payload["product_name"] or plan_data.get("plan_title") or title_fallback
 
     amount = payload["promo_price"] if payload["promo_price"] else payload["price"]
     original_price = payload["price"] if payload["promo_price"] else None
 
     plan_price = plan_data.get("plan_price")
     plan_old_price = plan_data.get("plan_old_price")
-    if plan_price is not None:
+    if amount is None and plan_price is not None:
         amount = plan_price
         if plan_old_price and plan_old_price > plan_price:
             original_price = plan_old_price
-        elif plan_old_price and amount and plan_old_price > amount:
-            original_price = plan_old_price
-    currency = plan_data.get("plan_currency") or payload["currency"] or "MAD"
+    elif amount is not None and plan_old_price and plan_price and plan_old_price > plan_price:
+        # plan gives better reference price if provided explicitly
+        original_price = plan_old_price
+
+    currency = payload["currency"] or plan_data.get("plan_currency") or "MAD"
+    currency_label = _translate_currency(currency, translator)
 
     discount_label = params.get("discount_label")
     if discount_label is None:
-        # backward compatibility with old key
         discount_label = params.get("online_discount_label")
     discount_label = str(discount_label or "sticky_order.discount_label").strip()
 
     cta_label = str(params.get("cta_label") or "sticky_order.cta_primary")
     aria_label = str(params.get("aria_label") or "sticky_order.bar_aria_label")
     close_label = str(params.get("close_label") or "sticky_order.close_aria_label")
+
+    feature_values = params.get("features")
+    feature_tokens = params.get("feature_tokens")
+    fallback_features: List[str] = []
+    if payload.get("product_found") and not feature_values and not feature_tokens:
+        # reuse plan features only if explicitly requested via plan slug
+        fallback_features = plan_data.get("plan_features") or []
+    features = _collect_features(feature_values, feature_tokens, translator=translator, fallback=fallback_features)
+    if not features and plan_slug_param and plan_data.get("plan_features"):
+        features = [str(item) for item in plan_data.get("plan_features") if item]
 
     return {
         "product_slug": slug,
@@ -133,6 +219,7 @@ def buybar_v2(request: HttpRequest, params: Dict[str, Any] | None) -> Dict[str, 
         "amount": amount,
         "original_price": original_price,
         "currency": currency,
+        "currency_label": currency_label,
         "discount_label": discount_label,
         "cta_label": cta_label,
         "aria_label": aria_label,
@@ -141,7 +228,6 @@ def buybar_v2(request: HttpRequest, params: Dict[str, Any] | None) -> Dict[str, 
         "form_root_selector": params.get("form_root_selector", "[data-ff-root]"),
         "input_selector": params.get("input_selector", "#ff-fullname"),
         "dismiss_days": int(params.get("dismiss_days", 1) or 1),
-        "plan_title": plan_data.get("plan_title", ""),
-        "plan_features": plan_data.get("plan_features") or [],
-        "plan_slug": plan_data.get("plan_slug", ""),
+        "features": features,
+        "plan_slug": plan_slug_param,
     }

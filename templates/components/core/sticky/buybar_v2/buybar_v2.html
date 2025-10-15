@@ -20,27 +20,27 @@
     </div>
 
     <div class="af-mid">
-      {% if plan_title or plan_features %}
+      {% if title or features %}
         <div class="af-plan">
-          {% if plan_title %}
-            <div class="af-plan-title">{{ plan_title }}</div>
+          {% if title %}
+            <div class="af-plan-title">{{ title|safe }}</div>
           {% endif %}
-          {% if plan_features %}
-            <ul class="af-plan-features">
-              {% for feature in plan_features %}
-                <li>{{ feature }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+<!--          {% if features %}-->
+<!--            <ul class="af-plan-features">-->
+<!--              {% for feature in features %}-->
+<!--                <li>{{ feature|safe }}</li>-->
+<!--              {% endfor %}-->
+<!--            </ul>-->
+<!--          {% endif %}-->
         </div>
       {% endif %}
 
       <div class="af-price-block">
         {% if amount %}
           <div class="af-price">
-            {{ amount|floatformat:0 }} {{ currency }}
+            {{ amount|floatformat:0 }} {{ currency_label|default:currency }}
             {% if original_price and original_price > amount %}
-              <span class="af-price-old">{{ original_price|floatformat:0 }} {{ currency }}</span>
+              <span class="af-price-old">{{ original_price|floatformat:0 }} {{ currency_label|default:currency }}</span>
             {% endif %}
           </div>
         {% endif %}

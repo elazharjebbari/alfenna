@@ -42,9 +42,6 @@ html[dir='rtl'] .af-topbar {
 .af-topbar:focus-within .af-track {
   animation-play-state: paused;
 }
-html[dir="rtl"] .af-track {
-  animation-direction: reverse;
-}
 @media (prefers-reduced-motion: reduce) {
   .af-track {
     animation: none;
@@ -65,6 +62,19 @@ html[dir="rtl"] .af-track {
   padding: 0;
   padding-inline-end: 2.25rem;
   list-style: none;
+}
+
+html[dir='rtl'] .af-track,
+html[dir='rtl'] .af-list {
+  direction: ltr;
+}
+
+html[dir='rtl'] .af-list {
+  flex-direction: row;
+}
+
+html[dir='rtl'] .af-text {
+  direction: rtl;
 }
 .af-item {
   display: inline-flex;

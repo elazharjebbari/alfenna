@@ -105,13 +105,13 @@
                     <div class="form-text mt-1">{% trans "Format libre. Les caractères non numériques seront nettoyés automatiquement." %}</div>
                 </div>
 
-                <div>
-                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>
-                    <input id="ff-email-step1" type="email" class="form-control"
-                           name="{{ email_key }}" autocomplete="email" required
-                           data-ff-email-primary
-                           placeholder="{% trans 'Ex. salma@example.com' %}">
-                </div>
+<!--                <div>-->
+<!--                    <label class="af-label" for="ff-email-step1">{% trans "Adresse e‑mail" %}</label>-->
+<!--                    <input id="ff-email-step1" type="email" class="form-control"-->
+<!--                           name="{{ email_key }}" autocomplete="email" required-->
+<!--                           data-ff-email-primary-->
+<!--                           placeholder="{% trans 'Ex. salma@example.com' %}">-->
+<!--                </div>-->
 
                 <div>
                     <label class="af-label" for="ff-address-line1">{% trans "Adresse de livraison" %}</label>
@@ -120,50 +120,50 @@
                            placeholder="{% trans 'Rue, quartier' %}">
                 </div>
 
-                <div>
-                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>
-                    <input id="ff-address-line2" class="form-control" type="text"
-                           name="{{ address_line2_key }}" autocomplete="address-line2"
-                           placeholder="{% trans 'Appartement, étage, référence' %}">
-                </div>
+<!--                <div>-->
+<!--                    <label class="af-label" for="ff-address-line2">{% trans "Complément d’adresse" %} <span class="text-muted">{% trans '(optionnel)' %}</span></label>-->
+<!--                    <input id="ff-address-line2" class="form-control" type="text"-->
+<!--                           name="{{ address_line2_key }}" autocomplete="address-line2"-->
+<!--                           placeholder="{% trans 'Appartement, étage, référence' %}">-->
+<!--                </div>-->
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>
-                        <input id="ff-city" class="form-control" type="text"
-                               name="{{ city_key }}" autocomplete="address-level2" required
-                               placeholder="{% trans 'Ex. Casablanca' %}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>
-                        <input id="ff-state" class="form-control" type="text"
-                               name="{{ state_key }}" autocomplete="address-level1"
-                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">
-                    </div>
-                </div>
+<!--                <div class="row g-3">-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-city">{% trans "Ville" %}</label>-->
+<!--                        <input id="ff-city" class="form-control" type="text"-->
+<!--                               name="{{ city_key }}" autocomplete="address-level2" required-->
+<!--                               placeholder="{% trans 'Ex. Casablanca' %}">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-state">{% trans "Région / Wilaya" %}</label>-->
+<!--                        <input id="ff-state" class="form-control" type="text"-->
+<!--                               name="{{ state_key }}" autocomplete="address-level1"-->
+<!--                               placeholder="{% trans 'Ex. Casablanca-Settat' %}">-->
+<!--                    </div>-->
+<!--                </div>-->
 
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>
-                        {% trans 'Ex. 20000' as default_postal_placeholder %}
-                        <input id="ff-postal" class="form-control" type="text"
-                               name="{{ postal_code_key }}" autocomplete="postal-code" required
-                               placeholder="{{ ui_texts.postal_placeholder|default:default_postal_placeholder }}">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>
-                        <select id="ff-country" class="form-select"
-                                name="{{ country_key }}" autocomplete="country" required>
-                            <option value="">{% trans "Choisissez" %}</option>
-                            <option value="MA" selected>{% trans "Maroc" %}</option>
-                            <option value="FR">{% trans "France" %}</option>
-                            <option value="ES">{% trans "Espagne" %}</option>
-                            <option value="BE">{% trans "Belgique" %}</option>
-                            <option value="CH">{% trans "Suisse" %}</option>
-                            <option value="CA">{% trans "Canada" %}</option>
-                        </select>
-                    </div>
-                </div>
+<!--                <div class="row g-3">-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>-->
+<!--                        {% trans 'Ex. 20000' as default_postal_placeholder %}-->
+<!--                        <input id="ff-postal" class="form-control" type="text"-->
+<!--                               name="{{ postal_code_key }}" autocomplete="postal-code" required-->
+<!--                               placeholder="{{ ui_texts.postal_placeholder|default:default_postal_placeholder }}">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6">-->
+<!--                        <label class="af-label" for="ff-country">{% trans "Pays" %}</label>-->
+<!--                        <select id="ff-country" class="form-select"-->
+<!--                                name="{{ country_key }}" autocomplete="country" required>-->
+<!--                            <option value="">{% trans "Choisissez" %}</option>-->
+<!--                            <option value="MA" selected>{% trans "Maroc" %}</option>-->
+<!--                            <option value="FR">{% trans "France" %}</option>-->
+<!--                            <option value="ES">{% trans "Espagne" %}</option>-->
+<!--                            <option value="BE">{% trans "Belgique" %}</option>-->
+<!--                            <option value="CH">{% trans "Suisse" %}</option>-->
+<!--                            <option value="CA">{% trans "Canada" %}</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="ff-wa-optin" name="{{ wa_key }}" value="1" checked>

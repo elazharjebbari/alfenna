@@ -5,7 +5,7 @@
     "fields": {
       "slug": "pack-cosmetique-naturel",
       "name": "Le rituel spa antifongique 100% naturel — Pack <strong>8&nbsp;pièces</strong>",
-      "subname": "<p class=\"pack-line\">\n  <span class=\"badge\">Le soin complet pour pieds et ongles — </span>\n  <span class=\"items\">sérum, gel, hydratant, trousse, pierre ponce, lime, coupe-ongles, serviette.</span>\n</p>",
+      "subname": "<p class=\"pack-line\">Comprend 8 pièces <span class=\"items\"><span class=\"badge\">Sérum</span> <span class=\"badge\">Gel</span> <span class=\"badge\">Hydratant</span> <span class=\"badge\">Trousse</span> <span class=\"badge\">Pierre ponce</span> <span class=\"badge\">Lime à ongles</span> <span class=\"badge\">Coupe-ongles</span> <span class=\"badge\">Serviette</span></span></p>",
       "description": "Pack complet pour <strong>pieds &amp; ongles</strong> : agit en douceur, <strong>résultats visibles en 4&nbsp;semaines</strong>. Livraison <strong>24/48&nbsp;h</strong>.",
       "seo_title": "Pack anti-mycose pieds & ongles – Rituel spa naturel",
       "seo_description": "Coffret complet pour traiter les mycoses des pieds et des ongles en douceur. Résultats en 4 semaines. Livraison 24/48 h partout au Maroc.",
@@ -15,7 +15,7 @@
         "Fabriqué à partir d’huiles essentielles et d’extraits végétaux"
       ],
       "price": "450.00",
-      "promo_price": "347.00",
+      "promo_price": "269.00",
       "currency": "MAD",
       "extra": {
         "long_description": "Routine quotidienne visage + corps pour nourrir et apaiser la peau.",

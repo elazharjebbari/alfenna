@@ -11,7 +11,7 @@ assets:
 
 params:
   product_slug: ""
-  plan_slug: "createur"
+  plan_slug: ""
   cta_label: "t:sticky_order.cta_primary"
   hero_selector: "#hero"
   form_root_selector: "[data-ff-root]"
@@ -21,6 +21,10 @@ params:
   discount_label: "t:sticky_order.discount_label"
   aria_label: "t:sticky_order.bar_aria_label"
   close_label: "t:sticky_order.close_aria_label"
+  features: []
+  feature_tokens: []
+  title: ""
+  title_token: ""
 
 contract:
   optional:
@@ -35,6 +39,10 @@ contract:
     discount_label: "str"
     aria_label: "Libellé aria de la barre"
     close_label: "Libellé aria du bouton de fermeture"
+    features: "list"
+    feature_tokens: "list"
+    title: "str"
+    title_token: "str"
 
 hydrate:
   module: "apps.atelier.compose.hydrators.sticky.hydrators"
