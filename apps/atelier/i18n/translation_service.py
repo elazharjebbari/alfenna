@@ -89,6 +89,8 @@ class TranslationService:
             return data
 
         if isinstance(data, Mapping):
+            if not data:
+                return {}
             if data.get("_no_i18n") is True:
                 return {k: v for k, v in data.items() if k != "_no_i18n"}
             # token-only dict: {"t": "..."} optionally with {"default": "..."}
