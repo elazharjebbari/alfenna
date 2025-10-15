@@ -57,8 +57,8 @@
     "fields": {
       "product": 5100,
       "kind": "hero",
-      "src": "/static/images/landing-page/product-single/pack-hero.webp",
-      "thumb": "/static/images/landing-page/product-single/pack-hero_thumb.webp",
+      "src": "/static/images/landing-page/product-single/sac-3.png",
+      "thumb": "/static/images/landing-page/product-single/sac-3_highlight.png",
       "alt": "Pack cosm\u00e9tique naturel \u2014 visuel principal",
       "position": 0
     }
@@ -69,8 +69,8 @@
     "fields": {
       "product": 5100,
       "kind": "gallery",
-      "src": "/static/images/landing-page/product-single/pack-detail-1.webp",
-      "thumb": "/static/images/landing-page/product-single/pack-detail-1_thumb.webp",
+      "src": "/static/images/landing-page/style-de-vie/avant-apres.png",
+      "thumb": "/static/images/landing-page/style-de-vie/avant-apres_highlight.png",
       "alt": "D\u00e9tail du coffret cosm\u00e9tique naturel",
       "position": 1
     }
@@ -81,9 +81,21 @@
     "fields": {
       "product": 5100,
       "kind": "gallery",
-      "src": "/static/images/landing-page/product-single/pack-detail-2.webp",
-      "thumb": "/static/images/landing-page/product-single/pack-detail-2_thumb.webp",
+      "src": "/static/images/landing-page/style-de-vie/hammam-1.png",
+      "thumb": "/static/images/landing-page/style-de-vie/hammam-1_highlight.png",
       "alt": "Routine spa \u00e0 domicile \u2014 illustration",
+      "position": 2
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 5303,
+    "fields": {
+      "product": 5100,
+      "kind": "gallery",
+      "src": "/static/images/landing-page/style-de-vie/gel-1.png",
+      "thumb": "/static/images/landing-page/style-de-vie/gel-1_highlight.png",
+      "alt": "gel du pack",
       "position": 2
     }
   },
