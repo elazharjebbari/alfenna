@@ -270,5 +270,39 @@
       "created_at": "2025-01-01T00:00:00Z",
       "updated_at": "2025-01-01T00:00:00Z"
     }
+  },
+   {
+    "model": "catalog.productoffer",
+    "pk": 4001,
+    "fields": {
+      "product": 5001,
+      "code": "solo",
+      "title": "Pack Solo",
+      "price": "450.00",
+      "compare_at_price": "269.00",
+      "is_featured": false,
+      "savings_label": "توفير 81 درهمً ",
+      "position": 0,
+      "extra": {
+        "bundle_size": 1
+      }
+    }
+  },
+  {
+    "model": "catalog.productoffer",
+    "pk": 4002,
+    "fields": {
+      "product": 5001,
+      "code": "duo",
+      "title": "Pack Duo",
+      "price": "900.00",
+      "compare_at_price": "478.00",
+      "is_featured": true,
+      "savings_label": "أفضل الاختيارات",
+      "position": 1,
+      "extra": {
+        "bundle_size": 2
+      }
+    }
   }
 ]
