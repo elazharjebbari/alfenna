@@ -1,4 +1,4 @@
-{% load static %}
+{% load static widget_tweaks %}
 <!doctype html>
 <html lang="fr">
 <head>
@@ -51,7 +51,7 @@
           </label>
 
           {% if field.errors %}
-            {% with widget=field.as_widget(attrs={'class':'is-invalid'}) %}{{ widget }}{% endwith %}
+            {{ field|add_class:"is-invalid" }}
             <div class="invalid-feedback" style="display:block;">{{ field.errors|striptags }}</div>
           {% else %}
             {{ field }}
