@@ -2569,7 +2569,7 @@ msgstr "اختيار الحزمة"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:117
 msgid "Pack Solo"
-msgstr "حزمة سولو"
+msgstr "حزمة واحدة"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:120
 msgid "Oui"
@@ -2581,7 +2581,7 @@ msgstr "الخيار الأفضل"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:131
 msgid "Pack Duo"
-msgstr "حزمة ديو"
+msgstr "حزمتين"
 
 #: templates/components/core/forms/lead_step3/lead_step3.html:133
 msgid "Éco 209 MAD"

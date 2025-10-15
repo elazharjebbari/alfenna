@@ -835,40 +835,43 @@ def hydrate_product(request, params: Dict[str, Any] | None, *, context: Dict[str
             filtered.append(value)
         return filtered
 
+    def _field_variants(key: str, *extras: str) -> List[str]:
+        variants = [form_fields_map.get(key)]
+        variants.extend(extras)
+        return [variant for variant in variants if variant]
+
     progress_steps = {
         "step1": _filter_fields(
-            [
-                form_fields_map.get("first_name"),
-                form_fields_map.get("last_name"),
-                form_fields_map.get("fullname"),
-                form_fields_map.get("email"),
-                form_fields_map.get("phone"),
-                form_fields_map.get("address_line1"),
-                form_fields_map.get("address_line2"),
-                form_fields_map.get("city"),
-                form_fields_map.get("state"),
-                form_fields_map.get("postal_code"),
-                form_fields_map.get("country"),
-                form_fields_map.get("product"),
+            _field_variants("first_name", "first_name")
+            + _field_variants("last_name", "last_name")
+            + _field_variants("fullname", "full_name")
+            + _field_variants("email", "email")
+            + _field_variants("phone", "phone", "phone_number")
+            + _field_variants("address_line1", "address_line1", "address", "address_raw")
+            + _field_variants("address_line2", "address_line2")
+            + _field_variants("city", "city")
+            + _field_variants("state", "state")
+            + _field_variants("postal_code", "postal_code")
+            + _field_variants("country", "country")
+            + _field_variants("product", "product")
+            + [
                 "campaign",
                 "source",
                 "utm_source",
                 "utm_medium",
                 "utm_campaign",
-                form_fields_map.get("wa_optin"),
             ]
+            + _field_variants("wa_optin", "wa_optin")
         ),
         "step2": _filter_fields(
-            [
-                form_fields_map.get("pack_slug"),
-                form_fields_map.get("offer"),
-                form_fields_map.get("quantity"),
-                form_fields_map.get("bump"),
-                form_fields_map.get("promotion"),
-                form_fields_map.get("address"),
-                form_fields_map.get("payment_method"),
-                "context.complementary_slugs",
-            ]
+            _field_variants("pack_slug", "pack_slug")
+            + _field_variants("offer", "offer_key", "offer")
+            + _field_variants("quantity", "quantity")
+            + _field_variants("bump", "bump_optin")
+            + _field_variants("promotion", "promotion_selected")
+            + _field_variants("address_line1", "address", "address_line1")
+            + _field_variants("payment_method", "payment_method", "payment_mode")
+            + ["context.complementary_slugs"]
         ),
     }
 
