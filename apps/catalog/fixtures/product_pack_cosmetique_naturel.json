@@ -69,6 +69,18 @@
     "fields": {
       "product": 5100,
       "kind": "gallery",
+      "src": "/static/images/landing-page/style-de-vie/sac-2.png",
+      "thumb": "/static/images/landing-page/style-de-vie/sac-2_highlight.png",
+      "alt": "D\u00e9tail du coffret cosm\u00e9tique naturel",
+      "position": 1
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 5302,
+    "fields": {
+      "product": 5100,
+      "kind": "gallery",
       "src": "/static/images/landing-page/style-de-vie/avant-apres.png",
       "thumb": "/static/images/landing-page/style-de-vie/avant-apres_highlight.png",
       "alt": "D\u00e9tail du coffret cosm\u00e9tique naturel",
@@ -77,7 +89,7 @@
   },
   {
     "model": "catalog.productimage",
-    "pk": 5302,
+    "pk": 5303,
     "fields": {
       "product": 5100,
       "kind": "gallery",
@@ -89,7 +101,7 @@
   },
   {
     "model": "catalog.productimage",
-    "pk": 5303,
+    "pk": 5304,
     "fields": {
       "product": 5100,
       "kind": "gallery",
