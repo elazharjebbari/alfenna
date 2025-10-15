@@ -80,3 +80,7 @@ DJANGO_SETTINGS_MODULE=alfenna.settings.dev python manage.py compilemessages -l 
 
 
  django-admin compilemessages
+
+
+ python manage.py runscript scripts.load_pack_cosmetique_fixture --settings=alfenna.settings.prod
+
