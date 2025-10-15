@@ -7,6 +7,67 @@
   if (window.__LL_ANALYTICS_INIT__) {
     return;
   }
+
+  const TRUE_VALUES = ["1", "true", "yes", "y", "on", "accept", "granted"];
+
+  function hasTrue(value) {
+    if (value === null || value === undefined) {
+      return false;
+    }
+    const normalized = String(value).trim().toLowerCase();
+    return TRUE_VALUES.indexOf(normalized) !== -1;
+  }
+
+  function readCookie(name) {
+    if (!name || typeof document === "undefined" || !document.cookie) {
+      return "";
+    }
+    const pattern = "(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\/+^])/g, "\\$1") + "=([^;]*)";
+    const match = document.cookie.match(new RegExp(pattern));
+    return match ? decodeURIComponent(match[1]) : "";
+  }
+
+  function consentCookieName() {
+    const body = document.body || document.documentElement;
+    if (!body) {
+      return "cookie_consent_marketing";
+    }
+    if (body.dataset && body.dataset.llConsentCookie) {
+      return body.dataset.llConsentCookie;
+    }
+    if (typeof body.getAttribute === "function") {
+      const attr = body.getAttribute("data-ll-consent-cookie");
+      if (attr) {
+        return attr;
+      }
+    }
+    return "cookie_consent_marketing";
+  }
+
+  function analyticsAllowed() {
+    const body = document.body || document.documentElement;
+    const attrEnabled = body && typeof body.getAttribute === "function"
+      ? body.getAttribute("data-ll-analytics-enabled")
+      : "";
+    const attrAllows = attrEnabled ? hasTrue(attrEnabled) : true;
+    if (!attrAllows) {
+      return false;
+    }
+    const cookieName = consentCookieName();
+    if (!cookieName) {
+      return true;
+    }
+    const cookieValue = readCookie(cookieName);
+    if (!cookieValue) {
+      return false;
+    }
+    return hasTrue(cookieValue);
+  }
+
+  if (!analyticsAllowed()) {
+    return;
+  }
+
   window.__LL_ANALYTICS_INIT__ = true;
 
   const queue = [];
@@ -28,6 +89,175 @@
       return v.toString(16);
     });
   };
+
+  const canNormalize = typeof String.prototype.normalize === "function";
+  const stripDiacritics = (value) => {
+    if (!value) {
+      return "";
+    }
+    if (!canNormalize) {
+      return String(value);
+    }
+    try {
+      return String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    } catch (err) {
+      return String(value);
+    }
+  };
+
+  function toSlugPart(value) {
+    if (value === null || value === undefined) {
+      return "";
+    }
+    const stripped = stripDiacritics(value);
+    const lower = stripped.toLowerCase();
+    const cleaned = lower.replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+    return cleaned.slice(0, 80);
+  }
+
+  function resolveEventId(evt) {
+    if (!evt || typeof evt !== "object") {
+      return uuid();
+    }
+    const payload = evt.payload || {};
+    const preferred = payload.id
+      || payload.event_id
+      || payload.eventId
+      || payload.element_id
+      || payload.elementId
+      || payload.name;
+    const preferredSlug = toSlugPart(preferred);
+    if (preferredSlug) {
+      return preferredSlug;
+    }
+
+    const derivedParts = [
+      toSlugPart(evt.page_id),
+      toSlugPart(evt.slot_id),
+      toSlugPart(evt.component_alias),
+      toSlugPart(payload.ev || payload.event),
+      toSlugPart(evt.event_type),
+    ].filter(Boolean);
+
+    if (derivedParts.length) {
+      return derivedParts.join("__").slice(0, 120);
+    }
+
+    return evt.event_uuid || uuid();
+  }
+
+  function ensureDataLayer() {
+    const existing = window.dataLayer;
+    const dl = Array.isArray(existing) ? existing : [];
+    if (!Array.isArray(existing)) {
+      window.dataLayer = dl;
+    }
+    if (dl.__ll_patched__) {
+      return dl;
+    }
+
+    const listeners = [];
+    const originalPush = Array.prototype.push;
+
+    const eventContext = (entry) => {
+      const rawEvent =
+        entry.event_type
+        || entry.eventType
+        || entry.ll_event_type
+        || entry.event
+        || "";
+      let eventType = "";
+      if (typeof rawEvent === "string") {
+        eventType = rawEvent.startsWith("ll_") ? rawEvent.slice(3) : rawEvent;
+      }
+      return {
+        event_type: eventType || "",
+        page_id: entry.page_id || entry.ll_page_id || "",
+        slot_id: entry.slot_id || entry.ll_slot_id || "",
+        component_alias: entry.component_alias || entry.ll_component_alias || "",
+      };
+    };
+
+    const normalizeEntry = (entry) => {
+      const base = entry && typeof entry === "object" ? entry : { value: entry };
+      const normalized = Object.assign({}, base);
+      normalized.payload = Object.assign({}, base && base.payload && typeof base.payload === "object" ? base.payload : {});
+      normalized.ts = normalized.ts || nowISO();
+      normalized.event_uuid = normalized.event_uuid || uuid();
+
+      const context = eventContext(normalized);
+      if (!normalized.ll_event_type && context.event_type) {
+        normalized.ll_event_type = context.event_type;
+      }
+      if (!normalized.ll_page_id && context.page_id) {
+        normalized.ll_page_id = context.page_id;
+      }
+      if (!normalized.ll_slot_id && context.slot_id) {
+        normalized.ll_slot_id = context.slot_id;
+      }
+      if (!normalized.ll_component_alias && context.component_alias) {
+        normalized.ll_component_alias = context.component_alias;
+      }
+      if (!normalized.event || typeof normalized.event !== "string") {
+        normalized.event = context.event_type ? `ll_${context.event_type}` : "ll_event";
+      }
+
+      const idSource = Object.assign({}, context, {
+        payload: normalized.payload,
+        event_uuid: normalized.event_uuid,
+      });
+
+      normalized.id_event = normalized.id_event || resolveEventId(idSource);
+      normalized.event_uuid = normalized.event_uuid || idSource.event_uuid;
+      return normalized;
+    };
+
+    const notify = (entry) => {
+      const snapshot = listeners.slice();
+      for (let i = 0; i < snapshot.length; i += 1) {
+        const fn = snapshot[i];
+        if (typeof fn === "function") {
+          try {
+            fn(entry);
+          } catch (err) {}
+        }
+      }
+      try {
+        if (typeof window.dispatchEvent === "function" && typeof window.CustomEvent === "function") {
+          const evt = new window.CustomEvent("datalayer:push", { detail: entry });
+          window.dispatchEvent(evt);
+        }
+      } catch (err) {}
+    };
+
+    dl.on = function on(fn) {
+      if (typeof fn !== "function") {
+        return () => {};
+      }
+      listeners.push(fn);
+      return function unsubscribe() {
+        const idx = listeners.indexOf(fn);
+        if (idx !== -1) {
+          listeners.splice(idx, 1);
+        }
+      };
+    };
+
+    dl.push = function pushWithNormalize() {
+      let length = dl.length;
+      for (let i = 0; i < arguments.length; i += 1) {
+        const normalized = normalizeEntry(arguments[i]);
+        length = originalPush.call(dl, normalized);
+        notify(normalized);
+      }
+      return length;
+    };
+
+    dl.__ll_patched__ = true;
+    return dl;
+  }
+
+  const dataLayer = ensureDataLayer();
 
   function ctx(el) {
     const slot = el && el.closest ? el.closest("[data-ll-slot-id]") : null;
@@ -91,7 +321,7 @@
 
   LL.emit = function emit(type, el, payload) {
     const base = ctx(el || document.body);
-    push({
+    const event = {
       event_uuid: uuid(),
       event_type: type,
       ts: nowISO(),
@@ -99,7 +329,9 @@
       slot_id: base.slot_id,
       component_alias: base.component_alias,
       payload: payload || {},
-    });
+    };
+    push(event);
+    return event;
   };
 
   LL.view = function view(el) {
@@ -124,39 +356,37 @@
   (function () {
     function mirrorToDataLayer(evt) {
       try {
-        const dl = window.dataLayer = window.dataLayer || [];
-        const payload = evt.payload || {};
+        const dl = ensureDataLayer();
+        if (!evt || typeof evt !== "object") {
+          return;
+        }
+        const payloadSource = evt.payload || {};
+        const payload = Object.assign({}, payloadSource);
         const eventNameRaw = evt.event_type === "conversion"
           ? (payload.ev || payload.event || "")
           : `ll_${evt.event_type}`;
-        const flat = Object.assign(
-          {
-            event: eventNameRaw || "ll_event",
-            ll_event_type: evt.event_type,
-            ll_page_id: evt.page_id || "",
-            ll_slot_id: evt.slot_id || "",
-            ll_component_alias: evt.component_alias || "",
-          },
-          payload,
-        );
+        const flat = Object.assign({
+          event: eventNameRaw || "ll_event",
+          ll_event_type: evt.event_type,
+          ll_page_id: evt.page_id || "",
+          ll_slot_id: evt.slot_id || "",
+          ll_component_alias: evt.component_alias || "",
+          event_uuid: evt.event_uuid || "",
+          id_event: resolveEventId(evt),
+        }, payload);
+        flat.id_event = flat.id_event || resolveEventId(evt);
+        flat.event_uuid = flat.event_uuid || evt.event_uuid || "";
         dl.push(flat);
       } catch (err) {}
     }
 
     const originalEmit = LL.emit;
     LL.emit = function emit(type, el, payload) {
-      const result = originalEmit.call(LL, type, el, payload);
+      const evt = originalEmit.call(LL, type, el, payload);
       try {
-        const contextBase = ctx(el || document.body);
-        mirrorToDataLayer({
-          event_type: type,
-          page_id: contextBase.page_id,
-          slot_id: contextBase.slot_id,
-          component_alias: contextBase.component_alias,
-          payload: payload || {},
-        });
+        mirrorToDataLayer(evt);
       } catch (err) {}
-      return result;
+      return evt;
     };
   })();
 
