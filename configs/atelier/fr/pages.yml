@@ -146,6 +146,8 @@ pages:
         component: "vendors/core"
       header:
         component: "header/modes"
+      language_switch:
+        component: "lang/switcher"
       product_hero:
         component: "core/product"
         params:

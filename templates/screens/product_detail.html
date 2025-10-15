@@ -10,6 +10,12 @@
 <div class="d-none d-md-block">
     <div class="section-padding"></div>
 </div>
+<div data-ll-page-id="product_detail" data-ll-slot-id="language_switch">
+    {{ slots_html.language_switch|default_if_none:""|safe }}
+</div>
+<div class="d-none d-md-block">
+    <div class="section-padding"></div>
+</div>
 <div class="section-padding"></div>
 <div data-ll-page-id="product_detail" data-ll-slot-id="product_hero">
     {{ slots_html.product_hero|default_if_none:""|safe }}
