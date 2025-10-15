@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0012_course_translatable_base'),
+        ('catalog', '0012_alter_coursetranslation_master'),
     ]
 
     operations = [

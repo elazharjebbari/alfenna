@@ -27,6 +27,10 @@
     try { return window.localStorage; } catch (_) { return null; }
   }
 
+  function safeSessionStorage() {
+    try { return window.sessionStorage; } catch (_) { return null; }
+  }
+
   function ensureProgressSessionKey(storageKey) {
     const keyName = storageKey || PROGRESS_STORAGE_KEY;
     const store = safeLocalStorage();
@@ -65,6 +69,21 @@
       root.appendChild(flowField);
     }
     flowField.value = flowKey;
+  }
+
+  function ensureProgressIdempotencyKey(flowKey, sessionKey, stepKey) {
+    const store = safeSessionStorage();
+    const base = `ff-progress:${flowKey || "flow"}:${sessionKey || "session"}:${stepKey || "step"}`;
+    if (!store) {
+      return `${base}:${uuid4()}`;
+    }
+    const existing = store.getItem(base);
+    if (existing && existing.length) {
+      return existing;
+    }
+    const generated = `${base}:${uuid4()}`;
+    try { store.setItem(base, generated); } catch (_) { /* ignore quota errors */ }
+    return generated;
   }
 
   function getCookie(name) {
@@ -227,12 +246,24 @@
 
     ensureProgressHiddenFields(root, cfg, sessionKey, flowKey);
 
+    const idemKey = ensureProgressIdempotencyKey(flowKey, sessionKey, stepKey);
+    if (payload && typeof payload === "object") {
+      if (!Object.prototype.hasOwnProperty.call(payload, "idempotency_key")) {
+        payload.idempotency_key = idemKey;
+      }
+      if (!Object.prototype.hasOwnProperty.call(payload, "_idempotency_key")) {
+        payload._idempotency_key = idemKey;
+      }
+    }
+
     const body = {
       flow_key: flowKey,
       session_key: sessionKey,
       form_kind: formKind,
       step: stepKey,
       payload,
+      idempotency_key: idemKey,
+      _idempotency_key: idemKey,
     };
 
     try {
@@ -241,6 +272,7 @@
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "XMLHttpRequest",
+          "X-Idempotency-Key": idemKey,
         },
         body: JSON.stringify(body),
         credentials: "same-origin",
