@@ -51,8 +51,8 @@
                             <div class="af-price-old mt-1">{{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency }}
                             </div>
                             <div class="af-saving mt-2">
-                                {% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency_label|default:pricing.currency %}
-                                Vous économisez {{ amount }} {{ currency }}
+                                {% blocktrans trimmed with amount=pricing.savings|floatformat:0 currency=pricing.currency_label|default:pricing.currency_display|default:pricing.currency %}
+                                  Vous économisez {{ amount }} {{ currency }}
                                 {% endblocktrans %}
                             </div>
                             {% elif pricing.price %}
@@ -145,9 +145,10 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="af-label" for="ff-postal">{% trans "Code postal" %}</label>
+                        {% trans 'Ex. 20000' as default_postal_placeholder %}
                         <input id="ff-postal" class="form-control" type="text"
                                name="{{ postal_code_key }}" autocomplete="postal-code" required
-                               placeholder="20000">
+                               placeholder="{{ ui_texts.postal_placeholder|default:default_postal_placeholder }}">
                     </div>
                     <div class="col-md-6">
                         <label class="af-label" for="ff-country">{% trans "Pays" %}</label>

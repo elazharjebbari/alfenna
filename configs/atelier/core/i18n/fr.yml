@@ -243,6 +243,8 @@ product_detail:
     total_label: "Total à régler"
     thanks_title: "Merci pour votre confiance !"
     thanks_subtitle: "Notre équipe vous contacte très vite."
+    placeholders:
+      postal: "Ex. 20000"
 
 before_after:
   wipe:
@@ -262,7 +264,7 @@ before_after:
       - "Gêne & honte"
       - "Inconfort à la marche"
       - "Ongle abîmé"
-    cta_label: "Je me lance"
+    cta_label: "Achetez maintenant"
 
 gallery:
   participants:

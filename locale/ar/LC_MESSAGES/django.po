@@ -1022,7 +1022,7 @@ msgstr ""
 
 #: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:78
 msgid "vous économisez"
-msgstr ""
+msgstr "توفّر"
 
 #: draft/template_ref_to_convert/carpet/components/deal_timer/deal_timer.html:86
 #: draft/template_ref_to_convert/carpet/components/timer/timer.html:105
@@ -1335,7 +1335,7 @@ msgstr ""
 #: draft/template_ref_to_convert/carpet/components/product/product_dynamic_upsell/3_v2.html:307
 #: templates/components/core/checkout/order_summary.html:21
 msgid "Vous économisez"
-msgstr ""
+msgstr "وفرْت"
 
 #: draft/template_ref_to_convert/carpet/components/forms/form-lead.html:330
 #: draft/template_ref_to_convert/carpet/components/forms/form-lead_cosmetic.html:330
@@ -2704,9 +2704,10 @@ msgid "Se déconnecter"
 msgstr ""
 
 #: templates/components/core/product/_info.html:17
+#: templates/components/core/forms/lead_step3/lead_step3.html:54
 #, python-format
-msgid "Vous economisez %(amount)s %(currency)s"
-msgstr ""
+msgid "Vous économisez %(amount)s %(currency)s"
+msgstr "توفر %(amount)s %(currency)s"
 
 #: templates/components/core/product/_media.html:21
 msgid "Image precedente"

@@ -6,8 +6,10 @@ import html
 
 from django.urls import reverse, NoReverseMatch
 from django.http import HttpRequest
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.formats import date_format
+
+from apps.atelier.i18n.translation_service import TranslationService
 
 logger = logging.getLogger("atelier.header.modes")
 
@@ -35,7 +37,39 @@ def _norm_icon(raw_icon: dict | None) -> dict | None:
     return icon
 
 
-def _norm_banner(raw_banner: dict | None) -> dict:
+def _human_today_label(request: HttpRequest | None = None) -> str:
+    lang = getattr(request, "LANGUAGE_CODE", None) or translation.get_language() or "fr"
+    with translation.override(lang):
+        today_local = timezone.localdate()
+        return date_format(today_local, "l j F", use_l10n=True)
+
+
+def _get_translator(request: HttpRequest | None = None) -> TranslationService | None:
+    if request is None:
+        return None
+    locale = getattr(request, "LANGUAGE_CODE", None) or translation.get_language() or "fr"
+    site_version = getattr(request, "site_version", None) or "core"
+    try:
+        return TranslationService(locale=locale, site_version=site_version)
+    except Exception:
+        return None
+
+
+def _resolve_token(value: Any, translator: TranslationService | None) -> Any:
+    if not isinstance(value, str):
+        return value
+    stripped = value.strip()
+    if not stripped.startswith("t:"):
+        return value
+    token = stripped[2:].strip()
+    if not token:
+        return value
+    if not translator:
+        return value
+    return translator.t(token, default=value)
+
+
+def _norm_banner(raw_banner: dict | None, *, request: HttpRequest | None = None) -> dict:
     defaults = {
         "enabled": False,
         "colors": {"from": "#2c6a57", "to": "#1f4f42"},
@@ -50,23 +84,34 @@ def _norm_banner(raw_banner: dict | None) -> dict:
     if not isinstance(raw_banner, dict):
         return defaults
 
-    today_local = timezone.localdate()
-    today_label = date_format(today_local, "l j F", use_l10n=True)
+    today_label: str | None = None
+    translator = _get_translator(request)
 
     messages: List[Dict[str, Any]] = []
     for raw_msg in raw_banner.get("messages", []) or []:
         if not isinstance(raw_msg, dict):
             continue
-        text = str(raw_msg.get("text") or "").strip()
+        raw_text = raw_msg.get("text")
+        text_resolved = _resolve_token(raw_text, translator)
+        text = str(text_resolved or "").strip()
         if not text:
             continue
         icon = _norm_icon(raw_msg.get("icon"))
-        badge = str(raw_msg.get("badge") or "").strip() or None
+        badge_raw = raw_msg.get("badge")
+        badge_resolved = _resolve_token(badge_raw, translator)
+        badge = str(badge_resolved or "").strip() or None
+        text_plain = text
         text_escaped = html.escape(text)
-        if "[today_human]" in text_escaped:
-            text_escaped = text_escaped.replace("[today_human]", f'<span class="af-date">{html.escape(today_label)}</span>')
+        if "[today_human]" in text:
+            if today_label is None:
+                today_label = _human_today_label(request)
+            text_plain = text.replace("[today_human]", today_label)
+            text_escaped = text_escaped.replace(
+                "[today_human]",
+                f'<span class="af-date">{html.escape(today_label)}</span>',
+            )
         messages.append({
-            "text": text,
+            "text": text_plain,
             "text_html": text_escaped,
             "icon": icon,
             "badge": badge,
@@ -159,10 +204,10 @@ def _build_urls(params: dict) -> Dict[str, str]:
 
 def _default_menu(urls: Dict[str, str]) -> List[Dict[str, str]]:
     return [
-        {"label": "Accueil", "url": urls["home"]},
-        {"label": "Nos Formations", "url": urls["packs"]},
-        {"label": "FAQ", "url": urls["faq"]},
-        {"label": "Contact", "url": urls["contact"]},
+        {"label": "t:header.menu.home", "url": urls["home"]},
+        {"label": "t:header.menu.trainings", "url": urls["packs"]},
+        {"label": "t:header.menu.faq", "url": urls["faq"]},
+        {"label": "t:header.menu.contact", "url": urls["contact"]},
     ]
 
 
@@ -197,7 +242,7 @@ def _menu_from_params(raw_menu: Any, urls: Dict[str, str], fallback: List[Dict[s
 
 
 def _rating_badge_text(params: dict) -> str:
-    return (params.get("rating_badge_text") or "★ 4,8 / 5 • 500+").strip()
+    return (params.get("rating_badge_text") or "t:header.rating_badge_text").strip()
 
 # ---------- Hydrateurs (STRUCT / MAIN / MOBILE)
 
@@ -206,14 +251,26 @@ def modes_struct(request: HttpRequest, params: dict) -> Dict[str, Any]:
     En-tête structurel (topbar + conteneur enfants).
     Pas d'invention de defaults agressifs : lecture params + normalisation simple.
     """
+    translator = _get_translator(request)
     topbar = params.get("topbar") or {}
     enabled = bool(topbar.get("enabled", False))
-    text_html = topbar.get("text_html") or ""
+    raw_text_html = _resolve_token(topbar.get("text_html"), translator) or ""
+    text_html = raw_text_html
+    if isinstance(text_html, str) and "[today_human]" in text_html:
+        today_label = _human_today_label(request)
+        text_html = text_html.replace(
+            "[today_human]",
+            f'<span class="af-date">{html.escape(today_label)}</span>',
+        )
     deadline_ts = topbar.get("deadline_ts") or ""
     cta = None
     cta_raw = topbar.get("cta") or {}
     if isinstance(cta_raw, dict) and cta_raw.get("label") and cta_raw.get("url"):
-        cta = {"label": str(cta_raw["label"]).strip(), "url": str(cta_raw["url"]).strip()}
+        cta_label = _resolve_token(cta_raw.get("label"), translator)
+        cta = {
+            "label": str(cta_label or cta_raw["label"]).strip(),
+            "url": str(cta_raw["url"]).strip(),
+        }
 
     return {
         "topbar": {
@@ -222,7 +279,7 @@ def modes_struct(request: HttpRequest, params: dict) -> Dict[str, Any]:
             "deadline_ts": deadline_ts,
             **({"cta": cta} if cta else {}),
         },
-        "banner": _norm_banner(params.get("banner")),
+        "banner": _norm_banner(params.get("banner"), request=request),
     }
 
 def modes_main(request: HttpRequest, params: dict) -> Dict[str, Any]:
@@ -238,17 +295,21 @@ def modes_main(request: HttpRequest, params: dict) -> Dict[str, Any]:
     if user and getattr(user, "is_authenticated", False):
         username = getattr(user, "username", "") or getattr(user, "email", "") or ""
 
+    primary_label = params.get("primary_cta_label") or "t:header.primary_cta.label"
+    primary_sublabel = params.get("primary_cta_sublabel") or "t:header.primary_cta.sublabel"
+    primary_aria = params.get("primary_cta_aria") or "t:header.primary_cta.aria"
+
     return {
         "mode": mode,
         "menu": menu_common,
         "primary_cta": {
-            "label": (params.get("primary_cta_label") or "Je me lance"),
-            "sublabel": (params.get("primary_cta_sublabel") or "Paiement sécurisé • Accès immédiat"),
-            "aria": (params.get("primary_cta_aria") or "Je me lance — Accès immédiat"),
+            "label": primary_label,
+            "sublabel": primary_sublabel,
+            "aria": primary_aria,
             "url": urls["cta"],
         },
         "logo_src": (params.get("logo_src") or "images/logo.webp"),
-        "logo_alt": (params.get("logo_alt") or "Lumiere"),
+        "logo_alt": (params.get("logo_alt") or "t:header.logo.alt"),
         "home_url": urls["home"],
         "show_rating_badge": bool(params.get("show_rating_badge", True)),
         "rating_badge_text": _rating_badge_text(params),

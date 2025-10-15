@@ -47,6 +47,11 @@
   font-size: 0.95rem;
 }
 
+html[dir='rtl'] .c-wa-fab {
+  right: var(--fab-offset, 16px);
+  left: auto;
+}
+
 @media (max-width: 420px) {
   .c-wa-fab {
     width: 56px;

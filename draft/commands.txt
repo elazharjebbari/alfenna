@@ -74,3 +74,9 @@ EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD
 celery -A alfenna worker -l info -Q default,email,analytics,leads,ads -n ll_all@%h --autoscale=16,1 --prefetch-multiplier=1 -Ofair
 rsync -avz --progress ~/.codex/auth.json root@46.202.128.168:~/.codex/auth.json
+
+
+DJANGO_SETTINGS_MODULE=alfenna.settings.dev python manage.py compilemessages -l fr -l en -l ar
+
+
+ django-admin compilemessages

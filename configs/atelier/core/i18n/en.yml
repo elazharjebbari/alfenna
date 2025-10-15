@@ -16,6 +16,25 @@ header:
       check: "Check before you pay"
       cod: "Cash on delivery"
       natural: "100% natural product"
+  primary_cta:
+    label: "Start now"
+    sublabel: "Secure payment • Immediate access"
+    aria: "Start now — Immediate access"
+  menu:
+    home: "Home"
+    trainings: "Our Trainings"
+    product: "Our Pack"
+    faq: "FAQ"
+    contact: "Contact"
+  contact:
+    phone_tel: "+212719646705"
+    phone_display: "+212 719-646-705"
+    email: "partnership@alfenna.com"
+    address_text: "Alfenna — Rabat, Morocco"
+    address_url: "https://maps.google.com/?q=Casablanca%2C%20Morocco"
+  rating_badge_text: "★ 4.8 / 5 • 500+ reviews"
+  logo:
+    alt: "Alfenna"
 product_detail:
   meta:
     title: "Alfenna natural cosmetic pack — Product page"
@@ -43,6 +62,8 @@ product_detail:
     total_label: "Total amount due"
     thanks_title: "Thank you for your trust!"
     thanks_subtitle: "Our team will contact you very soon."
+    placeholders:
+      postal: "e.g. 20000"
 
 before_after:
   wipe:

@@ -8,9 +8,9 @@ body.rtl {
 }
 
 body.rtl .c-wa-fab {
-    right: auto !important;
-    left: var(--fab-offset, 16px);
-    flex-direction: row-reverse;
+    right: var(--fab-offset, 16px) !important;
+    left: auto !important;
+    flex-direction: row;
 }
 
 body.rtl .af-buybar {

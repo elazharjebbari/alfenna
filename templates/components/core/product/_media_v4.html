@@ -50,10 +50,18 @@
         </div>
 
         <button class="swiper-button-prev afg-paddle ms-md-5" type="button" aria-label="{% trans 'Image précédente' %}">
-          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+          {% if is_rtl %}
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          {% else %}
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+          {% endif %}
         </button>
         <button class="swiper-button-next afg-paddle me-md-5" type="button" aria-label="{% trans 'Image suivante' %}">
-          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          {% if is_rtl %}
+            <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+          {% else %}
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          {% endif %}
         </button>
 
         <div class="swiper-pagination afg-dots" aria-hidden="true"></div>

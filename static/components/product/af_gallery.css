@@ -60,6 +60,8 @@
 }
 .af-gallery .swiper-button-prev.afg-paddle { left:-28px; }
 .af-gallery .swiper-button-next.afg-paddle { right:-28px; }
+html[dir='rtl'] .af-gallery .swiper-button-prev.afg-paddle { right:-28px; left:auto; }
+html[dir='rtl'] .af-gallery .swiper-button-next.afg-paddle { left:-28px; right:auto; }
 .af-gallery .afg-paddle::after{ content:none; } /* masque l’icône par défaut */
 
 /* Dots */
@@ -82,6 +84,8 @@
   .af-gallery .afg-thumb{ width:86px; height:86px; }
   .af-gallery .swiper-button-prev.afg-paddle{ left:15px; }
   .af-gallery .swiper-button-next.afg-paddle{ right:15px; }
+  html[dir='rtl'] .af-gallery .swiper-button-prev.afg-paddle{ right:15px; left:auto; }
+  html[dir='rtl'] .af-gallery .swiper-button-next.afg-paddle{ left:15px; right:auto; }
 }
 
 /* Réduction du mouvement */

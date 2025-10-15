@@ -33,7 +33,7 @@ params:
       - { icon: "fa-solid fa-face-smile",        text: "t:before_after.wipe.after_pills.0" }
       - { icon: "fa-solid fa-person-walking",      text: "t:before_after.wipe.after_pills.1" }
       - { icon: "fa-solid fa-square-check",  text: "t:before_after.wipe.after_pills.2" }
-  cta: { label: "t:before_after.wipe.cta_label", url: "#program" }
+  cta: { label: "t:before_after.wipe.cta_label", url: "#form-stepper" }
   style:
     bg_color: "#e7f8ee"
     handle_color: "#309255"

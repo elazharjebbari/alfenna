@@ -17,7 +17,7 @@ def _using_dev_settings(argv: list[str]) -> bool:
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'alfenna.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'alfenna.settings.dev')
 
     if len(sys.argv) >= 2 and sys.argv[1] == 'runserver' and '--nostatic' not in sys.argv:
         if _using_dev_settings(sys.argv):

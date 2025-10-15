@@ -35,7 +35,6 @@ html[dir='rtl'] .af-topbar {
 }
 .af-track {
   display: flex;
-  gap: 2.25rem;
   will-change: transform;
   animation: af-marquee var(--af-speed, 10000ms) linear infinite;
 }
@@ -64,6 +63,7 @@ html[dir="rtl"] .af-track {
   gap: 2.25rem;
   margin: 0;
   padding: 0;
+  padding-inline-end: 2.25rem;
   list-style: none;
 }
 .af-item {

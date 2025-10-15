@@ -184,6 +184,8 @@ product_detail:
     total_label: "المبلغ الإجمالي المستحق"
     thanks_title: "شكراً لثقتك بنا!"
     thanks_subtitle: "سيتواصل معك فريقنا في أقرب وقت."
+    placeholders:
+      postal: "مثال: 20000"
 
 before_after:
   wipe:
@@ -203,7 +205,7 @@ before_after:
       - "حرج وانزعاج"
       - "صعوبة في المشي"
       - "ظفر متضرر"
-    cta_label: "أبدأ الآن"
+    cta_label: "اشترِ الآن"
 
 gallery:
   participants:

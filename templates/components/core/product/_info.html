@@ -16,14 +16,24 @@
   <div>
     {% if pricing.has_promo %}
       <div class="d-flex align-items-baseline gap-2">
-        <span class="fs-3 fw-bold text-danger">{{ pricing.promo_price|floatformat:0 }} {{ pricing.currency }}</span>
-        <span class="text-muted text-decoration-line-through">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</span>
+        <span class="fs-3 fw-bold text-danger">
+          {{ pricing.promo_price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency_display|default:pricing.currency }}
+        </span>
+        <span class="text-muted text-decoration-line-through">
+          {{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency_display|default:pricing.currency }}
+        </span>
       </div>
     {% elif pricing.price %}
-      <div class="fs-3 fw-bold">{{ pricing.price|floatformat:0 }} {{ pricing.currency }}</div>
+      <div class="fs-3 fw-bold">
+        {{ pricing.price|floatformat:0 }} {{ pricing.currency_label|default:pricing.currency_display|default:pricing.currency }}
+      </div>
     {% endif %}
     {% if pricing.savings %}
-      <small class="text-success">{% blocktrans with amount=pricing.savings|floatformat:0 currency=pricing.currency %}Vous economisez {{ amount }} {{ currency }}{% endblocktrans %}</small>
+      <small class="text-success">
+        {% blocktrans trimmed with amount=pricing.savings|floatformat:0 currency=pricing.currency_label|default:pricing.currency_display|default:pricing.currency %}
+          Vous économisez {{ amount }} {{ currency }}
+        {% endblocktrans %}
+      </small>
     {% endif %}
   </div>
 
