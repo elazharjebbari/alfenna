@@ -1,15 +1,15 @@
+import django.db.models.deletion
+import parler.fields
 from django.db import migrations, models
 from django.db.migrations.operations.base import Operation
 
 import parler.models
 
-from apps.catalog.models.models import CourseManager
-
 
 class AlterCourseModelBases(Operation):
     """
-    Ensure the historical Course model inherits from TranslatableModel so that
-    parler can register its translation meta during migrations.
+    Update the historical Course model so parler recognises it as translatable
+    before CourseTranslation relationships are reloaded.
     """
 
     reduces_to_sql = True
@@ -22,28 +22,28 @@ class AlterCourseModelBases(Operation):
 
     def state_forwards(self, app_label, state):
         model_state = state.models[app_label, self.name.lower()]
-        updated_state = model_state.clone()
-        updated_state.bases = self.new_bases
-        state.models[app_label, self.name.lower()] = updated_state
+        cloned = model_state.clone()
+        cloned.bases = self.new_bases
+        state.models[app_label, self.name.lower()] = cloned
         state.reload_model(app_label, self.name.lower(), delay=True)
 
     def state_backwards(self, app_label, state):
         model_state = state.models[app_label, self.name.lower()]
-        updated_state = model_state.clone()
-        updated_state.bases = self.old_bases
-        state.models[app_label, self.name.lower()] = updated_state
+        cloned = model_state.clone()
+        cloned.bases = self.old_bases
+        state.models[app_label, self.name.lower()] = cloned
         state.reload_model(app_label, self.name.lower(), delay=True)
 
     def database_forwards(self, app_label, schema_editor, from_state, to_state):
-        # No database changes required; this keeps model state in sync.
+        # State-only adjustment.
         pass
 
     def database_backwards(self, app_label, schema_editor, from_state, to_state):
-        # No database changes required; this keeps model state in sync.
+        # State-only adjustment.
         pass
 
     def describe(self):
-        return f"Alter {self.name} model bases to use parler.TranslatableModel"
+        return f"Alter {self.name} model bases to parler.TranslatableModel"
 
 
 class Migration(migrations.Migration):
@@ -58,10 +58,15 @@ class Migration(migrations.Migration):
             new_bases=(parler.models.TranslatableModel,),
             old_bases=(models.Model,),
         ),
-        migrations.AlterModelManagers(
-            name="course",
-            managers=[
-                ("objects", CourseManager()),
-            ],
+        migrations.AlterField(
+            model_name="coursetranslation",
+            name="master",
+            field=parler.fields.TranslationsForeignKey(
+                editable=False,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="translations",
+                to="catalog.course",
+            ),
         ),
     ]
