@@ -1,7 +1,8 @@
 {% load static %}
+{% with footer_logo=footer_logo_src|default:'images/logo/logo_text_black_200x60.png' top_shape=top_shape_src|default:'images/shape/shape-21.png' bottom_shape=bottom_shape_src|default:'images/shape/shape-22.png' %}
 <div class="section footer-section">
   <div class="footer-widget-section">
-    <img src="{% static slider_image|default:'images/shape/shape-21.png' %}"
+    <img src="{% static top_shape %}"
          alt="Shape">
     <div class="container">
       <div class="row">
@@ -10,7 +11,7 @@
           <div class="footer-widget">
             <div class="widget-logo">
               <a href="#">
-                  <img src="{% static slider_image|default:'images/logo/logo_text_black_200x60.png' %}"
+                  <img src="{% static footer_logo %}"
                        alt="footer-logo">
               </a>
             </div>
@@ -65,7 +66,7 @@
         </div>
       </div>
     </div>
-      <img src="{% static slider_image|default:'images/shape/shape-22.png' %}"
+      <img src="{% static bottom_shape %}"
            alt="Shape">
 
   </div>
@@ -81,3 +82,4 @@
     </div>
   </div>
 </div>
+{% endwith %}

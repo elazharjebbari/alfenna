@@ -10,6 +10,9 @@ assets:
 
 # Valeurs de référence (documentaires)
 params:
+  footer_logo_src: "images/logo/logo_text_black_200x60.png"
+  top_shape_src: "images/shape/shape-21.png"
+  bottom_shape_src: "images/shape/shape-22.png"
   brand_title: "t:footer.brand"
   address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
   address_text: "t:footer.address_text"
@@ -38,6 +41,9 @@ params:
 contract:
   required: {}
   optional:
+    footer_logo_src: "str"
+    top_shape_src: "str"
+    bottom_shape_src: "str"
     address_url: "Lien adresse Google Maps"
     address_text: "Texte adresse"
     email: "Email contact"
@@ -64,6 +70,9 @@ hydrate:
 
   # Whitelist + defaults (manifest-first robuste)
   params:
+    footer_logo_src: "images/logo/logo_text_black_200x60.png"
+    top_shape_src: "images/shape/shape-21.png"
+    bottom_shape_src: "images/shape/shape-22.png"
     address_url: "https://maps.google.com/?q=Casablanca%2C%20Maroc"
     address_text: "t:footer.address_text"
     email: "partenariat@alfenna.com"

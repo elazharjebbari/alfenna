@@ -157,10 +157,10 @@
       "product": 5100,
       "code": "duo",
       "title": "Pack Duo",
-      "price": "360.00",
-      "compare_at_price": "512.00",
+      "price": "380.00",
+      "compare_at_price": "520.00",
       "is_featured": true,
-      "savings_label": "Économie de 162 MAD",
+      "savings_label": "Économie de 140 MAD",
       "position": 1,
       "extra": {
         "bundle_size": 2
