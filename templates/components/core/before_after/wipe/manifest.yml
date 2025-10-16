@@ -18,7 +18,7 @@ params:
     ok_label: "t:before_after.wipe.hint_ok"
     storage_key: "ba_hint_wipe_v1"
   before:
-    image: "images/landing-page/before_after/avant.jpg"
+    image: "images/landing-page/before_after/avant.png"
     alt: "t:before_after.wipe.before_alt"
     label: "t:before_after.wipe.before_label"
     pills:

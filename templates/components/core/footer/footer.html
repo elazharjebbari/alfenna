@@ -1,7 +1,8 @@
-{% load static atelier_images %}
+{% load static %}
 <div class="section footer-section">
   <div class="footer-widget-section">
-    {% responsive_picture slider_image|default:'images/shape/shape-21.png' alt="Shape" %}
+    <img src="{% static slider_image|default:'images/shape/shape-21.png' %}"
+         alt="Shape">
     <div class="container">
       <div class="row">
         <!-- Col 1 -->
@@ -9,7 +10,8 @@
           <div class="footer-widget">
             <div class="widget-logo">
               <a href="#">
-                  {% responsive_picture slider_image|default:'images/logo/logo_text_black_200x60.png' alt="footer-logo" %}
+                  <img src="{% static slider_image|default:'images/logo/logo_text_black_200x60.png' %}"
+                       alt="footer-logo">
               </a>
             </div>
             <div class="widget-address">
@@ -63,7 +65,8 @@
         </div>
       </div>
     </div>
-      {% responsive_picture slider_image|default:'/images/shape/shape-22.png' alt="Shape" %}
+      <img src="{% static slider_image|default:'images/shape/shape-22.png' %}"
+           alt="Shape">
 
   </div>
 

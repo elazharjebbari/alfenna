@@ -14,8 +14,8 @@
         "Livraison 24/48h partout au Maroc",
         "Formule naturelle sans parab\u00e8nes"
       ],
-      "price": "450.00",
-      "promo_price": "269.00",
+      "price": "260.00",
+      "promo_price": "199.00",
       "currency": "MAD",
       "is_active": true,
       "extra": {
@@ -140,10 +140,10 @@
       "product": 5100,
       "code": "solo",
       "title": "Pack Solo",
-      "price": "269.00",
-      "compare_at_price": "450.00",
+      "price": "199.00",
+      "compare_at_price": "260.00",
       "is_featured": false,
-      "savings_label": "Économie de 181 MAD",
+      "savings_label": "Économie de 61 MAD",
       "position": 0,
       "extra": {
         "bundle_size": 1
@@ -157,10 +157,10 @@
       "product": 5100,
       "code": "duo",
       "title": "Pack Duo",
-      "price": "489.00",
-      "compare_at_price": "900.00",
+      "price": "360.00",
+      "compare_at_price": "512.00",
       "is_featured": true,
-      "savings_label": "Économie de 411 MAD",
+      "savings_label": "Économie de 162 MAD",
       "position": 1,
       "extra": {
         "bundle_size": 2

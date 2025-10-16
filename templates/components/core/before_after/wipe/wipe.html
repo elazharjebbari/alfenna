@@ -1,4 +1,4 @@
-{% load static atelier_images atelier_utils i18n  %}
+{% load static atelier_utils i18n  %}
 
 <div class="section">
   <section class="ba-section{% if is_rtl %} ba-section-rtl{% endif %}"
@@ -32,7 +32,9 @@
 
         <!-- AVANT -->
         <div class="ba-layer ba-before" aria-hidden="true">
-          {% responsive_picture before.image alt=before.alt cls="ba-img" %}
+          <img src="{% static before.image|default:'images/landing-page/before_after/avant.png' %}"
+               alt="{{ before.alt }}"
+               class="ba-img">
           {% if before.pills %}
           <ul class="ba-pills left">
             {% for p in before.pills %}
@@ -45,7 +47,9 @@
 
         <!-- APRÈS -->
         <div class="ba-layer ba-after" style="--wipe: {{ options.default_value|default:'50' }}%;">
-          {% responsive_picture after.image alt=after.alt cls="ba-img" %}
+          <img src="{% static after.image|default:'images/landing-page/before_after/apres.png' %}"
+               alt="{{ after.alt }}"
+               class="ba-img">
           {% if after.pills %}
           <ul class="ba-pills right">
             {% for p in after.pills %}

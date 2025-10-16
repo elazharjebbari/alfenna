@@ -1,11 +1,13 @@
-{% load atelier_images i18n %}
+{% load static i18n %}
 <div class="header-main-wrapper" id="header-main-wrapper"
      style="display:flex;align-items:center;gap:16px;min-height:72px;">
 
   <!-- Logo + preuve -->
   <div class="header-logo" style="display:flex;align-items:center;gap:8px;">
     <a href="{{ home_url|default:'/' }}" style="display:inline-flex;align-items:center;">
-      {% responsive_picture logo_src|default:'images/logo.webp' alt=logo_alt|default:'logo' cls="img-fluid" %}
+      <img src="{% static logo_src|default:'images/logo/logo_text_black_200x60.png' %}"
+           alt="{{ logo_alt|default:'logo' }}"
+           class="img-fluid">
     </a>
     {% if show_rating_badge %}
       <span class="badge-rating d-none d-lg-inline-flex"

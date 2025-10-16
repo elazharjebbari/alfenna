@@ -8,7 +8,7 @@ assets:
   vendors: []
 
 params:
-  logo_src: "images/logo/logo_text_black_200x60.webp"
+  logo_src: "images/logo/logo_text_black_200x60.png"
   logo_alt: "Lumiere"
   show_rating_badge: true
 #  primary_cta_label: "J'achète'"
